@@ -1,0 +1,70 @@
+:root {
+    --primary-color: #002f52;
+    --primary-color-back: rgba(4, 4, 48, 1);
+    --secondary-color: #ffffff;
+    --containBlack: #ffffff;
+    --slider: 0;
+    --sideNavwidth: 400px;
+    --colorMain2: #630016;
+    --colorMain2_light: #d8d8d8;
+
+    --color1: #002f5;
+    --color2: rgba(92, 181, 244, 1);
+    --color3: #faffff;
+    --color4: #004476;
+    --color5: rgba(4, 4, 48, 1);
+}
+
+.shadow {
+    -webkit-box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+body{
+    font: 12px Arial;
+
+}
+
+#header .top-bar, #header .top-bar ul{
+    background-color: var(--primary-color);
+}
+
+.menu .menu-text{
+    color:  var(--secondary-color)
+}
+
+#header a {
+    color: var(--secondary-color)
+}
+
+.site-link__img {
+    vertical-align: middle;
+    height: auto;
+    max-width: 100%;
+}
+
+#header2 {
+    background-color: var(--color3);
+}
+.overlayObit {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.overlayObit h1, .overlayObit h4{
+    color: white;
+    padding: 0 10px;
+    margin: 0;
+}
+
+.overlayObit .boxtext{
+    border: white solid 2px;
+    margin-bottom: 10px;
+}
+
+.overlayObit .hightlightext {
+    background: white;
+    color: var(--color2);
+    padding: 0px 20px;
+}

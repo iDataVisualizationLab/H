@@ -1,0 +1,159 @@
+<!doctype html>
+<!--<html class="no-js" lang="">-->
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="src/style/foundation.css">
+    <link rel="stylesheet" href="src/style/zmultiselect.css">
+    <link rel="stylesheet" href="src/style/ol.css">
+    <script src="https://kit.fontawesome.com/da99e175b3.js"></script>
+    <!--<link rel="manifest" href="site.webmanifest">-->
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <!-- Place favicon.ico in the root directory -->
+
+    <!--<link rel="stylesheet" href="css/normalize.css">-->
+    <link rel="stylesheet" href="src/style/main.css">
+    <link rel="stylesheet" href="src/style/vis.css">
+
+    <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+<!--[if IE]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<div id="header">
+
+</div>
+
+<div class="top-bar floating-navigator" id="filterDiv" style="background-color: unset">
+    <div class="float-center floating-navigator-content" id="filterContent">
+
+    </div>
+</div>
+<button class="openbtn btn-floating btn waves-effect waves-light shadow " type="button" id="sideNavbtn" style="" data-open="offCanvasTop" data-toggle="filter_manager">
+    <!-- Screen readers will see "close" -->
+    <span class="show-for-sr">Close</span>
+    <!-- Visual users will see the X, but not the "Close" text -->
+    <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+</button>
+<div class="top-bar floating-navigator" style="background-color: unset">
+    <div class="float-center floating-navigator-content menu horizontal">
+        <!--<button class="menu-icon menu cell" type="button" data-open="offCanvasTop" data-toggle="filter_manager"></button>-->
+
+        <ul class="dropdown menu cell" data-dropdown-menu id="projects" style="background-color: unset">
+        </ul>
+    </div>
+    <div id="dataInfo" class="grid-x align-center-middle">
+        <h3 id="numberSection"></h3>
+        <h6> sectionID(s)</h6>
+    </div>
+</div>
+
+<!--<div class="floating-navigator expanded secondary align-center grid-x">-->
+    <!--<div class="float-center button-group" id="projects">-->
+
+    <!--</div>-->
+
+<!--</div>-->
+
+<div class="off-canvas position-right" id="datatable" data-off-canvas>
+    <!-- Your menu or Off-canvas content goes here -->
+</div>
+<div id="menu">
+    <div id="search_box"></div>
+</div>
+<div class="off-canvas-wrapper">
+    <div class="off-canvas-absolute position-left" id="filter_manager" data-off-canvas data-transition="overlap">
+        <div class="grid-y grid-padding-y expanded" id="schemaSetting">
+            <!--<div class="schema-field">-->
+                <!--<div class="schema-field-chart"></div>-->
+                <!--<select class="schema-field-tag" placeholder="Pick a state..."></select>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <div class="off-canvas-content" data-off-canvas-content>
+
+<div id="map" class="cell" style="min-height: calc(100vh - 56px) ;">
+    <div id="info" style="position:absolute;z-index: 10" class="card">
+        <div id="tooltp_header" data-equalizer>
+            <span data-equalizer-watch>Click to hold</span>
+            <button data-equalizer-watch class="close-button close_tooltip" aria-label="Close alert" type="button" data-close><span aria-hidden="true">&times;</span>
+            </button>
+            <button data-equalizer-watch class="print-button" type="button" data-open="printModal"><span aria-hidden="true">Print <i class="fas fa-print"></i></span>
+            </button>
+        </div>
+        <select id="info_menu" class="hide">
+            <optgroup label="Foods">
+                <option>Pizza</option>
+                <option data-selected>Spaghetti</option>
+                <option>Mozzarella</option>
+                <option>Eggs</option>
+                <option data-selected>Eggs 2</option>
+                <option>Eggs 3</option>
+            </optgroup>
+            <optgroup label="Drinks">
+                <option>Water</option>
+                <option>Beer</option>
+                <option>Coke</option>
+                <option>Gin</option>
+            </optgroup>
+        </select>
+
+    </div>
+</div>
+    <div id="overlaymap" style="display: none;"></div>
+</div>
+</div>
+<div class="reveal small" id="printModal" data-reveal>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h3>Chose file to download.</h3>
+    <div class="printModal_content">
+
+    </div>
+    <button type="button">Download All in 1 file</button>
+</div>
+
+<script src="src/lib/jquery-3.4.1.min.js"></script>
+<script src="src/lib/selectize.js"></script>
+
+<script src="src/lib/d3.v5.min.js"></script>
+<script src="src/lib/d3-selection-multi.v1.min.js"></script>
+<script src="src/lib/topojson.v2.min.js"></script>
+<script src="src/lib/simple-statistics.min.js"></script>
+<script src="src/lib/lodash_fp.min.js"></script>
+<script type="text/javascript" src="src/lib/jquery.printPage.js"></script>
+<!--<script type="text/javascript" src="http://doc2pdf.pdf24.org/js/api.js"></script>-->
+
+<!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA-YOLIVTWEZLS7316nJfEX3C9FedRkLg&libraries=visualization"></script>-->
+<script type="text/javascript" src="src/lib/ol.js"></script>
+
+<!--theme-->
+<script src="src/lib/foundation.js"></script>
+<script>
+    $(document).foundation();
+</script>
+<script src="src/lib/zmultiselect.min.js"></script>
+<script>
+    $(function(){
+        $('#header').load('headerMenu.html');
+    })
+</script>
+<script src="src/js/schemabox.js"></script>
+<script src="src/js/plugins.js"></script>
+<script src="src/js/globalvariable.js"></script>
+<script src="src/js/d3openlayer.js"></script>
+<!--<script src="src/js/d3googlemap.js"></script>-->
+<script src="src/js/processdata.js"></script>
+<script src="src/js/map.js"></script>
+<script src="src/js/main.js"></script>
+
+</body>
