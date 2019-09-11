@@ -36,16 +36,13 @@ function init(){
             } else{
                 currentel.on('click',e=>addFilter({type:'DataType',text:e.text,id:e.id},true));
             }
-
             currentel.style("background-color", projectColorMap[d['text']]);
 
-            console.log(sectionProjectMap);
         }
     );
 
 
     d3.select('#filterContent').on('removeFilter',function(d){
-        console.log(d3.event.detail)
         removeFilter(d3.event.detail);
     })
     Foundation.reInit($('#projects'));
@@ -61,8 +58,8 @@ function init(){
             if (d['County'] !== null)
                 d['County'] = seperateStr(d['County'])
         });
-        dp = new dataProcessor(basearr);
 
+        dp = new dataProcessor(basearr);
     }).then(function(){
         return readConf("listMedia").then((data)=>{mediaQuery=data});
     }).then(function(){
@@ -76,11 +73,12 @@ function init(){
         let max_d = 0;
         arr_variable_collection.forEach(v=>{
             let data =d3.nest().key(d=>d[v.id]).sortKeys((a,b)=>a-b)
-                .rollup(d=>{return {len: d.length,val: d[0][v.id]}})
+                .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
                 .entries(dp.filter(d=>d[v.id]!==null));
             v.schemabox.dataShadow(data);
             max_d = Math.max(max_d,d3.max(data,d=>d.value.len));
         });
+
         arr_variable_collection.forEach(v=> {
             let data = v.schemabox.dataShadow();
             data.range=[0, max_d];
@@ -112,8 +110,8 @@ function redrawMap(){
 
 function UpdateSchema(){
     arr_variable_collection.forEach(v=>{
-        let data =d3.nest().key(d=>d[v.id])
-            .rollup(d=>{return {len: d.length,val: d[0][v.id]}})
+        let data = d3.nest().key(d=>{return d[v.id];})
+            .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
             .entries(dp.filter(d=>d[v.id]!==null));
         // data.range =[0,dp.length];
         v.schemabox.data(data);

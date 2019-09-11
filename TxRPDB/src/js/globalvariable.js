@@ -131,6 +131,7 @@ let project_collection ={
         sub: ["Fast Track Pavement","Bonded Overlay","Unbonded Overlay","Whitetopping","Precast Pavement","Cast-in-Place Prestressed","Recycled Concrete Pavement","RCC Pavement"]
     }
 };
+let project_name = Object.keys(project_collection).map(k => project_collection[k]['text']);
 let project_feature = {
     "Level 1 Sections": ["Deflections","LTE","Cracks","Pictures"],
     "all":["Plans","Reports","Pictures"]

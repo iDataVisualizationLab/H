@@ -369,6 +369,12 @@ function projectToColor() {
         projectColorMap[project_collection[project]['text']] = Colors[counter];
         counter++;
     }
-
 }
 
+function countElements(data) {
+    var elements = {}
+    for (var project in project_collection) {
+        elements[project_collection[project]['text']] = data.filter(x => sectionProjectMap[x['DataType']] == project_collection[project]['text']).length;
+    }
+    return elements;
+}
