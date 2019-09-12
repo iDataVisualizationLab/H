@@ -124,15 +124,14 @@ let Schemabox = function() {
             .append("g")
             .attr("class", "group");
 
-        var rect = group.selectAll("rect")
+        bar_g_n.selectAll("rect")
             .data(function (d) {
                 return d.value.stack;
             })
             .enter()
             .append("rect");
 
-        console.log("hiiiiiii")
-
+        // group.append("rect").attr("width", x.bandwidth()).attr("height", 0);
 
         bar_g_n.append("text").attr("class", "label hide")
             .style('text-anchor','middle')
