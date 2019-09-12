@@ -132,6 +132,8 @@ let project_collection ={
     }
 };
 let project_name = Object.keys(project_collection).map(k => project_collection[k]['text']);
+let colors = d3.scaleOrdinal(d3.schemeCategory10).domain(project_name);
+
 let project_feature = {
     "Level 1 Sections": ["Deflections","LTE","Cracks","Pictures"],
     "all":["Plans","Reports","Pictures"]

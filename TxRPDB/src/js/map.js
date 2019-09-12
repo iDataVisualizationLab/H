@@ -115,7 +115,7 @@ function plotGPS() {
         });
         newf.setStyle(new ol.style.Style({
             image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
-                color: (d=>projectColorMap[sectionProjectMap[d['DataType']]])(d),
+                color: (d=>colors(sectionProjectMap[d['DataType']]))(d),
                 crossOrigin: 'anonymous',
                 src: 'src/Images/pin.png',
                 anchor: [0.5, 1],
@@ -124,9 +124,6 @@ function plotGPS() {
                 scale: 0.5
             }))
         }));
-        function getcolor(d){
-            return projectColorMap[sectionProjectMap[d['DataType']]]
-        }
         return newf;
     });
     var vectorSource = new ol.source.Vector({

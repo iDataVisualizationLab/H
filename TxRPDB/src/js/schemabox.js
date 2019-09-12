@@ -97,7 +97,9 @@ let Schemabox = function() {
 
     function draw(dataset){
         let bar_g = maing.selectAll(".bar")
-            .data(dataset,d=>d.key);
+             .data(data, d=>d.key);
+
+        console.log(dataset);
 
         bar_g.exit().remove();
 
@@ -115,9 +117,22 @@ let Schemabox = function() {
             //     d3.select(this).classed('selected',!current_state);
             //     filterChangeFunc({id:d.key,text:d.key,type:master.id},!current_state);
             // });
-        for (var project in project_name){
-            bar_g_n.append("rect").attr("width", x.bandwidth()).attr("height", 0).attr("project", project_name[project]);
-        }
+
+        // console.log(dataset);
+
+        var group = bar_g_n
+            .append("g")
+            .attr("class", "group");
+
+        var rect = group.selectAll("rect")
+            .data(function (d) {
+                return d.value.stack;
+            })
+            .enter()
+            .append("rect");
+
+        console.log("hiiiiiii")
+
 
         bar_g_n.append("text").attr("class", "label hide")
             .style('text-anchor','middle')
@@ -129,18 +144,17 @@ let Schemabox = function() {
                 return graphicopt.barcolor;
             })
             .attr('transform',d=>`translate(${x(d.key)},0)`);
-        for (var project in project_name){
-            bar_g.select('rect')
-                .transition()
-                .duration(500)
-                .attr("y",  d => {return y(d.value.len)*d.value.elem[project_name[project]]/d.value.len; })
-                .attr("width", x.bandwidth())
-                .attr("height",  d => {console.log(y(d.value.len)*d.value.elem[project_name[project]]/d.value.len) ;
-                return graphicopt.heightG() - y(d.value.len)*d.value.elem[project_name[project]]/d.value.len; })
-                .style("fill", function (d) {
-                    return projectColorMap[project_name[project]];
-            })
-        }
+
+
+        bar_g.selectAll('rect')
+            .transition()
+            .duration(500)
+            .attr("y",  d => {console.log(d['0']+d['1']); return y(d['1']); })
+            .attr("width", x.bandwidth())
+            .attr("height",  d => { return graphicopt.heightG() - y(d['1'] - d['0']); })
+            .style("fill", function (d) {
+                return colors(d.project);
+            });
 
 
         bar_g.select('.label')

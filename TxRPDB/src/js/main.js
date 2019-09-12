@@ -36,7 +36,7 @@ function init(){
             } else{
                 currentel.on('click',e=>addFilter({type:'DataType',text:e.text,id:e.id},true));
             }
-            currentel.style("background-color", projectColorMap[d['text']]);
+            currentel.style("background-color", colors(d['text']));
 
         }
     );
@@ -113,7 +113,17 @@ function UpdateSchema(){
         let data = d3.nest().key(d=>{return d[v.id];})
             .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
             .entries(dp.filter(d=>d[v.id]!==null));
-        // data.range =[0,dp.length];
+        console.log(data);
+
+        var groupCountData = data.map(d => d.value.elem);
+        stackData = d3.stack().keys(project_name)(groupCountData);
+        stackData.forEach(col => col.forEach(d => d['project'] = col.key))
+        stackData = stackData[0].map((col,i) => stackData.map(row => row[i]));
+
+        data.forEach(function (d, i) {
+            d.value['stack'] = stackData[i];
+        });
+
         v.schemabox.data(data);
     });
 }

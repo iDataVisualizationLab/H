@@ -373,8 +373,11 @@ function projectToColor() {
 
 function countElements(data) {
     var elements = {}
+    var sum = 0
     for (var project in project_collection) {
         elements[project_collection[project]['text']] = data.filter(x => sectionProjectMap[x['DataType']] == project_collection[project]['text']).length;
+        sum += elements[project_collection[project]['text']];
     }
+    elements['len'] = sum
     return elements;
 }
