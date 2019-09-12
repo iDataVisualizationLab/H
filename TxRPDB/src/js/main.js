@@ -11,7 +11,7 @@ function initFilterSetting(){
         .append('div')
         .attr('class','schema-field');
     schema_field.append('span').attr('class','schema-field-label').text(d=>d.text);
-    schema_field.append('select').attr('class','schema-field-tag').attr('multiple','').attr('placeholder',d=>`Choose ${d.text} ....`);
+    schema_field.append('select').attr('class','schema-field-tag').attr('multiple','').attr('placeholder',d=>`Choose ${d.text} ....`).style('width', 150);
     schema_field.append('div').attr('class','schema-field-chart')
         .append('svg').each(function(d){
         d.schemabox = Schemabox().graphicopt(schemaSvg_option).svg(d3.select(this)).init().visibility(d.statistic).filterChangeFunc(filterTrigger).master(d);
@@ -113,10 +113,9 @@ function UpdateSchema(){
         let data = d3.nest().key(d=>{return d[v.id];})
             .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
             .entries(dp.filter(d=>d[v.id]!==null));
-        console.log(data);
 
         var groupCountData = data.map(d => d.value.elem);
-        stackData = d3.stack().keys(project_name)(groupCountData);
+        var stackData = d3.stack().keys(project_name)(groupCountData);
         stackData.forEach(col => col.forEach(d => d['project'] = col.key))
         stackData = stackData[0].map((col,i) => stackData.map(row => row[i]));
 

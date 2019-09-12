@@ -75,7 +75,6 @@ li.projects_item{
     margin: 0;
 }
 .chip, .schema-field-tag div.item{
-    display: inline-block;
     padding: 0 10px;
     height: 20px;
     line-height: 20px;

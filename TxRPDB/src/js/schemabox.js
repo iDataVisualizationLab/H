@@ -50,10 +50,6 @@ let Schemabox = function() {
             });
         bar_g_n.append("rect").attr("width", x.bandwidth()).attr("height", 0);
 
-        // bar_g_n.append("text").attr("class", "label hide")
-        //     .style('text-anchor','middle')
-        //     .attr("x", ( d => { return (x.bandwidth() / 2); }));
-
         bar_g = bar_g_n.merge(bar_g)
             .style("display", d => { return d.value.len === null ? "none" : null; })
             .style("fill",  d => {
@@ -99,8 +95,6 @@ let Schemabox = function() {
         let bar_g = maing.selectAll(".bar")
              .data(data, d=>d.key);
 
-        console.log(dataset);
-
         bar_g.exit().remove();
 
         let bar_g_n = bar_g.enter()
@@ -118,20 +112,15 @@ let Schemabox = function() {
             //     filterChangeFunc({id:d.key,text:d.key,type:master.id},!current_state);
             // });
 
-        // console.log(dataset);
-
-        var group = bar_g_n
-            .append("g")
-            .attr("class", "group");
-
-        bar_g_n.selectAll("rect")
+        var rects = bar_g_n.selectAll('rect')
             .data(function (d) {
                 return d.value.stack;
-            })
-            .enter()
-            .append("rect");
+            });
 
-        // group.append("rect").attr("width", x.bandwidth()).attr("height", 0);
+        rects.enter()
+            .append('rect')
+            .attr('width', x.bandwidth())
+            .attr('heigth', 0).exit().remove();
 
         bar_g_n.append("text").attr("class", "label hide")
             .style('text-anchor','middle')
@@ -144,26 +133,26 @@ let Schemabox = function() {
             })
             .attr('transform',d=>`translate(${x(d.key)},0)`);
 
-
         bar_g.selectAll('rect')
+            .data(function (d) {
+                return d.value.stack;
+            })
             .transition()
             .duration(500)
-            .attr("y",  d => {console.log(d['0']+d['1']); return y(d['1']); })
+            .attr("y",  d => y(d['1']))
             .attr("width", x.bandwidth())
             .attr("height",  d => { return graphicopt.heightG() - y(d['1'] - d['0']); })
             .style("fill", function (d) {
                 return colors(d.project);
             });
 
-
         bar_g.select('.label')
             .transition()
             .duration(500)
-            .attr("x", ( d => { return (x.bandwidth() / 2); }))
-            .attr("y",  d => { return y(d.value.len) + .1; })
+            .attr("x", ( d => {return (x.bandwidth() / 2); }))
+            .attr("y",  d => {return y(d.value.len) + .1; })
             .text( d => d.value.len )
-            .attr("dy", "-.7em")
-        ;
+            .attr("dy", "-.7em");
     }
 
     schemabox.init = function () {
