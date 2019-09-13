@@ -11,7 +11,7 @@ function initFilterSetting(){
         .append('div')
         .attr('class','schema-field');
     schema_field.append('span').attr('class','schema-field-label').text(d=>d.text);
-    schema_field.append('select').attr('class','schema-field-tag').attr('multiple','').attr('placeholder',d=>`Choose ${d.text} ....`).style('width', 150);
+    schema_field.append('select').attr('class','schema-field-tag').attr('multiple','').attr('placeholder',d=>`Choose ${d.text} ....`);
     schema_field.append('div').attr('class','schema-field-chart')
         .append('svg').each(function(d){
         d.schemabox = Schemabox().graphicopt(schemaSvg_option).svg(d3.select(this)).init().visibility(d.statistic).filterChangeFunc(filterTrigger).master(d);

@@ -83,6 +83,8 @@ li.projects_item{
     border: #8a8a8a solid 0.5px;
 }
 .schema-field-tag input{
+    float: none !important;
+    display: inline-block !important;
     max-width: 100% !important;
     max-height: none !important;
     min-height: 0 !important;
@@ -136,6 +138,8 @@ input:focus, textarea:focus {
     padding: 5px;
     border-radius: 5px;
     background-color: white;
+    float: none;
+    display: inline-block;
 }
 .selectize-input.items.dropdown-active{
     background-color: #d3eaf9;
@@ -174,6 +178,9 @@ input:focus, textarea:focus {
     opacity: 0.4;
 }
 .schema-field-label {
+    float: none !important;
+    display: inline-block !important;
+    margin-right: 1%;
     font-weight: bold;
 }
 
@@ -227,4 +234,10 @@ input:focus, textarea:focus {
 }
 .selectize-control.loading::before {
     opacity: 0.4;
+}
+
+.selectize-control {
+    /*width: 100%;*/
+    float: none;
+    display: inline-block;
 }
