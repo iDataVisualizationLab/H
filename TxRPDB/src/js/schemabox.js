@@ -3,6 +3,8 @@ let Schemabox = function() {
             margin: {top: 20, right: 0, bottom: 0, left: 0},
             width: 250,
             height: 50,
+            // width: 250,
+            // height: 50,
             scalezoom: 10,
             barcolor: 'red',
             widthView: function(){return this.width*this.scalezoom},
@@ -19,15 +21,28 @@ let Schemabox = function() {
     var y = d3.scaleLinear()
         .range([graphicopt.heightG(), 0]);
 
+
+    /*var y = d3.scaleBand()
+        .range([0, graphicopt.widthG()])
+        .padding(0.1);
+    var x = d3.scaleLinear()
+        .range([graphicopt.heightG(), 0]);*/
+
     schemabox.draw_Shadow = function(){
         x.domain(dataShadow.map( d => { return d.key; }));
-        // y.domain([0, d3.max(dataset,  d => { return d.value.len; })]);
-        // y.domain(d3.extent(dataset,d=>d.value.len));
         y.domain(dataShadow.range);
+
+
+        /*y.domain(dataShadow.map( d => { return d.key; }));
+        x.domain(dataShadow.range);*/
 
         var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
         g.select(".x.axis")
             .call(xAxis);
+
+        /*var yAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
+        g.select(".y.axis")
+            .call(yAxis);*/
 
         let bar_g = g_shadow.selectAll(".barS")
             .data(dataShadow,d=>d.key);
@@ -92,8 +107,12 @@ let Schemabox = function() {
     }
 
     function draw(dataset){
+        drawVertical(dataset);
+    }
+
+    function drawVertical(dataset){
         let bar_g = maing.selectAll(".bar")
-             .data(data, d=>d.key);
+            .data(data, d=>d.key);
 
         bar_g.exit().remove();
 
@@ -106,11 +125,75 @@ let Schemabox = function() {
             }).on('mouseleave',function(){
                 d3.select(this).select('.label').classed('hide',true);
             })
-            // .on('click',function(d){
-            //     const current_state = d3.select(this).classed('selected');
-            //     d3.select(this).classed('selected',!current_state);
-            //     filterChangeFunc({id:d.key,text:d.key,type:master.id},!current_state);
-            // });
+        // .on('click',function(d){
+        //     const current_state = d3.select(this).classed('selected');
+        //     d3.select(this).classed('selected',!current_state);
+        //     filterChangeFunc({id:d.key,text:d.key,type:master.id},!current_state);
+        // });
+
+        var rects = bar_g_n.selectAll('rect')
+            .data(function (d) {
+                return d.value.stack;
+            });
+
+        rects.enter()
+            .append('rect')
+            .attr('width', x.bandwidth())
+            .attr('heigth', 0).exit().remove();
+
+        bar_g_n.append("text").attr("class", "label hide")
+            .style('text-anchor','middle')
+            .attr("x", ( d => { return (x.bandwidth() / 2); }));
+
+        bar_g = bar_g_n.merge(bar_g)
+            .style("display", d => { return d.value.len === null ? "none" : null; })
+            .style("fill",  d => {
+                return graphicopt.barcolor;
+            })
+            .attr('transform',d=>`translate(${x(d.key)},0)`);
+
+        bar_g.selectAll('rect')
+            .data(function (d) {
+                return d.value.stack;
+            })
+            .transition()
+            .duration(500)
+            .attr("y",  d => y(d['1']))
+            .attr("width", x.bandwidth())
+            .attr("height",  d => { return graphicopt.heightG() - y(d['1'] - d['0']); })
+            .style("fill", function (d) {
+                return colors(d.project);
+            });
+
+        bar_g.select('.label')
+            .transition()
+            .duration(500)
+            .attr("x", ( d => {return (x.bandwidth() / 2); }))
+            .attr("y",  d => {return y(d.value.len) + .1; })
+            .text( d => d.value.len )
+            .attr("dy", "-.7em");
+    }
+
+    function drawHorizontal(dataset){
+        let bar_g = maing.selectAll(".bar")
+            .data(data, d=>d.key);
+
+        bar_g.exit().remove();
+
+        let bar_g_n = bar_g.enter()
+            .append("g")
+            .attr("class", "bar")
+            .attr('transform',d=>`translate(${x(d.key)},${graphicopt.heightG()})`)
+            .on('mouseover',function(){
+                d3.select(this).select('.label').classed('hide',false);
+            }).on('mouseleave',function(){
+                d3.select(this).select('.label').classed('hide',true);
+            })
+        // .on('click',function(d){
+        //     const current_state = d3.select(this).classed('selected');
+        //     d3.select(this).classed('selected',!current_state);
+        //     filterChangeFunc({id:d.key,text:d.key,type:master.id},!current_state);
+        // });
 
         var rects = bar_g_n.selectAll('rect')
             .data(function (d) {

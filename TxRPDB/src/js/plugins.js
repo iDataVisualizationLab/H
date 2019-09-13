@@ -385,5 +385,5 @@ function countElements(data) {
 function sortVariables(){
     var isStatistic = arr_variable_collection.filter( d=> d.statistic);
     var isNotStatistic = arr_variable_collection.filter(d => !d.statistic);
-    return isStatistic.concat(isNotStatistic);
+    return isNotStatistic.concat(isStatistic);
 }

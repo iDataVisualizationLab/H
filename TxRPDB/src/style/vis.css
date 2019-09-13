@@ -75,12 +75,14 @@ li.projects_item{
     margin: 0;
 }
 .chip, .schema-field-tag div.item{
+    width: fit-content;
     padding: 0 10px;
     height: 20px;
     line-height: 20px;
     border-radius: 5px;
     background-color: #f1f1f1;
     border: #8a8a8a solid 0.5px;
+    display: inline-block;
 }
 .schema-field-tag input{
     float: none !important;
@@ -138,8 +140,6 @@ input:focus, textarea:focus {
     padding: 5px;
     border-radius: 5px;
     background-color: white;
-    float: none;
-    display: inline-block;
 }
 .selectize-input.items.dropdown-active{
     background-color: #d3eaf9;
@@ -178,10 +178,13 @@ input:focus, textarea:focus {
     opacity: 0.4;
 }
 .schema-field-label {
-    float: none !important;
-    display: inline-block !important;
-    margin-right: 1%;
+    float: left;
+    width: 30%;
+    text-align: center;
+    height: 100%;
+    display: inline-block;
     font-weight: bold;
+    padding: 5px;
 }
 
 .openbtn {
@@ -237,7 +240,8 @@ input:focus, textarea:focus {
 }
 
 .selectize-control {
-    /*width: 100%;*/
-    float: none;
+    width: 70%;
+    float: left;
+    text-align: left;
     display: inline-block;
 }
