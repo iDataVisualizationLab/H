@@ -287,7 +287,7 @@ function DownloadURLSet(path) {
     var lengthOfFile = path.length;
     var filetype = path.substring(indexOffileType + 1, lengthOfFile);
 
-    path = "https://idatavisualizationlab.github.io/N/TxRPDB/" + path;
+    path = "https://idatavisualizationlab.github.io/H/TxRPDB/" + path;
     return path;
 }
 function ViewFileURL(path) {
@@ -300,10 +300,10 @@ function ViewFileURL(path) {
     var filetype = path.substring(indexOffileType + 1, lengthOfFile);
 
     if (filetype == "jpg" || filetype == "JPG" || filetype == "jpeg" || filetype == "JPEG" || filetype == "png" || filetype == "PNG" || filetype == "pdf"  || filetype == "PDF" || filetype == "gif" || filetype == "GIF") {
-        path = "https://idatavisualizationlab.github.io/N/TxRPDB/" + path;
+        path = "https://idatavisualizationlab.github.io/H/TxRPDB/" + path;
     }
     else {
-        path = "http://docs.google.com/gview?url=https://idatavisualizationlab.github.io/N/TxRPDB/" + path+"&embedded=true";
+        path = "http://docs.google.com/gview?url=https://idatavisualizationlab.github.io/H/TxRPDB/" + path+"&embedded=true";
     }
     return path;
 }
