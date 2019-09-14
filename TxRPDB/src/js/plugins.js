@@ -303,7 +303,7 @@ function ViewFileURL(path) {
         path = "https://idatavisualizationlab.github.io/H/TxRPDB/" + path;
     }
     else {
-        path = "http://docs.google.com/gview?url=https://idatavisualizationlab.github.io/H/TxRPDB/" + path+"&embedded=true";
+        path = "https://docs.google.com/gview?url=https://idatavisualizationlab.github.io/H/TxRPDB/" + path+"&embedded=true";
     }
     return path;
 }
