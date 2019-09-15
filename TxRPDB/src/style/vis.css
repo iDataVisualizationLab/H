@@ -180,7 +180,7 @@ input:focus, textarea:focus {
 .schema-field-label {
     float: left;
     width: 30%;
-    text-align: center;
+    text-align: right;
     height: 100%;
     display: inline-block;
     font-weight: bold;

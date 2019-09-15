@@ -1,48 +1,55 @@
 let Schemabox = function() {
     let graphicopt = {
             margin: {top: 20, right: 0, bottom: 0, left: 0},
-            width: 250,
-            height: 50,
             // width: 250,
             // height: 50,
+            width: 370,
+            height: 250,
             scalezoom: 10,
             barcolor: 'red',
+            barWidth: 12,
             widthView: function(){return this.width*this.scalezoom},
             heightView: function(){return this.height*this.scalezoom},
             widthG: function(){return this.widthView()-this.margin.left-this.margin.right},
             heightG: function(){return this.heightView()-this.margin.top-this.margin.bottom},
+            svgHeightGToHeight: function (newHeightG) {
+                this.height = newHeightG + this.margin.top + this.margin.bottom;
+                return this.height;
+            }
         },
         svg,g,visibility,filterChangeFunc=function(){},master={},dataShadow=[],g_shadow,maing,overlayg,
     data =[];
     let schemabox ={};
-    var x = d3.scaleBand()
-        .range([0, graphicopt.widthG()])
-        .padding(0.1);
-    var y = d3.scaleLinear()
-        .range([graphicopt.heightG(), 0]);
+    // var x = d3.scaleBand()
+    //     .range([0, graphicopt.widthG()])
+    //     .padding(0.1);
+    // var y = d3.scaleLinear()
+    //     .range([graphicopt.heightG(), 0]);
 
 
-    /*var y = d3.scaleBand()
-        .range([0, graphicopt.widthG()])
-        .padding(0.1);
     var x = d3.scaleLinear()
-        .range([graphicopt.heightG(), 0]);*/
+        .range([0, graphicopt.widthG()]);
+    var y = d3.scaleBand()
+        .range([0, graphicopt.heightG()])
+        .padding(0.2);
 
     schemabox.draw_Shadow = function(){
-        x.domain(dataShadow.map( d => { return d.key; }));
-        y.domain(dataShadow.range);
 
+        var numOfItems = dataShadow.map(d=> d.key).length;
 
-        /*y.domain(dataShadow.map( d => { return d.key; }));
-        x.domain(dataShadow.range);*/
+        x.domain(dataShadow.range);
+        y.range([0, numOfItems*graphicopt.barWidth])
+            .domain(dataShadow.map( d => { return d.key; }));
 
-        var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
-        g.select(".x.axis")
-            .call(xAxis);
+        // var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
+        // g.select(".x.axis")
+        //     .call(xAxis);
 
-        /*var yAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
+        svg.attr("height", graphicopt.svgHeightGToHeight(numOfItems*graphicopt.barWidth));
+
+        var yAxis = d3.axisLeft(y).tickSize([]).tickPadding(5);
         g.select(".y.axis")
-            .call(yAxis);*/
+            .call(yAxis);
 
         let bar_g = g_shadow.selectAll(".barS")
             .data(dataShadow,d=>d.key);
@@ -52,7 +59,7 @@ let Schemabox = function() {
         let bar_g_n = bar_g.enter()
             .append("g")
             .attr("class", "barS")
-            .attr('transform',d=>`translate(${x(d.key)},${graphicopt.heightG()})`)
+            .attr('transform',d=>`translate(${graphicopt.heightG()},${y(d.key)})`)
             // .on('mouseover',function(){
             //     d3.select(this).select('.label').classed('hide',false);
             // }).on('mouseleave',function(){
@@ -63,21 +70,21 @@ let Schemabox = function() {
                 d3.select(this).classed('selected',!current_state);
                 filterChangeFunc({id:d.key,text:d.key,type:master.id},!current_state);
             });
-        bar_g_n.append("rect").attr("width", x.bandwidth()).attr("height", 0);
+        bar_g_n.append("rect").attr("width", 0).attr("height", y.bandwidth());
 
         bar_g = bar_g_n.merge(bar_g)
             .style("display", d => { return d.value.len === null ? "none" : null; })
             .style("fill",  d => {
                 return graphicopt.barcolor;
             })
-            .attr('transform',d=>`translate(${x(d.key)},0)`);
+            .attr('transform',d=>`translate(0,${y(d.key)})`);
 
         bar_g.selectAll('rect')
             .transition()
             .duration(500)
-            .attr("y",  d => { return y(d.value.len); })
-            .attr("width", x.bandwidth())
-            .attr("height",  d => { return graphicopt.heightG() - y(d.value.len); });
+            .attr("x",  0)
+            .attr("height", y.bandwidth())
+            .attr("width",  d => { return x(d.value.len); });
 
         bar_g = overlayg.selectAll(".barOverlay")
             .data(dataShadow,d=>d.key);
@@ -87,7 +94,7 @@ let Schemabox = function() {
         bar_g_n = bar_g.enter()
             .append("g")
             .attr("class", "barOverlay")
-            .attr('transform',d=>`translate(${x(d.key)},${0})`)
+            .attr('transform',d=>`translate(${0},${y(d.key)})`)
             .on('mouseover',function(e){
                 maing.selectAll('.label').filter(d=>d.key===e.key).classed('hide',false);
             }).on('mouseleave',function(e){
@@ -98,7 +105,7 @@ let Schemabox = function() {
                 d3.select(this).classed('selected',!current_state);
                 filterChangeFunc({id:d.value.val,text:d.key,type:master.id},!current_state);
             });
-        bar_g_n.append("rect").attr("width", x.bandwidth()).attr("height", graphicopt.heightG());
+        bar_g_n.append("rect").attr("width", graphicopt.widthG()).attr("height", y.bandwidth());
         // bar_g_n.append("text").attr("class", "label hide")
         //     .style('text-anchor','middle')
         //     .attr("x", ( d => { return (x.bandwidth() / 2); }));
@@ -107,83 +114,20 @@ let Schemabox = function() {
     }
 
     function draw(dataset){
-        drawVertical(dataset);
-    }
-
-    function drawVertical(dataset){
-        let bar_g = maing.selectAll(".bar")
-            .data(data, d=>d.key);
-
-        bar_g.exit().remove();
-
-        let bar_g_n = bar_g.enter()
-            .append("g")
-            .attr("class", "bar")
-            .attr('transform',d=>`translate(${x(d.key)},${graphicopt.heightG()})`)
-            .on('mouseover',function(){
-                d3.select(this).select('.label').classed('hide',false);
-            }).on('mouseleave',function(){
-                d3.select(this).select('.label').classed('hide',true);
-            })
-        // .on('click',function(d){
-        //     const current_state = d3.select(this).classed('selected');
-        //     d3.select(this).classed('selected',!current_state);
-        //     filterChangeFunc({id:d.key,text:d.key,type:master.id},!current_state);
-        // });
-
-        var rects = bar_g_n.selectAll('rect')
-            .data(function (d) {
-                return d.value.stack;
-            });
-
-        rects.enter()
-            .append('rect')
-            .attr('width', x.bandwidth())
-            .attr('heigth', 0).exit().remove();
-
-        bar_g_n.append("text").attr("class", "label hide")
-            .style('text-anchor','middle')
-            .attr("x", ( d => { return (x.bandwidth() / 2); }));
-
-        bar_g = bar_g_n.merge(bar_g)
-            .style("display", d => { return d.value.len === null ? "none" : null; })
-            .style("fill",  d => {
-                return graphicopt.barcolor;
-            })
-            .attr('transform',d=>`translate(${x(d.key)},0)`);
-
-        bar_g.selectAll('rect')
-            .data(function (d) {
-                return d.value.stack;
-            })
-            .transition()
-            .duration(500)
-            .attr("y",  d => y(d['1']))
-            .attr("width", x.bandwidth())
-            .attr("height",  d => { return graphicopt.heightG() - y(d['1'] - d['0']); })
-            .style("fill", function (d) {
-                return colors(d.project);
-            });
-
-        bar_g.select('.label')
-            .transition()
-            .duration(500)
-            .attr("x", ( d => {return (x.bandwidth() / 2); }))
-            .attr("y",  d => {return y(d.value.len) + .1; })
-            .text( d => d.value.len )
-            .attr("dy", "-.7em");
+        console.log(dataset);
+        drawHorizontal(dataset);
     }
 
     function drawHorizontal(dataset){
         let bar_g = maing.selectAll(".bar")
-            .data(data, d=>d.key);
+            .data(dataset, d=>d.key);
 
         bar_g.exit().remove();
 
         let bar_g_n = bar_g.enter()
             .append("g")
             .attr("class", "bar")
-            .attr('transform',d=>`translate(${x(d.key)},${graphicopt.heightG()})`)
+            .attr('transform',d=>`translate(${graphicopt.heightG()},${y(d.key)})`)
             .on('mouseover',function(){
                 d3.select(this).select('.label').classed('hide',false);
             }).on('mouseleave',function(){
@@ -202,19 +146,19 @@ let Schemabox = function() {
 
         rects.enter()
             .append('rect')
-            .attr('width', x.bandwidth())
-            .attr('heigth', 0).exit().remove();
+            .attr('width', 0)
+            .attr('height', y.bandwidth()).exit().remove();
 
         bar_g_n.append("text").attr("class", "label hide")
             .style('text-anchor','middle')
-            .attr("x", ( d => { return (x.bandwidth() / 2); }));
+            .attr("y", ( d => { return (y.bandwidth() / 2); }));
 
         bar_g = bar_g_n.merge(bar_g)
             .style("display", d => { return d.value.len === null ? "none" : null; })
             .style("fill",  d => {
                 return graphicopt.barcolor;
             })
-            .attr('transform',d=>`translate(${x(d.key)},0)`);
+            .attr('transform',d=>`translate(0,${y(d.key)})`);
 
         bar_g.selectAll('rect')
             .data(function (d) {
@@ -222,9 +166,9 @@ let Schemabox = function() {
             })
             .transition()
             .duration(500)
-            .attr("y",  d => y(d['1']))
-            .attr("width", x.bandwidth())
-            .attr("height",  d => { return graphicopt.heightG() - y(d['1'] - d['0']); })
+            .attr("x",  d => x(d['0']))
+            .attr("height", y.bandwidth())
+            .attr("width",  d => { return x(d['1'] - d['0']); })
             .style("fill", function (d) {
                 return colors(d.project);
             });
@@ -232,16 +176,16 @@ let Schemabox = function() {
         bar_g.select('.label')
             .transition()
             .duration(500)
-            .attr("x", ( d => {return (x.bandwidth() / 2); }))
-            .attr("y",  d => {return y(d.value.len) + .1; })
+            .attr("y", ( d => y.bandwidth()/4*3 ))
+            .attr("x",  d =>  x(d.value.len+25))
             .text( d => d.value.len )
-            .attr("dy", "-.7em");
+            .attr("dx", "-.7em");
     }
 
     schemabox.init = function () {
         svg.attrs({
             width: graphicopt.width,
-            height: graphicopt.height,
+            height: graphicopt.height
             // overflow: "visible",
 
         });
@@ -252,8 +196,8 @@ let Schemabox = function() {
         g_shadow = g.append("g")
             .attr("class", "shadow");
         g.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + graphicopt.heightG() + ")");
+            .attr("class", "y axis")
+            .attr("transform", "translate(0,0)");
 
         maing = g.append("g")
             .attr("class", "main");

@@ -18,10 +18,11 @@ function initFilterSetting(){
     });
 }
 function init(){
+    // sortVariables();
     initmap();
     initFilterSetting();
     sectionToProject();
-    projectToColor();
+
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -95,7 +96,7 @@ function selectize_init(selection,data){
     selection.selectAll('option').data(data)
         .enter().append('option')
         .text(d=>d.key);
-    $(selection.node()).selectize({    plugins: ['remove_button']
+    $(selection.node()).selectize({plugins: ['remove_button']
     })
 }
 

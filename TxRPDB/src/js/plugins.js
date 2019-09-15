@@ -387,3 +387,19 @@ function sortVariables(){
     var isNotStatistic = arr_variable_collection.filter(d => !d.statistic);
     return isNotStatistic.concat(isStatistic);
 }
+
+// function varNameProcessing(name) {
+//     var items = name.split
+// }
+
+function sortProject() {
+    var sortedArrVariables = [];
+
+    for (var project in project_collection) {
+        for (var d in project_collection[project]['sub']){
+            sortedArrVariables.push(project_collection[project]['sub'][d]);
+        }
+    }
+
+
+}
