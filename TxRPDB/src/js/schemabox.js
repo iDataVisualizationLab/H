@@ -3,7 +3,7 @@ let Schemabox = function() {
             margin: {top: 20, right: 0, bottom: 0, left: 0},
             // width: 250,
             // height: 50,
-            width: 370,
+            width: 420,
             height: 250,
             scalezoom: 10,
             barcolor: 'red',
@@ -116,9 +116,6 @@ let Schemabox = function() {
                 filterChangeFunc({id:d.value.val,text:d.key,type:master.id},!current_state);
             });
         bar_g_n.append("rect").attr("width", graphicopt.widthG()).attr("height", y.bandwidth());
-        // bar_g_n.append("text").attr("class", "label hide")
-        //     .style('text-anchor','middle')
-        //     .attr("x", ( d => { return (x.bandwidth() / 2); }));
 
         return schemabox;
     }

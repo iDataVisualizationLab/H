@@ -26,7 +26,6 @@ function init(){
     initFilterSetting();
     sectionToProject();
 
-
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     d3.select('#projects').selectAll('projects_item').data(Object.keys(project_collection).map(k=>project_collection[k]))

@@ -5466,7 +5466,7 @@ a.thumbnail image {
   height: 100%;
   overflow-y: auto;
   width: 450px;
-  transform: translateX(-400px);
+  transform: translateX(-450px);
 }
 .off-canvas-content .off-canvas.position-left {
   transform: translateX(-400px);

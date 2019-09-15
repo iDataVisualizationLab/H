@@ -205,7 +205,7 @@ input:focus, textarea:focus {
 }
 
 .openbtn[aria-expanded=true] {
-    left: 450px
+    left: 450px;
 }
 
 .schema-field-chart svg {
