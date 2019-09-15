@@ -392,14 +392,36 @@ function sortVariables(){
 //     var items = name.split
 // }
 
-function sortProject() {
+function sortProject(data) {
     var sortedArrVariables = [];
 
     for (var project in project_collection) {
         for (var d in project_collection[project]['sub']){
-            sortedArrVariables.push(project_collection[project]['sub'][d]);
+            var section = findSectionByName(data, project_collection[project]['sub'][d]);
+            if (section === undefined) continue;
+            data = data.filter(d => d.key !== section.key);
+            sortedArrVariables.push(section);
         }
     }
 
+    return sortedArrVariables.concat(data);
+}
 
+function findSectionByName(data, section) {
+    var sectionData = undefined;
+    data.forEach(function (d) {
+        if (d.key.toLowerCase() === section.toLowerCase()) sectionData = d;
+    });
+    return sectionData;
+}
+
+function varNameProcessor(name) {
+    var newName = name.replace(/\([a-zA-Z ]+\)/, "");
+    if (newName.includes("No.")) newName = newName.replace("No.", "Number");
+
+    return newName;
+}
+
+function makeXGridlines() {
+    return d3.axisBottom(x).ticks(5);
 }

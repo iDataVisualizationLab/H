@@ -47,9 +47,19 @@ let Schemabox = function() {
 
         svg.attr("height", graphicopt.svgHeightGToHeight(numOfItems*graphicopt.barWidth));
 
+        var xAxis = d3.axisBottom(x).tickSize([])
+
         var yAxis = d3.axisLeft(y).tickSize([]).tickPadding(5);
         g.select(".y.axis")
             .call(yAxis);
+
+        g.select(".x.axis")
+            .attr("transform", `translate(5,${numOfItems*graphicopt.barWidth})`)
+            .call(xAxis);
+
+        g.select(".grid")
+            .attr("transform", `translate(5,${numOfItems*graphicopt.barWidth})`)
+            .call(xAxis.tickSize(-graphicopt.heightG(), 0, 0).tickFormat(''));
 
         let bar_g = g_shadow.selectAll(".barS")
             .data(dataShadow,d=>d.key);
@@ -77,7 +87,7 @@ let Schemabox = function() {
             .style("fill",  d => {
                 return graphicopt.barcolor;
             })
-            .attr('transform',d=>`translate(0,${y(d.key)})`);
+            .attr('transform',d=>`translate(5,${y(d.key)})`);
 
         bar_g.selectAll('rect')
             .transition()
@@ -94,7 +104,7 @@ let Schemabox = function() {
         bar_g_n = bar_g.enter()
             .append("g")
             .attr("class", "barOverlay")
-            .attr('transform',d=>`translate(${0},${y(d.key)})`)
+            .attr('transform',d=>`translate(5,${y(d.key)})`)
             .on('mouseover',function(e){
                 maing.selectAll('.label').filter(d=>d.key===e.key).classed('hide',false);
             }).on('mouseleave',function(e){
@@ -114,7 +124,6 @@ let Schemabox = function() {
     }
 
     function draw(dataset){
-        console.log(dataset);
         drawHorizontal(dataset);
     }
 
@@ -158,7 +167,7 @@ let Schemabox = function() {
             .style("fill",  d => {
                 return graphicopt.barcolor;
             })
-            .attr('transform',d=>`translate(0,${y(d.key)})`);
+            .attr('transform',d=>`translate(5,${y(d.key)})`);
 
         bar_g.selectAll('rect')
             .data(function (d) {
@@ -176,7 +185,7 @@ let Schemabox = function() {
         bar_g.select('.label')
             .transition()
             .duration(500)
-            .attr("y", ( d => y.bandwidth()/4*3 ))
+            .attr("y", y.bandwidth()/5*3 )
             .attr("x",  d =>  x(d.value.len+25))
             .text( d => d.value.len )
             .attr("dx", "-.7em");
@@ -193,11 +202,21 @@ let Schemabox = function() {
         g = svg.append("g")
             .attr('class','pannel')
             .attr('transform',`translate(${graphicopt.margin.left},${graphicopt.margin.top})`);
+
+        g.append("g")
+            .attr("class", "grid")
+            .attr("transform", "translate(0,0)");
+
         g_shadow = g.append("g")
             .attr("class", "shadow");
         g.append("g")
             .attr("class", "y axis")
             .attr("transform", "translate(0,0)");
+
+        g.append("g")
+            .attr("class", "x axis")
+            .attr("transform", `translate(0,0)`);
+
 
         maing = g.append("g")
             .attr("class", "main");

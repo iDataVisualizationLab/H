@@ -10,7 +10,7 @@ function initFilterSetting(){
         .enter()
         .append('div')
         .attr('class','schema-field');
-    schema_field.append('span').attr('class','schema-field-label').text(d=>d.text);
+    schema_field.append('span').attr('class','schema-field-label').text(d=>{return varNameProcessor(d.text);});
     schema_field.append('select').attr('class','schema-field-tag').attr('multiple','').attr('placeholder',d=>`Choose ${d.text} ....`);
     schema_field.append('div').attr('class','schema-field-chart')
         .append('svg').each(function(d){
@@ -73,9 +73,15 @@ function init(){
     ).then(function() {
         let max_d = 0;
         arr_variable_collection.forEach(v=>{
-            let data =d3.nest().key(d=>d[v.id]).sortKeys((a,b)=>a-b)
-                .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
-                .entries(dp.filter(d=>d[v.id]!==null));
+
+            let data = d3.nest().key(d=>d[v.id]).sortKeys((a,b)=>a-b)
+                    .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
+                    .entries(dp.filter(d=>d[v.id]!==null));
+
+            if (v.id === 'DataType') {
+                data = sortProject(data);
+            }
+
             v.schemabox.dataShadow(data);
             max_d = Math.max(max_d,d3.max(data,d=>d.value.len));
         });

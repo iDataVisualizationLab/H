@@ -129,7 +129,7 @@ let project_collection ={
     SpecialSections: {
         text:"Special Sections",
         id:"Special Sections",
-        sub: ["Fast Track Pavement","Bonded Overlay","Unbonded Overlay","Whitetopping","Precast Pavement","Cast-in-Place Prestressed","Recycled Concrete Pavement","RCC Pavement"]
+        sub: ["Fast Track Pavement","Bonded Overlay","Unbonded Overlay","Whitetopping","Precast Pavement","Cast-in-Place Prestressed Pavement","Recycled Concrete Pavement","RCC Pavement"]
     }
 };
 let project_name = Object.keys(project_collection).map(k => project_collection[k]['text']);
@@ -190,8 +190,8 @@ let map_conf ={
 // menu
 
 let schemaSvg_option = {
-    margin: {top: 2, right: 10, bottom: 6, left: 110},
-    width: 370,
+    margin: {top: 2, right: 10, bottom: 15, left: 130},
+    width: 420,
     height: 600,
     scalezoom: 1,
     widthView: function(){return this.width*this.scalezoom},
