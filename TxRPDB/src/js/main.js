@@ -16,6 +16,9 @@ function initFilterSetting(){
         .append('svg').each(function(d){
         d.schemabox = Schemabox().graphicopt(schemaSvg_option).svg(d3.select(this)).init().visibility(d.statistic).filterChangeFunc(filterTrigger).master(d);
     });
+    // schema_field.select(".selectize-control").attr("visibility", function (d) {
+    //     if (d.statistic) {return "hide"} else return "unset";
+    // })
 }
 function init(){
     // sortVariables();
@@ -41,7 +44,6 @@ function init(){
 
         }
     );
-
 
     d3.select('#filterContent').on('removeFilter',function(d){
         removeFilter(d3.event.detail);

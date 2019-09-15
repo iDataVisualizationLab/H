@@ -185,7 +185,7 @@ let Schemabox = function() {
         bar_g.select('.label')
             .transition()
             .duration(500)
-            .attr("y", y.bandwidth()/5*3 )
+            .attr("y", y.bandwidth() )
             .attr("x",  d =>  x(d.value.len+25))
             .text( d => d.value.len )
             .attr("dx", "-.7em");
