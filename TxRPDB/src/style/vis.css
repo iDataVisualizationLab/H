@@ -253,3 +253,7 @@ input:focus, textarea:focus {
 .grid path {
     stroke-width: 0;
 }
+
+.axis {
+    font-size: 12px;
+}

@@ -1,13 +1,12 @@
 let Schemabox = function() {
     let graphicopt = {
             margin: {top: 20, right: 0, bottom: 0, left: 0},
-            // width: 250,
-            // height: 50,
             width: 420,
             height: 250,
             scalezoom: 10,
             barcolor: 'red',
-            barWidth: 12,
+            barWidth: 14,
+            fontSize: 12,
             widthView: function(){return this.width*this.scalezoom},
             heightView: function(){return this.height*this.scalezoom},
             widthG: function(){return this.widthView()-this.margin.left-this.margin.right},
@@ -20,12 +19,6 @@ let Schemabox = function() {
         svg,g,visibility,filterChangeFunc=function(){},master={},dataShadow=[],g_shadow,maing,overlayg,
     data =[];
     let schemabox ={};
-    // var x = d3.scaleBand()
-    //     .range([0, graphicopt.widthG()])
-    //     .padding(0.1);
-    // var y = d3.scaleLinear()
-    //     .range([graphicopt.heightG(), 0]);
-
 
     var x = d3.scaleLinear()
         .range([0, graphicopt.widthG()]);
@@ -41,24 +34,20 @@ let Schemabox = function() {
         y.range([0, numOfItems*graphicopt.barWidth])
             .domain(dataShadow.map( d => { return d.key; }));
 
-        // var xAxis = d3.axisBottom(x).tickSize([]).tickPadding(10);
-        // g.select(".x.axis")
-        //     .call(xAxis);
-
         svg.attr("height", graphicopt.svgHeightGToHeight(numOfItems*graphicopt.barWidth));
 
-        var xAxis = d3.axisBottom(x).tickSize([])
+        var xAxis = d3.axisBottom(x).tickSize([]).ticks(Math.round(dataShadow.range[1]/50));
 
         var yAxis = d3.axisLeft(y).tickSize([]).tickPadding(5);
         g.select(".y.axis")
             .call(yAxis);
 
         g.select(".x.axis")
-            .attr("transform", `translate(5,${numOfItems*graphicopt.barWidth})`)
+            .attr("transform", `translate(1,${numOfItems*graphicopt.barWidth})`)
             .call(xAxis);
 
         g.select(".grid")
-            .attr("transform", `translate(5,${numOfItems*graphicopt.barWidth})`)
+            .attr("transform", `translate(1,${numOfItems*graphicopt.barWidth})`)
             .call(xAxis.tickSize(-graphicopt.heightG(), 0, 0).tickFormat(''));
 
         let bar_g = g_shadow.selectAll(".barS")
@@ -87,7 +76,7 @@ let Schemabox = function() {
             .style("fill",  d => {
                 return graphicopt.barcolor;
             })
-            .attr('transform',d=>`translate(5,${y(d.key)})`);
+            .attr('transform',d=>`translate(1,${y(d.key)})`);
 
         bar_g.selectAll('rect')
             .transition()
@@ -164,7 +153,7 @@ let Schemabox = function() {
             .style("fill",  d => {
                 return graphicopt.barcolor;
             })
-            .attr('transform',d=>`translate(5,${y(d.key)})`);
+            .attr('transform',d=>`translate(1,${y(d.key)})`);
 
         bar_g.selectAll('rect')
             .data(function (d) {
@@ -206,6 +195,7 @@ let Schemabox = function() {
 
         g_shadow = g.append("g")
             .attr("class", "shadow");
+
         g.append("g")
             .attr("class", "y axis")
             .attr("transform", "translate(0,0)");
