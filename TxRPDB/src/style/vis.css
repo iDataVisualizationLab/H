@@ -197,7 +197,8 @@ input:focus, textarea:focus {
     color: var(--color2);
     font-size: 14px;
     top:50%;
-    transition: 0.5s ease-out;
+    left: 0;
+    transition: 0.5s linear;
 }
 
 .openbtn[aria-expanded=true] {
