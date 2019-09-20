@@ -1,58 +1,60 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
     init();
 });
-function initmap(){
+
+function initmap() {
     map_conf.height = map.clientHeight
 }
-function initFilterSetting(){
+
+function initFilterSetting() {
     let schema_field = d3.select("#schemaSetting").selectAll('div').data(arr_variable_collection)
         .enter()
         .append('div')
-        .attr('class','schema-field');
-    schema_field.append('span').attr('class','schema-field-label').text(d=>{return varNameProcessor(d.text);});
-    schema_field.append('select').attr('class','schema-field-tag').attr('multiple','').attr('placeholder',d=>`Choose ${d.text} ....`);
-    schema_field.append('div').attr('class','schema-field-chart')
-        .append('svg').each(function(d){
+        .attr('class', 'schema-field')
+        .attr('id', d => d.id);
+    schema_field.append('span').attr('class', 'schema-field-label').text(d => {
+        return varNameProcessor(d.text);
+    });
+    schema_field.append('select').attr('class', 'schema-field-tag').attr('multiple', '').attr('placeholder', d => `Choose ${d.text} ....`);
+    schema_field.append('div').attr('class', 'schema-field-chart')
+        .append('svg').each(function (d) {
         d.schemabox = Schemabox().graphicopt(schemaSvg_option).svg(d3.select(this)).init().visibility(d.statistic).filterChangeFunc(filterTrigger).master(d);
     });
-    // schema_field.select(".selectize-control").attr("visibility", function (d) {
-    //     if (d.statistic) {return "hide"} else return "unset";
-    // })
 }
-function init(){
-    // sortVariables();
+
+function init() {
     initmap();
     initFilterSetting();
     sectionToProject();
 
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-    d3.select('#projects').selectAll('projects_item').data(Object.keys(project_collection).map(k=>project_collection[k]))
-        .enter().append('li').attr('class','button projects_item').classed('has-submenu',d=>d.sub.length).each(function(d, i){
-        const currentel = d3.select(this);
-        currentel.text(d.text);
-            if(d.sub.length) {
-                let ul_item = currentel.append('ul').attr('class','submenu menu vertical').attr('data-submenu','');
-                ul_item.selectAll('li').data(e=>e.sub)
-                    .enter().append('li').text(e=>e).on('click',e=>addFilter({type:'DataType',text:e,id:e},true));
-            } else{
-                currentel.on('click',e=>addFilter({type:'DataType',text:e.text,id:e.id},true));
+    d3.select('#projects').selectAll('projects_item').data(Object.keys(project_collection).map(k => project_collection[k]))
+        .enter().append('li').attr('class', 'button projects_item').classed('has-submenu', d => d.sub.length).each(function (d, i) {
+            const currentel = d3.select(this);
+            currentel.text(d.text);
+            if (d.sub.length) {
+                let ul_item = currentel.append('ul').attr('class', 'submenu menu vertical').attr('data-submenu', '');
+                ul_item.selectAll('li').data(e => e.sub)
+                    .enter().append('li').text(e => e).on('click', e => {
+                    return addFilter({type: 'DataType', text: e, id: e}, true)
+                });
+            } else {
+                currentel.on('click', e => {return addFilter({type: 'DataType', text: e.text, id: e.id}, true)});
             }
             currentel.style("background-color", colors(d['text']));
 
         }
     );
 
-    d3.select('#filterContent').on('removeFilter',function(d){
+    d3.select('#filterContent').on('removeFilter', function (d) {
         removeFilter(d3.event.detail);
     })
     Foundation.reInit($('#projects'));
-    readConf("Data_details").then((data)=>{
+    readConf("Data_details").then((data) => {
         reformat(data);
         basedata = data;
-        basearr = d3.values(data) ;
-        basearr.forEach(d=>{
+        basearr = d3.values(data);
+        basearr.forEach(d => {
             if (d['GPSEnd'] !== null)
                 d['GPSEnd'] = dmstoLongLat(d['GPSEnd']);
             if (d['GPSStart'] !== null)
@@ -62,52 +64,98 @@ function init(){
         });
 
         dp = new dataProcessor(basearr);
-    }).then(function(){
-        return readConf("listMedia").then((data)=>{mediaQuery=data});
-    }).then(function(){
-            return readLib("TxDOT_Districts",'json').then((data)=>
-                us_dis=data,us_dis);
+    }).then(function () {
+        return readConf("listMedia").then((data) => {
+            mediaQuery = data
+        });
+    }).then(function () {
+            return readLib("TxDOT_Districts", 'json').then((data) =>
+                us_dis = data, us_dis);
         }
-    ).then (function(){
-            return readLib("TX-48-texas-counties",'json').then((data)=>us=data,us);
+    ).then(function () {
+            return readLib("TX-48-texas-counties", 'json').then((data) => us = data, us);
         }
-    ).then(function() {
+    ).then(function () {
         let max_d = 0;
-        arr_variable_collection.forEach(v=>{
+        arr_variable_collection.forEach(v => {
 
-            let data = d3.nest().key(d=>d[v.id]).sortKeys((a,b)=>a-b)
-                    .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
-                    .entries(dp.filter(d=>d[v.id]!==null));
+            let data = d3.nest().key(d => d[v.id]).sortKeys((a, b) => a - b)
+                .rollup(d => {
+                    return {len: d.length, val: d[0][v.id], elem: countElements(d)}
+                })
+                .entries(dp.filter(d => d[v.id] !== null));
 
             if (v.id === 'DataType') {
                 data = sortProject(data);
             }
 
             v.schemabox.dataShadow(data);
-            max_d = Math.max(max_d,d3.max(data,d=>d.value.len));
+            max_d = Math.max(max_d, d3.max(data, d => d.value.len));
         });
 
-        arr_variable_collection.forEach(v=> {
+        arr_variable_collection.forEach(v => {
             let data = v.schemabox.dataShadow();
-            data.range=[0, max_d];
+            data.range = [0, max_d];
             v.schemabox.dataShadow(data).draw_Shadow();
 
-            selectize_init(d3.selectAll('.schema-field').filter(d=>d.text===v.text).select('.schema-field-tag'),data)
+            selectize_init(d3.selectAll('.schema-field').filter(d => d.text === v.text).select('.schema-field-tag'), data);
+
+
         });
+
         plotMaps(dp);
         redrawMap();
     });
 }
 
-function selectize_init(selection,data){
+function selectize_init(selection, data, type) {
     selection.selectAll('option').data(data)
         .enter().append('option')
-        .text(d=>d.key);
-    $(selection.node()).selectize({plugins: ['remove_button']
+        .text(d => {
+            return d.key;
+        });
+
+    var eventHandler = function (name) {
+        return function () {
+            // console.log(name,arguments);
+        };
+
+    };
+
+    $(selection.node()).selectize({
+        plugins: ['remove_button'],
+        onChange: eventHandler('onChange'),
+        onItemAdd: onItemAdd(),
+        onItemRemove: onItemRemove(),
+        onOptionAdd: eventHandler('onOptionAdd'),
+        onOptionRemove: eventHandler('onOptionRemove'),
+        onDropdownOpen: eventHandler('onDropdownOpen'),
+        onDropdownClose: eventHandler('onDropdownClose'),
+        onFocus: eventHandler('onFocus'),
+        onBlur: eventHandler('onBlur'),
+        onInitialize: eventHandler('onInitialize'),
     })
+
 }
 
-function redrawMap(){
+function onItemAdd() {
+    return function () {
+        var newSelected = arguments[0];
+        var type = arguments[1][0].parentNode.parentNode.parentNode.id;
+        addFilter({type: type, text: newSelected, id: newSelected}, false);
+    };
+}
+
+function onItemRemove() {
+    return function () {
+        var newSelected = arguments[0];
+        var type = this.$wrapper[0].parentNode;
+        removeFilter({type: type, text: newSelected, id: newSelected}, true);
+
+    };
+}
+
+function redrawMap() {
     d3.select('#numberSection').text(dp.length);
     plotCounties();
     plotDistrict();
@@ -116,16 +164,20 @@ function redrawMap(){
     UpdateSchema();
 }
 
-function UpdateSchema(){
-    arr_variable_collection.forEach(v=>{
-        let data = d3.nest().key(d=>{return d[v.id];})
-            .rollup(d=>{return {len: d.length,val: d[0][v.id], elem: countElements(d)}})
-            .entries(dp.filter(d=>d[v.id]!==null));
+function UpdateSchema() {
+    arr_variable_collection.forEach(v => {
+        let data = d3.nest().key(d => {
+            return d[v.id];
+        })
+            .rollup(d => {
+                return {len: d.length, val: d[0][v.id], elem: countElements(d)}
+            })
+            .entries(dp.filter(d => d[v.id] !== null));
 
         var groupCountData = data.map(d => d.value.elem);
         var stackData = d3.stack().keys(project_name)(groupCountData);
         stackData.forEach(col => col.forEach(d => d['project'] = col.key))
-        stackData = stackData[0].map((col,i) => stackData.map(row => row[i]));
+        stackData = stackData[0].map((col, i) => stackData.map(row => row[i]));
 
         data.forEach(function (d, i) {
             d.value['stack'] = stackData[i];
@@ -134,29 +186,34 @@ function UpdateSchema(){
         v.schemabox.data(data);
     });
 }
-function addFilter(d,collapseMode){
-    if(collapseMode){
-        _.remove(filters, e=>e.type===d.type);
+
+
+function addFilter(d, collapseMode) {
+    if (collapseMode) {
+        _.remove(filters, e => e.type === d.type);
     }
     filters.push(d);
-    updateFilterChip(d3.select('#filterContent'),filters);
+    updateFilterChip(d3.select('#filterContent'), filters);
     filterData(filters);
     Updatemap();
     redrawMap();
 }
-function removeFilter(d){
-    _.remove(filters, e=>e.id===d.id);
-    updateFilterChip(d3.select('#filterContent'),filters);
+
+function removeFilter(d, fromSchema) {
+    if (!fromSchema) {
+        console.log("#"+d.type+" .selectized")
+        $("#"+d.type+" .selectized")[0].selectize.removeItem(d.text);
+    }
+    _.remove(filters, e => e.id === d.id);
+    updateFilterChip(d3.select('#filterContent'), filters);
     filterData(filters);
     Updatemap();
     redrawMap();
 }
-function filterTrigger (ob,state) {
-    if(state)
+
+function filterTrigger(ob, state) {
+    if (state)
         addFilter(ob);
     else
-        removeFilter(ob);
-}
-function updateFilterschema(){
-
+        removeFilter(ob, false);
 }

@@ -247,6 +247,7 @@ let Schemabox = function() {
 
     };
     schemabox.filterChangeFunc = function (_) {
+        console.log(_)
         return arguments.length ? (filterChangeFunc = _, schemabox) : filterChangeFunc;
     };
 

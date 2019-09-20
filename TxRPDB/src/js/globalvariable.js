@@ -243,4 +243,4 @@ let Colors = [
 ];
 
 let sectionProjectMap = {}
-let projectColorMap = {}
+let selectedValues = []

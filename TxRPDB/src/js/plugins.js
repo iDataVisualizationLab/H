@@ -343,7 +343,7 @@ function updateFilterChip (path,data) {
     let chipf_n = chipf.enter().append('div')
         .attr('class','chip');
     chipf_n.append("span").attr('class','chiptext').text(d=>d.text)
-    chipf_n    .append('button').attr('class','close-closebtn')
+    chipf_n.append('button').attr('class','close-closebtn')
         .attr('type','button')
         .attr('aria-label','removeChip').attr('aria-hidden','true').html('&times;').on('click',function(d){
             d3.select(this.parentNode).remove();
@@ -363,14 +363,6 @@ function sectionToProject(){
     }
 }
 
-function projectToColor() {
-    var counter = 0;
-    for (var project in project_collection)  {
-        projectColorMap[project_collection[project]['text']] = Colors[counter];
-        counter++;
-    }
-}
-
 function countElements(data) {
     var elements = {}
     var sum = 0
@@ -387,10 +379,6 @@ function sortVariables(){
     var isNotStatistic = arr_variable_collection.filter(d => !d.statistic);
     return isNotStatistic.concat(isStatistic);
 }
-
-// function varNameProcessing(name) {
-//     var items = name.split
-// }
 
 function sortProject(data) {
     var sortedArrVariables = [];
