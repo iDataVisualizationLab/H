@@ -1,6 +1,6 @@
 function maketooltip(info, properties) {
     if (properties.data&&properties.data.sectionID) {
-        let variable_display = ["CCSJ", "ConcreteCAT", "ConstYear", "County", "Direction", "District", "Drainage", "GPSEnd", "GPSStart", "Highway", "HorizontalAlign", "NoOFLanes", "PavementType", "RefMarker", "ShoulderType", "SlabThickness", "Surfacetexture", "VerticalAlign"]
+        let variable_display = ["District", "County", "Highway", "CCSJ", "PavementType", "ConstYear", "RefMarker", "SlabThickness", "ShoulderType", "Drainage"]
         let ta = d3.select(info).selectAll('.detail_div')
             .data([properties.data],d=>d.sectionID);
         ta.exit().remove();

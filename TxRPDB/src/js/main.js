@@ -8,7 +8,7 @@ function initmap() {
 }
 
 function initFilterSetting() {
-    let schema_field = d3.select("#schemaSetting").selectAll('div').data(arr_variable_collection)
+    let schema_field = d3.select("#schemaSetting").selectAll('div').data(specificVariables)
         .enter()
         .append('div')
         .attr('class', 'schema-field')
@@ -39,7 +39,9 @@ function init() {
                     return addFilter({type: 'DataType', text: e, id: e}, true)
                 });
             } else {
-                currentel.on('click', e => {return addFilter({type: 'DataType', text: e.text, id: e.id}, true)});
+                currentel.on('click', e => {
+                    return addFilter({type: 'DataType', text: e.text, id: e.id}, true)
+                });
             }
             currentel.style("background-color", colors(d['text']));
 
@@ -47,7 +49,7 @@ function init() {
     );
 
     d3.select('#filterContent').on('removeFilter', function (d) {
-        removeFilter(d3.event.detail);
+        removeFilter(d3.event.detail, false);
     })
     Foundation.reInit($('#projects'));
     readConf("Data_details").then((data) => {
@@ -77,7 +79,8 @@ function init() {
         }
     ).then(function () {
         let max_d = 0;
-        arr_variable_collection.forEach(v => {
+
+        specificVariables.forEach(v => {
 
             let data = d3.nest().key(d => d[v.id]).sortKeys((a, b) => a - b)
                 .rollup(d => {
@@ -93,13 +96,18 @@ function init() {
             max_d = Math.max(max_d, d3.max(data, d => d.value.len));
         });
 
-        arr_variable_collection.forEach(v => {
+        specificVariables.forEach(v => {
             let data = v.schemabox.dataShadow();
             data.range = [0, max_d];
-            v.schemabox.dataShadow(data).draw_Shadow();
+
+            var hasSlider = false;
+
+            if (v.id === 'ConstYear') {
+                hasSlider = true;
+            }
+            v.schemabox.dataShadow(data).draw_Shadow(hasSlider);
 
             selectize_init(d3.selectAll('.schema-field').filter(d => d.text === v.text).select('.schema-field-tag'), data);
-
 
         });
 
@@ -165,7 +173,7 @@ function redrawMap() {
 }
 
 function UpdateSchema() {
-    arr_variable_collection.forEach(v => {
+    specificVariables.forEach(v => {
         let data = d3.nest().key(d => {
             return d[v.id];
         })
@@ -201,8 +209,8 @@ function addFilter(d, collapseMode) {
 
 function removeFilter(d, fromSchema) {
     if (!fromSchema) {
-        console.log("#"+d.type+" .selectized")
-        $("#"+d.type+" .selectized")[0].selectize.removeItem(d.text);
+        $("#" + d.type + " .selectized")[0].selectize.removeItem(d.text);
+        console.log(d3.select(".slider"))
     }
     _.remove(filters, e => e.id === d.id);
     updateFilterChip(d3.select('#filterContent'), filters);
@@ -216,4 +224,20 @@ function filterTrigger(ob, state) {
         addFilter(ob);
     else
         removeFilter(ob, false);
+}
+
+function updateYearRangeFilter(d, collapseMode) {
+    console.log(d)
+    if (yearRangeFilter.min === d.from && yearRangeFilter.max === d.to) {
+        _.remove(filters, e => e.type === d.type && e.from === yearRangeFilter.from && e.to === yearRangeFilter.to);
+        removeFilter(d, true);
+        return;
+    }
+
+    if ((yearRangeFilter.from !== d.from) || (yearRangeFilter.to !== d.to)) {
+        _.remove(filters, e => e.type === d.type && e.from === yearRangeFilter.from && e.to === yearRangeFilter.to);
+        yearRangeFilter.from = d.from;
+        yearRangeFilter.to = d.to;
+        addFilter(d, collapseMode);
+    }
 }

@@ -257,3 +257,7 @@ input:focus, textarea:focus {
 .axis {
     font-size: 12px;
 }
+
+.slider .tick {
+    color: #0a0a0a;
+}
