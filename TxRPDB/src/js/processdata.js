@@ -20,9 +20,8 @@ function filterData(filters) {
                             return years.find(f => e[type] === f.toString())
                         }
                     } else {
-                        return ff.values.find(f => e[type] === f.id)
+                        return ff.values.find(f => e[type] == f.id)
                     }
-
                 }
             )
         });

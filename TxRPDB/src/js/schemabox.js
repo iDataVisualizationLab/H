@@ -37,9 +37,13 @@ let Schemabox = function () {
 
     schemabox.draw_Shadow = function (hasSlider) {
         var numOfItems = dataShadow.map(d => d.key).length;
-        x.domain(dataShadow.range);
+        // x.domain(dataShadow.range);
+        var maxValue = Math.max(...dataShadow.map(d => d.value.len));
 
+        x.domain([0,maxValue])
         if (hasSlider) graphicopt.barWidth = graphicopt.barWidth / 2;
+
+
 
         y.range([0, numOfItems * graphicopt.barWidth])
             .domain(dataShadow.map(d => {
@@ -66,7 +70,7 @@ let Schemabox = function () {
             var sliderContainer = svg
                 .append('g')
                 .attr("class", "filter-slider")
-                .attr('transform', `translate(60,${graphicopt.heightG() / 8})`);
+                .attr('transform', `translate(60,5)`);
 
             var slider = d3.sliderVertical()
                 .max(new Date(dataShadow[0].key, 1, 1))
@@ -75,7 +79,7 @@ let Schemabox = function () {
                 .default([new Date(dataShadow[dataShadow.length - 1].key, 1, 1), new Date(dataShadow[0].key, 1, 1)])
                 .fill('#2196f3')
                 .tickFormat(d3.timeFormat('%Y'))
-                .height(graphicopt.heightG() * 3 / 4)
+                .height(graphicopt.heightG()-10)
                 .on('end', values => {
                     var fromYear = new Date(values[0]);
                     var toYear = new Date(values[1]);
