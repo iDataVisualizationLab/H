@@ -210,7 +210,6 @@ function addFilter(d, collapseMode) {
 function removeFilter(d, fromSchema) {
     if (!fromSchema) {
         $("#" + d.type + " .selectized")[0].selectize.removeItem(d.text);
-        console.log(d3.select(".slider"))
     }
     _.remove(filters, e => e.id === d.id);
     updateFilterChip(d3.select('#filterContent'), filters);
@@ -227,7 +226,6 @@ function filterTrigger(ob, state) {
 }
 
 function updateYearRangeFilter(d, collapseMode) {
-    console.log(d)
     if (yearRangeFilter.min === d.from && yearRangeFilter.max === d.to) {
         _.remove(filters, e => e.type === d.type && e.from === yearRangeFilter.from && e.to === yearRangeFilter.to);
         removeFilter(d, true);

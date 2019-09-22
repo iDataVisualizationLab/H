@@ -39,6 +39,8 @@ let Schemabox = function () {
         var numOfItems = dataShadow.map(d => d.key).length;
         x.domain(dataShadow.range);
 
+        if (hasSlider) graphicopt.barWidth = graphicopt.barWidth / 2;
+
         y.range([0, numOfItems * graphicopt.barWidth])
             .domain(dataShadow.map(d => {
                 return d.key;
@@ -65,6 +67,7 @@ let Schemabox = function () {
                 .append('g')
                 .attr("class", "filter-slider")
                 .attr('transform', `translate(60,${graphicopt.heightG() / 8})`);
+
             var slider = d3.sliderVertical()
                 .max(new Date(dataShadow[0].key, 1, 1))
                 .min(new Date(dataShadow[dataShadow.length - 1].key, 1, 1))
@@ -90,6 +93,12 @@ let Schemabox = function () {
             yearRangeFilter.max = new Date(dataShadow[dataShadow.length - 1].key, 1, 1).getFullYear();
 
             sliderContainer.call(slider);
+
+            sliderContainer.selectAll()
+
+            yAxisSelected.selectAll(".tick text").each(function (d, i) {
+                if (d % 5 !== 0) d3.select(this).remove();
+            })
         }
 
         let bar_g = g_shadow.selectAll(".barS")

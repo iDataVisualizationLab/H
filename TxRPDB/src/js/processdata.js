@@ -27,7 +27,6 @@ function filterData(filters) {
             )
         });
     dp = new dataProcessor(dp);
-    console.log(dp);
 }
 
 function reformat(data) {
