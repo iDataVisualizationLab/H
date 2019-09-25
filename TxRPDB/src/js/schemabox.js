@@ -37,21 +37,23 @@ let Schemabox = function () {
 
     schemabox.draw_Shadow = function (hasSlider) {
         var numOfItems = dataShadow.map(d => d.key).length;
+
         // x.domain(dataShadow.range);
-        var maxValue = Math.max(...dataShadow.map(d => d.value.len));
 
-        x.domain([0,maxValue])
+        var maxValue = Math.ceil(Math.max(...dataShadow.map(d => d.value.len)) / 10) * 10;
+
+        x.domain([0, maxValue])
+
         if (hasSlider) graphicopt.barWidth = graphicopt.barWidth / 2;
-
-
 
         y.range([0, numOfItems * graphicopt.barWidth])
             .domain(dataShadow.map(d => {
                 return d.key;
             }));
+
         svg.attr("height", graphicopt.svgHeightGToHeight(numOfItems * graphicopt.barWidth));
 
-        var xAxis = d3.axisBottom(x).tickSize([]).ticks(Math.round(dataShadow.range[1] / 50));
+        var xAxis = d3.axisBottom(x).tickSize([]).ticks(5);
 
         var yAxis = d3.axisLeft(y).tickSize([]).tickPadding(5);
 
@@ -79,7 +81,7 @@ let Schemabox = function () {
                 .default([new Date(dataShadow[dataShadow.length - 1].key, 1, 1), new Date(dataShadow[0].key, 1, 1)])
                 .fill('#2196f3')
                 .tickFormat(d3.timeFormat('%Y'))
-                .height(graphicopt.heightG()-10)
+                .height(graphicopt.heightG() - 10)
                 .on('end', values => {
                     var fromYear = new Date(values[0]);
                     var toYear = new Date(values[1]);
@@ -174,6 +176,9 @@ let Schemabox = function () {
     }
 
     function drawHorizontal(dataset) {
+        var maxValue = Math.ceil(Math.max(...dataShadow.map(d => d.value.len)) / 10) * 10;
+        x.domain([0, maxValue]);
+
         let bar_g = maing.selectAll(".bar")
             .data(dataset, d => d.key);
 
@@ -238,7 +243,7 @@ let Schemabox = function () {
             .transition()
             .duration(500)
             .attr("y", y.bandwidth())
-            .attr("x", d => x(d.value.len + 25))
+            .attr("x", d => x(d.value.len) + 25)
             .text(d => d.value.len)
             .attr("dx", "-.7em");
     }

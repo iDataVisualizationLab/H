@@ -105,8 +105,6 @@ function colorType(type) {
 function plotGPS() {
     gm.map.pin.remove();
 
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-
     let ct = dp.filter(d=>(d["GPSStart"]!==null)||(d["GPSEnd"]!==null)).map((d)=>{
         var bermudaTriangle = d["GPSStart"]||d["GPSEnd"];
         var newf = new ol.Feature({
@@ -117,11 +115,12 @@ function plotGPS() {
             image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
                 color: (d=>colors(sectionProjectMap[d['DataType']]))(d),
                 crossOrigin: 'anonymous',
+                opacity:0.8,
                 src: 'src/Images/pin.png',
                 anchor: [0.5, 1],
                 anchorXUnits: 'fraction',
                 anchorYUnits: 'fraction',
-                scale: 0.5
+                scale: 0.35
             }))
         }));
         return newf;

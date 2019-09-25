@@ -1,24 +1,25 @@
 // Avoid `console` errors in browsers that lack a console.
-(function() {
-  var method;
-  var noop = function () {};
-  var methods = [
-    'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
-    'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
-    'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-    'timeline', 'timelineEnd', 'timeStamp', 'trace', 'warn'
-  ];
-  var length = methods.length;
-  var console = (window.console = window.console || {});
+(function () {
+    var method;
+    var noop = function () {
+    };
+    var methods = [
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeline', 'timelineEnd', 'timeStamp', 'trace', 'warn'
+    ];
+    var length = methods.length;
+    var console = (window.console = window.console || {});
 
-  while (length--) {
-    method = methods[length];
+    while (length--) {
+        method = methods[length];
 
-    // Only stub undefined methods.
-    if (!console[method]) {
-      console[method] = noop;
+        // Only stub undefined methods.
+        if (!console[method]) {
+            console[method] = noop;
+        }
     }
-  }
 }());
 
 /**
@@ -31,7 +32,7 @@ function getCookie(cname) {
     var cArr = window.document.cookie.split(';'); //Create cookie array by split the cookie by ';'
 
     //Loop through the cookies and return the cooki value if it find the cookie name
-    for(var i=0; i<cArr.length; i++) {
+    for (var i = 0; i < cArr.length; i++) {
         var c = cArr[i].trim();
         //If the name is the cookie string at position 0, we found the cookie and return the cookie value
         if (c.indexOf(name) == 0)
@@ -50,12 +51,12 @@ function getCookie(cname) {
  */
 function checkCookie() {
     //deleteCookie('vistorname');
-    var vistor=getCookie("vistorname");
+    var vistor = getCookie("vistorname");
     if (vistor != "") {
         var welcome_msg = window.document.getElementById('welcome-msg');
-        welcome_msg.innerHTML="Welcome "+vistor;
+        welcome_msg.innerHTML = "Welcome " + vistor;
     } else {
-        vistor = prompt("What is your name?","");
+        vistor = prompt("What is your name?", "");
         if (vistor != "" && vistor != null) {
             setCookie("vistorname", vistor, 30);
         }
@@ -65,7 +66,7 @@ function checkCookie() {
 /**
  * Set a cooke and reload the page when the create cookie button is clicked
  */
-function setACookie(){
+function setACookie() {
     var cname = window.document.getElementById('cname').value; //Get the cookie name from the cname input element
     var cvalue = window.document.getElementById('cvalue').value;//Get the cookie value from the cvalue input element
     var exdays = window.document.getElementById('exdays').value;//Get the expiration days from the exdays input element
@@ -77,7 +78,7 @@ function setACookie(){
 /**
  * Delete a cookie and reload the page when the delete cookie button is clicked
  */
-function deleteACookie(){
+function deleteACookie() {
     var cname = window.document.getElementById('cname').value;//Get the cookie name from the cname input element
     deleteCookie(cname);//Call the deleteCookie to delete the cookie
     window.location.reload();//Reload the page
@@ -86,16 +87,14 @@ function deleteACookie(){
 /**
  * Display all the cookies
  */
-function disPlayAllCookies()
-{
+function disPlayAllCookies() {
     var cookieDiv = window.document.getElementById('cookies');//Get the cookies div element
     var cArr = window.document.cookie.split(';'); //Create cookie array by split the cookie by ';'
 
     //Loop through all the cookies and display them with cookie name = cookie value
-    for(var i=0; i<cArr.length; i++)
-    {
+    for (var i = 0; i < cArr.length; i++) {
         var pElm = window.document.createElement("p");//Create a p element to hold the cookie name and cookie value
-        pElm.innerHTML=cArr[i].trim();//Put the cookie name and cookie value in the p elment
+        pElm.innerHTML = cArr[i].trim();//Put the cookie name and cookie value in the p elment
         cookieDiv.appendChild(pElm);//Append the p to the cookies div element
     }
 }
@@ -106,71 +105,74 @@ function readConf(choice) {
     });
 }
 
-function readLib(choice,type) {
-    return d3.json("src/lib/" + choice + "."+type, function (data) {
+function readLib(choice, type) {
+    return d3.json("src/lib/" + choice + "." + type, function (data) {
         return data;
     });
 }
 
-function dmstoLongLat(string){
+function dmstoLongLat(string) {
     const dicarr = string.match(/[A-Z]/gi);
     let temp = {};
-    if(dicarr !==null) {
+    if (dicarr !== null) {
         const numstrarr = string.split(/[A-Z]/i)
-        temp[COL_LONG] =  convertorGPS(str2num(numstrarr[2]));
+        temp[COL_LONG] = convertorGPS(str2num(numstrarr[2]));
         temp[COL_LAT] = convertorGPS(str2num(numstrarr[1]));
-        if (dicarr[0] === "S"||dicarr[1] === "s") {
+        if (dicarr[0] === "S" || dicarr[1] === "s") {
             temp[COL_LAT] = -temp[COL_LAT];
         }
-        if (dicarr[1] === "W"||dicarr[1] === "w") {
+        if (dicarr[1] === "W" || dicarr[1] === "w") {
             temp[COL_LONG] = -temp[COL_LONG];
         }
-    }else{
+    } else {
         const numstrarr = string.split(',');
-        temp[COL_LONG] =  +numstrarr[1];
+        temp[COL_LONG] = +numstrarr[1];
         temp[COL_LAT] = +numstrarr[0];
     }
     return temp;
-    function str2num(str){
-        return str.split(/�|'|"/).map(d=>+d);
+
+    function str2num(str) {
+        return str.split(/�|'|"/).map(d => +d);
     }
-    function convertorGPS([d,min,sec]){
-        return d + (min/60) + (sec/3600);
+
+    function convertorGPS([d, min, sec]) {
+        return d + (min / 60) + (sec / 3600);
     }
 }
 
-function LongLattodms(arr){
+function LongLattodms(arr) {
     try {
-            let str = '';
-            let tempNum = arr[COL_LAT];
-            if (tempNum < 0) {
-                str += 'S';
-                tempNum = -tempNum;
-            } else
-                str += 'N';
-            str += num2str(tempNum) + ', ';
-            tempNum = arr[COL_LONG];
-            if (tempNum < 0) {
-                str += 'W';
-                tempNum = -tempNum;
-            } else
-                str += 'E';
-            str += num2str(tempNum);
+        let str = '';
+        let tempNum = arr[COL_LAT];
+        if (tempNum < 0) {
+            str += 'S';
+            tempNum = -tempNum;
+        } else
+            str += 'N';
+        str += num2str(tempNum) + ', ';
+        tempNum = arr[COL_LONG];
+        if (tempNum < 0) {
+            str += 'W';
+            tempNum = -tempNum;
+        } else
+            str += 'E';
+        str += num2str(tempNum);
 
-            return str;
-    }catch(e){
+        return str;
+    } catch (e) {
         return arr;
     }
-    function num2str (num){
+
+    function num2str(num) {
         let d = Math.ceil(num);
-        num = (num-d)*60;
+        num = (num - d) * 60;
         let m = Math.ceil(num);
-        let sec = (num-m)*60;
-        return d+'o'+m+"'"+'"';
+        let sec = (num - m) * 60;
+        return d + 'o' + m + "'" + '"';
     }
 }
 
-function queryData(){
+function queryData() {
 
 }
 
@@ -212,33 +214,36 @@ function queryData(){
 //         }
 //     })
 // }
-function queryMedia(secid,conttype){
+function queryMedia(secid, conttype) {
 
 }
-function queryfromsource(secid,div) {
+
+function queryfromsource(secid, div) {
     let temp_data;
     let maindata = div.datum();
     if (!mediaQuery[secid] || !mediaQuery[secid][this.id]) {
         temp_data = undefined;
         div.selectAll('*').remove();
-        div.classed('no-background-color',false).append('span').text('No files are available to Display.')
-    }else{
-        temp_data = mediaQuery[secid][this.id].map((d,i)=>{
-            return{ url: ViewFileURL('src/data/SurveyData/'+secid+'/'+this.id+'/'+d),
+        div.classed('no-background-color', false).append('span').text('No files are available to Display.')
+    } else {
+        temp_data = mediaQuery[secid][this.id].map((d, i) => {
+            return {
+                url: ViewFileURL('src/data/SurveyData/' + secid + '/' + this.id + '/' + d),
                 filename: d,
                 type: maindata.id,
-                target: secid+maindata.id+i,
-                urlDownload: DownloadURLSet('src/data/SurveyData/'+secid+'/'+this.id+'/'+d),
+                target: secid + maindata.id + i,
+                urlDownload: DownloadURLSet('src/data/SurveyData/' + secid + '/' + this.id + '/' + d),
             };
         })
-        div.classed('no-background-color',true).select('span').remove();
-        let dold = div.selectAll('div.cell').data(temp_data,d=>d);
+        div.classed('no-background-color', true).select('span').remove();
+        let dold = div.selectAll('div.cell').data(temp_data, d => d);
         dold.exit().remove();
-        dold.enter().append('div').attr('class','cell').append('iframe').attr('class','cell').attr('frameborder',0);
-        div.selectAll('iframe').attr('src',d=>d.url)
+        dold.enter().append('div').attr('class', 'cell').append('iframe').attr('class', 'cell').attr('frameborder', 0);
+        div.selectAll('iframe').attr('src', d => d.url)
     }
     return temp_data;
 }
+
 function getpdfContent() {
     $.ajax({
         type: 'GET',
@@ -247,14 +252,14 @@ function getpdfContent() {
         crossDomain: true,
         success: function (htmldata) {
             var doc = new PDF24Doc({
-                charset : "UTF-8",
-                headline : "This ist the headline",
-                headlineUrl : "http://www.pdf24.org",
-                baseUrl : "http://www.pdf24.org",
-                filename : "test",
-                pageSize : "210x297",
-                emailTo : "stefanz@pdf24.org",
-                emailFrom : "stefanz@pdf24.org",
+                charset: "UTF-8",
+                headline: "This ist the headline",
+                headlineUrl: "http://www.pdf24.org",
+                baseUrl: "http://www.pdf24.org",
+                filename: "test",
+                pageSize: "210x297",
+                emailTo: "stefanz@pdf24.org",
+                emailFrom: "stefanz@pdf24.org",
                 emailSubject: "Here is your created PDF files",
                 emailBody: "The created PDF file is attached to this email. Regards www.pdf24.org!",
                 emailBodyType: "text"
@@ -264,11 +269,11 @@ function getpdfContent() {
             * Add an element without using PDF24Element
             */
             doc.addElement({
-                title : "This is a title",
-                url : "http://www.pdf24.org",
-                author : "Stefan Ziegler",
-                dateTime : "2010-04-15 8:00",
-                body : htmldata
+                title: "This is a title",
+                url: "http://www.pdf24.org",
+                author: "Stefan Ziegler",
+                dateTime: "2010-04-15 8:00",
+                body: htmldata
             });
 
             /*
@@ -278,6 +283,7 @@ function getpdfContent() {
         }
     })
 }
+
 function DownloadURLSet(path) {
     path = path.replace(/!/g, '/');
     path = path.replace(/ /g, '%20');
@@ -290,6 +296,7 @@ function DownloadURLSet(path) {
     path = "https://idatavisualizationlab.github.io/H/TxRPDB/" + path;
     return path;
 }
+
 function ViewFileURL(path) {
     path = path.replace(/!/g, '/');
     path = path.replace(/ /g, '%20');
@@ -299,14 +306,14 @@ function ViewFileURL(path) {
     var lengthOfFile = path.length;
     var filetype = path.substring(indexOffileType + 1, lengthOfFile);
 
-    if (filetype == "jpg" || filetype == "JPG" || filetype == "jpeg" || filetype == "JPEG" || filetype == "png" || filetype == "PNG" || filetype == "pdf"  || filetype == "PDF" || filetype == "gif" || filetype == "GIF") {
+    if (filetype == "jpg" || filetype == "JPG" || filetype == "jpeg" || filetype == "JPEG" || filetype == "png" || filetype == "PNG" || filetype == "pdf" || filetype == "PDF" || filetype == "gif" || filetype == "GIF") {
         path = "https://idatavisualizationlab.github.io/H/TxRPDB/" + path;
-    }
-    else {
-        path = "https://docs.google.com/gview?url=https://idatavisualizationlab.github.io/H/TxRPDB/" + path+"&embedded=true";
+    } else {
+        path = "https://docs.google.com/gview?url=https://idatavisualizationlab.github.io/H/TxRPDB/" + path + "&embedded=true";
     }
     return path;
 }
+
 // function DownloadURLSet(path) {
 //     path = path.replace(/!/g, '/');
 //     path = path.replace(/ /g, '%20');
@@ -337,23 +344,23 @@ function ViewFileURL(path) {
 //     return path;
 // }
 
-function updateFilterChip (path,data) {
-    let chipf = path.selectAll('.chip').data(data,d=>d.id);
+function updateFilterChip(path, data) {
+    let chipf = path.selectAll('.chip').data(data, d => d.id);
     chipf.exit().remove();
     let chipf_n = chipf.enter().append('div')
-        .attr('class','chip');
-    chipf_n.append("span").attr('class','chiptext').text(d=>d.text)
-    chipf_n.append('button').attr('class','close-closebtn')
-        .attr('type','button')
-        .attr('aria-label','removeChip').attr('aria-hidden','true').html('&times;').on('click',function(d){
-            d3.select(this.parentNode).remove();
-        path.dispatch('removeFilter',{detail:d});
+        .attr('class', 'chip');
+    chipf_n.append("span").attr('class', 'chiptext').text(d => d.text)
+    chipf_n.append('button').attr('class', 'close-closebtn')
+        .attr('type', 'button')
+        .attr('aria-label', 'removeChip').attr('aria-hidden', 'true').html('&times;').on('click', function (d) {
+        d3.select(this.parentNode).remove();
+        path.dispatch('removeFilter', {detail: d});
     });
-    chipf.select('.chiptext').text(d=>d.text);
+    chipf.select('.chiptext').text(d => d.text);
     return chipf;
 }
 
-function sectionToProject(){
+function sectionToProject() {
     for (var project in project_collection) {
         projectFields = project_collection[project]
         for (var section in projectFields['sub']) {
@@ -374,9 +381,9 @@ function countElements(data) {
     return elements;
 }
 
-function sortVariables(){
-    var isStatistic = arr_variable_collection.filter( d=> d.statistic);
-    var isNotStatistic = arr_variable_collection.filter(d => !d.statistic);
+function sortVariables(variables) {
+    var isStatistic = variables.filter(d => d.statistic);
+    var isNotStatistic = variables.filter(d => !d.statistic);
     return isNotStatistic.concat(isStatistic);
 }
 
@@ -384,7 +391,7 @@ function sortProject(data) {
     var sortedArrVariables = [];
 
     for (var project in project_collection) {
-        for (var d in project_collection[project]['sub']){
+        for (var d in project_collection[project]['sub']) {
             var section = findSectionByName(data, project_collection[project]['sub'][d]);
             if (section === undefined) continue;
             data = data.filter(d => d.key !== section.key);
@@ -410,6 +417,11 @@ function varNameProcessor(name) {
     return newName;
 }
 
-function makeXGridlines() {
-    return d3.axisBottom(x).ticks(5);
+
+function makeSpecificVariables () {
+    var sVariables = ['District', 'County', 'Highway', 'PavementType', 'ConstYear', 'SlabThickness', 'BaseType', 'Drainage', 'CumulativeTraffic'];
+    var new_variables = []
+
+    sVariables.forEach(v => new_variables.push(arr_variable_collection.filter(k => {return k.id === v})));
+    return new_variables.flat();
 }

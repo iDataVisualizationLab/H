@@ -3750,7 +3750,7 @@
 
     Selectize.define('remove_button', function(options) {
         options = $.extend({
-            label     : '&times;',
+            label     : '&#;',
             title     : 'Remove',
             className : 'remove',
             append    : true

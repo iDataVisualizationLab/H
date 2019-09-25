@@ -109,7 +109,10 @@ let variable_collection ={
 };
 let arr_variable_collection =[];
 Object.keys(variable_collection).forEach(d=>{if (!variable_collection[d].hide) arr_variable_collection.push(variable_collection[d])});
-arr_variable_collection = sortVariables();
+arr_variable_collection = sortVariables(arr_variable_collection);
+let specificVariables = makeSpecificVariables();
+specificVariables = sortVariables(specificVariables);
+
 let project_collection ={
     CRCP: {
         text:"CRCP",
@@ -173,6 +176,13 @@ let project_feature_collection = {
 }
 
 let filters =[];
+let yearRangeFilter = {
+    min : 0,
+    max : 0,
+    from: 0,
+    to: 2100
+};
+
 // map
 
 let us,us_dis;
@@ -243,4 +253,3 @@ let Colors = [
 ];
 
 let sectionProjectMap = {}
-let selectedValues = []
