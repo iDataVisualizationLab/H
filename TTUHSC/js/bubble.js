@@ -114,7 +114,7 @@ function createBubblesChart() {
   function createNodes(data) {
     var nodes = data.map(function (d) {
       return {
-        radius: 40,
+        radius: 20,
         value: 1,
         name: d.name.split(",", 1)[0],
         data: d,

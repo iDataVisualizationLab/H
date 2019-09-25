@@ -6,7 +6,7 @@ text {
   clip-path: circle(50%);
 }
 circle {
-  stroke-width: 4;
+  stroke-width: 2;
 }
 
 .cluster {
