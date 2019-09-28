@@ -1,0 +1,14 @@
+text {
+  font: 10px sans-serif;
+}
+
+.profile-pic {
+  clip-path: circle(50%);
+}
+circle {
+  stroke-width: 2;
+}
+
+.cluster {
+  font-size: 20px;
+}
