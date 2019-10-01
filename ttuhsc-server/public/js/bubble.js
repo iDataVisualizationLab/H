@@ -241,7 +241,7 @@ $(document).ready(function () {
         });
 
     $.ajax({
-        url: 'http://localhost:3000/api/profile/all',
+        url: '/api/profile/all',
         success: function (data) {
             bubbleChart(data.data);
         },

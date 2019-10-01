@@ -4,6 +4,7 @@
   "description": "",
   "main": "ttuhsc-server.js",
   "scripts": {
+    "start": "node ttuhsc-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

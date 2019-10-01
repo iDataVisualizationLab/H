@@ -581,6 +581,12 @@ pre code {
     }
 }
 
+@media (min-width: 1201px) {
+    .container {
+        max-width: 90%;
+    }
+}
+
 
 .container-fluid {
     width: 100%;
@@ -2729,7 +2735,8 @@ textarea.form-control {
 }
 
 .btn {
-    display: inline-block;
+    display: block;
+    margin: auto;
     font-weight: 400;
     color: #212529;
     text-align: center;
