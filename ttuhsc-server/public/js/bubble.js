@@ -1,21 +1,23 @@
 function createBubblesChart() {
-    let width = window.innerWidth,
-        height = window.innerHeight,
-        color = d3.scaleOrdinal(d3.schemeCategory10);
+    let color = d3.scaleOrdinal(d3.schemeCategory10);
 
+    let width = null, height = null;
+    let center = null;
     let forceStrength = 0.04;
-    let center = {x: width / 2, y: height / 2};
     let bubbles = null, svg = null;
     let clusters = {};
     let simulation = null;
 
+    svg = d3.select("#main-chart").append("svg")
+        .attr("class", "bubble-chart");
+
+    width = +svg.style('width').replace('px', '');
+    height = +svg.style('height').replace('px', '');
+
+    center = {x: width / 2, y: height / 2};
+
     var chart = function (data) {
         createCluster(data);
-
-        svg = d3.select("body").append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("class", "bubble-chart");
 
         let defs = svg.append("defs");
 
@@ -81,15 +83,7 @@ function createBubblesChart() {
     function splitBubbles() {
         var clusterArr = Object.keys(clusters);
 
-        svg.selectAll('text').data(clusterArr)
-            .enter()
-            .append('text')
-            .attr('class', 'cluster')
-            .attr('x', d => clusters[d].x)
-            .attr('y', d => clusters[d].y / 5)
-            .attr('text-anchor', 'middle')
-            .style('fill', d => color(d))
-            .text(d => d);
+        createMultilineText(clusterArr);
 
         simulation.force('x', d3.forceX().strength(forceStrength).x(d => clusters[d.data.institution].x));
         simulation.alpha(1).restart();
@@ -186,45 +180,71 @@ function createBubblesChart() {
         else splitBubbles();
     };
 
+    function createMultilineText(clusterArr) {
+        var texts = svg.selectAll('text').data(clusterArr)
+            .enter()
+            .append('text')
+            .attr('class', 'cluster')
+            .attr('x', d => clusters[d].x)
+            .attr('y', d => clusters[d].y / 5)
+            .attr('text-anchor', 'middle')
+            .style('fill', d => color(d))
+            .text(d => d);
+
+        var width = 200;
+
+        texts.each(function () {
+            var text = d3.select(this),
+                words = text.text().split(/\s+|\//).reverse(),
+                word,
+                line = [],
+                lineNumber = 0,
+                lineHeight = 1.1, // ems
+                x = text.attr("x"),
+                y = text.attr("y"),
+                tspan = text.text(null).append("tspan").attr("x", x).attr("y", y);
+            while (word = words.pop()) {
+                line.push(word);
+                tspan.text(line.join(" "));
+                if (tspan.node().getComputedTextLength() > width) {
+                    line.pop();
+                    tspan.text(line.join(" "));
+                    line = [word];
+                    tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + "em").text(word);
+                }
+            }
+        });
+    }
+
     return chart
 }
 
 var bubbleChart = createBubblesChart();
 
-// d3.json("profiles.json", function (error, data) {
-//     if (error) throw error;
-//     console.log(data);
-//     bubbleChart(data);
-// });
+$(document).ready(function () {
+    let filter = d3.select('.chart-container').append("div")
+        .attr("class", "filter-button");
 
-$.ajax({
-  url: 'http://localhost:3000/profile/all',
-  success: function (data) {
-    console.log(data.data);
-    bubbleChart(data.data);
-  },
-  dataType: 'json'
-});
+    filter.append('button').attr("class", "group-button").attr('id', 'group-all').text("All profile");
+    filter.append('button').attr("class", "group-button").attr('id', 'group-institution').text("Group by institution");
 
-let filter = d3.select('body').append("div")
-    .attr("class", "filter-button");
+    filter.selectAll('.group-button')
+        .on('click', function () {
+            d3.selectAll('.group-button').classed('active', false);
 
-filter.append('button').attr("class", "group-button").attr('id', 'group-all').text("All profile");
-filter.append('button').attr("class", "group-button").attr('id', 'group-institution').text("Group by institution");
+            var button = d3.select(this);
 
-filter.selectAll('.group-button')
-    .on('click', function () {
-        d3.selectAll('.group-button').classed('active', false);
+            button.classed('active', true);
+            var displayName = button.attr('id');
 
-        var button = d3.select(this);
+            bubbleChart.toggleDisplay(displayName)
+        });
 
-        button.classed('active', true);
-        var displayName = button.attr('id');
-
-        console.log(displayName)
-
-        bubbleChart.toggleDisplay(displayName)
+    $.ajax({
+        url: 'http://localhost:3000/api/profile/all',
+        success: function (data) {
+            bubbleChart(data.data);
+        },
+        dataType: 'json'
     });
-
-
-
+});

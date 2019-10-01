@@ -12,3 +12,29 @@ circle {
 .cluster {
   font-size: 20px;
 }
+
+.filter-button {
+  width: fit-content;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.group-button {
+  padding: 5px;
+  margin: 5px;
+}
+
+.bubble-chart {
+  width: 100%;
+  height: 600px;
+}
+
+.chart-container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
