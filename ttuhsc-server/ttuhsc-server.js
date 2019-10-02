@@ -13,7 +13,7 @@ MongoClient.connect("mongodb+srv://ttuhsc:ttuhsc123@ttuhsc-3yay2.mongodb.net/tes
     db = database.db("TTUHSC");
 
     app.listen(port);
-    console.log("Listening on port "+port);
+    console.log("Listening on port " + port);
 });
 
 app.use(logger('dev'));
@@ -55,6 +55,7 @@ app.post('/api/blog/create', function (req, res) {
     });
 
     req.on('end', function () {
+        db.collection('blog').insertOne(JSON.parse(store));
         res.send("OK")
     })
 });
