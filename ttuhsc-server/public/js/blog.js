@@ -20,7 +20,7 @@ $(document).ready(function () {
             $("#blog-container").append(
                 `<div class='col-md-12'>` +
                 `<div class='blog-entry ftco-animate d-md-flex fadeInUp ftco-animated'>` +
-                `<a href='single.html' class='img img-2' style='background-image: url(img/user_male.png);'></a>` +
+                `<a href='single.html' class='img img-2' style='background-image: url(\"img/${name}.png\");'></a>` +
                 `<div class='text text-2 pl-md-4'>` +
                 `<h3 class='mb-2'><a href='single.html'>${title}</a>` +
                 `</h3>` +

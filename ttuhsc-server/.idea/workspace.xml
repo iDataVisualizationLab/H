@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3e937541-fe00-47ec-a3c8-e260d9f3f849" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/js/blog.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/js/tooltip.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/blog.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/blog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ttuhsc-server.js" beforeDir="false" afterPath="$PROJECT_DIR$/ttuhsc-server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/bubble.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/bubble.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/bubble.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/bubble.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/blog.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/blog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/bubble.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/bubble.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/single.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/single.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +98,7 @@
       <workItem from="1569859184533" duration="20207000" />
       <workItem from="1569944864097" duration="11172000" />
       <workItem from="1569982575489" duration="208000" />
-      <workItem from="1569982820013" duration="7982000" />
+      <workItem from="1569982820013" duration="13860000" />
     </task>
     <servers />
   </component>

@@ -8,6 +8,8 @@ function createBubblesChart() {
     let clusters = {};
     let simulation = null;
 
+    var tooltip = floatingTooltip('gates_tooltip', 240);
+
     svg = d3.select("#main-chart").append("svg")
         .attr("class", "bubble-chart");
 
@@ -57,7 +59,9 @@ function createBubblesChart() {
             })
             .attr('stroke', function (d) {
                 return color(d.data.institution);
-            });
+            })
+            .on('mouseover', showDetail)
+            .on('mouseout', hideDetail);
 
         bubbles.merge(bubblesE);
 
@@ -127,20 +131,34 @@ function createBubblesChart() {
         d3.select(this).attr("stroke", "black");
 
         var content = '<span class="name">Name: </span><span class="value">' +
-            d.name +
+            d.data.name +
             '</span><br/>' +
-            '<span class="name">Title: </span><span class="value">$' +
-            d.title +
+            '<span class="name">Title: </span><span class="value">' +
+            d.data.title +
             '</span><br/>' +
             '<span class="name">Institution: </span><span class="value">' +
-            d.institution +
+            d.data.institution +
             '</span><br/>' +
             '<span class="name">Email: </span><span class="value">' +
-            d.email +
+            d.data.email +
             '</span><br/>' +
             '<span class="name">Phone: </span><span class="value">' +
-            d.phone +
+            d.data.phone +
             '</span>';
+
+        tooltip.showTooltip(content, d3.event);
+    }
+
+    function hideDetail(d) {
+        d3.select(this)
+            .attr('fill', function (d) {
+                return "url(\"#" + d.name.replace(" ", "") + "\")";
+            })
+            .attr('stroke', function (d) {
+                return color(d.data.institution);
+            });
+
+        tooltip.hideTooltip();
     }
 
     function dragstarted(d) {
