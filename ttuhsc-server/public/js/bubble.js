@@ -7,6 +7,7 @@ function createBubblesChart() {
     let bubbles = null, svg = null;
     let clusters = {};
     let simulation = null;
+    let bubbleRadius = null;
 
     var tooltip = floatingTooltip('gates_tooltip', 240);
 
@@ -18,8 +19,11 @@ function createBubblesChart() {
 
     center = {x: width / 2, y: height / 2};
 
+
     var chart = function (data) {
         createCluster(data);
+
+        bubbleRadius = height/ (data.length*1/3);
 
         let defs = svg.append("defs");
 
@@ -112,7 +116,7 @@ function createBubblesChart() {
     function createNodes(data) {
         var nodes = data.map(function (d) {
             return {
-                radius: 20,
+                radius: bubbleRadius,
                 value: 1,
                 name: d.name.split(",", 1)[0],
                 data: d,
@@ -130,7 +134,9 @@ function createBubblesChart() {
     function showDetail(d) {
         d3.select(this).attr("stroke", "black");
 
-        var content = '<span class="name">Name: </span><span class="value">' +
+        var content =
+            '<img src=\"img/'+d.name+'.png\" width = 133 height = auto style="margin-left: auto; margin-right: auto"><br/>'+
+            '<span class="name">Name: </span><span class="value">' +
             d.data.name +
             '</span><br/>' +
             '<span class="name">Title: </span><span class="value">' +
@@ -240,15 +246,15 @@ function createBubblesChart() {
 var bubbleChart = createBubblesChart();
 
 $(document).ready(function () {
-    let filter = d3.select('.chart-container').append("div")
-        .attr("class", "filter-button");
+    let filter = d3.select('#main-chart').append("div")
+        .attr("class", "row col-12 button-container");
 
-    filter.append('button').attr("class", "group-button").attr('id', 'group-all').text("All profile");
-    filter.append('button').attr("class", "group-button").attr('id', 'group-institution').text("Group by institution");
+    filter.append('button').attr("class", "btn btn-info filter-button").attr('id', 'group-all').text("All profile");
+    filter.append('button').attr("class", "btn btn-info filter-button").attr('id', 'group-institution').text("Group by institution");
 
-    filter.selectAll('.group-button')
+    filter.selectAll('.filter-button')
         .on('click', function () {
-            d3.selectAll('.group-button').classed('active', false);
+            d3.selectAll('.filter-button').classed('active', false);
 
             var button = d3.select(this);
 

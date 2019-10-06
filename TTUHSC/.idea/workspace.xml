@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e8320a6-6658-426c-9751-592251059283" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../ttuhsc-server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ttuhsc-server/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ttuhsc-server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../ttuhsc-server/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ttuhsc-server/public/blog.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ttuhsc-server/public/blog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ttuhsc-server/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/../ttuhsc-server/public/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ttuhsc-server/public/js/bubble.js" beforeDir="false" afterPath="$PROJECT_DIR$/../ttuhsc-server/public/js/bubble.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ttuhsc-server/public/single.html" beforeDir="false" afterPath="$PROJECT_DIR$/../ttuhsc-server/public/single.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ttuhsc-server/ttuhsc-server.js" beforeDir="false" afterPath="$PROJECT_DIR$/../ttuhsc-server/ttuhsc-server.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

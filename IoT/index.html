@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IoT visualization</title>
+    <script src="lib/d3.min.js"></script>
+    <script src='lib/spin.min.js'></script>
+    <style>
+        .axis path,
+        .axis line{
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        .axis text{
+            font: 11px sans-serif;
+        }
+        .cells :hover circle{
+            fill: red;
+        }
+        .brushed{
+            fill: red;
+            opacity: 1.0;
+        }
+        .faded{
+            opacity: 0.2;
+        }
+        #info{
+            border: solid 1px black;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 5px #444;
+            padding: 10px;
+            position: absolute;
+            top: 900px;
+            left: 20px;
+            margin-right: 55px;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+<!-- Spinner when loading -->
+<div id="loadingSpinner"></div>
+<div id="info" style="display: none; background-color:white;"></div>
+<!--section for auto-complete: adopted from w3schools-->
+<style>
+@import "css/autocomplete.css";
+</style>
+<script src="lib/autocomplete.js"></script>
+<form autocomplete="off" action="none">
+    <select id="filename" onchange="changeDataSet();">
+        <option value="iothackernews">IoT</option>
+        <option value="bigdatahackernews">Big Data</option>
+        <option value="cpshackernews">CPS</option>
+    </select>
+    <div class="autocomplete" style="width:100px;">
+        <input id="theWord" type="text" name="theWord" placeholder="words">
+    </div>
+    <input type="button" value="Submit" onclick="searchWord()">
+</form>
+
+<svg id="mainsvg"></svg>
+<script src="javascript/d3.layout.wordstream.js"></script>
+<script src="javascript/wordstream_draw.js"></script>
+<script src="javascript/wordstream_data.js"></script>
+<script src="javascript/main.js"></script>
+</body>
+</html>

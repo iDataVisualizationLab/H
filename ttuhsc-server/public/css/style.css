@@ -551,8 +551,8 @@ pre code {
 
 .container {
     width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 0px;
+    padding-left: 0px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -583,7 +583,7 @@ pre code {
 
 @media (min-width: 1201px) {
     .container {
-        max-width: 90%;
+        max-width: 100%;
     }
 }
 
@@ -602,8 +602,8 @@ pre code {
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .no-gutters {
@@ -2176,6 +2176,7 @@ pre code {
 }
 
 .form-control {
+    background-color: #f2f3f5 !important;
     display: block;
     width: 100%;
     height: calc(1.5em + 0.75rem + 2px);
@@ -2210,7 +2211,7 @@ pre code {
 
 .form-control:focus {
     color: #495057;
-    background-color: #fff;
+    background-color: #f2f3f5;
     border-color: #80bdff;
     outline: 0;
     -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -2319,11 +2320,16 @@ textarea.form-control {
 
 .form-group {
     margin-bottom: 1rem;
+    width: 100%;
 }
 
 .form-text {
     display: block;
     margin-top: 0.25rem;
+}
+
+.blog-comment {
+    margin-top: 20px;
 }
 
 .form-row {
@@ -2685,7 +2691,9 @@ textarea.form-control {
     .form-inline .form-control {
         display: inline-block;
         width: auto;
+        height: auto;
         vertical-align: middle;
+        border-radius: 25px;
     }
 
     .form-inline .form-control-plaintext {
@@ -11714,7 +11722,7 @@ h1, h2, h3, h4, h5,
 
 #colorlib-main {
     width: 100%;
-    float: right;
+    float: left;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     -webkit-transition: all 0.5s ease;
@@ -11724,7 +11732,7 @@ h1, h2, h3, h4, h5,
 
 @media (min-width: 992px) {
     #colorlib-main {
-        width: 85%;
+        width: 100%;
     }
 }
 
@@ -11860,7 +11868,7 @@ h1, h2, h3, h4, h5,
 }
 
 .ftco-about .text h2 {
-    font-size: 50px;
+    font-size: 25px;
     font-family: "Poppins", Arial, sans-serif;
     font-weight: 600;
     line-height: 1.2;
@@ -12003,13 +12011,26 @@ h1, h2, h3, h4, h5,
 
 .blog-entry {
     width: 100%;
-    margin-bottom: 3em;
+    margin-bottom: 1.5em;
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 2%;
 }
 
 .blog-entry .img {
     display: block;
-    height: 150px;
-    width: 150px;
+    height: 60px;
+    width: 60px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.blog-entry .img-avatar {
+    display: block;
+    height: 80px;
+    width: 80px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -12019,7 +12040,7 @@ h1, h2, h3, h4, h5,
 @media (max-width: 767.98px) {
     .blog-entry .img {
         margin: 0 auto;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 }
 
@@ -12027,7 +12048,7 @@ h1, h2, h3, h4, h5,
     position: relative;
     z-index: 0;
     width: 100%;
-    width: calc(100% - 150px);
+    width: calc(100% - 80px);
 }
 
 @media (max-width: 767.98px) {
@@ -12039,7 +12060,7 @@ h1, h2, h3, h4, h5,
 
 .blog-entry .text h3 {
     font-weight: 400;
-    font-size: 30px;
+    font-size: 20px;
 }
 
 .blog-entry .text h3 a {
@@ -12206,16 +12227,17 @@ h1, h2, h3, h4, h5,
 
 .form-control {
     height: 52px !important;
-    background: #fff !important;
+    background: #f2f3f5 !important;
     color: #000000 !important;
     font-size: 18px;
     border-radius: 0px;
+    border-color: transparent;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
 
 .form-control:focus, .form-control:active {
-    border-color: #000000;
+    /*border-color: #000000;*/
 }
 
 textarea.form-control {
@@ -12486,7 +12508,7 @@ textarea.form-control {
 }
 
 .bg-light {
-    background: #f8f9fa !important;
+    background: #e9ebee !important;
 }
 
 .bg-primary {
@@ -13019,4 +13041,122 @@ textarea.form-control {
     height: 60%;
     display: block;
     margin: 0 auto 50px;
+}
+
+.scrollable-panel {
+    overflow-y: scroll;
+    max-height: 100vh;
+}
+
+.blog-content {
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.horizontal-line {
+    margin-bottom: 10px;
+    width: 100%;
+    border-top: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.blog-content p {
+    height: fit-content;
+}
+
+.blog-content p img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.blog-content-img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chart-container {
+    background-color: #e9ebee;
+}
+
+.bubble-chart {
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+
+.comment-content {
+    padding: 10px;
+    border-radius: 25px;
+    background-color: #f2f3f5;
+    margin: 0;
+    margin-left: 2%;
+}
+
+.blog-comment .img {
+    width: 50px;
+    height: 50px;
+}
+
+.scrollable-panel .col-md-12 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.button-container {
+    margin: 0 auto;
+    width: fit-content;
+    text-align: center;
+}
+
+.middle-text {
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#create-post-form .img {
+    width: 60px;
+    height: 60px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#create-post-form textarea {
+    resize: none;
+    overflow: hidden;
+    font-size: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#blog-create-container .btn {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.create-comment-form .img {
+    width: 40px;
+    height: 40px;
+}
+
+.create-comment-form textarea {
+    resize: none;
+    overflow: hidden;
+    font-size: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.create-comment-form .btn {
+    margin-top: 5px;
+}
+
+.input-comment {
+
+}
+
+.comment-signin {
+    margin: auto;
 }
