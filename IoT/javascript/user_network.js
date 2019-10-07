@@ -1,7 +1,7 @@
 function createNetwork(data, mainsvg) {
     let width = 1650,
         height = 800;
-    let forceStrength = 0.3;
+    let forceStrength = 0.5;
     let center = {x: width/2, y: height/2}
 
     var packLayout = d3.pack();
