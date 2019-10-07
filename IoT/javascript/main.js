@@ -14,10 +14,10 @@ var spinner = new Spinner(opts).spin(target);
 // END: loader spinner settings ****************************
 
 let mainsvg = d3.select("#mainsvg"),
-    svgWidth = 1650,
-    svgHeight = 1000,
-    // svgWidth = window.outerWidth,
-    // svgHeight = window.outerHeight,
+    // svgWidth = 1650,
+    // svgHeight = 1000,
+    svgWidth = window.outerWidth,
+    svgHeight = window.outerHeight,
     axisHeight = 40,
     margin = {top: 40, right: 40, bottom: 40, left: 80, axisx: 40, axisy: 60, storyTop: 40},
     width = svgWidth - margin.left - margin.right - margin.axisx,
@@ -48,7 +48,7 @@ let mainsvg = d3.select("#mainsvg"),
 mainsvg.attr("width", svgWidth).attr("height", svgHeight);
 let self = null;
 let currentScoreRange = null;
-let fileName = "iothackernews";
+let fileName = "iotdataset";
 loadData(fileName)
 function loadData(fileName){
     //Just make sure that we clean the svg.
@@ -56,6 +56,9 @@ function loadData(fileName){
     d3.json("data/"+fileName+".json", function (error, rawData) {
         self = this;
         if (error) throw error;
+        console.log(rawData);
+        createNetwork(rawData, mainsvg);
+
         //<editor-fold desc="process data">
         //take data from 2011 or later only
         rawData = rawData.filter(d => d.timestamp >= new Date("2011-01-01"));
@@ -161,8 +164,6 @@ function loadData(fileName){
             }
             return result;
         }
-
-        createNetwork(rawData, mainsvg);
 
         //</editor-fold>
         //The slider is based on rawData

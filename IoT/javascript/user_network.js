@@ -1,11 +1,13 @@
 function createNetwork(data, mainsvg) {
-    let width = 1650,
-        height = 800;
-    let forceStrength = 0.5;
-    let center = {x: width/2, y: height/2}
+    let width = svgWidth,
+        height = svgHeight;
+    let forceStrength = 0.3;
+    let packPadding = 1.5;
+    let center = {x: width / 2, y: height / 2}
 
     var packLayout = d3.pack();
-    packLayout.size([width, height]);
+    packLayout.size([width, height])
+        .padding(packPadding);
 
     const nodes = createNodes(data);
     const idToUsername = idToUsernameMap(nodes);
@@ -16,7 +18,10 @@ function createNetwork(data, mainsvg) {
 
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.key))
-        .force("charge", d3.forceManyBody())
+        .force('charge', d3.forceManyBody())
+        .force('collision', d3.forceCollide().radius(function (d) {
+            return 5
+        }))
         .force('x', d3.forceX().strength(forceStrength).x(center.x))
         .force('y', d3.forceY().strength(forceStrength).y(center.y))
         .velocityDecay(0.2)
@@ -31,31 +36,45 @@ function createNetwork(data, mainsvg) {
         .data(links)
         .enter()
         .append("line")
-        .attr("stroke-width", d => 2*Math.sqrt(d.value));
+        .attr("stroke-width", d => 2 * Math.sqrt(d.value));
 
     const node = svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5)
-        .selectAll("circle")
+        .attr("class", "nodes")
+        .selectAll("g")
         .data(nodes)
         .enter()
+        .append("g");
+
+    const circle = node
         .append("circle")
         .attr("r", 5)
-        .attr("fill", "#000000")
+        .attr("fill", "blue")
         .call(drag(simulation));
 
-    node.append("title")
-        .text(d => d.key);
+    // node.append("text")
+    //     .text(d => d.key)
+    //     .style("font-family", "sans-serif")
+    //     .style("font-size", "10px")
+    //     .style("fill", "#000000")
+    //     .attr("x", 6)
+    //     .attr("y", 3);
 
     simulation.on("tick", function () {
-       link.attr("x1", d => d.source.x)
-           .attr("y1", d => d.source.y)
-           .attr("x2", d => d.target.x)
-           .attr("y2", d => d.target.y);
+        link.attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
 
-       node.attr("cx", d => d.x)
-           .attr("cy", d => d.y);
+        node.attr("transform", function (d) {
+            return `translate(${d.x}, ${d.y})`;
+        })
     });
+
+    function charge(d) {
+        return -Math.pow(5, 2.0) * forceStrength;
+    }
 }
 
 drag = simulation => {
@@ -81,7 +100,8 @@ drag = simulation => {
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended);
-}
+};
+
 
 function idToUsernameMap(nodes) {
     var map = {};
