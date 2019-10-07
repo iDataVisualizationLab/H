@@ -1,3 +1,3 @@
 # IoT
 
-https://idatavisualizationlab.github.io/IoT/
+https://idatavisualizationlab.github.io/H/IoT/
