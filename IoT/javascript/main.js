@@ -162,266 +162,268 @@ function loadData(fileName){
             return result;
         }
 
+        createNetwork(rawData, mainsvg);
+
         //</editor-fold>
         //The slider is based on rawData
-        scaleX.domain(d3.extent(rawData.map(d => +d.timestamp)));
-        let scoreDomain = d3.extent(rawStories.map(d => +d.score));
-        //make sure the scale score is not zero
-        scoreDomain[0] = Math.max(scoreDomain[0], 1);
-        scaleScore.domain(scoreDomain);
-
-        //The maingroup
-        mainGroup = mainsvg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
-        //The data
-        let allData = null;
-        links = mainGroup.append("g")
-            .attr("class", "links")
-            .attr("transform", `translate(${margin.axisx}, 0)`);
-
-        let cellGroup = mainGroup.append("g")
-            .attr("class", "cells")
-            .attr("transform", `translate(${margin.axisx}, 0)`);
-        self.updateDisplay = function updateDisplay(scoreRange) {
-
-            //Filter stories
-            let data = rawData.filter(d => {
-                if (d.type !== "story") {
-                    return true;
-                } else {
-                    return d.score >= scoreRange[0] && d.score <= scoreRange[1];
-                }
-            });
-            let word = document.getElementById("theWord").value;
-            if (word) {
-                data = data.filter(d => d.type !== "story" || d.title.toLowerCase().indexOf(word.toLowerCase()) >= 0)
-            }
-            let stories = extractStories(data);
-            ////TODO: Shouldn't remove all but add/update/exit merge
-            //Remove axis for author + story scores since we changed it
-            if (authorScoreAxis) authorScoreAxis.remove();
-            if (storyScoreAxis) storyScoreAxis.remove();
-
-            loadNewsData(stories, draw);//load the hacker news stories (only title) to display for the word stream
-            let authors = processAuthors(data); //load authors data
-            allData = data.concat(authors); //add authors data to the list of nodes.
-
-            let scoreDomain = d3.extent(stories.map(d => +d.score));//new score domain after filtering
-            scaleStoryScore.domain(scoreDomain);
-            scaleAuthorScore.domain(scoreDomain);
-            scaleRadius.domain(d3.extent(stories.concat(authors).map(d => Math.sqrt(d.postCount))));
-
-            //<editor-fold desc="force simulation">
-            let simulation = d3.forceSimulation(allData)
-                .force("x", d3.forceX(d => scaleX(+d.timestamp)))
-                .force("y", d3.forceY(d => {
-                    if (d.type === "author") {
-                        return scaleAuthorScore(+d.score);
-                    }
-                    if (d.type === "story") {
-                        return scaleStoryScore(+d.score);
-                    }
-                    if (d.type === "comment") {
-                        return commentStartY + 80 + d.commentLevel * commentHeight;//80 is for the expansion of the comments due to collisions (may remove this since displayin gcomments on demand only => would not have this many.
-                    }
-                }))
-                .force("collide", d3.forceCollide(d => scaleRadius(Math.sqrt(d.postCount)) + 1))
-                .alphaDecay(0.0228)//about 300 loops: = 1 - Math.pow(0.001, 1 / 300)
-                .on("tick", ticked);// ;
-
-
-            //</editor-fold>
-
-            //<editor-fold desc="axis">
-            let xAxisScale = d3.scaleBand().domain(dateLabels).range([0, width]);
-            axisx = mainGroup.append("g")
-                .attr("class", 'axis axis--x')
-                .attr("transform", `translate(${margin.axisx},${storyStartY + storyHeight + margin.axisy})`)
-                .call(d3.axisBottom(xAxisScale));
-
-            authorScoreAxis = mainGroup.append("g")
-                .attr("class", "axis axis--y")
-                .call(d3.axisLeft(scaleAuthorScore).ticks(10, ".0s"));
-
-            storyScoreAxis = mainGroup.append("g")
-                .attr("class", "axis axis--y")
-                .call(d3.axisLeft(scaleStoryScore).ticks(10, ".0s"));
-
-            //</editor-fold>
-
-            let cells = cellGroup.selectAll("circle").data(allData);
-            let circles = cells.enter().append("circle")
-                .merge(cells)
-                .attr("id", d => "id" + d.id)
-                .attr("r", d => scaleRadius(Math.sqrt(d.postCount)))
-                .attr("fill", d => d.type === "story" ? "#000" : "#444")
-                .on("mouseover", (d) => {
-                    if (d.type === "author") {
-                        displayAuthor(d);
-                    }
-                    if (d.type === "story") {
-                        displayStory(d);
-                    }
-                    if (d.type === "comment") {
-                        displayComment(d);
-                    }
-
-                    if (!clicked) {
-                        mainGroup.selectAll("circle").classed("faded", true);
-                        mainGroup.selectAll(".wordletext").classed("faded", true);
-                        d3.select("#info").style("display", "inline");
-                        dispatch.call("up", null, d);
-                        dispatch.call("down", null, d);
-                    }
-                })
-                .on("mouseleave", () => {
-                    if (!clicked) {
-                        d3.select("#info").style("display", "none");
-                        mainGroup.selectAll(".faded").classed("faded", false);
-                        links.selectAll("*").remove();
-                        mainGroup.selectAll(".brushed").classed("brushed", false);
-                    }
-                })
-                .on("click", () => {
-                    clicked = !clicked;
-                })
-
-            cells.exit().remove();
-
-            function ticked() {
-                circles.attr("transform", d => `translate(${d.x}, ${d.y})`);
-                // circles.transition().attr("transform", d => `translate(${d.x}, ${d.y})`);
-            }
-
-            spinner.stop();
-        }
-        dispatch.on("up", node => {
-            let selection = d3.select("#id" + node.id);
-            selection.classed("faded", false);
-            if (node.type !== "word") {//brush if it is not text
-                selection.classed("brushed", true);
-            }
-            let parents = getParent(node, allData);
-            //If the parents are words (parents of author) then we need to check if the word is displayed.
-            if (node.type === "author") {
-                parents = parents.filter(p => p.placed);
-            }
-            //brush the nodes (except the text)
-            parents.forEach(p => {
-                let selection = d3.select("#id" + p.id);
-                selection.classed("faded", false);
-                if (p.type !== "word") {//brush if it is not text
-                    selection.classed("brushed", true);
-                }
-            });
-
-
-            //create links from this node to the parents
-            links
-                .selectAll(".links")
-                .data(parents)
-                .enter()
-                .append("line")
-                .attr("x1", node.x)
-                .attr("y1", node.y)
-                .attr("x2", d => d.x)
-                .attr("y2", d => d.y)
-                .attr("stroke", "black")
-                .attr("stroke-width", 0.3)
-                .attr("opacity", 0.9)
-                .style("pointer-events", "none");
-            parents.forEach(p => {
-                //bubble up all the parents
-                dispatch.call("up", null, p);
-            });
-
-        });
-        dispatch.on("down", node => {
-            let children = getChildrenOfNode(node, allData);
-            let selection = d3.select("#id" + node.id);
-            selection.classed("faded", false);
-            if (node.type !== "word") {
-                selection.classed("brushed", true)
-            }
-
-            children.forEach(p => {
-                d3.select("#id" + p.id).classed("brushed", true).classed("faded", false);
-            });
-            links
-                .selectAll(".links")
-                .data(children)
-                .enter()
-                .append("line")
-                .attr("x1", node.x)
-                .attr("y1", node.y)
-                .attr("x2", d => d.x)
-                .attr("y2", d => d.y)
-                .attr("stroke", "black")
-                .attr("stroke-width", 0.5)
-                .attr("opacity", 0.9)
-                .style("pointer-events", "none");
-            children.forEach(c => {
-                //bubble up all the parents
-                dispatch.call("down", null, c);
-            });
-        });
-
-        function displayAuthor(author) {
-            let msg = "<b>Author: </b>" + author.id + "<br/>" +
-                "Posts: " + author.postCount + "<br/>" +
-                "Average score: " + author.score;
-            d3.select("#info").html(msg);
-        }
-
-        function displayStory(story) {
-            let msg = "<b>Story: </b>" + story.title + "<br/>" +
-                "Posted on: " + formatTime(story.timestamp) + "<br/>" +
-                "Comments: " + story.postCount + "<br/>" +
-                "Average score: " + story.score + "<br/>" +
-                `URL: <a href='${story.url}'>${story.url}</a>`;
-            d3.select("#info").html(msg);
-        }
-
-        function displayComment(comment) {
-            let msg = "<b>By: </b>" + comment.by + "<br/>" +
-                "Posted on: " + formatTime(comment.timestamp) + "<br/>" +
-                "Sub-Comments: " + comment.postCount + "<br/>" +
-                `Text: ${comment.text}`;
-            d3.select("#info").html(msg);
-        }
-
-        function formatTime(unix_timestamp) {
-            let date = new Date(unix_timestamp),
-                year = date.getFullYear(),
-                month = date.getMonth(),
-                day = date.getDate(),
-                formattedTime = year + '-' + (month + 1) + '-' + day;
-            return formattedTime;
-        }
-
-        document.onkeyup = function (e) {
-            if (e.key === "Escape") {
-                clicked = false;
-            }
-        };
-        //<editor-fold: desc="section for the slider">
-        let brushWidth = 6;
-        let brush = d3.brushY().extent([[0, 0], [brushWidth, storyHeight]]).on("end", function () {
-            currentScoreRange = d3.event.selection.map(scaleScore.invert).reverse();
-            updateDisplay(currentScoreRange);
-        });
-        let brushGroup = mainsvg.append("g").attr("class", "brush")
-            .attr("id", "brushGroup")
-            .attr("transform", `translate(${(margin.left - brushWidth) / 2}, ${margin.top + storyStartY})`);
-        let scoreAxis = brushGroup.append("g")
-            .attr("class", "axis axis--y");
-        scoreAxis
-            .call(d3.axisLeft(scaleScore).ticks(10, ".0s"));
-
-        brushGroup.call(brush);
-        brushGroup.selectAll(".overlay").style("fill", '#888');
-        brushGroup.selectAll(".selection").style("fill", null).attr("fill-opacity", 1).style("fill", "#ddd");
-        brushGroup.selectAll("rect.handle").style('fill', "#aaa");
-        brush.move(brushGroup, scaleScore.range().reverse());
+        // scaleX.domain(d3.extent(rawData.map(d => +d.timestamp)));
+        // let scoreDomain = d3.extent(rawStories.map(d => +d.score));
+        // //make sure the scale score is not zero
+        // scoreDomain[0] = Math.max(scoreDomain[0], 1);
+        // scaleScore.domain(scoreDomain);
+        //
+        // //The maingroup
+        // mainGroup = mainsvg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
+        // //The data
+        // let allData = null;
+        // links = mainGroup.append("g")
+        //     .attr("class", "links")
+        //     .attr("transform", `translate(${margin.axisx}, 0)`);
+        //
+        // let cellGroup = mainGroup.append("g")
+        //     .attr("class", "cells")
+        //     .attr("transform", `translate(${margin.axisx}, 0)`);
+        // self.updateDisplay = function updateDisplay(scoreRange) {
+        //
+        //     //Filter stories
+        //     let data = rawData.filter(d => {
+        //         if (d.type !== "story") {
+        //             return true;
+        //         } else {
+        //             return d.score >= scoreRange[0] && d.score <= scoreRange[1];
+        //         }
+        //     });
+        //     let word = document.getElementById("theWord").value;
+        //     if (word) {
+        //         data = data.filter(d => d.type !== "story" || d.title.toLowerCase().indexOf(word.toLowerCase()) >= 0)
+        //     }
+        //     let stories = extractStories(data);
+        //     ////TODO: Shouldn't remove all but add/update/exit merge
+        //     //Remove axis for author + story scores since we changed it
+        //     if (authorScoreAxis) authorScoreAxis.remove();
+        //     if (storyScoreAxis) storyScoreAxis.remove();
+        //
+        //     loadNewsData(stories, draw);//load the hacker news stories (only title) to display for the word stream
+        //     let authors = processAuthors(data); //load authors data
+        //     allData = data.concat(authors); //add authors data to the list of nodes.
+        //
+        //     let scoreDomain = d3.extent(stories.map(d => +d.score));//new score domain after filtering
+        //     scaleStoryScore.domain(scoreDomain);
+        //     scaleAuthorScore.domain(scoreDomain);
+        //     scaleRadius.domain(d3.extent(stories.concat(authors).map(d => Math.sqrt(d.postCount))));
+        //
+        //     //<editor-fold desc="force simulation">
+        //     let simulation = d3.forceSimulation(allData)
+        //         .force("x", d3.forceX(d => scaleX(+d.timestamp)))
+        //         .force("y", d3.forceY(d => {
+        //             if (d.type === "author") {
+        //                 return scaleAuthorScore(+d.score);
+        //             }
+        //             if (d.type === "story") {
+        //                 return scaleStoryScore(+d.score);
+        //             }
+        //             if (d.type === "comment") {
+        //                 return commentStartY + 80 + d.commentLevel * commentHeight;//80 is for the expansion of the comments due to collisions (may remove this since displayin gcomments on demand only => would not have this many.
+        //             }
+        //         }))
+        //         .force("collide", d3.forceCollide(d => scaleRadius(Math.sqrt(d.postCount)) + 1))
+        //         .alphaDecay(0.0228)//about 300 loops: = 1 - Math.pow(0.001, 1 / 300)
+        //         .on("tick", ticked);// ;
+        //
+        //
+        //     //</editor-fold>
+        //
+        //     //<editor-fold desc="axis">
+        //     let xAxisScale = d3.scaleBand().domain(dateLabels).range([0, width]);
+        //     axisx = mainGroup.append("g")
+        //         .attr("class", 'axis axis--x')
+        //         .attr("transform", `translate(${margin.axisx},${storyStartY + storyHeight + margin.axisy})`)
+        //         .call(d3.axisBottom(xAxisScale));
+        //
+        //     authorScoreAxis = mainGroup.append("g")
+        //         .attr("class", "axis axis--y")
+        //         .call(d3.axisLeft(scaleAuthorScore).ticks(10, ".0s"));
+        //
+        //     storyScoreAxis = mainGroup.append("g")
+        //         .attr("class", "axis axis--y")
+        //         .call(d3.axisLeft(scaleStoryScore).ticks(10, ".0s"));
+        //
+        //     //</editor-fold>
+        //
+        //     let cells = cellGroup.selectAll("circle").data(allData);
+        //     let circles = cells.enter().append("circle")
+        //         .merge(cells)
+        //         .attr("id", d => "id" + d.id)
+        //         .attr("r", d => scaleRadius(Math.sqrt(d.postCount)))
+        //         .attr("fill", d => d.type === "story" ? "#000" : "#444")
+        //         .on("mouseover", (d) => {
+        //             if (d.type === "author") {
+        //                 displayAuthor(d);
+        //             }
+        //             if (d.type === "story") {
+        //                 displayStory(d);
+        //             }
+        //             if (d.type === "comment") {
+        //                 displayComment(d);
+        //             }
+        //
+        //             if (!clicked) {
+        //                 mainGroup.selectAll("circle").classed("faded", true);
+        //                 mainGroup.selectAll(".wordletext").classed("faded", true);
+        //                 d3.select("#info").style("display", "inline");
+        //                 dispatch.call("up", null, d);
+        //                 dispatch.call("down", null, d);
+        //             }
+        //         })
+        //         .on("mouseleave", () => {
+        //             if (!clicked) {
+        //                 d3.select("#info").style("display", "none");
+        //                 mainGroup.selectAll(".faded").classed("faded", false);
+        //                 links.selectAll("*").remove();
+        //                 mainGroup.selectAll(".brushed").classed("brushed", false);
+        //             }
+        //         })
+        //         .on("click", () => {
+        //             clicked = !clicked;
+        //         })
+        //
+        //     cells.exit().remove();
+        //
+        //     function ticked() {
+        //         circles.attr("transform", d => `translate(${d.x}, ${d.y})`);
+        //         // circles.transition().attr("transform", d => `translate(${d.x}, ${d.y})`);
+        //     }
+        //
+        //     spinner.stop();
+        // }
+        // dispatch.on("up", node => {
+        //     let selection = d3.select("#id" + node.id);
+        //     selection.classed("faded", false);
+        //     if (node.type !== "word") {//brush if it is not text
+        //         selection.classed("brushed", true);
+        //     }
+        //     let parents = getParent(node, allData);
+        //     //If the parents are words (parents of author) then we need to check if the word is displayed.
+        //     if (node.type === "author") {
+        //         parents = parents.filter(p => p.placed);
+        //     }
+        //     //brush the nodes (except the text)
+        //     parents.forEach(p => {
+        //         let selection = d3.select("#id" + p.id);
+        //         selection.classed("faded", false);
+        //         if (p.type !== "word") {//brush if it is not text
+        //             selection.classed("brushed", true);
+        //         }
+        //     });
+        //
+        //
+        //     //create links from this node to the parents
+        //     links
+        //         .selectAll(".links")
+        //         .data(parents)
+        //         .enter()
+        //         .append("line")
+        //         .attr("x1", node.x)
+        //         .attr("y1", node.y)
+        //         .attr("x2", d => d.x)
+        //         .attr("y2", d => d.y)
+        //         .attr("stroke", "black")
+        //         .attr("stroke-width", 0.3)
+        //         .attr("opacity", 0.9)
+        //         .style("pointer-events", "none");
+        //     parents.forEach(p => {
+        //         //bubble up all the parents
+        //         dispatch.call("up", null, p);
+        //     });
+        //
+        // });
+        // dispatch.on("down", node => {
+        //     let children = getChildrenOfNode(node, allData);
+        //     let selection = d3.select("#id" + node.id);
+        //     selection.classed("faded", false);
+        //     if (node.type !== "word") {
+        //         selection.classed("brushed", true)
+        //     }
+        //
+        //     children.forEach(p => {
+        //         d3.select("#id" + p.id).classed("brushed", true).classed("faded", false);
+        //     });
+        //     links
+        //         .selectAll(".links")
+        //         .data(children)
+        //         .enter()
+        //         .append("line")
+        //         .attr("x1", node.x)
+        //         .attr("y1", node.y)
+        //         .attr("x2", d => d.x)
+        //         .attr("y2", d => d.y)
+        //         .attr("stroke", "black")
+        //         .attr("stroke-width", 0.5)
+        //         .attr("opacity", 0.9)
+        //         .style("pointer-events", "none");
+        //     children.forEach(c => {
+        //         //bubble up all the parents
+        //         dispatch.call("down", null, c);
+        //     });
+        // });
+        //
+        // function displayAuthor(author) {
+        //     let msg = "<b>Author: </b>" + author.id + "<br/>" +
+        //         "Posts: " + author.postCount + "<br/>" +
+        //         "Average score: " + author.score;
+        //     d3.select("#info").html(msg);
+        // }
+        //
+        // function displayStory(story) {
+        //     let msg = "<b>Story: </b>" + story.title + "<br/>" +
+        //         "Posted on: " + formatTime(story.timestamp) + "<br/>" +
+        //         "Comments: " + story.postCount + "<br/>" +
+        //         "Average score: " + story.score + "<br/>" +
+        //         `URL: <a href='${story.url}'>${story.url}</a>`;
+        //     d3.select("#info").html(msg);
+        // }
+        //
+        // function displayComment(comment) {
+        //     let msg = "<b>By: </b>" + comment.by + "<br/>" +
+        //         "Posted on: " + formatTime(comment.timestamp) + "<br/>" +
+        //         "Sub-Comments: " + comment.postCount + "<br/>" +
+        //         `Text: ${comment.text}`;
+        //     d3.select("#info").html(msg);
+        // }
+        //
+        // function formatTime(unix_timestamp) {
+        //     let date = new Date(unix_timestamp),
+        //         year = date.getFullYear(),
+        //         month = date.getMonth(),
+        //         day = date.getDate(),
+        //         formattedTime = year + '-' + (month + 1) + '-' + day;
+        //     return formattedTime;
+        // }
+        //
+        // document.onkeyup = function (e) {
+        //     if (e.key === "Escape") {
+        //         clicked = false;
+        //     }
+        // };
+        // //<editor-fold: desc="section for the slider">
+        // let brushWidth = 6;
+        // let brush = d3.brushY().extent([[0, 0], [brushWidth, storyHeight]]).on("end", function () {
+        //     currentScoreRange = d3.event.selection.map(scaleScore.invert).reverse();
+        //     updateDisplay(currentScoreRange);
+        // });
+        // let brushGroup = mainsvg.append("g").attr("class", "brush")
+        //     .attr("id", "brushGroup")
+        //     .attr("transform", `translate(${(margin.left - brushWidth) / 2}, ${margin.top + storyStartY})`);
+        // let scoreAxis = brushGroup.append("g")
+        //     .attr("class", "axis axis--y");
+        // scoreAxis
+        //     .call(d3.axisLeft(scaleScore).ticks(10, ".0s"));
+        //
+        // brushGroup.call(brush);
+        // brushGroup.selectAll(".overlay").style("fill", '#888');
+        // brushGroup.selectAll(".selection").style("fill", null).attr("fill-opacity", 1).style("fill", "#ddd");
+        // brushGroup.selectAll("rect.handle").style('fill', "#aaa");
+        // brush.move(brushGroup, scaleScore.range().reverse());
 
 //</editor-fold>
     });
