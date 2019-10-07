@@ -1,6 +1,6 @@
 function createNetwork(data, mainsvg) {
     let width = 1650,
-        height = 1000;
+        height = 800;
     let forceStrength = 0.3;
     let center = {x: width/2, y: height/2}
 
