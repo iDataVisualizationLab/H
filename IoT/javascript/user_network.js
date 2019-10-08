@@ -1,3 +1,6 @@
+const tooltip = floatingTooltip("chart-tooltip", 100);
+const color = d3.scaleOrdinal(d3.schemeCategory10);
+
 function createNetwork(data, mainsvg) {
     let width = svgWidth,
         height = svgHeight;
@@ -13,10 +16,10 @@ function createNetwork(data, mainsvg) {
     const idToUsername = idToUsernameMap(nodes);
     const links = createLinks(nodes, data, idToUsername);
 
+
     console.log(nodes);
     console.log(links);
 
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
 
     var max = -1;
     nodes.forEach(function (d) {
@@ -29,18 +32,34 @@ function createNetwork(data, mainsvg) {
         .range([3, 20])
         .domain([1, max]);
 
+
+
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.key).distance(20).strength(0.5))
         .force('charge', d3.forceManyBody().strength(-10))
         .force('collision', d3.forceCollide().radius(function (d) {
             return radiusScale(d.values.length);
-        }))
-        .force('x', d3.forceX().strength(forceStrength).x(center.x))
+        })
+            .iterations(10))
+        .force('x', d3.forceX().strength(forceStrength*4/5).x(center.x))
         .force('y', d3.forceY().strength(forceStrength).y(center.y))
         .velocityDecay(0.2)
         .alphaTarget(0.05);
 
     const svg = mainsvg;
+
+
+    var maxThickness = -1;
+    links.forEach(function (d) {
+       if (d.value > maxThickness) {
+           maxThickness = d.value;
+       }
+    });
+    var thicknessScale = d3.scaleSqrt()
+        .range([1, 5])
+        .domain([1, maxThickness]);
+
+    console.log(maxThickness)
 
     const link = svg.append("g")
         .attr("stroke", "#999")
@@ -52,7 +71,9 @@ function createNetwork(data, mainsvg) {
         .attr("stroke", d => color(d.label))
         .append("line")
         .attr("fill", d => color(d.label))
-        .attr("stroke-width", d => Math.sqrt(d.value));
+        .attr("stroke-width", function (d) {
+            return thicknessScale(d.value)
+        });
 
     const node = svg.append("g")
         .attr("stroke", "#fff")
@@ -69,7 +90,9 @@ function createNetwork(data, mainsvg) {
             return radiusScale(d.values.length);
         })
         .attr("fill", "#7f7f7f")
-        .call(drag(simulation));
+        .call(drag(simulation))
+        .on('mouseover', showDetail)
+        .on('mouseout', hideDetail);
 
     // node.append("text")
     //     .text(d => d.key)
@@ -87,12 +110,40 @@ function createNetwork(data, mainsvg) {
 
         node.attr("transform", function (d) {
             return `translate(${d.x}, ${d.y})`;
-        })
+        });
+
+        if (simulation.alpha() <= 0.07) {
+            simulation.stop()
+        }
     });
 
-    function charge(d) {
-        return -Math.pow(5, 2.0) * forceStrength;
-    }
+
+
+}
+
+function showDetail(d) {
+    d3.select(this).attr("stroke", "black");
+
+    var content =
+        '<span class="name">Author: </span><span class="value">' +
+        d.key +
+        '</span><br/>' +
+        '<span class="name">Posts: </span><span class="value">' +
+        d.values.length +
+        '</span><br/>' +
+        '<span class="name">Connections: </span><span class="value">' +
+        'null';
+
+    tooltip.showTooltip(content, d3.event);
+}
+
+function hideDetail(d) {
+    d3.select(this)
+        .attr('stroke', function (d) {
+            return "#7f7f7f";
+        });
+
+    tooltip.hideTooltip();
 }
 
 drag = simulation => {
@@ -109,7 +160,7 @@ drag = simulation => {
     }
 
     function dragended(d) {
-        if (!d3.event.active) simulation.alphaTarget(0);
+        if (!d3.event.active) simulation.alphaTarget(0.05);
         d.fx = null;
         d.fy = null;
     }
@@ -119,6 +170,7 @@ drag = simulation => {
         .on("drag", dragged)
         .on("end", dragended);
 };
+
 
 
 function idToUsernameMap(nodes) {
@@ -147,14 +199,26 @@ function createLinks(nodes, data, idToUsername) {
         var parentId = d.parent;
         var label = d.label;
         var parentName = idToUsername[parentId];
+        var source = '';
+        var target = '';
+
+        if (name > parentName) {
+            source = parentName;
+            target = name;
+        } else {
+            source = name;
+            target = parentName;
+        }
 
         if (parentId && parentName) {
-            links.push({temp_key: currnetId + "" + parentId, source: name, target: parentName, value: 1, label: label});
+            links.push({temp_key: source + "" + target+"label", source: source, target: target, value: 1, label: label});
         }
     });
 
     var uniqueLinks = d3.nest()
-        .key(d => d.temp_key)
+        .key(function (d) {
+            return d.temp_key;
+        })
         .rollup(function (v) {
             return {source: v[0].source, target: v[0].target, value: v.length, label: v[0].label};
         })

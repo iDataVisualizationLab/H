@@ -12,6 +12,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -22,10 +23,12 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/javascript" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/javascript" />
       <recent name="$PROJECT_DIR$/data" />
     </key>
   </component>
@@ -65,7 +68,7 @@
       <workItem from="1570423591285" duration="1647000" />
       <workItem from="1570459387782" duration="217000" />
       <workItem from="1570459795314" duration="2702000" />
-      <workItem from="1570474695595" duration="11129000" />
+      <workItem from="1570474695595" duration="18885000" />
     </task>
     <servers />
   </component>
