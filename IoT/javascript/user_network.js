@@ -1,7 +1,7 @@
 function createNetwork(data, mainsvg) {
     let width = svgWidth,
         height = svgHeight;
-    let forceStrength = 0.3;
+    let forceStrength = 0.2;
     let packPadding = 1.5;
     let center = {x: width / 2, y: height / 2}
 
@@ -16,27 +16,32 @@ function createNetwork(data, mainsvg) {
     console.log(nodes);
     console.log(links);
 
+    var color = d3.scaleOrdinal(d3.schemeCategory10);
+
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.key))
-        .force('charge', d3.forceManyBody())
+        .force("link", d3.forceLink(links).id(d => d.key).distance(20).strength(0.5))
+        .force('charge', d3.forceManyBody().strength(-10))
         .force('collision', d3.forceCollide().radius(function (d) {
-            return 5
+            return d.values.length;
         }))
         .force('x', d3.forceX().strength(forceStrength).x(center.x))
         .force('y', d3.forceY().strength(forceStrength).y(center.y))
         .velocityDecay(0.2)
-        .alphaTarget(0.1);
+        .alphaTarget(0.05);
 
     const svg = mainsvg;
 
     const link = svg.append("g")
         .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.6)
+        .attr("stroke-opacity", 0.8)
         .selectAll("line")
         .data(links)
         .enter()
+        .append("g")
+        .attr("stroke", d => color(d.label))
         .append("line")
-        .attr("stroke-width", d => 2 * Math.sqrt(d.value));
+        .attr("fill", d => color(d.label))
+        .attr("stroke-width", d => Math.sqrt(d.value));
 
     const node = svg.append("g")
         .attr("stroke", "#fff")
@@ -47,10 +52,18 @@ function createNetwork(data, mainsvg) {
         .enter()
         .append("g");
 
+    var max = -1;
+
     const circle = node
         .append("circle")
-        .attr("r", 5)
-        .attr("fill", "blue")
+        .attr("r", function (d) {
+            if (d.values.length > max) {
+                max = d.values.length;
+                console.log(max)
+            }
+            return d.values.length+1;
+        })
+        .attr("fill", "#7f7f7f")
         .call(drag(simulation));
 
     // node.append("text")
@@ -127,17 +140,18 @@ function createLinks(nodes, data, idToUsername) {
         var name = d.by;
         var currnetId = d.id;
         var parentId = d.parent;
+        var label = d.label;
         var parentName = idToUsername[parentId];
 
         if (parentId && parentName) {
-            links.push({temp_key: currnetId + "" + parentId, source: name, target: parentName, value: 1});
+            links.push({temp_key: currnetId + "" + parentId, source: name, target: parentName, value: 1, label: label});
         }
     });
 
     var uniqueLinks = d3.nest()
         .key(d => d.temp_key)
         .rollup(function (v) {
-            return {source: v[0].source, target: v[0].target, value: v.length};
+            return {source: v[0].source, target: v[0].target, value: v.length, label: v[0].label};
         })
         .entries(links);
     return uniqueLinks.map(d => d.value);
