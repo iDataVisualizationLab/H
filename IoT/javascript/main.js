@@ -44,6 +44,7 @@ function loadData(fileName){
     d3.json("data/"+fileName+".json", function (error, rawData) {
         self = this;
         if (error) throw error;
+        rawData = rawData.filter(d => d.by);
         console.log(rawData);
         createNetwork(rawData, mainsvg);
     });

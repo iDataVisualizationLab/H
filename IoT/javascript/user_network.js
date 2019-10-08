@@ -91,8 +91,8 @@ function createNetwork(data, mainsvg) {
         })
         .attr("fill", "#7f7f7f")
         .call(drag(simulation))
-        // .on('mouseover', showDetail)
-        // .on('mouseout', hideDetail);
+        .on('mouseover', showDetail)
+        .on('mouseout', hideDetail);
 
     // node.append("text")
     //     .text(d => d.key)
@@ -140,7 +140,7 @@ function showDetail(d) {
 function hideDetail(d) {
     d3.select(this)
         .attr('stroke', function (d) {
-            return "#7f7f7f";
+            return "#ffffff";
         });
 
     tooltip.hideTooltip();
@@ -211,7 +211,7 @@ function createLinks(nodes, data, idToUsername) {
         }
 
         if (parentId && parentName) {
-            links.push({temp_key: source + "" + target+"label", source: source, target: target, value: 1, label: label});
+            links.push({temp_key: source + "" + target, source: source, target: target, value: 1, label: label});
         }
     });
 
