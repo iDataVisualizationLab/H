@@ -91,8 +91,8 @@ function createNetwork(data, mainsvg) {
         })
         .attr("fill", "#7f7f7f")
         .call(drag(simulation))
-        .on('mouseover', showDetail)
-        .on('mouseout', hideDetail);
+        // .on('mouseover', showDetail)
+        // .on('mouseout', hideDetail);
 
     // node.append("text")
     //     .text(d => d.key)
