@@ -18,11 +18,22 @@ function createNetwork(data, mainsvg) {
 
     var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+    var max = -1;
+    nodes.forEach(function (d) {
+       if (d.values.length > max) {
+           max = d.values.length;
+       }
+    });
+
+    var radiusScale = d3.scaleSqrt()
+        .range([3, 20])
+        .domain([1, max]);
+
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.key).distance(20).strength(0.5))
         .force('charge', d3.forceManyBody().strength(-10))
         .force('collision', d3.forceCollide().radius(function (d) {
-            return d.values.length;
+            return radiusScale(d.values.length);
         }))
         .force('x', d3.forceX().strength(forceStrength).x(center.x))
         .force('y', d3.forceY().strength(forceStrength).y(center.y))
@@ -52,16 +63,10 @@ function createNetwork(data, mainsvg) {
         .enter()
         .append("g");
 
-    var max = -1;
-
     const circle = node
         .append("circle")
         .attr("r", function (d) {
-            if (d.values.length > max) {
-                max = d.values.length;
-                console.log(max)
-            }
-            return d.values.length+1;
+            return radiusScale(d.values.length);
         })
         .attr("fill", "#7f7f7f")
         .call(drag(simulation));
