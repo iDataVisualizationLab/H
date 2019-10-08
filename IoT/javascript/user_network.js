@@ -23,15 +23,14 @@ function createNetwork(data, mainsvg) {
 
     var max = -1;
     nodes.forEach(function (d) {
-       if (d.values.length > max) {
-           max = d.values.length;
-       }
+        if (d.values.length > max) {
+            max = d.values.length;
+        }
     });
 
     var radiusScale = d3.scaleSqrt()
         .range([3, 20])
         .domain([1, max]);
-
 
 
     const simulation = d3.forceSimulation(nodes)
@@ -41,7 +40,7 @@ function createNetwork(data, mainsvg) {
             return radiusScale(d.values.length);
         })
             .iterations(10))
-        .force('x', d3.forceX().strength(forceStrength*4/5).x(center.x))
+        .force('x', d3.forceX().strength(forceStrength * 4 / 5).x(center.x))
         .force('y', d3.forceY().strength(forceStrength).y(center.y))
         .velocityDecay(0.2)
         .alphaTarget(0.05);
@@ -51,9 +50,9 @@ function createNetwork(data, mainsvg) {
 
     var maxThickness = -1;
     links.forEach(function (d) {
-       if (d.value > maxThickness) {
-           maxThickness = d.value;
-       }
+        if (d.value > maxThickness) {
+            maxThickness = d.value;
+        }
     });
     var thicknessScale = d3.scaleSqrt()
         .range([1, 5])
@@ -118,11 +117,15 @@ function createNetwork(data, mainsvg) {
     });
 
 
-
 }
 
 function showDetail(d) {
     d3.select(this).attr("stroke", "black");
+
+    var connections = 0;
+    if (d.connections) {
+        connections = d.connections;
+    }
 
     var content =
         '<span class="name">Author: </span><span class="value">' +
@@ -131,8 +134,8 @@ function showDetail(d) {
         '<span class="name">Posts: </span><span class="value">' +
         d.values.length +
         '</span><br/>' +
-        '<span class="name">Connections: </span><span class="value">' +
-        'null';
+        '<span class="name">Interactions: </span><span class="value">' +
+        connections;
 
     tooltip.showTooltip(content, d3.event);
 }
@@ -172,7 +175,6 @@ drag = simulation => {
 };
 
 
-
 function idToUsernameMap(nodes) {
     var map = {};
     nodes.forEach(function (d) {
@@ -186,7 +188,20 @@ function idToUsernameMap(nodes) {
 
 function createNodes(data) {
     var nodes = d3.nest().key(d => d.by).entries(data);
+
     return nodes;
+}
+
+function updateNodeConnections(key, nodes) {
+    nodes.forEach(function (d, i) {
+        if (d.key === key) {
+            if (d.connections) {
+                nodes[i].connections +=1;
+            } else {
+                nodes[i]['connections'] = 1;
+            }
+        }
+    });
 }
 
 function createLinks(nodes, data, idToUsername) {
@@ -211,7 +226,16 @@ function createLinks(nodes, data, idToUsername) {
         }
 
         if (parentId && parentName) {
-            links.push({temp_key: source + "" + target, source: source, target: target, value: 1, label: label});
+            updateNodeConnections(name, nodes);
+            updateNodeConnections(parentName, nodes);
+
+            links.push({
+                temp_key: source + "" + target + "" + label,
+                source: source,
+                target: target,
+                value: 1,
+                label: label
+            });
         }
     });
 
