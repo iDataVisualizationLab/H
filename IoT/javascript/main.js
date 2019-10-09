@@ -65,7 +65,7 @@ function loadData(fileName) {
 
         var sliderContainer = mainsvg.append("g")
             .attr("class", "filter-slider")
-            .attr("transform", "translate(60, 200)");
+            .attr("transform", `translate(60, ${(svgHeight-500)/2})`);
 
         var slider = d3.sliderVertical()
             .min(new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay()))

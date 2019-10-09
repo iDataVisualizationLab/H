@@ -153,7 +153,7 @@ function createNetwork(data, mainsvg) {
         .force('x', d3.forceX().strength(forceStrength / 2).x(0))
         .force('y', d3.forceY().strength(forceStrength).y(0))
         .velocityDecay(0.2)
-        .alphaTarget(0.15);
+        .alphaTarget(0.2);
 
     updateNetwork(data, mainsvg)
 }
