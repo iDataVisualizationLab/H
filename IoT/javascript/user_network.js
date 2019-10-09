@@ -16,6 +16,7 @@ function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) 
         .data(links, function (d) {
             return d.source.key + "" + d.target.key;
         })
+        .attr("transform", `translate(${center.x}, ${center.y})`)
         .attr("stroke", d => color(d.label));
 
     link.select("line")
@@ -28,6 +29,7 @@ function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) 
 
     link.enter()
         .append("g")
+        .attr("transform", `translate(${center.x}, ${center.y})`)
         .attr("stroke", d => color(d.label))
         .append("line")
         .attr("fill", d => color(d.label))
@@ -40,6 +42,8 @@ function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) 
         .data(nodes, d => d.key);
 
     node.select("circle")
+        .attr("cx", center.x)
+        .attr("cy", center.y)
         .attr("r", function (d) {
             return radiusScale(d.values.length);
         });
@@ -49,6 +53,8 @@ function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) 
     node.enter()
         .append("g")
         .append("circle")
+        .attr("cx", center.x)
+        .attr("cy", center.y)
         .attr("r", function (d) {
             return radiusScale(d.values.length);
         })
@@ -93,18 +99,20 @@ function updateNetwork(data, svg) {
     const {link, node} = updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation);
 
     simulation.on("tick", function () {
-        link.attr("x1", d => d.source.x)
+        link
+            .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
-        node.attr("transform", function (d) {
+        node
+            .attr("transform", function (d) {
             return `translate(${d.x}, ${d.y})`;
         });
 
-        // if (simulation.alpha() <= 0.07) {
-        //     simulation.stop()
-        // }
+        if (simulation.alpha() <= 0.03) {
+            simulation.stop()
+        }
     });
 }
 
@@ -139,11 +147,11 @@ function createNetwork(data, mainsvg) {
     simulation = d3.forceSimulation()
         .force('charge', d3.forceManyBody().strength(-10))
         .force('collision', d3.forceCollide().radius(function (d) {
-            return radiusScale(d.values.length);
+            return radiusScale(d.values.length+5);
         })
-            .iterations(10))
-        .force('x', d3.forceX().strength(forceStrength / 2).x(center.x))
-        .force('y', d3.forceY().strength(forceStrength).y(center.y))
+            .iterations(20))
+        .force('x', d3.forceX().strength(forceStrength / 2).x(0))
+        .force('y', d3.forceY().strength(forceStrength).y(0))
         .velocityDecay(0.2)
         .alphaTarget(0.15);
 
