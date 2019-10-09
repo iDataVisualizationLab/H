@@ -89,9 +89,14 @@ function updateNetwork(data, svg) {
     const nodes = createNodes(data);
     const idToUsername = idToUsernameMap(nodes);
     const links = createLinks(nodes, data, idToUsername);
+    let data_old = svg.select('.nodes').selectAll('g').data();
 
-    console.log(nodes);
-    console.log(links);
+    nodes.forEach(d=>{
+        let temp = data_old.find(e=>e.key===d.key);
+        if(temp){
+        d.x = temp.x;
+        d.y = temp.y;}
+    });
 
     simulation.nodes(nodes)
         .force("link", d3.forceLink(links).id(d => d.key).distance(d => d.value).strength(0.5));
