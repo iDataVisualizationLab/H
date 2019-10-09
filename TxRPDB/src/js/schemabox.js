@@ -100,7 +100,7 @@ let Schemabox = function () {
 
             sliderContainer.call(slider);
 
-            sliderContainer.selectAll()
+            sliderContainer.selectAll();
 
             yAxisSelected.selectAll(".tick text").each(function (d, i) {
                 if (d % 5 !== 0) d3.select(this).remove();

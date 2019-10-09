@@ -1,71 +1,32 @@
 const tooltip = floatingTooltip("chart-tooltip", 100);
 const color = d3.scaleOrdinal(d3.schemeCategory10);
+let mainsvg = d3.select("#mainsvg")
+let width = mainsvg.style('width').replace('px', ''),
+    height = mainsvg.style("height").replace('px', '');
+let forceStrength = 0.15;
+let center = {x: width / 2, y: height / 2};
+let simulation = null,
+    thicknessScale = null,
+    radiusScale = null;
 
-function createNetwork(data, mainsvg) {
-    let width = svgWidth,
-        height = svgHeight;
-    let forceStrength = 0.2;
-    let packPadding = 1.5;
-    let center = {x: width / 2, y: height / 2}
+function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) {
 
-    var packLayout = d3.pack();
-    packLayout.size([width, height])
-        .padding(packPadding);
-
-    const nodes = createNodes(data);
-    const idToUsername = idToUsernameMap(nodes);
-    const links = createLinks(nodes, data, idToUsername);
-
-
-    console.log(nodes);
-    console.log(links);
-
-
-    var max = -1;
-    nodes.forEach(function (d) {
-        if (d.values.length > max) {
-            max = d.values.length;
-        }
-    });
-
-    var radiusScale = d3.scaleSqrt()
-        .range([3, 20])
-        .domain([1, max]);
-
-
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.key).distance(20).strength(0.5))
-        .force('charge', d3.forceManyBody().strength(-10))
-        .force('collision', d3.forceCollide().radius(function (d) {
-            return radiusScale(d.values.length);
+    let link = svg.select(".links")
+        .selectAll("g")
+        .data(links, function (d) {
+            return d.source.key + "" + d.target.key;
         })
-            .iterations(10))
-        .force('x', d3.forceX().strength(forceStrength * 4 / 5).x(center.x))
-        .force('y', d3.forceY().strength(forceStrength).y(center.y))
-        .velocityDecay(0.2)
-        .alphaTarget(0.05);
+        .attr("stroke", d => color(d.label));
 
-    const svg = mainsvg;
+    link.select("line")
+        .attr("fill", d => color(d.label))
+        .attr("stroke-width", function (d) {
+            return thicknessScale(d.value)
+        });
 
+    link.exit().remove();
 
-    var maxThickness = -1;
-    links.forEach(function (d) {
-        if (d.value > maxThickness) {
-            maxThickness = d.value;
-        }
-    });
-    var thicknessScale = d3.scaleSqrt()
-        .range([1, 5])
-        .domain([1, maxThickness]);
-
-    console.log(maxThickness)
-
-    const link = svg.append("g")
-        .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.8)
-        .selectAll("line")
-        .data(links)
-        .enter()
+    link.enter()
         .append("g")
         .attr("stroke", d => color(d.label))
         .append("line")
@@ -74,16 +35,19 @@ function createNetwork(data, mainsvg) {
             return thicknessScale(d.value)
         });
 
-    const node = svg.append("g")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
-        .attr("class", "nodes")
+    let node = svg.select(".nodes")
         .selectAll("g")
-        .data(nodes)
-        .enter()
-        .append("g");
+        .data(nodes, d => d.key);
 
-    const circle = node
+    node.select("circle")
+        .attr("r", function (d) {
+            return radiusScale(d.values.length);
+        });
+
+    node.exit().remove();
+
+    node.enter()
+        .append("g")
         .append("circle")
         .attr("r", function (d) {
             return radiusScale(d.values.length);
@@ -93,13 +57,40 @@ function createNetwork(data, mainsvg) {
         .on('mouseover', showDetail)
         .on('mouseout', hideDetail);
 
-    // node.append("text")
-    //     .text(d => d.key)
-    //     .style("font-family", "sans-serif")
-    //     .style("font-size", "10px")
-    //     .style("fill", "#000000")
-    //     .attr("x", 6)
-    //     .attr("y", 3);
+    node = svg.select(".nodes")
+        .selectAll("g");
+
+    link = svg.select(".links")
+        .selectAll("g").select("line");
+
+    return {link, node};
+}
+
+function initialization(svg) {
+
+    svg.append("g")
+        .attr("class", "links")
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.8);
+
+    svg.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+        .attr("class", "nodes");
+}
+
+function updateNetwork(data, svg) {
+    const nodes = createNodes(data);
+    const idToUsername = idToUsernameMap(nodes);
+    const links = createLinks(nodes, data, idToUsername);
+
+    console.log(nodes);
+    console.log(links);
+
+    simulation.nodes(nodes)
+        .force("link", d3.forceLink(links).id(d => d.key).distance(20).strength(0.5));
+
+    const {link, node} = updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation);
 
     simulation.on("tick", function () {
         link.attr("x1", d => d.source.x)
@@ -115,8 +106,48 @@ function createNetwork(data, mainsvg) {
             simulation.stop()
         }
     });
+}
 
+function createNetwork(data, mainsvg) {
+    var max = -1;
 
+    const nodes = createNodes(data);
+    const idToUsername = idToUsernameMap(nodes);
+    const links = createLinks(nodes, data, idToUsername);
+
+    nodes.forEach(function (d) {
+        if (d.values.length > max) {
+            max = d.values.length;
+        }
+    });
+
+    radiusScale = d3.scaleSqrt()
+        .range([3, 20])
+        .domain([1, max]);
+
+    var maxThickness = -1;
+    links.forEach(function (d) {
+        if (d.value > maxThickness) {
+            maxThickness = d.value;
+        }
+    });
+
+    thicknessScale = d3.scaleSqrt()
+        .range([1, 5])
+        .domain([1, maxThickness]);
+
+    simulation = d3.forceSimulation()
+        .force('charge', d3.forceManyBody().strength(-10))
+        .force('collision', d3.forceCollide().radius(function (d) {
+            return radiusScale(d.values.length);
+        })
+            .iterations(10))
+        .force('x', d3.forceX().strength(forceStrength / 2).x(center.x))
+        .force('y', d3.forceY().strength(forceStrength).y(center.y))
+        .velocityDecay(0.2)
+        .alphaTarget(0.05);
+
+    updateNetwork(data, mainsvg)
 }
 
 function showDetail(d) {
@@ -196,7 +227,7 @@ function updateNodeConnections(key, nodes) {
     nodes.forEach(function (d, i) {
         if (d.key === key) {
             if (d.connections) {
-                nodes[i].connections +=1;
+                nodes[i].connections += 1;
             } else {
                 nodes[i]['connections'] = 1;
             }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ddedd043-fed1-4c31-91dd-e7c58563c870" name="Default Changelist" comment="" />
+    <list default="true" id="ddedd043-fed1-4c31-91dd-e7c58563c870" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../TxRPDB/src/js/schemabox.js" beforeDir="false" afterPath="$PROJECT_DIR$/../TxRPDB/src/js/schemabox.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +70,8 @@
       <workItem from="1570423591285" duration="1647000" />
       <workItem from="1570459387782" duration="217000" />
       <workItem from="1570459795314" duration="2702000" />
-      <workItem from="1570474695595" duration="22255000" />
+      <workItem from="1570474695595" duration="31465000" />
+      <workItem from="1570585858032" duration="4506000" />
     </task>
     <servers />
   </component>
