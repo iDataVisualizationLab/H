@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ddedd043-fed1-4c31-91dd-e7c58563c870" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../TxRPDB/src/js/schemabox.js" beforeDir="false" afterPath="$PROJECT_DIR$/../TxRPDB/src/js/schemabox.js" afterDir="false" />
-    </list>
+    <list default="true" id="ddedd043-fed1-4c31-91dd-e7c58563c870" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,13 +23,13 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/javascript" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/javascript" />
       <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/javascript" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -71,7 +69,8 @@
       <workItem from="1570459387782" duration="217000" />
       <workItem from="1570459795314" duration="2702000" />
       <workItem from="1570474695595" duration="31465000" />
-      <workItem from="1570585858032" duration="4506000" />
+      <workItem from="1570585858032" duration="5527000" />
+      <workItem from="1570600288239" duration="1871000" />
     </task>
     <servers />
   </component>

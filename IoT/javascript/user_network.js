@@ -88,7 +88,7 @@ function updateNetwork(data, svg) {
     console.log(links);
 
     simulation.nodes(nodes)
-        .force("link", d3.forceLink(links).id(d => d.key).distance(20).strength(0.5));
+        .force("link", d3.forceLink(links).id(d => d.key).distance(d => d.value).strength(0.5));
 
     const {link, node} = updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation);
 
@@ -102,9 +102,9 @@ function updateNetwork(data, svg) {
             return `translate(${d.x}, ${d.y})`;
         });
 
-        if (simulation.alpha() <= 0.07) {
-            simulation.stop()
-        }
+        // if (simulation.alpha() <= 0.07) {
+        //     simulation.stop()
+        // }
     });
 }
 
@@ -145,7 +145,7 @@ function createNetwork(data, mainsvg) {
         .force('x', d3.forceX().strength(forceStrength / 2).x(center.x))
         .force('y', d3.forceY().strength(forceStrength).y(center.y))
         .velocityDecay(0.2)
-        .alphaTarget(0.05);
+        .alphaTarget(0.15);
 
     updateNetwork(data, mainsvg)
 }
