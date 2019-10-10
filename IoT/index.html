@@ -7,47 +7,9 @@
     <script src='lib/spin.min.js'></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/index.css">
-    <style>
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
-
-        .axis text {
-            font: 11px sans-serif;
-        }
-
-        .cells :hover circle {
-            fill: red;
-        }
-
-        .brushed {
-            fill: red;
-            opacity: 1.0;
-        }
-
-        .faded {
-            opacity: 0.2;
-        }
-
-        #info {
-            border: solid 1px black;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            box-shadow: 5px 5px 5px #444;
-            padding: 10px;
-            position: absolute;
-            top: 900px;
-            left: 20px;
-            margin-right: 55px;
-            pointer-events: none;
-        }
-
-    </style>
 </head>
 <body>
 <!--<div class="left-panel">-->
@@ -55,7 +17,8 @@
 
 <!--    </div>-->
 <!--</div>-->
-<svg id="mainsvg" class="main-chart"></svg>
+<svg id="mainsvg" class="col-12 main-chart"></svg>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="javascript/d3.layout.wordstream.js"></script>
 <script src="javascript/wordstream_draw.js"></script>
 <script src="javascript/wordstream_data.js"></script>

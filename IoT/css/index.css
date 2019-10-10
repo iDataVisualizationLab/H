@@ -1,3 +1,45 @@
+body {
+    overflow-x: auto;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font: 11px sans-serif;
+}
+
+.cells :hover circle {
+    fill: red;
+}
+
+.brushed {
+    fill: red;
+    opacity: 1.0;
+}
+
+.faded {
+    opacity: 0.2;
+}
+
+#info {
+    border: solid 1px black;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px #444;
+    padding: 10px;
+    position: absolute;
+    top: 900px;
+    left: 20px;
+    margin-right: 55px;
+    pointer-events: none;
+}
+
 .left-panel {
     padding: 20px;
     width: 10%;
@@ -23,7 +65,7 @@
     border-radius: 5px;
     border: 2px solid #000;
     background: #fff;
-    opacity: .9;
+    opacity: .1;
     color: black;
     padding: 10px;
     width: 150px;
@@ -37,4 +79,12 @@
 
 .tooltip .name {
     font-weight:bold;
+}
+
+.filters {
+    width: 100px;
+    height: 100%;
+    top: 50px;
+    left: 25px;
+    position: fixed;
 }

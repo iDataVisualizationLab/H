@@ -23,11 +23,12 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/image" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/image" />
       <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$/javascript" />
     </key>
@@ -70,7 +71,8 @@
       <workItem from="1570459795314" duration="2702000" />
       <workItem from="1570474695595" duration="31465000" />
       <workItem from="1570585858032" duration="5527000" />
-      <workItem from="1570600288239" duration="6188000" />
+      <workItem from="1570600288239" duration="13139000" />
+      <workItem from="1570724920534" duration="10603000" />
     </task>
     <servers />
   </component>
