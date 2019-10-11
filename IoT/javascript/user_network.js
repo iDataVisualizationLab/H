@@ -74,9 +74,9 @@ function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) 
             return "#b8b8b8";
         })
         .call(drag(simulation))
+        .on('click', d => setFocus(svg, d, nodes, links))
         .on('mouseover', showDetail)
-        .on('mouseout', hideDetail)
-        .on('click', d => setFocus(svg, d, nodes, links));
+        .on('mouseout', hideDetail);
 
     node = svg.select(".nodes")
         .selectAll("g");
@@ -93,30 +93,33 @@ function setFocus(svg, d, nodes, links) {
     const node = svg.select(".nodes");
     const link = svg.select(".links");
     d3.select(this.parentNode).style("opacity", 1);
-    d3.select(".tooltip").style("opacity", 0.5);
 
     const {adjNodes, connectedLinks} = findAdjNodes(d, nodes, links);
 
-    node.selectAll('g').style("opacity", function (d) {
-        if (adjNodes.includes(d.key)) {
-            return 1;
-        }
-        return 0.1;
-    })
-        .on("mouseover", function () {
-        });
+    node.selectAll('g')
+        .style("opacity", function (d) {
+            if (adjNodes.includes(d.key)) {
+                return 1;
+            }
+            return 0.1;
+        })
+        .on("mouseover", null);
 
     link.selectAll('g').style("opacity", function (d) {
         if (connectedLinks.includes(d.source.key + d.target.key)) {
             return 1;
         }
         return 0.1;
-    })
+    });
+
+    simulation.stop()
 }
 
 function removeFocus(svg) {
     svg.select(".nodes").selectAll("g").style("opacity", 1).on("mouseover", showDetail);
     svg.select(".links").selectAll("g").style("opacity", 1);
+
+    simulation.restart()
 }
 
 function findAdjNodes(d, nodes, links) {
@@ -154,6 +157,8 @@ function initialization(svg) {
 }
 
 function updateNetwork(data, svg) {
+    removeFocus(svg);
+
     const nodes = createNodes(data);
     const idToUsername = idToUsernameMap(nodes);
     const links = createLinks(nodes, data, idToUsername);
@@ -173,7 +178,7 @@ function updateNetwork(data, svg) {
     });
 
     simulation.nodes(nodes)
-        .force("link", d3.forceLink(links).id(d => d.key).distance(d => d.value).strength(0.5));
+        .force("link", d3.forceLink(links).id(d => d.key).distance(d => d.value).strength(0.2));
 
     const {link, node} = updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation);
 
@@ -232,7 +237,7 @@ function createNetwork(data, mainsvg) {
         .force('x', d3.forceX().strength(forceStrength / 2).x(0))
         .force('y', d3.forceY().strength(forceStrength).y(0))
         .velocityDecay(0.2)
-        .alphaTarget(0.2);
+        .alphaTarget(0.4);
 
     updateNetwork(data, mainsvg)
 }
@@ -385,7 +390,6 @@ function splitNetwork() {
     simulation
         .force('x', d3.forceX().strength(forceStrength).x(function (d) {
             if (d.isAlone) {
-                console.log(width / 4)
                 return -width / 6
             } else {
                 return width / 6
