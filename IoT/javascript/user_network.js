@@ -401,7 +401,7 @@ function splitNetwork() {
 
 function groupNetwork() {
     simulation
-        .force('x', d3.forceX().strength(forceStrength).x(0));
+        .force('x', d3.forceX().strength(forceStrength/2).x(0));
 
     simulation.alpha(0.5).restart();
 }

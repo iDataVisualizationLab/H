@@ -147,37 +147,44 @@ function loadData(fileName) {
 
         var toggles = filters.append('g')
             .attr("class", "toggles")
+            .attr("stroke", "#999")
             .attr("transform", "translate(0,770)");
 
 
         toggles.append("image")
             .attr("id", "toggle-on")
             .attr("href", "image/toggle-on-solid.svg")
-            .attr("width", "60px")
+            .attr("width", "30px")
             .style("display", "none");
 
         toggles.append("image")
             .attr("id", "toggle-off")
             .attr("href", "image/toggle-off-solid.svg")
-            .attr("width", "60px")
+            .attr("width", "30px")
             .style("display", "block");
 
-        toggles.on("click", function () {
-            console.log(toggle);
+        toggles.append("text")
+            .attr("x", 35)
+            .attr("y", 17)
+            .attr("id", "toggle-text")
+            .text("split");
 
+        toggles.on("click", function () {
             if (toggle) {
                 toggles.select("#toggle-on").style("display", "none");
                 toggles.select("#toggle-off").style("display", "block");
+                toggles.select("#toggle-text").text("split");
                 groupNetwork()
             } else {
                 toggles.select("#toggle-off").style("display", "none");
                 toggles.select("#toggle-on").style("display", "block");
+                toggles.select("#toggle-text").text("group");
                 splitNetwork()
-
             }
 
             toggle = !toggle;
         });
+
 
         initialization(mainsvg);
 
