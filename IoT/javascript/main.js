@@ -15,16 +15,15 @@ var spinner = new Spinner(opts).spin(target);
 
 let
     svgWidth = 1650,
-    svgHeight = 1000,
-    // svgWidth = mainsvg.style('width').replace('px', ''),
-    // svgHeight = mainsvg.style("height").replace('px', ''),
+    svgHeight = 800,
+    // svgWidth = networksvg.style('width').replace('px', ''),
+    // svgHeight = networksvg.style("height").replace('px', ''),
     margin = {top: 40, right: 40, bottom: 40, left: 80, axisx: 40, axisy: 60, storyTop: 40},
     // width = svgWidth - margin.left - margin.right - margin.axisx,
     // height = svgHeight - margin.top - margin.storyTop - margin.axisx - margin.bottom,
     wordStreamHeight = 200,
     wordStreamWidth = width,
     clicked = false,
-    links = null,
     storyHeight = authorHeight = commentHeight = (height - wordStreamHeight) / 3,
     authorStartY = 0 + wordStreamHeight,
     authorEndY = authorStartY + authorHeight,
@@ -33,20 +32,20 @@ let
     mainGroup = null,//used to store main group as a global variable later on
     dispatch = d3.dispatch("up", "down");
 
-mainsvg.attr("width", svgWidth).attr("height", svgHeight);
+networksvg.attr("width", svgWidth).attr("height", svgHeight);
 let self = null;
 let fileName = "iotdataset";
 loadData(fileName);
 
 function loadData(fileName) {
-    //Just make sure that we clean the svg.
-    mainsvg.selectAll("*").remove();
-    mainsvg.attr("viewBox", `0 0 1650 1000`)
-        .attr("preserveAspectRatio", "xMinYMid meet");
 
-    // mainsvg.append("g").attr("width", window.outerWidth)
-    //     .attr("height", window.outerHeight)
-    //     .on("click", removeFocus(mainsvg));
+    //Just make sure that we clean the svg.
+    networksvg.selectAll("*").remove();
+    networksvg.attr("viewBox", `0 0 1650 800`)
+        .attr("preserveAspectRatio", "xMinYMin meet");
+    //
+    filtersvg.attr("viewBox", "0 0 1650 200")
+        .attr("preserveAspectRatio", "xMinYMid meet");
 
     d3.json("data/" + fileName + ".json", function (error, rawData) {
         self = this;
@@ -67,29 +66,30 @@ function loadData(fileName) {
         var minTime = new Date(minYear * 1000);
         var maxTime = new Date(maxYear * 1000);
 
-        var filters = mainsvg.append("svg")
+        var filters = filtersvg
             .attr("class", "filters");
 
         var legends = filters
             .append('g')
             .attr("stroke", "#999")
-            .attr("transform", "translate(0,100)");
+            .attr("class", "legend")
+            .attr("transform", "translate(0, 100)");
 
         var sliderContainer = filters.append("g")
             .attr("class", "filter-slider")
-            .attr("transform", `translate(55, 250)`);
+            .attr("transform", `translate(200, 160)`);
 
-        var slider = d3.sliderVertical()
+        var slider = d3.sliderHorizontal()
             .min(new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay()))
             .max(new Date(maxTime.getFullYear(), maxTime.getMonth(), maxTime.getDay()))
             .step(1)
             .default([new Date(maxTime.getFullYear(), maxTime.getMonth(), maxTime.getDay()), new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay())])
             .fill('#2196f3')
             .tickFormat(d3.timeFormat('%Y'))
-            .height(500)
+            .width(1000)
             .on('end', values => {
                 var newData = timeFilter(rawData, values);
-                updateNetwork(newData, mainsvg);
+                updateNetwork(newData, networksvg);
             });
 
         sliderContainer.call(slider);
@@ -148,7 +148,7 @@ function loadData(fileName) {
         var toggles = filters.append('g')
             .attr("class", "toggles")
             .attr("stroke", "#999")
-            .attr("transform", "translate(0,770)");
+            .attr("transform", "translate(1550,170)");
 
 
         toggles.append("image")
@@ -186,9 +186,9 @@ function loadData(fileName) {
         });
 
 
-        initialization(mainsvg);
+        initialization(networksvg);
 
-        createNetwork(rawData, mainsvg);
+        createNetwork(rawData, networksvg);
     });
 }
 
@@ -202,6 +202,25 @@ function changeDataSet() {
     loadData(fileName);
 }
 
+
 $(document).click(function () {
-   removeFocus(mainsvg)
+   removeFocus(networksvg)
 });
+
+function createAreaChart(data) {
+
+    const areaWidth = 500;
+    const areaHeight = 300;
+
+    var x = d3.scaleTime().range([0, areaWidth]);
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var area = d3.area()
+        .x(function (d) {
+
+        })
+}
+
+function createPostDataByTime(data) {
+    var time = data.map()
+}

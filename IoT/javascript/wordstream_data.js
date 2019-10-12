@@ -75,7 +75,7 @@ function loadNewsData(rawData, draw) {
 
     let outputFormat = function (date) {
         return d3.timeFormat('%Y')(date) + "Q" + getQuarter(date);
-    }
+    };
 
     function getQuarter(date) {
         try {
@@ -99,11 +99,11 @@ function loadNewsData(rawData, draw) {
         //Reserve the phrase
         String.prototype.replaceAt=function(index, replacement) {
             return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
-        }
+        };
         phrases.forEach((p, i) => {
             let startIdx = -1;
             do {
-                startIdx = d.title.toLowerCase().indexOf(p.toLowerCase())
+                startIdx = d.title.toLowerCase().indexOf(p.toLowerCase());
                 if (startIdx >= 0) {
                     for (let j = 0; j < p.length; j++) {
                         d.title = d.title.replaceAt((startIdx + j), p[j]);//convert to the phrase careless of cases for each character
@@ -139,7 +139,7 @@ function loadNewsData(rawData, draw) {
         });
 
         words = removeStopWords(words, stopWords);
-        words = words.filter(t => t != '');//remove empty words
+        words = words.filter(t => t !== '');//remove empty words
         words.forEach(word => {
             let wordTime = word + date;
             if (!authorWords[author]) authorWords[author] = [];
@@ -180,9 +180,10 @@ function loadNewsData(rawData, draw) {
             date: date,
             words: words
         }
-    }).sort(function (a, b) {//sort by date
+    }).sort(function (a, b) { //sort by date
         return a.date.localeCompare(b.date);
     });
+    console.log(data);
     draw(data);
 }
 

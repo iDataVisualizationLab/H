@@ -1,14 +1,18 @@
 const tooltip = floatingTooltip("chart-tooltip", 100);
 const color = d3.scaleOrdinal(d3.schemeCategory10);
-let mainsvg = d3.select("#mainsvg")
+let networksvg = d3.select("#network-svg");
+let filtersvg = d3.select("#filter-svg");
 let width = 1650,
-    height = 1000;
+    height = 800;
+console.log(width, height);
 let forceStrength = 0.15;
 let center = {x: width / 2, y: height / 2};
 let simulation = null,
     thicknessScale = null,
     radiusScale = null;
 let toggle = false;
+let isFocus = false;
+let nodes = null, links = null;
 
 function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) {
 
@@ -74,9 +78,9 @@ function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) 
             return "#b8b8b8";
         })
         .call(drag(simulation))
-        .on('click', d => setFocus(svg, d, nodes, links))
         .on('mouseover', showDetail)
-        .on('mouseout', hideDetail);
+        .on('mouseout', hideDetail)
+        .on('click', d => setFocus(svg, d, nodes, links));
 
     node = svg.select(".nodes")
         .selectAll("g");
@@ -89,6 +93,10 @@ function updateDraw(svg, links, thicknessScale, nodes, radiusScale, simulation) 
 
 function setFocus(svg, d, nodes, links) {
     d3.event.stopPropagation();
+
+    if (isFocus) {
+        return;
+    }
 
     const node = svg.select(".nodes");
     const link = svg.select(".links");
@@ -103,7 +111,9 @@ function setFocus(svg, d, nodes, links) {
             }
             return 0.1;
         })
-        .on("mouseover", null);
+        .select("circle")
+        .on("mouseover", null)
+        .on("mouseout", null);
 
     link.selectAll('g').style("opacity", function (d) {
         if (connectedLinks.includes(d.source.key + d.target.key)) {
@@ -112,12 +122,19 @@ function setFocus(svg, d, nodes, links) {
         return 0.1;
     });
 
+    isFocus = true;
+
     simulation.stop()
 }
 
 function removeFocus(svg) {
-    svg.select(".nodes").selectAll("g").style("opacity", 1).on("mouseover", showDetail);
+    svg.select(".nodes").selectAll("g").style("opacity", 1)
+        .select("circle")
+        .on("mouseover", showDetail)
+        .on("mouseout", hideDetail);
     svg.select(".links").selectAll("g").style("opacity", 1);
+
+    isFocus = false;
 
     simulation.restart()
 }
@@ -159,13 +176,16 @@ function initialization(svg) {
 function updateNetwork(data, svg) {
     removeFocus(svg);
 
-    const nodes = createNodes(data);
+    nodes = createNodes(data);
     const idToUsername = idToUsernameMap(nodes);
-    const links = createLinks(nodes, data, idToUsername);
+    links = createLinks(nodes, data, idToUsername);
     let data_old = svg.select('.nodes').selectAll('g').data();
 
-    console.log(nodes);
-    console.log(links);
+    let stories = data.filter(d => d.type === "story");
+    // loadNewsData(stories, draw);
+
+    // console.log(nodes);
+    // console.log(links);
 
     filterAloneNodes(nodes, links);
 
@@ -189,6 +209,10 @@ function updateNetwork(data, svg) {
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
+        // link.attr("d", function (d) {
+        //
+        // })
+
         node
             .attr("transform", function (d) {
                 return `translate(${d.x}, ${d.y})`;
@@ -200,12 +224,12 @@ function updateNetwork(data, svg) {
     });
 }
 
-function createNetwork(data, mainsvg) {
+function createNetwork(data, networksvg) {
     var max = -1;
 
-    const nodes = createNodes(data);
+    nodes = createNodes(data);
     const idToUsername = idToUsernameMap(nodes);
-    const links = createLinks(nodes, data, idToUsername);
+    links = createLinks(nodes, data, idToUsername);
 
     nodes.forEach(function (d) {
         if (d.values.length > max) {
@@ -239,7 +263,7 @@ function createNetwork(data, mainsvg) {
         .velocityDecay(0.2)
         .alphaTarget(0.4);
 
-    updateNetwork(data, mainsvg)
+    updateNetwork(data, networksvg)
 }
 
 function showDetail(d) {
@@ -265,7 +289,7 @@ function showDetail(d) {
 
 function hideDetail() {
     d3.select(this)
-        .attr('stroke', function (d) {
+        .attr('stroke', function () {
             return "#ffffff";
         });
 
@@ -311,7 +335,6 @@ function idToUsernameMap(nodes) {
 
 function createNodes(data) {
     var nodes = d3.nest().key(d => d.by).entries(data);
-
     return nodes;
 }
 
@@ -329,7 +352,7 @@ function updateNodeConnections(key, nodes) {
 
 function createLinks(nodes, data, idToUsername) {
 
-    var links = [];
+    var tempLinks = [];
 
     data.forEach(function (d) {
         var name = d.by;
@@ -352,7 +375,7 @@ function createLinks(nodes, data, idToUsername) {
             updateNodeConnections(name, nodes);
             updateNodeConnections(parentName, nodes);
 
-            links.push({
+            tempLinks.push({
                 temp_key: source + "" + target + "" + label,
                 source: source,
                 target: target,
@@ -369,7 +392,7 @@ function createLinks(nodes, data, idToUsername) {
         .rollup(function (v) {
             return {source: v[0].source, target: v[0].target, value: v.length, label: v[0].label};
         })
-        .entries(links);
+        .entries(tempLinks);
     return uniqueLinks.map(d => d.value).filter(d => d.source !== d.target);
 }
 
@@ -401,7 +424,7 @@ function splitNetwork() {
 
 function groupNetwork() {
     simulation
-        .force('x', d3.forceX().strength(forceStrength/2).x(0));
+        .force('x', d3.forceX().strength(forceStrength / 2).x(0));
 
     simulation.alpha(0.5).restart();
 }

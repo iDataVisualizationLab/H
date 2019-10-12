@@ -50,13 +50,13 @@ function draw(data) {
         } else {
             return "#aaa";
         }
-    }
+    };
 
     let placed = true;
     //Remove all existing data if there is.
-    mainGroup.selectAll(".wordStreamGroup").remove();
+    filtersvg.selectAll(".wordStreamGroup").remove();
 
-    texts = mainGroup.append("g").attr("class", "wordStreamGroup").attr("transform", `translate(${margin.axisx}, 0)`).selectAll('g').data(allWords).enter().append('g');
+    texts = filtersvg.append("g").attr("class", "wordStreamGroup").attr("transform", `translate(${margin.axisx}, 0)`).selectAll('g').data(allWords).enter().append('g');
     texts
         .attr("transform", function (d) {
             return 'translate(' + d.x + ', ' + d.y + ')rotate(' + d.rotate + ')';
@@ -81,27 +81,6 @@ function draw(data) {
         })
         .attr("visibility", function (d) {
             return d.placed ? (placed ? "visible" : "hidden") : (placed ? "hidden" : "visible");
-        })
-        .style("cursor", "pointer")
-        .on("mouseover", d => {//Todo: Can generalize this together with the cells so we don't have to re-code
-            if (!clicked) {
-                mainGroup.selectAll("circle").classed("faded", true);
-                mainGroup.selectAll(".wordletext").classed("faded", true);
-                dispatch.call("down", null, d);
-            }
-
-        })
-        .on("mouseleave", () => {
-            if (!clicked) {
-                mainGroup.selectAll(".faded").classed("faded", false);
-                links.selectAll("*").remove();
-                mainGroup.selectAll(".brushed").classed("brushed", false);
-            }
-        })
-        .on("click", ()=>{
-            clicked = !clicked;
         });
-    // //This section is to set the autocomplete word
-    autocomplete(document.getElementById("theWord"), d3.set(allWords.filter(w=>w.placed).map(w=>w.text)).values());
 }
 

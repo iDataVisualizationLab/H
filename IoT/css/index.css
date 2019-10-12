@@ -52,7 +52,7 @@ body {
     left: 0;
 }
 
-.main-chart {
+.network-chart {
     width: 100%;
     height: 100vh;
 }
@@ -82,9 +82,22 @@ body {
 }
 
 .filters {
-    width: 100px;
-    height: 100%;
-    top: 50px;
-    left: 25px;
+    width: inherit;
+    height: inherit;
     position: fixed;
+}
+
+.filter-container {
+    height: 200px;
+    width: 100%;
+}
+
+.network-container {
+    width: 100%;
+    height: 800px;
+}
+
+.network-chart {
+    width: 100%;
+    height: 100%;
 }
