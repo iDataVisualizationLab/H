@@ -334,8 +334,7 @@ function idToUsernameMap(nodes) {
 }
 
 function createNodes(data) {
-    var nodes = d3.nest().key(d => d.by).entries(data);
-    return nodes;
+    return d3.nest().key(d => d.by).entries(data);
 }
 
 function updateNodeConnections(key, nodes) {

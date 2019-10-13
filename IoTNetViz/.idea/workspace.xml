@@ -2,17 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/IoTNetViz.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/css/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/alldata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/bigdatadataset.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/cpsdataset.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/iotdataset.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/forcenetwork.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/tooltip.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/d3.v4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/venn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vennchart.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoT/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoT/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoT/javascript/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/javascript/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IoT/javascript/user_network.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/javascript/user_network.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoT/javascript/wordstream_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/javascript/wordstream_data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoT/javascript/wordstream_draw.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/javascript/wordstream_draw.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,15 +24,35 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1S6tCVklrO6uCG3HQCKWzXO105S" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/js" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/js" />
+      <recent name="$PROJECT_DIR$/js/vendor" />
+      <recent name="$PROJECT_DIR$/data" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -42,6 +66,16 @@
       </list>
     </option>
   </component>
+  <component name="RunManager">
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/IoTNetViz/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.html" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -52,7 +86,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1570895745447</updated>
-      <workItem from="1570895747428" duration="558000" />
+      <workItem from="1570895747428" duration="16195000" />
+      <workItem from="1570982316748" duration="9317000" />
     </task>
     <servers />
   </component>
@@ -64,10 +99,15 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

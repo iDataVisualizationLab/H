@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ddedd043-fed1-4c31-91dd-e7c58563c870" name="Default Changelist" comment="" />
+    <list default="true" id="ddedd043-fed1-4c31-91dd-e7c58563c870" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/css/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/data/alldata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/data/bigdatadataset.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/data/cpsdataset.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/data/iotdataset.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/js/forcenetwork.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/js/tooltip.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/js/vendor/d3.v4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/js/vendor/venn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../IoTNetViz/js/vennchart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IoTNetViz/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IoTNetViz/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/js/main.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +34,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1RqRGEMWwBEq5NcIBiRugEuAyzE" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/image" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
@@ -75,7 +92,8 @@
       <workItem from="1570724920534" duration="10754000" />
       <workItem from="1570751412781" duration="1433000" />
       <workItem from="1570807339204" duration="14316000" />
-      <workItem from="1570895511983" duration="737000" />
+      <workItem from="1570895511983" duration="4325000" />
+      <workItem from="1570988593839" duration="2419000" />
     </task>
     <servers />
   </component>
@@ -94,5 +112,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
