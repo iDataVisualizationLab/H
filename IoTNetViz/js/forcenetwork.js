@@ -1,21 +1,22 @@
-function createForce(data) {
+function createForce(data, centers) {
   let simulation = null,
     thicknessScale = null,
     radiusScale = null;
   let isFocus = false;
-  let forceStrength = 0.15;
+  let forceStrength = 0.05;
   let center = {x: width / 2, y: height / 2};
   const tooltip = floatingTooltip("chart-tooltip", 100);
+  let clustersPosition = centers;
 
   var forceSvg = mainSvg.append("svg")
     .attr("class", "network")
     .attr("width", width)
     .attr("height", height);
 
+  createNodeTopics();
+  console.log(nodes);
   initialization();
   createNetwork();
-
-
 
   function updateDraw() {
 
@@ -24,7 +25,7 @@ function createForce(data) {
       .data(links, function (d) {
         return d.source.key + "" + d.target.key;
       })
-      .attr("transform", `translate(${center.x}, ${center.y})`)
+      // .attr("transform", `translate(${center.x}, ${center.y})`)
       .attr("stroke", d => color(d.label));
 
     link.select("line")
@@ -37,7 +38,7 @@ function createForce(data) {
 
     link.enter()
       .append("g")
-      .attr("transform", `translate(${center.x}, ${center.y})`)
+      // .attr("transform", `translate(${center.x}, ${center.y})`)
       .attr("stroke", d => color(d.label))
       .attr("id", d => d.source.key + d.target.key)
       .append("line")
@@ -51,8 +52,6 @@ function createForce(data) {
       .data(nodes, d => d.key);
 
     node.select("circle")
-      .attr("cx", center.x)
-      .attr("cy", center.y)
       .attr("r", function (d) {
         return radiusScale(d.values.length);
       })
@@ -60,7 +59,7 @@ function createForce(data) {
         // if (d.isAlone) {
         //   return "#636363";
         // }
-        return "#b8b8b8";
+        return "#636363";
       });
 
     node.exit().remove();
@@ -69,8 +68,6 @@ function createForce(data) {
       .append("g")
       .attr("id", d => d.key)
       .append("circle")
-      .attr("cx", center.x)
-      .attr("cy", center.y)
       .attr("r", function (d) {
         return radiusScale(d.values.length);
       })
@@ -78,7 +75,7 @@ function createForce(data) {
         // if (d.isAlone) {
         //   return "#636363";
         // }
-        return "#b8b8b8";
+        return "#636363";
       })
       .call(drag(simulation))
       .on('mouseover', showDetail)
@@ -176,7 +173,7 @@ function createForce(data) {
       .attr("class", "nodes");
   }
 
-  function updateNetwork(data) {
+  function updateNetwork() {
     removeFocus(forceSvg);
 
     let data_old = forceSvg.select('.nodes').selectAll('g').data();
@@ -196,7 +193,7 @@ function createForce(data) {
     });
 
     simulation.nodes(nodes)
-      .force("link", d3.forceLink(links).id(d => d.key).distance(d => d.value).strength(0.2));
+      .force("link", d3.forceLink(links).id(d => d.key).distance(100).iterations(10).strength(0));
 
     const {link, node} = updateDraw();
 
@@ -206,10 +203,6 @@ function createForce(data) {
         .attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y);
-
-      // link.attr("d", function (d) {
-      //
-      // })
 
       node
         .attr("transform", function (d) {
@@ -249,15 +242,15 @@ function createForce(data) {
       .domain([1, maxThickness]);
 
     simulation = d3.forceSimulation()
-      .force('charge', d3.forceManyBody().strength(-10))
+      .force('charge', d3.forceManyBody().strength(0))
       .force('collision', d3.forceCollide().radius(function (d) {
         return radiusScale(d.values.length + 5);
       })
         .iterations(20))
-      .force('x', d3.forceX().strength(forceStrength / 2).x(0))
-      .force('y', d3.forceY().strength(forceStrength).y(0))
+      .force('x', d3.forceX().strength(forceStrength).x(d => getCluster(d).x))
+      .force('y', d3.forceY().strength(forceStrength).y(d => getCluster(d).y))
       .velocityDecay(0.2)
-      .alphaTarget(0.4);
+      .alphaTarget(-0.05);
 
     updateNetwork(data)
   }
@@ -292,12 +285,44 @@ function createForce(data) {
     tooltip.hideTooltip();
   }
 
+  function createNodeTopics() {
+    nodes.forEach(function (node) {
+      node['topics'] = [];
+      node.values.forEach(function (val) {
+        val.topic.forEach(function (topic) {
+          if (!node.topics.includes(topic)) {
+            node.topics.push(topic)
+          }
+        })
+      })
+    })
+  }
+
+  function getCluster(node) {
+    var text = "";
+    if (node.topics.includes("iot")) {
+      text += "IoT "
+    }
+    if (node.topics.includes("bigdata")) {
+      text += "Big Data "
+    }
+    if (node.topics.includes("security")) {
+      text += "Security"
+    }
+
+    text = text.trim();
+
+
+    return clustersPosition.find(function (d) {
+      return d.name === text;
+    });
+  }
 }
 
 drag = simulation => {
 
   function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    if (!d3.event.active) simulation.alphaTarget(0.1).restart();
     d.fx = d.x;
     d.fy = d.y;
   }

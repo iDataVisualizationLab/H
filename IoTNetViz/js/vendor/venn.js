@@ -1231,6 +1231,7 @@
             styled = true,
             fontSize = null,
             orientationOrder = null,
+            circles = null,
 
             // mimic the behaviour of d3.scale.category10 from the previous
             // version of d3
@@ -1262,7 +1263,7 @@
                                              orientation,
                                              orientationOrder);
             }
-            var circles = scaleSolution(solution, width, height, padding);
+            circles = scaleSolution(solution, width, height, padding);
             var textCentres = computeTextCentres(circles, data);
 
             // create svg if not already existing
@@ -1277,7 +1278,7 @@
             var previous = {}, hasPrevious = false;
             svg.selectAll(".venn-area path").each(function (d) {
                 var path = d3Selection.select(this).attr("d");
-                if ((d.sets.length == 1) && path) {
+                if ((d.sets.length === 1) && path) {
                     hasPrevious = true;
                     previous[d.sets[0]] = circleFromPath(path);
                 }
@@ -1406,6 +1407,12 @@
                 return '' + d.sets[0];
             }
         }
+
+        chart.circles = function(_) {
+          if (!arguments.length) return circles;
+          circles = _;
+          return chart;
+        };
 
         chart.wrap = function(_) {
             if (!arguments.length) return wrap;
@@ -1600,7 +1607,7 @@
         }
 
         if (!valid) {
-            if (interior.length == 1) {
+            if (interior.length === 1) {
                 ret = {x: interior[0].x, y: interior[0].y};
             } else {
                 var areaStats = {};
@@ -1609,7 +1616,7 @@
                 if (areaStats.arcs.length === 0) {
                     ret = {'x': 0, 'y': -1000, disjoint:true};
 
-                } else if (areaStats.arcs.length == 1) {
+                } else if (areaStats.arcs.length === 1) {
                     ret = {'x': areaStats.arcs[0].circle.x,
                            'y': areaStats.arcs[0].circle.y};
 
@@ -1764,7 +1771,7 @@
         if (arcs.length === 0) {
             return "M 0 0";
 
-        } else if (arcs.length == 1) {
+        } else if (arcs.length === 1) {
             var circle = arcs[0].circle;
             return circlePath(circle.x, circle.y, circle.radius);
 

@@ -3,7 +3,7 @@ let width = 1600,
 
 let center = {x: width / 2, y: height / 2};
 let vennCenters = null;
-let color = d3.scaleOrdinal(d3.schemeCategory20);
+let color = d3.scaleOrdinal(d3.schemeCategory10);
 
 let mainSvg = d3.select("#main-chart");
 
@@ -24,10 +24,21 @@ let chart = function createChart(data) {
   links = createLinks(data);
 
   console.log(nodes);
+  console.log(links);
 
   vennCenters = createVenn(data);
-  console.log(vennCenters)
-  // createForce(data);
+  console.log(vennCenters);
+
+  // mainSvg.select('.venn').select('svg')
+  //   .selectAll('g')
+  //   .data(vennCenters)
+  //   .append('g')
+  //   .attr('class', 'center')
+  //   .append('circle')
+  //   .attr('r', 20)
+  //   .attr('cx', d => d.x)
+  //   .attr('cy', d => d.y);
+  createForce(data, vennCenters);
 
 
 };
@@ -46,7 +57,7 @@ function idToUsernameMap() {
 function createNodes(data) {
   const temp = d3.nest().key(d => d.by).entries(data);
   return temp.filter(function (d) {
-    return d.values.length > 5;
+    return d.values.length >= 15 ;
   });
 }
 

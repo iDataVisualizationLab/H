@@ -2,21 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/css/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/alldata.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/bigdatadataset.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/cpsdataset.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/iotdataset.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/forcenetwork.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/tooltip.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/d3.v4.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/venn.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vennchart.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoT/javascript/user_network.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/javascript/user_network.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/IoTNetViz.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IoTNetViz.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/forcenetwork.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/vendor/venn.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vendor/venn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/vennchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vennchart.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -87,7 +81,7 @@
       <option name="presentableId" value="Default" />
       <updated>1570895745447</updated>
       <workItem from="1570895747428" duration="16195000" />
-      <workItem from="1570982316748" duration="9317000" />
+      <workItem from="1570982316748" duration="20414000" />
     </task>
     <servers />
   </component>

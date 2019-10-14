@@ -1,16 +1,15 @@
 function createVenn(data) {
 
   function getPathCentroid() {
-    let paths = vennSvg.selectAll(".venn-area")
-      .select("path");
-
+    let texts = vennSvg.selectAll(".venn-area")
+      .select("text");
     let pathCenter = [];
 
-    paths._groups[0].forEach(function (d) {
+    texts._groups[0].forEach(function (d) {
       let bbox = d.getBBox();
 
       pathCenter.push({
-        name: d.parentElement.getAttribute("data-venn-sets"),
+        name: d.parentElement.getAttribute("data-venn-sets").split("_").join(" "),
         x: bbox.x + bbox.width / 2,
         y: bbox.y + bbox.height / 2,
         data: d
@@ -21,18 +20,19 @@ function createVenn(data) {
   }
 
   function draw(svg, counter) {
-    let sets = [{'sets': ['IoT'], size: counter.A},
-      {'sets': ['Big Data'], size: counter.B},
-      {'sets': ['Security'], size: counter.D},
-      {'sets': ['IoT', 'Big Data'], size: counter.AB},
-      {'sets': ['IoT', 'Security'], size: counter.AD},
-      {'sets': ['Big Data', 'Security'], size: counter.BD},
-      {'sets': ['IoT', 'Big Data', 'Security'], size: counter.ABD}
+    let sets = [{'sets': ['IoT'], 'label': 'IoT', size: counter.A},
+      {'sets': ['Big Data'], 'label': 'Big Data', size: counter.B},
+      {'sets': ['Security'], 'label': 'Security', size: counter.D},
+      {'sets': ['IoT', 'Big Data'], 'label': 'IoT_Bigdata', size: counter.AB},
+      {'sets': ['IoT', 'Security'], 'label': 'IoT_Security', size: counter.AD},
+      {'sets': ['Big Data', 'Security'], 'label': 'Bigdata_Security', size: counter.BD},
+      {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'IBS', size: counter.ABD}
     ];
 
     let vennChart = venn.VennDiagram()
       .width(width)
-      .height(height);
+      .height(height)
+      .styled("none");
 
     svg.datum(sets)
       .call(vennChart)
@@ -67,6 +67,7 @@ function createVenn(data) {
           .style("fill-opacity", d.sets.length === 1 ? .3 : .0)
           .style("stroke-opacity", 0);
       });
+
   }
 
   function processVennData(data) {
@@ -158,13 +159,13 @@ function createVenn(data) {
   const usersContribution = processVennData(data);
 
   const counter = calculateIntersection(usersContribution);
-
   var vennSvg = mainSvg.append("svg")
     .attr("class", "venn")
     .attr("width", width)
     .attr("height", height);
 
   draw(vennSvg, counter);
+
   return getPathCentroid();
 }
 
