@@ -237,7 +237,7 @@ function updateDraw() {
     .call(drag(simulation))
     .on('mouseover', showDetail)
     .on('mouseout', hideDetail)
-    // .on('click', d => setFocus(d));
+  // .on('click', d => setFocus(d));
 
   node = forceSvg.select(".nodes")
     .selectAll("g");
@@ -354,7 +354,13 @@ function createFakeNodes() {
 
 function createNodeStat() {
   nodes.forEach(function (node) {
-    node['stat'] = {iot: 0, bigdata: 0, security: 0};
+    if (!node.stat) {
+      node['stat'] = {iot: 0, bigdata: 0, security: 0};
+    } else {
+      node.stat.iot = 0;
+      node.stat.bigdata = 0;
+      node.stat.security = 0;
+    }
     node.values.forEach(function (post) {
       post.topic.forEach(function (t) {
         if (t === "iot") {
@@ -376,8 +382,6 @@ function updateNetwork() {
 
   let data_old = forceSvg.select('.nodes').selectAll('g').data();
 
-  console.log(nodes);
-
   nodes.forEach(d => {
     let temp = data_old.find(e => e.key === d.key);
     if (temp) {
@@ -388,20 +392,22 @@ function updateNetwork() {
     }
   });
 
+  // console.log(links);
+
   simulation.nodes(nodes)
     .force("link", d3.forceLink(links).id(d => d.key).strength(function (d) {
-      if (d.isFake) {
+      if (d.isFake && links.includes(d)) {
         var weight = 0.1;
         var sum = d.stat.iot + d.stat.bigdata + d.stat.security;
-        console.log(d, sum);
+        // console.log(d, sum);
         if (d.source.key === "FakeIoTNode") {
-          console.log("IoT", weight * d.stat.iot / sum);
+          // console.log("IoT", weight * d.stat.iot / sum);
           return weight * d.stat.iot / sum;
         } else if (d.source.key === "FakeBigdataNode") {
-          console.log("Big Data",weight * d.stat.bigdata / sum);
+          // console.log("Big Data", weight * d.stat.bigdata / sum);
           return weight * d.stat.bigdata / sum;
         } else {
-          console.log("Security", d.stat.security / sum);
+          // console.log("Security", d.stat.security / sum);
           return weight * d.stat.security / sum;
         }
       }
@@ -418,22 +424,30 @@ function updateNetwork() {
       .attr("y2", d => d.target.y)
       .attr("visibility", function (d) {
         if (d.isFake) {
-          return "show";
+          return "hidden";
         }
-        return "hidden";
+        return "show";
       });
 
     node
       .attr("transform", function (d) {
         return `translate(${d.x}, ${d.y})`;
+      })
+      .attr("visibility",  function (d) {
+        if (d.isFake) {
+          return "hidden"
+        }
+        return "show";
       });
 
-    if (simulation.alpha() <= 0.3000001) {
-      simulation.stop()
-    }
+    console.log(simulation.alpha())
+
+    // if (simulation.alpha() <= 0.3000001) {
+    //   simulation.stop()
+    // }
   });
 
-  simulation.alphaTarget(0.3).restart();
+  // simulation.alpha(1).restart();
 }
 
 function createNetwork() {
@@ -568,7 +582,7 @@ function getCluster(node) {
 drag = simulation => {
 
   function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.5).restart();
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
@@ -579,7 +593,7 @@ drag = simulation => {
   }
 
   function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.5);
+    if (!d3.event.active) simulation.alphaTarget(0.3);
     d.fx = null;
     d.fy = null;
   }

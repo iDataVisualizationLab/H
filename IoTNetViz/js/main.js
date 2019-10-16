@@ -47,8 +47,7 @@ function createFilter(rawData) {
     .width(1000)
     .on('end', values => {
       var newData = timeFilter(rawData, values);
-      var data = preprocessData(newData);
-      updateData(data);
+      updateData(newData);
       updateNetwork(mainSvg);
     });
 
@@ -128,11 +127,14 @@ function createChart(data) {
 
 
 function updateData(data) {
+
+
   nodes = createNodes(data);
-  console.log(nodes);
   userName = nodes.map(d => d.key);
   idToUsername = idToUsernameMap();
   links = createLinks(data);
+  console.log(nodes);
+  console.log(links);
 }
 
 function idToUsernameMap() {
@@ -154,7 +156,7 @@ function createNodes(data) {
   var temp = d3.nest().key(d => d.by).entries(data);
 
   return temp.filter(function (d) {
-    return d.values.length >= 25;
+    return d.values.length >= 10;
   });
 }
 

@@ -150,6 +150,7 @@ d3.csv("data/time_arc.csv", function (error, data_) {
 //d3.tsv("data/wikinews.tsv", function(error, data_) {
     if (error) throw error;
     data = data_;
+    console.log(data_);
 
     terms = new Object();
     termMaxMax = 1;
@@ -220,10 +221,15 @@ d3.csv("data/time_arc.csv", function (error, data_) {
         //         }
         //     }
         // }
+        var eliminateKeywords = ['date', '', '\'', '', '\'s', 'rel=', '/a', 'http', 'href', 'x2f', 'x27', '‘', '“', '”'];
+
         if (d["keywords"] !== "") {
             var list = d["keywords"].split("|");
             for (var i = 0; i < list.length; i++) {
                 var term = list[i];
+                if (eliminateKeywords.includes(term)) {
+                    continue;
+                }
                 d[term] = 1;
                 if (!terms[term]) {
                     terms[term] = new Object();
@@ -470,6 +476,7 @@ function recompute() {
 }
 
 function readTermsAndRelationships() {
+    console.log(data)
     data2 = data.filter(function (d, i) {
         if (!searchTerm || searchTerm === "") {
             return d;
@@ -617,7 +624,6 @@ function readTermsAndRelationships() {
             }
         }
     });
-    debugger;
 
     console.log("DONE computing realtionships relationshipMaxMax=" + relationshipMaxMax);
 }

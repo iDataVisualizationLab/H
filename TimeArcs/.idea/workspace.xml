@@ -21,12 +21,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="18" />
-    <option name="y" value="43" />
-    <option name="width" value="1400" />
-    <option name="height" value="837" />
-  </component>
   <component name="ProjectId" id="1SIHIkz2Gs0buDnp2uVFc092ZDZ" />
   <component name="PropertiesComponent">
     <property name="HbShouldOpenHtmlAsHb" value="" />
@@ -72,7 +66,7 @@
       <updated>1473224853930</updated>
       <workItem from="1473224856098" duration="68000" />
       <workItem from="1474253590753" duration="5000" />
-      <workItem from="1571244112828" duration="3058000" />
+      <workItem from="1571244112828" duration="5548000" />
     </task>
     <servers />
   </component>

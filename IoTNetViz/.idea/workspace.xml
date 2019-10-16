@@ -2,25 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/securitydataset.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/toggle-off-solid.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/image/toggle-on-solid.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/intersection.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/cola.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/underscore-min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../TimeArcs/Text/data/time_arc.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/IoTNetViz.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IoTNetViz.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/alldata.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/alldata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/forcenetwork.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/vendor/venn.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vendor/venn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/vennchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vennchart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TTUHSC/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TTUHSC/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TimeArcs/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TimeArcs/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TimeArcs/Text/data/time_arc.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../TimeArcs/Text/data/time_arc.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../TimeArcs/Text/myscripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../TimeArcs/Text/myscripts/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +83,7 @@
       <workItem from="1570982316748" duration="22552000" />
       <workItem from="1571074719749" duration="50992000" />
       <workItem from="1571239332477" duration="2832000" />
-      <workItem from="1571244531065" duration="3521000" />
+      <workItem from="1571244531065" duration="8062000" />
     </task>
     <servers />
   </component>
