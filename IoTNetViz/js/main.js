@@ -6,42 +6,134 @@ let vennCenters = null;
 let color = d3.scaleOrdinal(d3.schemeCategory10);
 
 let mainSvg = d3.select("#main-chart");
+let filterSvg = d3.select('#filter-svg');
 
 let nodes = null;
 let idToUsername = null;
 let links = null;
 let userName = null;
+let toggle = true;
 
-let chart = function createChart(data) {
+
+function createFilter(rawData) {
+  var minYear = rawData[0].time, maxYear = rawData[0].time;
+
+  rawData.forEach(function (d) {
+    if (d.time < minYear) {
+      minYear = d.time;
+    }
+    if (d.time > maxYear) {
+      maxYear = d.time;
+    }
+  });
+
+  var minTime = new Date(minYear * 1000);
+  var maxTime = new Date(maxYear * 1000);
+
+  var filters = filterSvg
+    .attr("class", "filters");
+
+  var sliderContainer = filters.append("g")
+    .attr("class", "filter-slider")
+    .attr("transform", `translate(250, 160)`);
+
+  var slider = d3.sliderHorizontal()
+    .min(new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay()))
+    .max(new Date(maxTime.getFullYear(), maxTime.getMonth(), maxTime.getDay()))
+    .step(1)
+    .default([new Date(maxTime.getFullYear(), maxTime.getMonth(), maxTime.getDay()), new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay())])
+    .fill('#2196f3')
+    .tickFormat(d3.timeFormat('%Y'))
+    .width(1000)
+    .on('end', values => {
+      var newData = timeFilter(rawData, values);
+      var data = preprocessData(newData);
+      updateData(data);
+      updateNetwork(mainSvg);
+    });
+
+  sliderContainer.call(slider);
+
+
+  var toggles = filters.append('g')
+    .attr("class", "toggles")
+    .attr("stroke", "#999")
+    .attr("transform", "translate(50,170)");
+
+
+  toggles.append("image")
+    .attr("id", "toggle-on")
+    .attr("href", "image/toggle-on-solid.svg")
+    .attr("width", "30px")
+    .style("display", "block");
+
+  toggles.append("image")
+    .attr("id", "toggle-off")
+    .attr("href", "image/toggle-off-solid.svg")
+    .attr("width", "30px")
+    .style("display", "none");
+
+  toggles.append("text")
+    .attr("x", 35)
+    .attr("y", 17)
+    .attr("id", "toggle-text")
+    .text("Hide Venn-chart");
+
+  toggles.on("click", function () {
+    if (toggle) {
+      toggles.select("#toggle-on").style("display", "none");
+      toggles.select("#toggle-off").style("display", "block");
+      toggles.select("#toggle-text").text("Show Venn-chart");
+      hideVenn()
+    } else {
+      toggles.select("#toggle-off").style("display", "none");
+      toggles.select("#toggle-on").style("display", "block");
+      toggles.select("#toggle-text").text("Hide Venn-chart");
+      showVenn()
+    }
+
+    toggle = !toggle;
+  });
+}
+
+function showVenn() {
+  mainSvg.select('.venn').attr("visibility", "show");
+}
+
+function hideVenn() {
+  mainSvg.select('.venn').attr("visibility", "hidden");
+}
+
+function createChart(data) {
   mainSvg.selectAll("*").remove();
 
   mainSvg.attr("width", width)
     .attr("height", height);
+
+  filterSvg.attr("width", width)
+    .attr("height", 200);
 
   nodes = createNodes(data);
   userName = nodes.map(d => d.key);
   idToUsername = idToUsernameMap();
   links = createLinks(data);
 
-  console.log(nodes);
-  console.log(links);
-
   vennCenters = createVenn(data);
-  console.log(vennCenters);
 
-  // mainSvg.select('.venn').select('svg')
-  //   .selectAll('g')
-  //   .data(vennCenters)
-  //   .append('g')
-  //   .attr('class', 'center')
-  //   .append('circle')
-  //   .attr('r', 20)
-  //   .attr('cx', d => d.x)
-  //   .attr('cy', d => d.y);
-  createForce(data, vennCenters);
+  createForce(vennCenters);
+
+  mainSvg.select(".venn").select('svg').selectAll('g').select('text').style('visibility', 'hidden');
+
+}
 
 
-};
+function updateData(data) {
+  nodes = createNodes(data);
+  console.log(nodes);
+  userName = nodes.map(d => d.key);
+  idToUsername = idToUsernameMap();
+  links = createLinks(data);
+}
 
 function idToUsernameMap() {
   var map = {};
@@ -54,10 +146,15 @@ function idToUsernameMap() {
   return map;
 }
 
+function timeFilter(data, values) {
+  return data.filter(d => d.time * 1000 <= values[1] && d.time * 1000 >= values[0])
+}
+
 function createNodes(data) {
-  const temp = d3.nest().key(d => d.by).entries(data);
+  var temp = d3.nest().key(d => d.by).entries(data);
+
   return temp.filter(function (d) {
-    return d.values.length >= 15 ;
+    return d.values.length >= 25;
   });
 }
 
@@ -84,7 +181,7 @@ function createLinks(data) {
     var source = '';
     var target = '';
 
-    if (!userName.includes(name) || !userName.includes(parentName)){
+    if (!userName.includes(name) || !userName.includes(parentName)) {
       return;
     }
 
@@ -118,13 +215,15 @@ function createLinks(data) {
       return {source: v[0].source, target: v[0].target, value: v.length, label: v[0].label};
     })
     .entries(tempLinks);
+
   return uniqueLinks.map(d => d.value).filter(d => d.source !== d.target);
 }
 
 $(document).ready(function () {
   d3.json('data/alldata.json', function (err, rawData) {
     const data = preprocessData(rawData);
-    chart(data);
+    createChart(data);
+    createFilter(data);
   });
 });
 

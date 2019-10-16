@@ -9,5 +9,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="paper-full" level="application" />
+    <orderEntry type="library" name="cola.v3" level="application" />
+    <orderEntry type="library" name="d3.v3" level="application" />
   </component>
 </module>

@@ -29,6 +29,8 @@ function createVenn(data) {
       {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'IBS', size: counter.ABD}
     ];
 
+    // svg.selectAll('*').remove();
+
     let vennChart = venn.VennDiagram()
       .width(width)
       .height(height)
@@ -50,7 +52,7 @@ function createVenn(data) {
       .on("mouseover", function (d) {
         venn.sortAreas(svg, d);
         tooltip.transition().duration(400).style("opacity", .9);
-        tooltip.text(d.size + " users");
+        tooltip.text(d.label + ": " + d.size + " users");
         var selection = d3.select(this).transition("tooltip").duration(400);
         selection.select("path")
           .style("fill-opacity", d.sets.length === 1 ? .4 : .1)
@@ -67,7 +69,6 @@ function createVenn(data) {
           .style("fill-opacity", d.sets.length === 1 ? .3 : .0)
           .style("stroke-opacity", 0);
       });
-
   }
 
   function processVennData(data) {
@@ -158,15 +159,23 @@ function createVenn(data) {
 
   const usersContribution = processVennData(data);
 
+
+
   const counter = calculateIntersection(usersContribution);
   var vennSvg = mainSvg.append("svg")
     .attr("class", "venn")
     .attr("width", width)
     .attr("height", height);
 
+  // var vennCenters = createVennIntersect(vennSvg, counter);
+  //
+  // return vennCenters;
+
+
   draw(vennSvg, counter);
 
   return getPathCentroid();
+
 }
 
 
