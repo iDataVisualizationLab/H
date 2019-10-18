@@ -36,13 +36,18 @@
 }
 
 .filter-container {
-  height: 200px;
+  height: 100px;
   width: 100%;
 }
 
 .network-container {
   width: 100%;
   height: 1000px;
+}
+
+.cloud-container {
+  height: 300px;
+  width: 100%;
 }
 
 .main-svg {
@@ -69,9 +74,25 @@
 g.venn-area-part {
   cursor: pointer;
 }
+
 g.venn-area-part path {
   fill: #ffffff;
   stroke: #009aca;
   stroke-width: 3px;
   stroke-opacity: 1;
+}
+
+#toggle-text {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.container {
+  width: 1600px;
+  height: auto;
+  margin: auto;
+}
+
+.filter-slider {
+  padding-left: 10px;
+  padding-right: 10px;
 }

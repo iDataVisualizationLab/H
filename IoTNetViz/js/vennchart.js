@@ -29,12 +29,10 @@ function createVenn(data) {
       {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'IBS', size: counter.ABD}
     ];
 
-    // svg.selectAll('*').remove();
 
     let vennChart = venn.VennDiagram()
       .width(width)
-      .height(height)
-      .styled("none");
+      .height(height);
 
     svg.datum(sets)
       .call(vennChart)
@@ -46,7 +44,10 @@ function createVenn(data) {
     svg.selectAll("path")
       .style("stroke-opacity", 0)
       .style("stroke", "#fff")
-      .style("stroke-width", 3);
+      .style("stroke-width", 3)
+      .attr("fill", function (d) {
+        return "black";
+      });
 
     svg.selectAll("g")
       .on("mouseover", function (d) {
@@ -66,7 +67,7 @@ function createVenn(data) {
         tooltip.transition().duration(400).style("opacity", 0);
         var selection = d3.select(this).transition("tooltip").duration(400);
         selection.select("path")
-          .style("fill-opacity", d.sets.length === 1 ? .3 : .0)
+          .style("fill-opacity", d.sets.length === 1 ? .15 : .0)
           .style("stroke-opacity", 0);
       });
   }

@@ -1,5 +1,9 @@
-let width = 1600,
-  height = 1000;
+let svgWidth = 1600,
+  svgHeight = 1000;
+
+let margin = {top: 10, right: 10, bottom: 10, left: 10, axisx: 0, axisy: 60, storyTop: 40},
+  width = svgWidth - margin.left - margin.right - margin.axisx,
+  height = svgHeight - margin.top - margin.storyTop - margin.axisx - margin.bottom;
 
 let center = {x: width / 2, y: height / 2};
 let vennCenters = null;
@@ -7,6 +11,7 @@ let color = d3.scaleOrdinal(d3.schemeCategory10);
 
 let mainSvg = d3.select("#main-chart");
 let filterSvg = d3.select('#filter-svg');
+let cloudSvg = d3.select('#cloud-svg');
 
 let nodes = null;
 let idToUsername = null;
@@ -14,6 +19,20 @@ let links = null;
 let userName = null;
 let toggle = true;
 
+
+
+let docs = [
+  "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter.",
+  "The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon.",
+  "When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton.",
+  "It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love."
+];
+
+function createCloud() {
+  createWordCloud();
+
+  showNewWords();
+}
 
 function createFilter(rawData) {
   var minYear = rawData[0].time, maxYear = rawData[0].time;
@@ -35,7 +54,7 @@ function createFilter(rawData) {
 
   var sliderContainer = filters.append("g")
     .attr("class", "filter-slider")
-    .attr("transform", `translate(250, 160)`);
+    .attr("transform", `translate(${margin.left}, 10)`);
 
   var slider = d3.sliderHorizontal()
     .min(new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay()))
@@ -44,7 +63,7 @@ function createFilter(rawData) {
     .default([new Date(maxTime.getFullYear(), maxTime.getMonth(), maxTime.getDay()), new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay())])
     .fill('#2196f3')
     .tickFormat(d3.timeFormat('%Y'))
-    .width(1000)
+    .width(width-20)
     .on('end', values => {
       var newData = timeFilter(rawData, values);
       updateData(newData);
@@ -57,7 +76,7 @@ function createFilter(rawData) {
   var toggles = filters.append('g')
     .attr("class", "toggles")
     .attr("stroke", "#999")
-    .attr("transform", "translate(50,170)");
+    .attr("transform", `translate(${margin.left},70)`);
 
 
   toggles.append("image")
@@ -110,7 +129,7 @@ function createChart(data) {
     .attr("height", height);
 
   filterSvg.attr("width", width)
-    .attr("height", 200);
+    .attr("height", 100);
 
   nodes = createNodes(data);
   userName = nodes.map(d => d.key);
@@ -133,8 +152,6 @@ function updateData(data) {
   userName = nodes.map(d => d.key);
   idToUsername = idToUsernameMap();
   links = createLinks(data);
-  console.log(nodes);
-  console.log(links);
 }
 
 function idToUsernameMap() {
@@ -226,6 +243,8 @@ $(document).ready(function () {
     const data = preprocessData(rawData);
     createChart(data);
     createFilter(data);
+    // createCloud();
+    wordCloudPreprocess();
   });
 });
 

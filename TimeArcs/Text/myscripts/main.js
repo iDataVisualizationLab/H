@@ -221,7 +221,7 @@ d3.csv("data/time_arc.csv", function (error, data_) {
         //         }
         //     }
         // }
-        var eliminateKeywords = ['date', '', '\'', '', '\'s', 'rel=', '/a', 'http', 'href', 'x2f', 'x27', '‘', '“', '”'];
+        var eliminateKeywords = ['keywords','nofollow','government','quot','data','date', '', '\'', '', '\'s', 'rel=', '/a', 'http', 'href', 'x2f', 'x27', '‘', '“', '”'];
 
         if (d["keywords"] !== "") {
             var list = d["keywords"].split("|");
@@ -454,7 +454,7 @@ function recompute() {
         $(fallback).empty().append("HTML5 progress tag not supported: ");
         $('#progUpdate').empty().append(loaded + "% loaded");
 
-        if (loaded == 100) {
+        if (loaded === 100) {
             clearInterval(beginLoad);
             $('#progUpdate').empty().append("Complete");
         }
@@ -468,7 +468,7 @@ function recompute() {
     function alertFunc() {
         readTermsAndRelationships();
         computeNodes();
-        computeLinks()
+        computeLinks();
         force.nodes(nodes)
             .links(links)
             .start();
@@ -476,13 +476,14 @@ function recompute() {
 }
 
 function readTermsAndRelationships() {
-    console.log(data)
     data2 = data.filter(function (d, i) {
         if (!searchTerm || searchTerm === "") {
             return d;
         } else if (d[searchTerm])
             return d;
     });
+
+    console.log(data2);
 
     var selected = {};
     if (searchTerm && searchTerm !== "") {
@@ -525,7 +526,6 @@ function readTermsAndRelationships() {
     removeList["dea ’s facebook impersonato"] = 1;
     removeList["dismantle roe"] = 1;
     removeList["huffington post"] = 1;
-    removeList["date"] = 1;
 
 
     termArray = [];
@@ -567,6 +567,8 @@ function readTermsAndRelationships() {
         termArray.push(e);
     }
 
+    console.log(termArray)
+
     termArray.sort(function (a, b) {
         if (a.max < b.max) {
             return 1;
@@ -593,7 +595,6 @@ function readTermsAndRelationships() {
     relationship = {};
     relationshipMaxMax = 0;
     data2.forEach(function (d) {
-        console.log(d);
         var year = d.date.getFullYear();
         if (year >= minYear && year <= maxYear) {
             var m = d.m;

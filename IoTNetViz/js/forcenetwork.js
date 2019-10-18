@@ -183,10 +183,10 @@ function updateDraw() {
       return d.source.key + "" + d.target.key;
     })
     // .attr("transform", `translate(${center.x}, ${center.y})`)
-    .attr("stroke", d => color(d.label));
+    .attr("stroke", /*d => color(d.label)*/ "#828282");
 
   link.select("line")
-    .attr("fill", d => color(d.label))
+    .attr("fill", /*d => color(d.label)*/ "#828282")
     .attr("stroke-width", function (d) {
       return thicknessScale(d.value)
     });
@@ -196,51 +196,110 @@ function updateDraw() {
   link.enter()
     .append("g")
     // .attr("transform", `translate(${center.x}, ${center.y})`)
-    .attr("stroke", d => color(d.label))
+    .attr("stroke", /*d => color(d.label)*/ "#828282")
     .attr("id", d => d.source.key + d.target.key)
     .append("line")
-    .attr("fill", d => color(d.label))
+    .attr("fill", /*d => color(d.label)*/ "#828282")
     .attr("stroke-width", function (d) {
       return thicknessScale(d.value)
     });
 
+  // let node = forceSvg.select(".nodes")
+  //   .selectAll("g")
+  //   .data(nodes, d => d.key);
+  //
+  // node.select("circle")
+  //   .attr("r", function (d) {
+  //     return radiusScale(d.values.length);
+  //   })
+  //   .attr("fill", function (d) {
+  //     // if (d.isAlone) {
+  //     //   return "#636363";
+  //     // }
+  //     return "#636363";
+  //   });
+  //
+  // node.exit().remove();
+  //
+  // node.enter()
+  //   .append("g")
+  //   .attr("id", d => d.key)
+  //   .append("circle")
+  //   .attr("r", function (d) {
+  //     return radiusScale(d.values.length);
+  //   })
+  //   .attr("fill", function (d) {
+  //     // if (d.isAlone) {
+  //     //   return "#636363";
+  //     // }
+  //     return "#636363";
+  //   })
+  //   .call(drag(simulation))
+  //   .on('mouseover', showDetail)
+  //   .on('mouseout', hideDetail)
+  // // .on('click', d => setFocus(d));
+  //
+  // node = forceSvg.select(".nodes")
+  //   .selectAll("g");
+  //
+  // link = forceSvg.select(".links")
+  //   .selectAll("g").select("line");
+
+  nodes = nodes.map(function (d) {
+    d.pieData = {pie: d.pie, radius: d.values.length}
+    return d;
+  });
+
   let node = forceSvg.select(".nodes")
     .selectAll("g")
     .data(nodes, d => d.key);
-
-  node.select("circle")
-    .attr("r", function (d) {
-      return radiusScale(d.values.length);
-    })
-    .attr("fill", function (d) {
-      // if (d.isAlone) {
-      //   return "#636363";
-      // }
-      return "#636363";
-    });
 
   node.exit().remove();
 
   node.enter()
     .append("g")
     .attr("id", d => d.key)
-    .append("circle")
-    .attr("r", function (d) {
-      return radiusScale(d.values.length);
-    })
-    .attr("fill", function (d) {
-      // if (d.isAlone) {
-      //   return "#636363";
-      // }
-      return "#636363";
-    })
     .call(drag(simulation))
     .on('mouseover', showDetail)
-    .on('mouseout', hideDetail)
-  // .on('click', d => setFocus(d));
+    .on('mouseout', hideDetail);
 
   node = forceSvg.select(".nodes")
     .selectAll("g");
+
+  let pies = node.selectAll("path")
+    .data(function (d) {
+      return d.pieData.pie;
+    })
+    .attr('d', d3.arc()
+      .innerRadius(0)
+      .outerRadius(function (d) {
+        parent = d3.select(this.parentNode).datum();
+        return radiusScale(parent.values.length);
+      })
+    )
+    .attr('fill', function (d) {
+      return color(d.data.key)
+    });
+
+  pies.exit().remove();
+
+  pies
+    .enter()
+    .append('path')
+    .attr('d', d3.arc()
+      .innerRadius(0)
+      .outerRadius(function (d) {
+        parent = d3.select(this.parentNode).datum();
+        return radiusScale(parent.values.length);
+      })
+    )
+    .attr('fill', function (d) {
+      return color(d.data.key)
+    })
+    .attr("stroke", "white")
+    .attr("stroke-width", d => d.data.value ? 0.5 : 0)
+    .style("stroke-opacity", 0.6);
+
 
   link = forceSvg.select(".links")
     .selectAll("g").select("line");
@@ -334,9 +393,21 @@ function initialization() {
 function createFakeNodes() {
   createNodeStat();
 
-  nodes.push({key: "FakeIoTNode", values: [], isFake: true, cluster: "IoT"});
-  nodes.push({key: "FakeBigdataNode", values: [], isFake: true, cluster: "Big Data"});
-  nodes.push({key: "FakeSecurityNode", values: [], isFake: true, cluster: "Security"});
+  nodes.push({key: "FakeIoTNode", values: [], isFake: true, cluster: "IoT", pie: {iot: 0, bigdata: 0, security: 0}});
+  nodes.push({
+    key: "FakeBigdataNode",
+    values: [],
+    isFake: true,
+    cluster: "Big Data",
+    pie: {iot: 0, bigdata: 0, security: 0}
+  });
+  nodes.push({
+    key: "FakeSecurityNode",
+    values: [],
+    isFake: true,
+    cluster: "Security",
+    pie: {iot: 0, bigdata: 0, security: 0}
+  });
 
 
   nodes.forEach(function (d) {
@@ -371,7 +442,14 @@ function createNodeStat() {
           node.stat.security += 1;
         }
       })
-    })
+    });
+
+    var pie = d3.pie()
+      .value(function (d) {
+        return d.value;
+      });
+
+    node['pie'] = pie(d3.entries(node.stat));
   })
 }
 
@@ -392,8 +470,6 @@ function updateNetwork() {
     }
   });
 
-  // console.log(links);
-
   simulation.nodes(nodes)
     .force("link", d3.forceLink(links).id(d => d.key).strength(function (d) {
       if (d.isFake && links.includes(d)) {
@@ -411,7 +487,7 @@ function updateNetwork() {
           return weight * d.stat.security / sum;
         }
       }
-      return 0.008;
+      return 0;
     }));
 
   const {link, node} = updateDraw();
@@ -433,21 +509,19 @@ function updateNetwork() {
       .attr("transform", function (d) {
         return `translate(${d.x}, ${d.y})`;
       })
-      .attr("visibility",  function (d) {
+      .attr("visibility", function (d) {
         if (d.isFake) {
           return "hidden"
         }
         return "show";
       });
 
-    console.log(simulation.alpha())
-
-    // if (simulation.alpha() <= 0.3000001) {
+    // if (simulation.alpha() <= 0.4000000000000012) {
     //   simulation.stop()
     // }
   });
 
-  // simulation.alpha(1).restart();
+  simulation.alphaTarget(0.4).restart();
 }
 
 function createNetwork() {
@@ -479,13 +553,13 @@ function createNetwork() {
   simulation = d3.forceSimulation()
     .force('charge', d3.forceManyBody().strength(-10).distanceMin(10).distanceMax(150))
     .force('collision', d3.forceCollide().radius(function (d) {
-      return radiusScale(d.values.length + 5);
+      return radiusScale(d.values.length + 10);
     }))
     .force('x', d3.forceX().strength(function (d) {
       if (d.isFake) {
         return 1
       }
-      return 0.05
+      return 0.005
     }).x(d => {
       return getCluster(d).x
     }))
@@ -493,9 +567,10 @@ function createNetwork() {
       if (d.isFake) {
         return 1
       }
-      return 0.05
+      return 0.005
     }).y(d => getCluster(d).y))
-    .alphaTarget(0.3);
+    .velocityDecay(0.2)
+    .alphaTarget(0.4);
 
   updateNetwork()
 }
@@ -582,7 +657,7 @@ function getCluster(node) {
 drag = simulation => {
 
   function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    if (!d3.event.active) simulation.alphaTarget(0.4).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
@@ -593,7 +668,7 @@ drag = simulation => {
   }
 
   function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3);
+    if (!d3.event.active) simulation.alphaTarget(0.4);
     d.fx = null;
     d.fy = null;
   }
