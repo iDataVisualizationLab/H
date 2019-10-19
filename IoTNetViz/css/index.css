@@ -96,3 +96,11 @@ g.venn-area-part path {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.brushed {
+  opacity: 1.0;
+}
+
+.non-brushed {
+  opacity: 0.5;
+}

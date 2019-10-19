@@ -246,7 +246,7 @@ function updateDraw() {
   //   .selectAll("g").select("line");
 
   nodes = nodes.map(function (d) {
-    d.pieData = {pie: d.pie, radius: d.values.length}
+    d.pieData = {pie: d.pie, radius: d.values.length};
     return d;
   });
 
@@ -377,8 +377,6 @@ function findAdjNodes(d) {
 }
 
 function initialization() {
-
-
   forceSvg.append("g")
     .attr("class", "links")
     .attr("stroke", "#999")
@@ -561,8 +559,6 @@ function updateNetwork() {
         }
         return "show";
       });
-
-    console.log(simulation.alpha());
 
     if (simulation.alpha() <= 0.11) {
       simulation.stop()

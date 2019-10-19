@@ -18,6 +18,7 @@ let idToUsername = null;
 let links = null;
 let userName = null;
 let toggle = true;
+let brush = null;
 
 
 let docs = [
@@ -124,6 +125,56 @@ function createFilter(rawData, wordStreamData) {
     }
     toggle = !toggle;
   });
+
+  brush = d3.brush()
+    .on("brush", highlightBrushed)
+    .on("end", brushFilter);
+
+  mainSvg.append("g")
+    .call(brush);
+}
+
+function highlightBrushed() {
+  if (d3.event.selection != null) {
+
+    let pathNodes = forceSvg.select('.nodes').selectAll('g');
+    pathNodes.attr("class", "non-brushed");
+
+    var brushCoords = d3.brushSelection(this);
+
+    let brushedNodes = pathNodes.filter(function (d) {
+      var cx = d.x + radiusScale(d.values.length + 10),
+        cy = d.y + radiusScale(d.values.length + 10);
+
+      return isBrushed(brushCoords, cx, cy);
+    })
+      .attr("class", "brushed");
+
+    console.log(brushedNodes);
+
+    if (brushedNodes.data().length === 0) {
+      pathNodes.attr("class", "brushed");
+    }
+  }
+}
+
+
+function brushFilter() {
+  if (!d3.event.selection) return;
+
+  d3.select(this).call(brush.move, null);
+  var brushedObject = d3.selectAll(".brushed").data();
+
+}
+
+function isBrushed(brushCoords, cx, cy) {
+
+  var x0 = brushCoords[0][0],
+    x1 = brushCoords[1][0],
+    y0 = brushCoords[0][1],
+    y1 = brushCoords[1][1];
+
+  return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
 }
 
 function showVenn() {

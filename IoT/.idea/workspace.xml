@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ddedd043-fed1-4c31-91dd-e7c58563c870" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../IoTNetViz/data/word_stream_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/.idea/IoTNetViz.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/.idea/IoTNetViz.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/js/forcenetwork.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/js/vendor/wordstream.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/js/vendor/wordstream.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/js/vennchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/js/vennchart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/js/wordcloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/js/wordcloud.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/js/wordstream.js" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/js/wordstream.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -96,7 +85,7 @@
       <workItem from="1571018509870" duration="521000" />
       <workItem from="1571075231228" duration="7007000" />
       <workItem from="1571261481298" duration="868000" />
-      <workItem from="1571440554816" duration="617000" />
+      <workItem from="1571440554816" duration="619000" />
     </task>
     <servers />
   </component>
