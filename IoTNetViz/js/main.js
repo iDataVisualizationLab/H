@@ -17,7 +17,8 @@ let nodes = null;
 let idToUsername = null;
 let links = null;
 let userName = null;
-let toggle = true;
+let vennToggle = true;
+let brushToggle = false;
 let brush = null;
 
 
@@ -87,62 +88,116 @@ function createFilter(rawData, wordStreamData) {
   sliderContainer.call(slider);
 
 
-  var toggles = filters.append('g')
+  var vennShowToggle = filters.append('g')
     .attr("class", "toggles")
     .attr("stroke", "#999")
     .attr("transform", `translate(${margin.left},70)`);
 
 
-  toggles.append("image")
+  vennShowToggle.append("image")
     .attr("id", "toggle-on")
     .attr("href", "image/toggle-on-solid.svg")
     .attr("width", "30px")
     .style("display", "block");
 
-  toggles.append("image")
+  vennShowToggle.append("image")
     .attr("id", "toggle-off")
     .attr("href", "image/toggle-off-solid.svg")
     .attr("width", "30px")
     .style("display", "none");
 
-  toggles.append("text")
+  vennShowToggle.append("text")
     .attr("x", 35)
     .attr("y", 17)
     .attr("id", "toggle-text")
     .text("Hide Venn-chart");
 
-  toggles.on("click", function () {
-    if (toggle) {
-      toggles.select("#toggle-on").style("display", "none");
-      toggles.select("#toggle-off").style("display", "block");
-      toggles.select("#toggle-text").text("Show Venn-chart");
+  vennShowToggle.on("click", function () {
+    if (vennToggle) {
+      vennShowToggle.select("#toggle-on").style("display", "none");
+      vennShowToggle.select("#toggle-off").style("display", "block");
+      vennShowToggle.select("#toggle-text").text("Show Venn-chart");
       hideVenn()
     } else {
-      toggles.select("#toggle-off").style("display", "none");
-      toggles.select("#toggle-on").style("display", "block");
-      toggles.select("#toggle-text").text("Hide Venn-chart");
+      vennShowToggle.select("#toggle-off").style("display", "none");
+      vennShowToggle.select("#toggle-on").style("display", "block");
+      vennShowToggle.select("#toggle-text").text("Hide Venn-chart");
       showVenn()
     }
-    toggle = !toggle;
+    vennToggle = !vennToggle;
   });
+
 
   brush = d3.brush()
     .on("brush", highlightBrushed)
     .on("end", brushFilter);
 
+  var brushShowToggle = filters.append('g')
+    .attr("class", "toggles")
+    .attr("stroke", "#999")
+    .attr("transform", `translate(${margin.left+150},70)`);
+
+
+  brushShowToggle.append("image")
+    .attr("id", "toggle-on")
+    .attr("href", "image/toggle-on-solid.svg")
+    .attr("width", "30px")
+    .style("display", "none");
+
+  brushShowToggle.append("image")
+    .attr("id", "toggle-off")
+    .attr("href", "image/toggle-off-solid.svg")
+    .attr("width", "30px")
+    .style("display", "block");
+
+  brushShowToggle.append("text")
+    .attr("x", 35)
+    .attr("y", 17)
+    .attr("id", "toggle-text")
+    .text("Turn on brush");
+
+  brushShowToggle.on("click", function () {
+    if (brushToggle) {
+      brushShowToggle.select("#toggle-on").style("display", "none");
+      brushShowToggle.select("#toggle-off").style("display", "block");
+      brushShowToggle.select("#toggle-text").text("Turn on brush");
+      turnOffBrush();
+    } else {
+      brushShowToggle.select("#toggle-off").style("display", "none");
+      brushShowToggle.select("#toggle-on").style("display", "block");
+      brushShowToggle.select("#toggle-text").text("Turn off brush");
+      turnOnBrush();
+    }
+    brushToggle = !brushToggle;
+  });
+}
+
+function turnOnBrush() {
   mainSvg.append("g")
+    .attr("class", "brush")
     .call(brush);
+}
+
+function turnOffBrush() {
+  mainSvg.select(".brush").remove();
+
+  let allNodes = forceSvg.select('.nodes').selectAll('g');
+  allNodes.attr("class", "brushed");
+  let allLinks = forceSvg.select('.links').selectAll('g');
+  allLinks.attr("class", "brushed");
 }
 
 function highlightBrushed() {
   if (d3.event.selection != null) {
 
-    let pathNodes = forceSvg.select('.nodes').selectAll('g');
-    pathNodes.attr("class", "non-brushed");
+    let allNodes = forceSvg.select('.nodes').selectAll('g');
+    allNodes.attr("class", "non-brushed");
+    let allLinks = forceSvg.select('.links').selectAll('g');
+    allLinks.attr("class", "non-brushed");
 
     var brushCoords = d3.brushSelection(this);
 
-    let brushedNodes = pathNodes.filter(function (d) {
+    let brushedNodes = allNodes.filter(function (d) {
       var cx = d.x + radiusScale(d.values.length + 10),
         cy = d.y + radiusScale(d.values.length + 10);
 
@@ -150,10 +205,15 @@ function highlightBrushed() {
     })
       .attr("class", "brushed");
 
-    console.log(brushedNodes);
+    allLinks.filter(function (d) {
+      let temp1 = brushedNodes.data().find(v => d.source.key === v.key);
+      let temp2 = brushedNodes.data().find(v => d.target.key === v.key);
+      return temp1 && temp2;
+    }).attr("class", "brushed");
 
     if (brushedNodes.data().length === 0) {
-      pathNodes.attr("class", "brushed");
+      allNodes.attr("class", "brushed");
+      allLinks.attr("class", "brushed")
     }
   }
 }
@@ -163,8 +223,10 @@ function brushFilter() {
   if (!d3.event.selection) return;
 
   d3.select(this).call(brush.move, null);
-  var brushedObject = d3.selectAll(".brushed").data();
+  var brushedObject = d3.selectAll(".brushed");
 
+  brushedObject.data().forEach(function (d) {
+  })
 }
 
 function isBrushed(brushCoords, cx, cy) {

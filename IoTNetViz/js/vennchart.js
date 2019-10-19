@@ -23,10 +23,10 @@ function createVenn(data) {
     let sets = [{'sets': ['IoT'], 'label': 'IoT', size: counter.A},
       {'sets': ['Big Data'], 'label': 'Big Data', size: counter.B},
       {'sets': ['Security'], 'label': 'Security', size: counter.D},
-      {'sets': ['IoT', 'Big Data'], 'label': 'IoT_Bigdata', size: counter.AB},
-      {'sets': ['IoT', 'Security'], 'label': 'IoT_Security', size: counter.AD},
-      {'sets': ['Big Data', 'Security'], 'label': 'Bigdata_Security', size: counter.BD},
-      {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'IBS', size: counter.ABD}
+      {'sets': ['IoT', 'Big Data'], 'label': 'IoT - Big Data', size: counter.AB},
+      {'sets': ['IoT', 'Security'], 'label': 'IoT - Security', size: counter.AD},
+      {'sets': ['Big Data', 'Security'], 'label': 'Big Data - Security', size: counter.BD},
+      {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'IoT - Big Data - Security', size: counter.ABD}
     ];
 
 
@@ -53,7 +53,7 @@ function createVenn(data) {
       .on("mouseover", function (d) {
         venn.sortAreas(svg, d);
         tooltip.transition().duration(400).style("opacity", .9);
-        tooltip.text(d.label + ": " + d.size + " users");
+        tooltip.text(d.label);
         var selection = d3.select(this).transition("tooltip").duration(400);
         selection.select("path")
           .style("fill-opacity", d.sets.length === 1 ? .4 : .1)

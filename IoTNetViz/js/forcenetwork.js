@@ -497,7 +497,7 @@ function createNodeStat() {
 }
 
 function updateNetwork() {
-  removeFocus(forceSvg);
+  // removeFocus(forceSvg);
   createNodeTopics();
   createFakeNodes();
 
