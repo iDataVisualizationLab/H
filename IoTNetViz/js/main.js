@@ -20,7 +20,6 @@ let userName = null;
 let toggle = true;
 
 
-
 let docs = [
   "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter.",
   "The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon.",
@@ -30,11 +29,22 @@ let docs = [
 
 function createCloud() {
   createWordCloud();
-
   showNewWords();
 }
 
-function createFilter(rawData) {
+function wsTimeFilter(wordStreamData, values) {
+  return wordStreamData.filter(function (d) {
+    var time = new Date(d.date);
+    var left = values[0];
+    var right = new Date(values[1]).getTime() + 365 * 24 * 60 * 60 * 1000;
+    if (time >= values[0] && time <= right) {
+      return true;
+    }
+    return false;
+  })
+}
+
+function createFilter(rawData, wordStreamData) {
   var minYear = rawData[0].time, maxYear = rawData[0].time;
 
   rawData.forEach(function (d) {
@@ -54,20 +64,23 @@ function createFilter(rawData) {
 
   var sliderContainer = filters.append("g")
     .attr("class", "filter-slider")
-    .attr("transform", `translate(${margin.left}, 10)`);
+    .attr("transform", `translate(82.5, 10)`);
 
   var slider = d3.sliderHorizontal()
-    .min(new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay()))
-    .max(new Date(maxTime.getFullYear(), maxTime.getMonth(), maxTime.getDay()))
-    .step(1)
-    .default([new Date(maxTime.getFullYear(), maxTime.getMonth(), maxTime.getDay()), new Date(minTime.getFullYear(), minTime.getMonth(), minTime.getDay())])
+    .min(new Date(minTime.getFullYear(), 0, 0))
+    .max(new Date(maxTime.getFullYear() + 1, 0, 1))
+    .step(365 * 24 * 60 * 60 * 1000)
+    .default([new Date(maxTime.getFullYear() + 1, 0, 0), new Date(minTime.getFullYear(), 0, 0)])
     .fill('#2196f3')
     .tickFormat(d3.timeFormat('%Y'))
-    .width(width-20)
+    .width(width - 82.5 * 2)
     .on('end', values => {
       var newData = timeFilter(rawData, values);
       updateData(newData);
       updateNetwork(mainSvg);
+
+      var newWSData = wsTimeFilter(wordStreamData, values)
+      updateWordStreamV2(newWSData);
     });
 
   sliderContainer.call(slider);
@@ -109,7 +122,6 @@ function createFilter(rawData) {
       toggles.select("#toggle-text").text("Hide Venn-chart");
       showVenn()
     }
-
     toggle = !toggle;
   });
 }
@@ -126,7 +138,7 @@ function createChart(data) {
   mainSvg.selectAll("*").remove();
 
   mainSvg.attr("width", width)
-    .attr("height", height);
+    .attr("height", 800);
 
   filterSvg.attr("width", width)
     .attr("height", 100);
@@ -141,13 +153,10 @@ function createChart(data) {
   createForce(vennCenters);
 
   mainSvg.select(".venn").select('svg').selectAll('g').select('text').style('visibility', 'hidden');
-
 }
 
 
 function updateData(data) {
-
-
   nodes = createNodes(data);
   userName = nodes.map(d => d.key);
   idToUsername = idToUsernameMap();
@@ -238,13 +247,19 @@ function createLinks(data) {
   return uniqueLinks.map(d => d.value).filter(d => d.source !== d.target);
 }
 
+function createStream(wordStreamData) {
+  createWordStreamV2(wordStreamData);
+}
+
 $(document).ready(function () {
   d3.json('data/alldata.json', function (err, rawData) {
     const data = preprocessData(rawData);
     createChart(data);
-    createFilter(data);
-    // createCloud();
-    wordCloudPreprocess();
+    d3.json("data/word_stream_data.json", function (err, wordStreamData) {
+      // createCloud();
+      createStream(wordStreamData);
+      createFilter(data, wordStreamData);
+    });
   });
 });
 

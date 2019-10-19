@@ -12,7 +12,7 @@ function createForce(centers) {
   forceSvg = mainSvg.append("svg")
     .attr("class", "network")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", 800);
 
   clustersPosition = centers;
 
@@ -388,6 +388,51 @@ function initialization() {
     .attr("stroke", "#fff")
     .attr("stroke-width", 1.5)
     .attr("class", "nodes");
+
+  var legends = forceSvg
+    .append('g')
+    .attr("stroke", "#999")
+    .attr("class", "legend")
+    .attr("transform", "translate(0, 100)");
+
+  legends.append("circle")
+    .attr("stroke", color("iot"))
+    .attr("fill", color("iot"))
+    .attr('r', 15)
+    .attr("cx", 20)
+    .attr("cy", 0)
+    .attr("stroke-width", 2);
+
+  legends.append('text')
+    .text("Internet of Things")
+    .attr("x", 40)
+    .attr("y", 7.5);
+
+  legends.append("circle")
+    .attr("stroke", color("bigdata"))
+    .attr("fill", color("bigdata"))
+    .attr('r', 15)
+    .attr("cx", 20)
+    .attr("cy", 40)
+    .attr("stroke-width", 2);
+
+  legends.append('text')
+    .text("Big Data")
+    .attr("x", 40)
+    .attr("y", 47.5);
+
+  legends.append("circle")
+    .attr("stroke", color("security"))
+    .attr("fill", color("security"))
+    .attr('r', 15)
+    .attr("cx", 20)
+    .attr("cy", 80)
+    .attr("stroke-width", 2);
+
+  legends.append('text')
+    .text("Security")
+    .attr("x", 40)
+    .attr("y", 87.5);
 }
 
 function createFakeNodes() {
@@ -492,7 +537,8 @@ function updateNetwork() {
 
   const {link, node} = updateDraw();
 
-  simulation.on("tick", function () {
+  simulation
+    .on("tick", function () {
     link
       .attr("x1", d => d.source.x)
       .attr("y1", d => d.source.y)
@@ -516,12 +562,14 @@ function updateNetwork() {
         return "show";
       });
 
-    // if (simulation.alpha() <= 0.4000000000000012) {
-    //   simulation.stop()
-    // }
+    console.log(simulation.alpha());
+
+    if (simulation.alpha() <= 0.11) {
+      simulation.stop()
+    }
   });
 
-  simulation.alphaTarget(0.4).restart();
+  simulation.alpha(1).alphaTarget(0.1).restart();
 }
 
 function createNetwork() {
@@ -570,7 +618,7 @@ function createNetwork() {
       return 0.005
     }).y(d => getCluster(d).y))
     .velocityDecay(0.2)
-    .alphaTarget(0.4);
+    .alphaTarget(0.1);
 
   updateNetwork()
 }
@@ -657,7 +705,7 @@ function getCluster(node) {
 drag = simulation => {
 
   function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.4).restart();
+    if (!d3.event.active) simulation.alphaTarget(0.5).restart();
     d.fx = d.x;
     d.fy = d.y;
   }
@@ -668,7 +716,7 @@ drag = simulation => {
   }
 
   function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.4);
+    if (!d3.event.active) simulation.alphaTarget(0.1);
     d.fx = null;
     d.fy = null;
   }

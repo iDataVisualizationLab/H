@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{cola.v3, d3.v3, paper-full}" />
+    <file url="PROJECT" libraries="{cola.v3, d3-scale-chromatic.v1, d3.v3, paper-full}" />
   </component>
 </project>

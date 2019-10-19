@@ -11,5 +11,6 @@
     <orderEntry type="library" name="paper-full" level="application" />
     <orderEntry type="library" name="cola.v3" level="application" />
     <orderEntry type="library" name="d3.v3" level="application" />
+    <orderEntry type="library" name="d3-scale-chromatic.v1" level="application" />
   </component>
 </module>

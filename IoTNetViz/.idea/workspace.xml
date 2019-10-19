@@ -2,27 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/alldata_big.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/time_arc.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/time_arc_big.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/d3.layout.cloud.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/d3.layout.wordstream.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/wordstream.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/wordcloud.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/wordstream.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/wordstream_data.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/wordstream_draw.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/word_stream_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoT/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/IoTNetViz.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/IoTNetViz.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/forcenetwork.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/vendor/venn.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vendor/venn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/vendor/wordstream.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vendor/wordstream.min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/vennchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vennchart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TimeArcs/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../TimeArcs/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TimeArcs/Text/data/time_arc.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../TimeArcs/Text/data/time_arc.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../TimeArcs/Text/myscripts/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../TimeArcs/Text/myscripts/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/wordcloud.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/wordcloud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/wordstream.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/wordstream.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,14 +42,17 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/js/vendor" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$/js/vendor" />
       <recent name="$PROJECT_DIR$/js" />
-      <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -98,7 +93,7 @@
       <workItem from="1571074719749" duration="50992000" />
       <workItem from="1571239332477" duration="2832000" />
       <workItem from="1571244531065" duration="17987000" />
-      <workItem from="1571279698422" duration="24206000" />
+      <workItem from="1571279698422" duration="34738000" />
     </task>
     <servers />
   </component>

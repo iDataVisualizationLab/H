@@ -2,32 +2,6 @@ let cloudColor = d3.scaleOrdinal(d3.schemeCategory20);
 let cloud = null;
 let kwData = null;
 
-function wordCloudPreprocess() {
-  cloudSvg.attr("width", width)
-    .attr("height", height);
-
-  d3.csv("data/time_arc.csv", function (err, filteredWords) {
-    console.log(new Date(filteredWords[0].time).getTime());
-
-    let filteredData = [];
-
-    filteredWords.forEach(function (d) {
-      var tempText = "";
-      d.keywords.split("|").forEach(function (kw) {
-        tempText += kw+" ";
-      });
-      filteredData.push({
-        time: d.time,
-        title: tempText
-      })
-    });
-
-    console.log(filteredData);
-
-    loadNewsData(filteredData, drawWordStream);
-  })
-}
-
 function createWordCloud() {
   cloudSvg.attr("width", 1600)
     .attr("height", 300)

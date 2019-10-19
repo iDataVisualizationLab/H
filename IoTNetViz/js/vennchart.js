@@ -32,7 +32,7 @@ function createVenn(data) {
 
     let vennChart = venn.VennDiagram()
       .width(width)
-      .height(height);
+      .height(800);
 
     svg.datum(sets)
       .call(vennChart)
@@ -166,7 +166,7 @@ function createVenn(data) {
   var vennSvg = mainSvg.append("svg")
     .attr("class", "venn")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", 800);
 
   // var vennCenters = createVennIntersect(vennSvg, counter);
   //
