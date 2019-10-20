@@ -17,7 +17,7 @@ let nodes = null;
 let idToUsername = null;
 let links = null;
 let userName = null;
-let vennToggle = true;
+let vennToggle = false;
 let brushToggle = false;
 let brush = null;
 
@@ -81,7 +81,7 @@ function createFilter(rawData, wordStreamData) {
       updateData(newData);
       updateNetwork(mainSvg);
 
-      var newWSData = wsTimeFilter(wordStreamData, values)
+      var newWSData = wsTimeFilter(wordStreamData, values);
       updateWordStreamV2(newWSData);
     });
 
@@ -98,19 +98,21 @@ function createFilter(rawData, wordStreamData) {
     .attr("id", "toggle-on")
     .attr("href", "image/toggle-on-solid.svg")
     .attr("width", "30px")
-    .style("display", "block");
+    .style("display", "none");
 
   vennShowToggle.append("image")
     .attr("id", "toggle-off")
     .attr("href", "image/toggle-off-solid.svg")
     .attr("width", "30px")
-    .style("display", "none");
+    .style("display", "block");
 
   vennShowToggle.append("text")
     .attr("x", 35)
     .attr("y", 17)
     .attr("id", "toggle-text")
-    .text("Hide Venn-chart");
+    .text("Show Venn-chart");
+
+  hideVenn();
 
   vennShowToggle.on("click", function () {
     if (vennToggle) {
@@ -135,7 +137,7 @@ function createFilter(rawData, wordStreamData) {
   var brushShowToggle = filters.append('g')
     .attr("class", "toggles")
     .attr("stroke", "#999")
-    .attr("transform", `translate(${margin.left+150},70)`);
+    .attr("transform", `translate(${margin.left+180},70)`);
 
 
   brushShowToggle.append("image")
@@ -218,14 +220,14 @@ function highlightBrushed() {
   }
 }
 
-
 function brushFilter() {
   if (!d3.event.selection) return;
 
   d3.select(this).call(brush.move, null);
-  var brushedObject = d3.selectAll(".brushed");
+  var brushedObject = forceSvg.select('.nodes').selectAll(".brushed");
 
   brushedObject.data().forEach(function (d) {
+    console.log(d);
   })
 }
 

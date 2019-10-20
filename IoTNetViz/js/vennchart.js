@@ -26,7 +26,7 @@ function createVenn(data) {
       {'sets': ['IoT', 'Big Data'], 'label': 'IoT - Big Data', size: counter.AB},
       {'sets': ['IoT', 'Security'], 'label': 'IoT - Security', size: counter.AD},
       {'sets': ['Big Data', 'Security'], 'label': 'Big Data - Security', size: counter.BD},
-      {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'IoT - Big Data - Security', size: counter.ABD}
+      {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'I - B - S', size: counter.ABD}
     ];
 
 
