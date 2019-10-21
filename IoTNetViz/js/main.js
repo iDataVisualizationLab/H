@@ -73,7 +73,7 @@ function createFilter(rawData, wordStreamData) {
     .max(new Date(maxTime.getFullYear() + 1, 0, 1))
     .step(365 * 24 * 60 * 60 * 1000)
     .default([new Date(maxTime.getFullYear() + 1, 0, 0), new Date(minTime.getFullYear(), 0, 0)])
-    .fill('#2196f3')
+    .fill('#828282')
     .tickFormat(d3.timeFormat('%Y'))
     .width(width - 82.5 * 2)
     .on('end', values => {

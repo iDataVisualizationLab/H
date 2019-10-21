@@ -39,7 +39,14 @@ function createWordStreamV2(wordStreamData) {
     var d2 = new Date(a.date).getTime();
     return d2 - d1;
   });
-  console.log(data);
+  data = data.map(function (d) {
+    return {
+      date: d.date,
+      words: {
+        keyword: d.words.keyword
+      }
+    }
+  });
   wordstream(cloudSvg, data, wordStreamConfig)
 }
 
@@ -50,6 +57,14 @@ function updateWordStreamV2(wordStreamData) {
     var d1 = new Date(b.date).getTime();
     var d2 = new Date(a.date).getTime();
     return d2 - d1;
+  });
+  data = data.map(function (d) {
+    return {
+      date: d.date,
+      words: {
+        keyword: d.words.keyword
+      }
+    }
   });
   wordstream(cloudSvg, data, wordStreamConfig)
 }

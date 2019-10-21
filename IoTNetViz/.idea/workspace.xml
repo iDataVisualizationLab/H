@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/word_stream_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/word_stream_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/vendor/wordstream.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vendor/wordstream.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/wordstream.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/wordstream.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,6 +87,8 @@
       <workItem from="1571279698422" duration="35593000" />
       <workItem from="1571468681768" duration="12475000" />
       <workItem from="1571590049946" duration="1554000" />
+      <workItem from="1571622174383" duration="1976000" />
+      <workItem from="1571636577515" duration="902000" />
     </task>
     <servers />
   </component>
