@@ -204,47 +204,6 @@ function updateDraw() {
       return thicknessScale(d.value)
     });
 
-  // let node = forceSvg.select(".nodes")
-  //   .selectAll("g")
-  //   .data(nodes, d => d.key);
-  //
-  // node.select("circle")
-  //   .attr("r", function (d) {
-  //     return radiusScale(d.values.length);
-  //   })
-  //   .attr("fill", function (d) {
-  //     // if (d.isAlone) {
-  //     //   return "#636363";
-  //     // }
-  //     return "#636363";
-  //   });
-  //
-  // node.exit().remove();
-  //
-  // node.enter()
-  //   .append("g")
-  //   .attr("id", d => d.key)
-  //   .append("circle")
-  //   .attr("r", function (d) {
-  //     return radiusScale(d.values.length);
-  //   })
-  //   .attr("fill", function (d) {
-  //     // if (d.isAlone) {
-  //     //   return "#636363";
-  //     // }
-  //     return "#636363";
-  //   })
-  //   .call(drag(simulation))
-  //   .on('mouseover', showDetail)
-  //   .on('mouseout', hideDetail)
-  // // .on('click', d => setFocus(d));
-  //
-  // node = forceSvg.select(".nodes")
-  //   .selectAll("g");
-  //
-  // link = forceSvg.select(".links")
-  //   .selectAll("g").select("line");
-
   nodes = nodes.map(function (d) {
     d.pieData = {pie: d.pie, radius: d.values.length};
     return d;
@@ -496,8 +455,12 @@ function createNodeStat() {
   })
 }
 
-function updateNetwork() {
+function updateNetwork(centers) {
   // removeFocus(forceSvg);
+  if (centers) {
+    clustersPosition = centers;
+  }
+
   createNodeTopics();
   createFakeNodes();
 
@@ -537,33 +500,33 @@ function updateNetwork() {
 
   simulation
     .on("tick", function () {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y)
-      .attr("visibility", function (d) {
-        if (d.isFake) {
-          return "hidden";
-        }
-        return "show";
-      });
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y)
+        .attr("visibility", function (d) {
+          if (d.isFake) {
+            return "hidden";
+          }
+          return "show";
+        });
 
-    node
-      .attr("transform", function (d) {
-        return `translate(${d.x}, ${d.y})`;
-      })
-      .attr("visibility", function (d) {
-        if (d.isFake) {
-          return "hidden"
-        }
-        return "show";
-      });
+      node
+        .attr("transform", function (d) {
+          return `translate(${d.x}, ${d.y})`;
+        })
+        .attr("visibility", function (d) {
+          if (d.isFake) {
+            return "hidden"
+          }
+          return "show";
+        });
 
-    if (simulation.alpha() <= 0.11) {
-      simulation.stop()
-    }
-  });
+      if (simulation.alpha() <= 0.11) {
+        simulation.stop()
+      }
+    });
 
   simulation.alpha(1).alphaTarget(0.1).restart();
 }

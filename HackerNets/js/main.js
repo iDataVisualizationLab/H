@@ -20,7 +20,7 @@ let userName = null;
 let vennToggle = false;
 let brushToggle = false;
 let brush = null;
-
+let wordStreamData = null;
 
 let docs = [
   "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter.",
@@ -79,10 +79,12 @@ function createFilter(rawData, wordStreamData) {
     .on('end', values => {
       var newData = timeFilter(rawData, values);
       updateData(newData);
-      updateNetwork(mainSvg);
+      updateChart(newData);
 
       var newWSData = wsTimeFilter(wordStreamData, values);
       updateWordStreamV2(newWSData);
+
+      turnOffBrush(filterSvg.select(".brush"));
     });
 
   sliderContainer.call(slider);
@@ -135,9 +137,9 @@ function createFilter(rawData, wordStreamData) {
     .on("end", brushFilter);
 
   var brushShowToggle = filters.append('g')
-    .attr("class", "toggles")
+    .attr("class", "brush")
     .attr("stroke", "#999")
-    .attr("transform", `translate(${margin.left+180},70)`);
+    .attr("transform", `translate(${margin.left + 180},70)`);
 
 
   brushShowToggle.append("image")
@@ -160,33 +162,40 @@ function createFilter(rawData, wordStreamData) {
 
   brushShowToggle.on("click", function () {
     if (brushToggle) {
-      brushShowToggle.select("#toggle-on").style("display", "none");
-      brushShowToggle.select("#toggle-off").style("display", "block");
-      brushShowToggle.select("#toggle-text").text("Turn on brush");
-      turnOffBrush();
+
+      turnOffBrush(brushShowToggle);
     } else {
-      brushShowToggle.select("#toggle-off").style("display", "none");
-      brushShowToggle.select("#toggle-on").style("display", "block");
-      brushShowToggle.select("#toggle-text").text("Turn off brush");
-      turnOnBrush();
+
+      turnOnBrush(brushShowToggle);
     }
-    brushToggle = !brushToggle;
   });
 }
 
-function turnOnBrush() {
+function turnOnBrush(brushShowToggle) {
+  brushShowToggle.select("#toggle-off").style("display", "none");
+  brushShowToggle.select("#toggle-on").style("display", "block");
+  brushShowToggle.select("#toggle-text").text("Turn off brush");
+
   mainSvg.append("g")
     .attr("class", "brush")
     .call(brush);
+
+  brushToggle = !brushToggle;
 }
 
-function turnOffBrush() {
+function turnOffBrush(brushShowToggle) {
+  brushShowToggle.select("#toggle-on").style("display", "none");
+  brushShowToggle.select("#toggle-off").style("display", "block");
+  brushShowToggle.select("#toggle-text").text("Turn on brush");
+
   mainSvg.select(".brush").remove();
 
   let allNodes = forceSvg.select('.nodes').selectAll('g');
   allNodes.attr("class", "brushed");
   let allLinks = forceSvg.select('.links').selectAll('g');
   allLinks.attr("class", "brushed");
+
+  brushToggle = !brushToggle;
 }
 
 function highlightBrushed() {
@@ -221,14 +230,29 @@ function highlightBrushed() {
 }
 
 function brushFilter() {
-  if (!d3.event.selection) return;
+  if (!d3.event || !d3.event.selection) return;
 
   d3.select(this).call(brush.move, null);
   var brushedObject = forceSvg.select('.nodes').selectAll(".brushed");
 
+  let newWordStreamData = [];
+  let tempDate = [];
+
   brushedObject.data().forEach(function (d) {
-    console.log(d);
-  })
+    wordStreamData.forEach(function (item) {
+      if (!tempDate.includes(item.date)) {
+        let temp = item.words.user.find(v => v.text === d.key);
+        if (temp) {
+          newWordStreamData.push(item);
+          tempDate.push(item.date);
+        }
+      }
+    })
+  });
+
+  console.log(newWordStreamData);
+
+  updateWordStreamV2(newWordStreamData);
 }
 
 function isBrushed(brushCoords, cx, cy) {
@@ -268,6 +292,19 @@ function createChart(data) {
   createForce(vennCenters);
 
   mainSvg.select(".venn").select('svg').selectAll('g').select('text').style('visibility', 'hidden');
+}
+
+function updateChart(data) {
+  mainSvg.select(".venn").remove();
+
+  vennCenters = createVenn(data);
+
+  updateNetwork(vennCenters);
+
+  mainSvg.select(".venn").select('svg').selectAll('g').select('text').style('visibility', 'hidden');
+  if (!vennToggle) {
+    hideVenn()
+  }
 }
 
 
@@ -370,8 +407,9 @@ $(document).ready(function () {
   d3.json('data/alldata.json', function (err, rawData) {
     const data = preprocessData(rawData);
     createChart(data);
-    d3.json("data/word_stream_data.json", function (err, wordStreamData) {
+    d3.json("data/word_stream_data.json", function (err, wordData) {
       // createCloud();
+      wordStreamData = wordData;
       createStream(wordStreamData);
       createFilter(data, wordStreamData);
     });
