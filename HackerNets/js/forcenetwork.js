@@ -355,7 +355,7 @@ function initialization() {
   legends.append("circle")
     .attr("stroke", color("iot"))
     .attr("fill", color("iot"))
-    .attr('r', 15)
+    .attr('r', 10)
     .attr("cx", 20)
     .attr("cy", 0)
     .attr("stroke-width", 2);
@@ -363,12 +363,12 @@ function initialization() {
   legends.append('text')
     .text("Internet of Things")
     .attr("x", 40)
-    .attr("y", 7.5);
+    .attr("y", 5);
 
   legends.append("circle")
     .attr("stroke", color("bigdata"))
     .attr("fill", color("bigdata"))
-    .attr('r', 15)
+    .attr('r', 10)
     .attr("cx", 20)
     .attr("cy", 40)
     .attr("stroke-width", 2);
@@ -376,20 +376,20 @@ function initialization() {
   legends.append('text')
     .text("Big Data")
     .attr("x", 40)
-    .attr("y", 47.5);
+    .attr("y", 45);
 
   legends.append("circle")
     .attr("stroke", color("security"))
     .attr("fill", color("security"))
-    .attr('r', 15)
+    .attr('r', 10)
     .attr("cx", 20)
     .attr("cy", 80)
     .attr("stroke-width", 2);
 
   legends.append('text')
-    .text("Security")
+    .text("Cybersecurity")
     .attr("x", 40)
-    .attr("y", 87.5);
+    .attr("y", 85);
 }
 
 function createFakeNodes() {

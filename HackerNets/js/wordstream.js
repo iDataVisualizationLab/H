@@ -30,7 +30,11 @@ let wordStreamConfig = {
   curve: d3.curveMonotoneX
 };
 
+let yearSvgWidth = 0;
+
 function createWordStreamV2(wordStreamData) {
+  yearSvgWidth = width / 13;
+
   cloudSvg.attr("width", width)
     .attr("height", 400);
 
@@ -66,5 +70,7 @@ function updateWordStreamV2(wordStreamData) {
       }
     }
   });
+  let numOfDate = data.length;
+  cloudSvg.attr("width", yearSvgWidth * numOfDate);
   wordstream(cloudSvg, data, wordStreamConfig)
 }

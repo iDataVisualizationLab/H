@@ -22,10 +22,10 @@ function createVenn(data) {
   function draw(svg, counter) {
     let sets = [{'sets': ['IoT'], 'label': 'IoT', size: counter.A},
       {'sets': ['Big Data'], 'label': 'Big Data', size: counter.B},
-      {'sets': ['Security'], 'label': 'Security', size: counter.D},
+      {'sets': ['Security'], 'label': 'Cybersecurity', size: counter.D},
       {'sets': ['IoT', 'Big Data'], 'label': 'IoT - Big Data', size: counter.AB},
-      {'sets': ['IoT', 'Security'], 'label': 'IoT - Security', size: counter.AD},
-      {'sets': ['Big Data', 'Security'], 'label': 'Big Data - Security', size: counter.BD},
+      {'sets': ['IoT', 'Security'], 'label': 'IoT - Cybersecurity', size: counter.AD},
+      {'sets': ['Big Data', 'Security'], 'label': 'Big Data - Cybersecurity', size: counter.BD},
       {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'I - B - S', size: counter.ABD}
     ];
 
