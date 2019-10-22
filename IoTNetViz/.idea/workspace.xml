@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/forcenetwork.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/vennchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vennchart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/wordstream.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/wordstream.js" afterDir="false" />
-    </list>
+    <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +85,7 @@
       <workItem from="1571590049946" duration="1554000" />
       <workItem from="1571622174383" duration="1976000" />
       <workItem from="1571636577515" duration="13258000" />
+      <workItem from="1571759994829" duration="85000" />
     </task>
     <servers />
   </component>
