@@ -264,3 +264,15 @@ textarea {
   }
 }
 
+.container {
+  width: 800px;
+  height: 800px;
+  margin: 0;
+}
+
+/*.btn-group {*/
+/*  width: 100%;*/
+/*  margin-left: auto;*/
+/*  margin-right: auto;*/
+/*}*/
+
