@@ -40,15 +40,15 @@
       </div>
       <div class="row form-group">
         <label for="learning-rate" class="col-3 col-form-label">Learning rate</label>
-        <input class="form-control col-9" id="learning-rate" placeholder="0.005">
+        <input class="form-control col-9" id="learning-rate" value="0.005">
       </div>
       <div class="row form-group">
         <label for="target-variables" class="col-3 col-form-label">Epochs</label>
-        <input class="form-control col-9" id="epochs" placeholder="100">
+        <input class="form-control col-9" id="epochs" value="100">
       </div>
       <div class="row form-group">
         <label for="target-variables" class="col-3 col-form-label">Batch size</label>
-        <input class="form-control col-9" id="batch-size" placeholder="8">
+        <input class="form-control col-9" id="batch-size" value="8">
       </div>
       <div class="text-center">
         <button type="button" class="btn btn-primary mb-2" id="train-btn">Train</button>
@@ -56,8 +56,16 @@
       </div>
     </form>
   </div>
-  <div class="chart-container">
+  <div class="chart-container" id="chart-div">
     <svg class="chart-svg" id="chart"></svg>
+    <div class="row form-group">
+      <label for="train-time" class="col-3 col-form-label">Training time</label>
+      <label class="form-control col-9" id="train-time"></label>
+    </div>
+    <div class="row form-group">
+      <label for="train-time" class="col-3 col-form-label">Loss</label>
+      <label class="form-control col-9" id="test-loss"></label>
+    </div>
   </div>
 </div>
 

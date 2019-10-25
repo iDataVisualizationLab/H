@@ -1,16 +1,25 @@
 let width = 800,
-  height = 800;
+  height = 200;
 let X_train, y_train, X_test, y_test;
 let model_params = {};
 
 let paramSvg = null,
   chartSvg = null;
 
+let chartYScale = d3.scaleLinear()
+  .range([height, 0]);
+
+let chartXScale = d3.scaleLinear()
+  .range([0, width])
+  .domain([0, 500]);
+
 let variables = null;
 
 function initialization() {
   paramSvg = d3.select("#param");
-  chartSvg = d3.select("#chart");
+  chartSvg = d3.select("#chart")
+    .attr("width", width)
+    .attr("height", height);
 
   createParam();
 }
@@ -53,3 +62,7 @@ $(document).ready(function () {
     loadDataAndTrain();
   })
 });
+
+function createLossChart() {
+  chartSvg.selec
+}
