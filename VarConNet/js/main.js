@@ -1,5 +1,7 @@
 let width = 800,
   height = 800;
+let X_train, y_train, X_test, y_test;
+let model_params = {};
 
 let paramSvg = null,
   chartSvg = null;
@@ -14,15 +16,40 @@ function initialization() {
 }
 
 function createParam() {
-  variables = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
+  variables = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0', "All Targets"];
 
   paramSvg.select("#target-variables")
     .selectAll("option")
     .data(variables)
     .enter()
     .append("option")
-    .text(d => {console.log(d); return d;})
+    .text(d => d)
 
 }
 
-initialization()
+initialization();
+
+function loadDataAndTrain() {
+  d3.json("data/allData/" + target_variable + "_target_X_train_HPCC_1_20.json").then(X_train_r => {
+    d3.json("data/allData/" + target_variable + "_target_y_train_HPCC_1_20.json").then(y_train_r => {
+      d3.json("data/allData/" + target_variable + "_target_X_test_HPCC_1_20.json").then(X_test_r => {
+        d3.json("data/allData/" + target_variable + "_target_y_test_HPCC_1_20.json").then(y_test_r => {
+          X_train = X_train_r;
+          y_train = y_train_r;
+          X_test = X_test_r;
+          y_test = y_test_r;
+          startTraining()
+        });
+      });
+    });
+  });
+}
+
+
+$(document).ready(function () {
+  $("#train-btn").on("click", function () {
+    target_variable = paramSvg.select("#target-variables").property("value");
+    console.log(target_variable);
+    loadDataAndTrain();
+  })
+});

@@ -73,7 +73,11 @@
                         model</a>
                     <a href="#" class="btn btn-menu" onclick="displayLoadModelDialog()" id="loadModelMenu">load
                         model</a>
-
+                    <div class="row form-group">
+                        <label for="target-variables" class="col-3 col-form-label">Select target variable</label>
+                        <select class="form-control col-9" id="target-variables">
+                        </select>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="container center" style="display: table;">
@@ -195,8 +199,8 @@
                     <option value="" disabled selected>Choose your model</option>
                     <option value="HPCC8">HPCC (8-8-8-4)</option>
                     <option value="HPCC4Good">HPCC (8-4)</option>
-<!--                    <option value="CMAP646488">CMAPSS (64-64-8-8)</option>-->
-<!--                    <option value="CMAPSS8884">CMAPSS (8-8-8-4)</option>-->
+                    <!--                    <option value="CMAP646488">CMAPSS (64-64-8-8)</option>-->
+                    <!--                    <option value="CMAPSS8884">CMAPSS (8-8-8-4)</option>-->
                 </select>
                 <label>Select a model from server</label>
             </div>
@@ -302,6 +306,29 @@
 </div>
 <!--</editor-fold>-->
 
+<!--<div class="container">-->
+<!--    <div class="param-container" id="param">-->
+<!--        <form class="col-12">-->
+<!--            &lt;!&ndash;      <div class="form-group">&ndash;&gt;-->
+<!--            &lt;!&ndash;        <label for="exampleFormControlInput1">Email address</label>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">&ndash;&gt;-->
+<!--            &lt;!&ndash;      </div>&ndash;&gt;-->
+<!--            <div class="row form-group">-->
+<!--                <label for="target-variables" class="col-3 col-form-label">Select target variable</label>-->
+<!--                <select class="form-control col-9" id="target-variables">-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="text-center">-->
+<!--                <button type="submit" class="btn btn-primary mb-2">Train</button>-->
+<!--                <button type="submit" class="btn btn-primary mb-2">Train with all targets</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--    <div class="chart-container">-->
+<!--        <svg class="chart-svg" id="chart"></svg>-->
+<!--    </div>-->
+<!--</div>-->
+
 <footer style="margin-bottom: 10px;">
     <div class="container">
         <h3><a name="article">The article</a></h3>
@@ -401,6 +428,7 @@
 </script>
 <!--Scripting-->
 <script src="js/tooltip/tooltip.js"></script>
+<script src="js/variablesnetwork.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/layerManagement.js"></script>
 <script src="js/drawcharts.js"></script>

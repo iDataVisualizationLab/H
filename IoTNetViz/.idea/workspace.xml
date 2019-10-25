@@ -2,110 +2,93 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../VCNN/.idea/VCNN.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/HPCCTemperature-checkpoint.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/new_hpcc_temperature-checkpoint.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/reprocessing_data-checkpoint.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/HPCCTemperature.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold1_17_58_17.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold1_18_14_05.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold2_17_58_29.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold2_18_14_29.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold3_17_58_42.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold3_18_14_52.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold1_18_00_18.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold1_18_17_29.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold2_18_00_34.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold2_18_17_55.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold3_18_00_48.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold3_18_18_20.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold1_18_01_21.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold1_18_19_13.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold2_18_01_36.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold2_18_19_38.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold3_18_01_51.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold3_18_20_04.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold1_18_02_31.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold1_18_20_55.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold2_18_02_51.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold2_18_21_22.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold3_18_03_02.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold3_18_21_51.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold1_18_03_42.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold1_18_22_45.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold2_18_03_59.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold2_18_23_34.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold3_18_04_16.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold3_18_24_04.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold1_17_59_18.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold1_18_15_40.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold2_17_59_29.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold2_18_16_02.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold3_17_59_42.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold3_18_16_27.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold1_18_04_57.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold1_18_24_57.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold2_18_05_14.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold2_18_25_28.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold3_18_05_36.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold3_18_25_59.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold1_17_55_36.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold1_18_09_48.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold2_17_55_46.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold2_18_10_04.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold3_17_55_55.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold3_18_10_23.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold1_17_56_29.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold1_18_11_06.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold2_17_56_35.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold2_18_11_22.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold3_17_56_45.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold3_18_11_44.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold1.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold1_17_57_20.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold1_18_12_25.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold2.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold2_17_57_30.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold2_18_12_55.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold3.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold3_17_57_42.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold3_18_13_18.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VarConNet/js/model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/d3.v4.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrCPU_load0_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrCPU_load0_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrCPU_load0_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrCPU_load0_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health0_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health0_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health0_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health0_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health1_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health1_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health1_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health1_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health2_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health2_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health2_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health2_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health3_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health3_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health3_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrFans_health3_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrMemory_usage0_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrMemory_usage0_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrMemory_usage0_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrMemory_usage0_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrPower_usage0_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrPower_usage0_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrPower_usage0_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrPower_usage0_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature0_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature0_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature0_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature0_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature1_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature1_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature1_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature1_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature2_target_X_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature2_target_X_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature2_target_y_test_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/allData/arrTemperature2_target_y_train_HPCC_1_20.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold1_13_46_46.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold2_13_46_59.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrCPU_load0_best_model_fold3_13_47_11.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold1_13_48_47.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold2_13_49_02.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health0_best_model_fold3_13_49_16.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold1_13_49_56.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold2_13_50_06.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health1_best_model_fold3_13_50_17.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold1_13_51_00.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold2_13_51_16.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health2_best_model_fold3_13_51_32.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold1_13_52_13.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold2_13_52_30.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrFans_health3_best_model_fold3_13_52_47.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold1_13_47_47.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold2_13_47_57.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrMemory_usage0_best_model_fold3_13_48_09.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold1_13_53_28.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold2_13_53_52.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrPower_usage0_best_model_fold3_13_54_07.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold1_13_37_13.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold1_13_44_07.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold2_13_37_48.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold2_13_44_14.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold3_13_38_21.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature0_best_model_fold3_13_44_22.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold1_13_39_19.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold1_13_44_52.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold2_13_39_52.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold2_13_45_03.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold3_13_40_27.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature1_best_model_fold3_13_45_13.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold1_13_41_28.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold1_13_45_48.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold2_13_42_30.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold2_13_45_59.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/arrTemperature2_best_model_fold3_13_46_11.h5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/lib/tf.min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/vendor/d3.v4.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VarConNet/js/vendor/d3.v4.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/HPCCData.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/HPCCData.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/lib/tf.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VarConNet/js/vendor/tf.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/js/modelmanagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/modelmanagement.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VarConNet/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VarConNet/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VarConNet/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VarConNet/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VarConNet/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VarConNet/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VarConNet/js/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VarConNet/js/model.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -133,19 +116,19 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/js/vendor" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/js/vendor" />
+      <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/js" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/js/vendor" />
       <recent name="$PROJECT_DIR$/data" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/data" />
-      <recent name="$PROJECT_DIR$/js/vendor" />
-      <recent name="$PROJECT_DIR$/js" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -193,6 +176,7 @@
       <workItem from="1571759994829" duration="85000" />
       <workItem from="1571932336529" duration="15000" />
       <workItem from="1571934253287" duration="616000" />
+      <workItem from="1571943649934" duration="20000" />
     </task>
     <servers />
   </component>

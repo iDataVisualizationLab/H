@@ -151,7 +151,7 @@ async function drawHeatmaps(data, container, selector) {
             mapObjects[selector + featureIdx] = hm;
         } else {
             let hm = mapObjects[selector + featureIdx];
-            debugger;
+            // debugger;
             hm.update({x: x, y: y, z: z});
         }
 

@@ -28,19 +28,31 @@
 
 <div class="container">
   <div class="param-container" id="param">
-    <form>
-<!--      <div class="form-group">-->
-<!--        <label for="exampleFormControlInput1">Email address</label>-->
-<!--        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">-->
-<!--      </div>-->
-      <div class="form-group">
-        <label for="target-variables">Select target variable</label>
-        <select class="form-control" id="target-variables">
+    <form class="col-12">
+      <!--      <div class="form-group">-->
+      <!--        <label for="exampleFormControlInput1">Email address</label>-->
+      <!--        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">-->
+      <!--      </div>-->
+      <div class="row form-group">
+        <label for="target-variables" class="col-3 col-form-label">Target variable</label>
+        <select class="form-control col-9" id="target-variables">
         </select>
       </div>
+      <div class="row form-group">
+        <label for="learning-rate" class="col-3 col-form-label">Learning rate</label>
+        <input class="form-control col-9" id="learning-rate" placeholder="0.005">
+      </div>
+      <div class="row form-group">
+        <label for="target-variables" class="col-3 col-form-label">Epochs</label>
+        <input class="form-control col-9" id="epochs" placeholder="100">
+      </div>
+      <div class="row form-group">
+        <label for="target-variables" class="col-3 col-form-label">Batch size</label>
+        <input class="form-control col-9" id="batch-size" placeholder="8">
+      </div>
       <div class="text-center">
-        <button type="button" class="btn btn-primary mb-2">Train</button>
-        <button type="button" class="btn btn-primary mb-2">Train with all targets</button>
+        <button type="button" class="btn btn-primary mb-2" id="train-btn">Train</button>
+        <button type="button" class="btn btn-primary mb-2" id="train-all-btn">Train with all targets</button>
       </div>
     </form>
   </div>
@@ -53,9 +65,11 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
-<script src="js/vendor/d3.v4.js"></script>
+<!--<script src="js/vendor/d3.v4.js"></script>-->
+<script src="js/vendor/d3.v5.min.js"></script>
 <script src="js/vendor/tf.min.js"></script>
 <script src="js/plugins.js"></script>
+<script src="js/model.js"></script>
 <script src="js/main.js"></script>
 
 <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->

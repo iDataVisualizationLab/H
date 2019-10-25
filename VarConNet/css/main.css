@@ -267,7 +267,10 @@ textarea {
 .container {
   width: 800px;
   height: 800px;
-  margin: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 /*.btn-group {*/

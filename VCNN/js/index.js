@@ -10,13 +10,18 @@ let link = d3.linkHorizontal()
     .y(function (d) {
         return d.y;
     });
-processInputs().then(() => {
-    //Create default layersConfig.
-    // createDefaultLayers();
-    createTrainingGUI(layersConfig).then(() => {
-        loadDefaultModel();
+
+function updateInputs(){
+    processInputs().then(() => {
+        //Create default layersConfig.
+        // createDefaultLayers();
+        createTrainingGUI(layersConfig).then(() => {
+            loadDefaultModel();
+        });
     });
-});
+}
+
+updateInputs();
 
 function loadDefaultModel() {
     //Load default model.
@@ -133,17 +138,18 @@ async function processInputs(sFs) {
         //                 features = [2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 20, 21].map(ss => "sensor" + ss);
         //                 predictedVariable = "RUL";
         //                 dataItemName = "Engines";
-        d3.json("data/X_train_HPCC_1_20.json").then(X_trainR => {
-            d3.json("data/y_train_HPCC_1_20.json").then(y_trainR => {
-                d3.json("data/X_test_HPCC_1_20.json").then(X_testR => {
-                    d3.json("data/y_test_HPCC_1_20.json").then(y_testR => {
+        d3.json("data/allData/" + target_variable + "_target_X_train_HPCC_1_20.json").then(X_trainR => {
+            d3.json("data/allData/" + target_variable + "_target_y_train_HPCC_1_20.json").then(y_trainR => {
+                d3.json("data/allData/" + target_variable + "_target_X_test_HPCC_1_20.json").then(X_testR => {
+                    d3.json("data/allData/" + target_variable + "_target_y_test_HPCC_1_20.json").then(y_testR => {
                         features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
-                        predictedVariable = "arrTemperature0";
+                        predictedVariable = target_variable;
+                        console.log(target_variable)
                         dataItemName = "Computes";
                         populateFeatureSelection(features);
-                        if(!sFs){
+                        if (!sFs) {
                             selectedFeatures = features.map(_ => true);
-                        }else{
+                        } else {
                             selectedFeatures = sFs;
                         }
                         //TODO: These for testing the models.
@@ -261,7 +267,6 @@ function startTraining() {
     } else {
         trainModel(currentModel, X_train, y_train, X_test, y_test, epochs, batchSize, false);
     }
-
 }
 
 function onWeightFilterInput() {
@@ -283,7 +288,7 @@ function onWeightFilterChanged(weightFilter) {
     for (let i = 0; i < layersConfig.length - 1; i++) {
         let layerInfo = layersConfig[i];
         //Network layer
-        if (layerInfo.layerType != 'flatten') {
+        if (layerInfo.layerType !== 'flatten') {
             let weightContainerId = getWeightsContainerId(i);
             let outputWeightContainerId = getWeightsContainerId(i + 1);
             let weightsContainer = d3.select(`#${weightContainerId}`);

@@ -40,7 +40,7 @@ async function createModel(layers, inputShape) {
                     units: l.units
                 };
                 //If it is the first one we input inputShape.
-                if (i == 0) {
+                if (i === 0) {
                     layerOption.inputShape = inputShape;
                 }
                 //If it is LSTM we add return sequence.
@@ -100,6 +100,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     let y_test_flat_ordered = y_test_ordered.flat();
     let target_ordered = normalizeTarget(y_train_flat_ordered, -1.0, 1.0);
 
+    console.log(X_train_T);
+    console.log(y_train);
 
     let lineChartSettings = {
         noSvg: true,
