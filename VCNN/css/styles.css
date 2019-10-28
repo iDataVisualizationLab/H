@@ -52,3 +52,27 @@
         stroke-dashoffset: 10;
     }
 }
+
+.network-tooltip {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    -moz-border-radius:5px;
+    border-radius: 5px;
+    border: 2px solid #000;
+    background: #fff;
+    opacity: .9;
+    color: black;
+    padding: 10px;
+    width: 150px;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.network-tooltip .title {
+    font-size: 13px;
+}
+
+.network-tooltip .name {
+    font-weight:bold;
+}

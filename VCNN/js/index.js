@@ -11,17 +11,27 @@ let link = d3.linkHorizontal()
         return d.y;
     });
 
-function updateInputs(){
+createVarNetwork();
+
+function updateInputs() {
     processInputs().then(() => {
         //Create default layersConfig.
-        // createDefaultLayers();
+        createDefaultLayers();
         createTrainingGUI(layersConfig).then(() => {
-            loadDefaultModel();
+            // loadAllVariablesModel();
+            // loadDefaultModel()
+            let model = loadAllPretrainModelFromServer(target_variable + "_model");
         });
     });
 }
 
 updateInputs();
+
+async function loadAllVariablesModel() {
+    variables.map(d => d.name).forEach(function (d) {
+        let model = loadAllPretrainModelFromServer(d + "_model");
+    })
+}
 
 function loadDefaultModel() {
     //Load default model.
@@ -144,7 +154,7 @@ async function processInputs(sFs) {
                     d3.json("data/allData/" + target_variable + "_target_y_test_HPCC_1_20.json").then(y_testR => {
                         features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
                         predictedVariable = target_variable;
-                        console.log(target_variable)
+                        console.log(target_variable);
                         dataItemName = "Computes";
                         populateFeatureSelection(features);
                         if (!sFs) {

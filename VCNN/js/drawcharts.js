@@ -197,6 +197,12 @@ function drawLinechartDetails(selector, d, data) {
     mapDetails.open();
 }
 
+async function drawNetwork(weights) {
+    let network = d3.select("#network");
+
+
+}
+
 async function drawLineCharts(data, normalizer, target, container, selector, lineChartSettings, noBorder) {
     let noOfItems = data.length;
     let noOfFeatures = data[0].length;

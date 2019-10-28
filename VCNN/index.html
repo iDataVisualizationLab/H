@@ -69,10 +69,7 @@
                 <div class="row">
                     <!--<a href="#" class="btn-menu">train data</a>-->
                     <!--<a href="#" class="btn-menu">testing data</a>-->
-                    <a href="#" class="btn btn-menu" id="saveModelMenu" onclick="displaySaveModelDialog()">Save
-                        model</a>
-                    <a href="#" class="btn btn-menu" onclick="displayLoadModelDialog()" id="loadModelMenu">load
-                        model</a>
+
                     <div class="row form-group">
                         <label for="target-variables" class="col-3 col-form-label">Select target variable</label>
                         <select class="form-control col-9" id="target-variables">
@@ -86,15 +83,25 @@
                 </div>
                 <div class="row">
                     <div class="col s12">
-                        <div class="input-field col s6">
+                        <div class="input-field col s4">
                             <input id="epochs" type="number" value="30">
-                            <label for="epochs">epochs</label>
+                            <label for="epochs">Epochs</label>
                         </div>
-                        <div class="input-field col s6">
+                        <div class="input-field col s4">
                             <input id="batchSize" type="number" value="8">
-                            <label for="batchSize">batch</label>
+                            <label for="batchSize">Batch</label>
+                        </div>
+                        <div class="input-field col s4">
+                            <input id="learningRate" type="number" value="0.005">
+                            <label for="learningRate">Learning rate</label>
                         </div>
                     </div>
+                </div>
+                <div class="row" style="margin-bottom: 10px">
+                    <a href="#" class="btn btn-menu" id="saveModelMenu" onclick="displaySaveModelDialog()">Save
+                        model</a>
+                    <a href="#" class="btn btn-menu" onclick="displayLoadModelDialog()" id="loadModelMenu">load
+                        model</a>
                 </div>
             </div>
             <div class="col s8">
@@ -170,6 +177,11 @@
                 </div>
                 <div class="row">
                     <div id="testContainer" class="col s12" style="width: 400px;"></div>
+                </div>
+                <div class="row">
+                    <div id="networkContainer" class="col s12" style="width: 400px;">
+                        <svg id="network" class="network-svg"></svg>
+                    </div>
                 </div>
             </div>
         </div>
@@ -428,6 +440,7 @@
 </script>
 <!--Scripting-->
 <script src="js/tooltip/tooltip.js"></script>
+<script src="js/tooltip/networktooltip.js"></script>
 <script src="js/variablesnetwork.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/layerManagement.js"></script>

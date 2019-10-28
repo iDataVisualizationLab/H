@@ -187,5 +187,14 @@ async function loadModelFromServer(modelName) {
         populateModelGUIFromData(model, modelData);
         hideLoader();
     });
+}
 
+async function loadAllPretrainModelFromServer(modelName) {
+    showLoader();
+    const model = await tf.loadLayersModel(`data/networkModel/${modelName}.json`);
+    //Now load data.
+    d3.json(`data/networkModel/${modelName}_data.json`).then(modelData => {
+        populateModelGUIFromData(model, modelData);
+        hideLoader();
+    });
 }

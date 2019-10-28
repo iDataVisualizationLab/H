@@ -1,10 +1,8 @@
 let layersConfig = [];
 
 function createDefaultLayers() {
-    createLayer("lstm", 8, "default", 0);
-    createLayer("lstm", 8, "default", 1);
-    createLayer("dense", 8, "relu", 2);
-    createLayer("dense", 4, "relu", 3);
+    // createLayer("lstm", 4, "default", 0);
+    // createLayer("dense", 2, "default", 1);
 }
 
 
@@ -27,6 +25,7 @@ function createLayer(layerType, units, activation, timeStamp) {
         units: units,
         activation: activation
     };
+
     //if the input layer already exists (add it before that).
     if (layersConfig.find(l => l.id === "output")) {
         layersConfig.splice(layersConfig.length - 1, 0, layerInfo);

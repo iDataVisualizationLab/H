@@ -56,6 +56,7 @@ async function createModel(layers, inputShape) {
             const model = tf.sequential({
                 layers: mLayers
             });
+
             model.compile({
                 optimizer: 'adam',
                 loss: 'meanSquaredError',
@@ -99,9 +100,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     let y_train_flat_ordered = y_train_ordered.flat();
     let y_test_flat_ordered = y_test_ordered.flat();
     let target_ordered = normalizeTarget(y_train_flat_ordered, -1.0, 1.0);
-
-    console.log(X_train_T);
-    console.log(y_train);
 
     let lineChartSettings = {
         noSvg: true,
@@ -215,12 +213,15 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     //Also toggle the weight displaying menu according to the default display.
     toggleWeightsMenu();
 
+    // let callbacks = [onEpochEnd: onEpochEnd, onBatchEnd: onBatchEnd, onTrainEnd: onTrainEnd]
+
     if (!reviewMode) {
         model.fit(X_train_T, y_train_T, {
             batchSize: batchSize,
             epochs: epochs,
+            // learningRate: 0.005,
             // shuffle: true,
-            callbacks: {onEpochEnd: onEpochEnd, onBatchEnd: onBatchEnd, onTrainEnd: onTrainEnd}
+            callbacks: {onEpochEnd: onEpochEnd, onBatchEnd: onBatchEnd, onTrainEnd: onTrainEnd},
         });
     } else {
         plotTrainLossData(trainLosses, testLosses);
@@ -477,11 +478,16 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         }
     }
 
+    function updateLinks(model) {
+
+    }
+
     function displayEpochData(model, trainLoss, testLoss) {
         for (let i = 0; i < layersConfig.length; i++) {
             let containerId = getWeightsContainerId(i);
             displayLayerWeights(model, i, containerId);
         }
+
         //it will display recursively.
         displayLayersOutputs(model, 0, X_train_T_ordered);
 
@@ -494,6 +500,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 //Update the training loss
                 updateGraphTitle("outputContainer", "Training, MSE: " + trainLoss.toFixed(2));
             });
+
+            updateVarNetwork();
         });
         //Draw the testing data.
         let test = model.predict(X_test_T_ordered);
@@ -510,6 +518,11 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     function onEpochEnd(epoch, logs) {
         hideLoader();
+        if (epoch === 0) {
+            createVarNetwork(model);
+        } else {
+            updateVarNetwork(model);
+        }
         displayEpochData(model, logs.loss);
         if (epoch > 1) {
             //We don't update for the first epoch
@@ -541,6 +554,9 @@ async function displayLayerWeights(model, i, containerId) {
             drawDenseWeights(containerId);
         });
     }
+
+
+
     //Don't have to draw weights of flatten, will only use it next layer (model.layersConfig[i].name.indexOf("flatten"))
 
 }

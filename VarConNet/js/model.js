@@ -71,8 +71,8 @@ async function trainLstmModel(X_train, y_train) {
 
   const hist = await model.fit(xs, ys,
     {
-      batchSize: batch,
-      epochs: epochs,
+      batchSize: +batch,
+      epochs: +epochs,
       validattionData: [xsVal, ysVal],
       callbacks:
         {
@@ -81,7 +81,7 @@ async function trainLstmModel(X_train, y_train) {
             console.log(logs);
           },
           onBatchEnd: async  (batch, logs) => {
-            console.log(epoch);
+            console.log(batch);
             console.log(logs);
             updateLossChart(logs.loss)
           }

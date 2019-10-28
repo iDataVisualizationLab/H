@@ -89,7 +89,6 @@ function populateModelGUIFromData(model, modelData) {
         //Draw the color scales for the intermediate outputs
         drawColorScales(layersConfig);
         trainModel(model, X_train, y_train, X_test, y_test, epochs_, batchSize_, true);
-
     });
     return layersConfig;
 }
@@ -98,6 +97,7 @@ function setTrainingConfigEditable(val) {
     //Enable the batch size, epochs form.
     $("#batchSize").prop("disabled", !val);
     $("#epochs").prop("disabled", !val);
+    $("#learningRate").prop("disabled", !val);
 }
 
 function stopTraining() {
@@ -134,7 +134,7 @@ function displayAddLayerDialog() {
     //Change the title dialog.
     $("#changeLayerDialogTitle").text("Adding layer information");
     //Change the function call.
-    $("#changeLayerDialogConfirm").on("click", addLayer);
+    $("#changeLayerDialogConfirm").unbind('click').click(addLayer);
     displayDialog("changeLayerDialog");
 }
 
