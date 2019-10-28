@@ -20,7 +20,7 @@ let networkRadius = 250;
 const tooltip = floatingTooltip("chart-tooltip", 100);
 let networkColor = d3.scaleOrdinal(d3.schemeCategory10);
 let thicknessScale = d3.scaleSqrt()
-    .range([1, 3]);
+    .range([1, 5]);
 
 
 let options = selector
@@ -44,7 +44,7 @@ function varNetworkInitialization() {
 
     networkSvg.append("g")
         .attr("class", "links")
-        .attr("stroke", "#999")
+        .attr("stroke", "#fff")
         .attr("stroke-opacity", 0.8);
 
     networkSvg.append("g")
@@ -62,15 +62,18 @@ function redrawNetwork() {
         .data(nodes, d => d.id)
         .enter()
         .append("g")
-        .attr("stroke", "#828282");
+        .attr("stroke", "#ffffff");
 
     node
         .append("circle")
         .attr("class", "node")
         .attr("r", 5)
         .attr("id", d => d.name)
-        .on('mouseover', showDetail)
-        .on('mouseout', hideDetail);
+        .on('mouseover', showNodeDetail)
+        .on('mouseout', hideNodeDetail);
+
+    let {min, max} = getMinMaxScore();
+    thicknessScale.domain([min, max]);
 
     let link = networkSvg.select(".links")
         .selectAll("g")
@@ -92,7 +95,7 @@ function redrawNetwork() {
 
 
     link.select("path")
-        .attr("stroke-width", d => d.score * 5);
+        .attr("stroke-width", d => thicknessScale(d.score));
 
     link.exit().remove();
 
@@ -101,7 +104,9 @@ function redrawNetwork() {
         .attr("stroke", d => networkColor(d.target.name))
         .append("path")
         .attr("fill", "none")
-        .attr("stroke-width", d => thicknessScale(d.score));
+        .attr("stroke-width", d => thicknessScale(d.score))
+        .on('mouseover', showLinkDetail)
+        .on('mouseout', hideLinkDetail);
 
     link = networkSvg.select(".links").selectAll("g").select("path");
 
@@ -109,7 +114,28 @@ function redrawNetwork() {
     return {node, link}
 }
 
-function showDetail(d) {
+function getMinMaxScore() {
+    let min = 10000, max = -1;
+    links.forEach(function (d) {
+        if (d.score > max) {
+            max =d.score
+        }
+        else if (d.score < min) {
+            min = d.score;
+        }
+    });
+
+    return {min, max};
+}
+
+function nodeSelected(d) {
+    let tempLinks = links.filter(d => d.target.name === d.name);
+    tempLinks.forEach(function (d) {
+        networkSvg.select(".links").selectAll("g")
+    })
+}
+
+function showNodeDetail(d) {
     d3.select(this).attr("stroke", "black");
 
     var content =
@@ -117,10 +143,29 @@ function showDetail(d) {
     tooltip.showTooltip(content, d3.event);
 }
 
-function hideDetail() {
+function hideNodeDetail() {
     d3.select(this)
         .attr('stroke', function () {
             return "#ffffff";
+        });
+
+    tooltip.hideTooltip();
+}
+
+function showLinkDetail(d) {
+    d3.select(this).attr("stroke", "black");
+
+    var content =
+        '<span class="name">Input: </span><span class="value">' + d.source.name + '</span><br/>'+
+        '<span class="name">Target: </span><span class="value">' + d.target.name + '</span><br/>'+
+        '<span class="name">Weight: </span><span class="value">' + d.score + '</span><br/>';
+    tooltip.showTooltip(content, d3.event);
+}
+
+function hideLinkDetail(d) {
+    d3.select(this)
+        .attr('stroke', function () {
+            return networkColor(d.target.name);
         });
 
     tooltip.hideTooltip();
