@@ -2,11 +2,13 @@ let layersConfig = [];
 let target_variable = "arrTemperature0";
 let start_time, end_time;
 let trainLoss = [];
+let bestModel = null;
+let bestResults = 100000;
 
 async function startTraining() {
   start_time = new Date();
-  var result = await trainLstmModel(X_train, y_train);
-  result.model.summary();
+  var result = await trainLstmModel();
+  result.summary();
   let predicted = predict(X_test, result.model);
 
   let ss = 0;
@@ -26,13 +28,8 @@ async function startTraining() {
   showResult(training_time, mse);
 }
 
-async function trainLstmModel(X_train, y_train) {
-  const rnn_input_layer_features = 10;
-  const rnn_input_layer_timesteps = 20;
-  const rnn_input_shape = [rnn_input_layer_timesteps, rnn_input_layer_features];
-  const rnn_output_neurons = 4;
-  const output_layer_shape = rnn_output_neurons;
-  const output_layer_neurons = 1;
+async function trainLstmModel() {
+  let inputShape = [X_train[0].length, X_train[0][0].length];
 
   const xs = tf.tensor(X_train);
   const ys = tf.tensor(y_train);
@@ -43,21 +40,12 @@ async function trainLstmModel(X_train, y_train) {
 
   const model = tf.sequential();
 
-  var lstm_cells = [];
-  const n_layers = 2;
+  model.add(tf.layers.lstm({units: 4, inputShape: inputShape, returnSequences: true}));
+  // model.add(tf.layers.lstm({units:4, inputShape: inputShape, returnSequences: true}));
+  model.add(tf.layers.flatten());
+  model.add(tf.layers.dense({units: 2}));
+  model.add(tf.layers.dense({units: 1}));
 
-  for (let index = 0; index < n_layers; index++) {
-
-    lstm_cells.push(tf.layers.lstmCell({units: rnn_output_neurons}));
-
-  }
-
-  model.add(tf.layers.rnn({cell: lstm_cells, inputShape: rnn_input_shape, returnSequences: false}));
-  model.add(tf.layers.dense({units: 4, inputShape: [output_layer_shape]}));
-  model.add(tf.layers.dense({units: 1, inputShape: [4], activation: 'relu'}));
-
-
-  const rnn_batch_size = 8;
 
   const epochs = $("#epochs").val();
   const lr = $("#learning-rate").val();
@@ -69,26 +57,32 @@ async function trainLstmModel(X_train, y_train) {
 
   model.compile({optimizer: opt_adam, loss: 'meanSquaredError'});
 
-  const hist = await model.fit(xs, ys,
+
+  await model.fit(xs, ys,
     {
       batchSize: +batch,
       epochs: +epochs,
-      validattionData: [xsVal, ysVal],
+      validationData: [xsVal, ysVal],
       callbacks:
         {
           onEpochEnd: async (epoch, logs) => {
             console.log(epoch);
             console.log(logs);
           },
-          onBatchEnd: async  (batch, logs) => {
-            console.log(batch);
-            console.log(logs);
+          onBatchEnd: async (batch, logs) => {
             updateLossChart(logs.loss)
           }
         }
     });
 
-  return {model: model, stats: hist};
+  await model.save('downloads://trainedModel/' + target_variable);
+
+  return model;
+}
+
+function splitKFold(k, i) {
+  let numRecordOfFold = X_train.length / k;
+
 }
 
 function updateLossChart(loss) {

@@ -57,7 +57,7 @@
     position: absolute;
     top: 50px;
     left: 50px;
-    -moz-border-radius:5px;
+    -moz-border-radius: 5px;
     border-radius: 5px;
     border: 2px solid #000;
     background: #fff;
@@ -74,5 +74,21 @@
 }
 
 .network-tooltip .name {
-    font-weight:bold;
+    font-weight: bold;
+}
+
+#networkContainer {
+    width: 800px;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#networkContainer .range-field {
+    margin-top: 0px;
+    height: 13px;
+    width: 300px;
+    line-height: 0.0;
+    margin-left: auto;
+    margin-right: auto;
 }

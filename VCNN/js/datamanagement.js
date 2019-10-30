@@ -191,9 +191,11 @@ async function loadModelFromServer(modelName) {
 
 async function loadAllPretrainModelFromServer(modelName) {
     showLoader();
-    const model = await tf.loadLayersModel(`data/networkModel/${modelName}.json`);
+    const model = await tf.loadLayersModel(`data/networkModel/${modelName}_model.json`);
     //Now load data.
-    d3.json(`data/networkModel/${modelName}_data.json`).then(modelData => {
+    d3.json(`data/networkModel/${modelName}_model_data.json`).then(modelData => {
+        target_variable = modelName;
+        console.log(target_variable);
         populateModelGUIFromData(model, modelData);
         hideLoader();
     });

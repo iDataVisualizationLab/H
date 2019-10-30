@@ -137,7 +137,8 @@
                         <!--for the first svg, add also the defs for arrow (to be used in all other places)-->
                         <svg id="layer0Weights" width="100" style="overflow: visible;">
                             <defs>
-                                <marker id="arrow" markerWidth="5" markerHeight="5" refX="5" refY="2.5" orient="auto"
+                                <marker id="arrow" markerWidth="5" markerHeight="5" refX="5" refY="2.5"
+                                        orient="auto"
                                         markerUnits="userSpaceOnUse">
                                     <path d="M0,0 L5,2.5 L0,5 z"></path>
                                 </marker>
@@ -178,13 +179,17 @@
                 <div class="row">
                     <div id="testContainer" class="col s12" style="width: 400px;"></div>
                 </div>
-                <div class="row">
-                    <div id="networkContainer" class="col s12" style="width: 400px;">
-                        <svg id="network" class="network-svg"></svg>
-                    </div>
-                </div>
+
             </div>
         </div>
+    </div>
+    <div id="networkContainer" class="col s12">
+        <p class="range-field">
+            <label for="weightFilter">Contribution filter</label>
+            <input type="range" id="contributionFilter" min="0.0" max="2.0" step="0.01" value="0.0"
+                   oninput="changeContributionFilter()"/>
+        </p>
+        <svg id="network" class="network-svg"></svg>
     </div>
 </div>
 <div class="divider"></div>

@@ -29,12 +29,13 @@ function processLayers(layers) {
 async function createModel(layers, inputShape) {
     await processLayers(layers);
 
-
     //Now create model
     return new Promise((resolve, reject) => {
         try {
             let mLayers = [];
             //Input layer
+            console.log(layers);
+
             layers.forEach((l, i) => {
                 let layerOption = {
                     units: l.units
@@ -500,7 +501,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 //Update the training loss
                 updateGraphTitle("outputContainer", "Training, MSE: " + trainLoss.toFixed(2));
             });
-
             updateVarNetwork();
         });
         //Draw the testing data.
@@ -519,9 +519,9 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     function onEpochEnd(epoch, logs) {
         hideLoader();
         if (epoch === 0) {
-            createVarNetwork(model);
+            createVarNetwork();
         } else {
-            updateVarNetwork(model);
+            updateVarNetwork();
         }
         displayEpochData(model, logs.loss);
         if (epoch > 1) {
@@ -554,7 +554,6 @@ async function displayLayerWeights(model, i, containerId) {
             drawDenseWeights(containerId);
         });
     }
-
 
 
     //Don't have to draw weights of flatten, will only use it next layer (model.layersConfig[i].name.indexOf("flatten"))

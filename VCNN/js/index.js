@@ -14,13 +14,25 @@ let link = d3.linkHorizontal()
 createVarNetwork();
 
 function updateInputs() {
+    if (target_variable === "allVariables") {
+        loadingAll = true;
+        pretrainedMode = true;
+        target_variable = "arrTemperature0";
+    } else {
+        pretrainedMode = false;
+        loadingAll = false;
+    }
+
     processInputs().then(() => {
         //Create default layersConfig.
         createDefaultLayers();
         createTrainingGUI(layersConfig).then(() => {
-            // loadAllVariablesModel();
             // loadDefaultModel()
-            let model = loadAllPretrainModelFromServer(target_variable + "_model");
+            if (pretrainedMode) {
+                loadAllVariablesModel();
+            } else {
+                loadAllPretrainModelFromServer(target_variable);
+            }
         });
     });
 }
@@ -28,9 +40,9 @@ function updateInputs() {
 updateInputs();
 
 async function loadAllVariablesModel() {
-    variables.map(d => d.name).forEach(function (d) {
-        let model = loadAllPretrainModelFromServer(d + "_model");
-    })
+    for (const d of variables.filter(d => d.id !== -1).map(d => d.name)) {
+        await loadAllPretrainModelFromServer(d);
+    }
 }
 
 function loadDefaultModel() {
@@ -148,13 +160,13 @@ async function processInputs(sFs) {
         //                 features = [2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 20, 21].map(ss => "sensor" + ss);
         //                 predictedVariable = "RUL";
         //                 dataItemName = "Engines";
+        if (target_variable === "allVariables") target_variable = "arrTemperature0";
         d3.json("data/allData/" + target_variable + "_target_X_train_HPCC_1_20.json").then(X_trainR => {
             d3.json("data/allData/" + target_variable + "_target_y_train_HPCC_1_20.json").then(y_trainR => {
                 d3.json("data/allData/" + target_variable + "_target_X_test_HPCC_1_20.json").then(X_testR => {
                     d3.json("data/allData/" + target_variable + "_target_y_test_HPCC_1_20.json").then(y_testR => {
                         features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
                         predictedVariable = target_variable;
-                        console.log(target_variable);
                         dataItemName = "Computes";
                         populateFeatureSelection(features);
                         if (!sFs) {
@@ -253,6 +265,7 @@ function startTraining() {
     trainStartTime = new Date();
     let epochs = +$("#epochs").val();
     let batchSize = +$("#batchSize").val();
+    let learningRate = +$("#learningRate").val();
 
     const inputShape = [X_train[0].length, X_train[0][0].length];
 
@@ -271,11 +284,11 @@ function startTraining() {
                 //Reset train losses, test losses for the first creation.
                 trainLosses = [];
                 testLosses = [];
-                trainModel(model, X_train, y_train, X_test, y_test, epochs, batchSize, false);
+                trainModel(model, X_train, y_train, X_test, y_test, epochs, batchSize, learningRate, false);
             }
         });
     } else {
-        trainModel(currentModel, X_train, y_train, X_test, y_test, epochs, batchSize, false);
+        trainModel(currentModel, X_train, y_train, X_test, y_test, epochs, batchSize, learningRate, false);
     }
 }
 
