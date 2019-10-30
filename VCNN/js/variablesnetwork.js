@@ -108,6 +108,7 @@ function redrawNetwork() {
         .append("circle")
         .attr("class", "node")
         .attr("r", 10)
+        .attr("fill", "#828282")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1);
 
@@ -345,8 +346,6 @@ function updateVarNetwork(contributionFilter) {
                     return `translate(${d.x}, ${d.y})`;
                 });
 
-            console.log(simulation.alpha())
-
             if (simulation.alpha() <= 0.1001) {
                 simulation.stop()
             }
@@ -364,9 +363,9 @@ function createVarNetwork() {
     varNetworkInitialization();
 
     simulation = d3.forceSimulation()
-        .force('link', d3.forceLink().strength(0))
-        .force('charge', d3.forceManyBody().strength(-300))
-        .force('collision', d3.forceCollide().radius(80))
+        .force('link', d3.forceLink().strength(0.1))
+        .force('charge', d3.forceManyBody().strength(-150))
+        .force('collision', d3.forceCollide().radius(100))
         // .force("center", d3.forceCenter(center.x, center.y))
         .force("x", d3.forceX().strength(0.1).x(center.x))
         .force("y", d3.forceY().strength(0.1).y(center.y))
