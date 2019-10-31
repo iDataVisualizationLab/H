@@ -3,6 +3,7 @@ let width = 800,
 let networkSvg = null, nodes = [], links = [], allLinks = [], linkNodes = [];
 let center = {x: width / 2, y: height / 2};
 let target_variable = "allVariables";
+let timeStep = 20;
 let loadingAll = false;
 let pretrainedMode = false;
 let variables = [
@@ -346,9 +347,9 @@ function updateVarNetwork(contributionFilter) {
                     return `translate(${d.x}, ${d.y})`;
                 });
 
-            if (simulation.alpha() <= 0.1001) {
-                simulation.stop()
-            }
+            // if (simulation.alpha() <= 0.1001) {
+            //     simulation.stop()
+            // }
 
         });
     console.log(target_variable);
@@ -363,12 +364,13 @@ function createVarNetwork() {
     varNetworkInitialization();
 
     simulation = d3.forceSimulation()
-        .force('link', d3.forceLink().strength(0.1))
-        .force('charge', d3.forceManyBody().strength(-150))
-        .force('collision', d3.forceCollide().radius(100))
+        .force('link', d3.forceLink().distance(120).strength(0.3))
+        .force('charge', d3.forceManyBody().distanceMin(100).distanceMax(200).strength(-400))
+        .force('collision', d3.forceCollide().strength(1))
         // .force("center", d3.forceCenter(center.x, center.y))
-        .force("x", d3.forceX().strength(0.1).x(center.x))
-        .force("y", d3.forceY().strength(0.1).y(center.y))
+        .force("x", d3.forceX().strength(0.01).x(center.x))
+        .force("y", d3.forceY().strength(0.01).y(center.y))
+        .alphaDecay(0.01)
         .alphaTarget(0.1);
 
     calculateNodes();
