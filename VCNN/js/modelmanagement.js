@@ -34,7 +34,6 @@ async function createModel(layers, inputShape) {
         try {
             let mLayers = [];
             //Input layer
-            console.log(layers);
 
             layers.forEach((l, i) => {
                 let layerOption = {
@@ -217,6 +216,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     // let callbacks = [onEpochEnd: onEpochEnd, onBatchEnd: onBatchEnd, onTrainEnd: onTrainEnd]
 
     if (!reviewMode) {
+        console.log("Test2");
         model.fit(X_train_T, y_train_T, {
             batchSize: batchSize,
             epochs: epochs,
@@ -225,6 +225,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             callbacks: {onEpochEnd: onEpochEnd, onBatchEnd: onBatchEnd, onTrainEnd: onTrainEnd},
         });
     } else {
+        console.log("test");
         plotTrainLossData(trainLosses, testLosses);
         displayEpochData(model, trainLosses[testLosses.length - 1], testLosses[testLosses.length - 1]);
     }
@@ -479,15 +480,13 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         }
     }
 
-    function updateLinks(model) {
-
-    }
-
     function displayEpochData(model, trainLoss, testLoss) {
         for (let i = 0; i < layersConfig.length; i++) {
             let containerId = getWeightsContainerId(i);
             displayLayerWeights(model, i, containerId);
         }
+
+        console.log(trainLoss);
 
         //it will display recursively.
         displayLayersOutputs(model, 0, X_train_T_ordered);
@@ -523,6 +522,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         } else {
             updateVarNetwork();
         }
+        console.log(logs);
         displayEpochData(model, logs.loss);
         if (epoch > 1) {
             //We don't update for the first epoch

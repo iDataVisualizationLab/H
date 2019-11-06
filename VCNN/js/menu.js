@@ -12,7 +12,6 @@ dispatch.on("changeInput", () => {
         d3.select("#inputContainer").selectAll("*").remove();
         //Remove weights out from input layer.
         d3.select("#layer0Weights").selectAll("*").each(sel => {
-            debugger
         });
 
         //Remove traintest loss
@@ -65,6 +64,10 @@ function populateModelGUIFromData(model, modelData) {
     let y_train_ = loadModelDataFromObj(modelData, "y_train");
     let X_test_ = loadModelDataFromObj(modelData, "X_test");
     let y_test_ = loadModelDataFromObj(modelData, "y_test");
+
+
+    console.log(modelData);
+    console.log("hihi")
     // currentModel = model;//Don't do this coz we need to re-compile things if would like to continue to train from here
     trainLosses = trainLosses_;
     testLosses = testLosses_;
@@ -139,7 +142,7 @@ function displayAddLayerDialog() {
 }
 
 function displayUpdateLayerDialog(layerInfo) {
-    debugger
+
     dispatch.call("change", null, undefined);
     //Populate the dialog with current value.
     $("#layerType").val(layerInfo.layerType);

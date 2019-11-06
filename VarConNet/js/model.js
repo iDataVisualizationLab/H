@@ -25,7 +25,7 @@ async function startTraining() {
   let training_time = end_time - start_time;
   console.log("Training time: " + training_time);
 
-  showResult(training_time, mse);
+  showResult(training_time/60000, mse);
 }
 
 async function trainLstmModel() {

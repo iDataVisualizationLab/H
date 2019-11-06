@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>XNN</title>
+    <title>VCNN</title>
     <style>
         @import "lib/materialize/css/materialize.css";
     </style>
@@ -149,48 +149,51 @@
             </div>
         </div>
         <!-- Dynamic part here. -->
-        <div class="grid-item" style="width: 400px !important;" id="layerOutput">
+        <div class="grid-item" style="width: 800px !important;" id="layerOutput">
             <div class="row">
+                <div class="col s6">
+                    <a href="#" class="btn-small btn-floating modal-trigger"><i
+                            class="material-icons" onclick="displayAddLayerDialog()">add</i></a>
+                    <b>Output</b>
+                    <br/>
+                    x-axis:
+                    <RUL></RUL>
+                    <br/>
+                    y-axis: engines
+                    <div class="divider" style="margin-bottom: 5px;"></div>
+                    <div class="row">
+                        <svg style="overflow: visible;" height="25" width="100">
+                            <g id="outputColorScale"></g>
+                        </svg>
+                        <p class="range-field"
+                           style="float: right;margin-top: 0px; height: 13px; width: 180px; line-height: 0.0;">
+                            <label for="weightFilter">Filter weight (absolute)</label>
+                            <input type="range" id="weightFilter" min="0.0" max="1.0" step="0.01" value="0.0"
+                                   oninput="onWeightFilterInput()"/>
+                        </p>
+                    </div>
+                    <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
+                    <div class="row">
+                        <div id="outputContainer" class="col s12" style="width: 400px;"></div>
+                    </div>
+                    <div class="row">
+                        <div id="testContainer" class="col s12" style="width: 400px;"></div>
+                    </div>
+                </div>
 
-                <a href="#" class="btn-small btn-floating modal-trigger"><i
-                        class="material-icons" onclick="displayAddLayerDialog()">add</i></a>
-                <b>Output</b>
-                <br/>
-                x-axis:
-                <RUL></RUL>
-                <br/>
-                y-axis: engines
-                <div class="divider" style="margin-bottom: 5px;"></div>
-                <div class="row">
-                    <svg style="overflow: visible;" height="25" width="100">
-                        <g id="outputColorScale"></g>
-                    </svg>
-                    <p class="range-field"
-                       style="float: right;margin-top: 0px; height: 13px; width: 180px; line-height: 0.0;">
-                        <label for="weightFilter">Filter weight (absolute)</label>
-                        <input type="range" id="weightFilter" min="0.0" max="1.0" step="0.01" value="0.0"
-                               oninput="onWeightFilterInput()"/>
+
+                <div id="networkContainer" class="col s6">
+                    <p class="range-field">
+                        <label for="weightFilter">Contribution filter</label>
+                        <input type="range" id="contributionFilter" min="0.0" max="1.0" step="0.05" value="0.0"
+                               oninput="changeContributionFilter()"/>
                     </p>
+                    <svg id="network" class="network-svg"></svg>
                 </div>
-                <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
-                <div class="row">
-                    <div id="outputContainer" class="col s12" style="width: 400px;"></div>
-                </div>
-                <div class="row">
-                    <div id="testContainer" class="col s12" style="width: 400px;"></div>
-                </div>
-
             </div>
         </div>
     </div>
-    <div id="networkContainer" class="col s12">
-        <p class="range-field">
-            <label for="weightFilter">Contribution filter</label>
-            <input type="range" id="contributionFilter" min="0.0" max="2.0" step="0.01" value="0.0"
-                   oninput="changeContributionFilter()"/>
-        </p>
-        <svg id="network" class="network-svg"></svg>
-    </div>
+
 </div>
 <div class="divider"></div>
 

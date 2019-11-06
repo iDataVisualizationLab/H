@@ -73,6 +73,7 @@ function updateLayerGUI(layerInfo) {
 
 function clearMiddleLayerGUI() {
     $(".grid-item").each((i, elm) => {
+        if (elm.id === "variable-network") return;
         if (elm.id !== "layerInput" && elm.id !== "layerOutput") {
             removeLayerGUI(elm.id);
         } else if (elm.id === "layerInput") {

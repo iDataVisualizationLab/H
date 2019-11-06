@@ -297,6 +297,7 @@ async function buildWeightPositionData(weightsT, leftNodeHeight, leftNodeMarginT
         let opacityScaler = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minOpacity, maxOpacity]);
         let zeroOneScaler = d3.scaleLinear().domain([0, d3.max(weightData.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
         let lineData = [];
+
         let wShape = weightsT.shape;
         let noOfLeftNodes = wShape[0];
         noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
