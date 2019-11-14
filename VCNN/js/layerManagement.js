@@ -47,7 +47,7 @@ function createLayerGUI(layerInfo) {
     let idVal = layerInfo.id;
     //Create the div.
     let div = $(`<div class='grid-item' id="${idVal}">
-                    <a class="btn-small btn-floating"><i class="material-icons grey" onclick="deleteLayer('${idVal}')">delete</i></a> <span id="layerInfoStr${idVal}">${layerInfoStr}</span>
+                    <a class="btn-small btn-floating"><i class="material-icons" onclick="deleteLayer('${idVal}')">delete</i></a> <span id="layerInfoStr${idVal}">${layerInfoStr}</span>
                     <div class="divider" style="margin-bottom: 5px;"></div>
                     <div class="row">
                         <svg style="overflow: visible; margin-left: 10px;" height="25">
@@ -108,10 +108,20 @@ function removeLayerGUI(id) {
 }
 
 function deleteLayer(id, onSuccess) {
-    layersConfig = layersConfig.filter(l => l.id !== id);
+    console.log(id)
+    removeLayer(id);
     removeLayerGUI(id);
     if (onSuccess) {
         onSuccess();
     }
     dispatch.call("change", null, undefined);
+}
+
+function removeLayer(id) {
+    let layerIdx = layersConfig.findIndex(l => l.id === id);
+    console.log(layerIdx)
+    if (layersConfig[layerIdx].layerType === 'lstm') {
+        layersConfig.splice(layerIdx, 1);
+    }
+    layersConfig.splice(layerIdx, 1);
 }

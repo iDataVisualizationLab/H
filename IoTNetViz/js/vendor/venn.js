@@ -1209,9 +1209,9 @@
         for (var i = 0; i < circles.length; ++i) {
             var circle = circles[i];
             scaled[setids[i]] = {
-                radius: scaling * circle.radius,
-                x: padding + xOffset + (circle.x - xRange.min) * scaling,
-                y: padding + yOffset + (circle.y - yRange.min) * scaling,
+                radius: 21 * circle.radius,
+                x: padding + xOffset + (circle.x - xRange.min) * 21,
+                y: padding + yOffset + (circle.y - yRange.min) * 21,
             };
         }
 
@@ -1238,6 +1238,7 @@
             colourMap = {},
 
             // so this is the same as d3.schemeCategory10, which is only defined in d3 4.0
+            // since we can support older versions of d3 as long as we don't force this,
             // since we can support older versions of d3 as long as we don't force this,
             // I'm hackily redefining below. TODO: remove this and change to d3.schemeCategory10
             colourScheme = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"],

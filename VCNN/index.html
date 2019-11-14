@@ -13,27 +13,18 @@
         @import "js/loader/loader.css";
         @import "js/tooltip/tooltip.css";
 
-        .btn-menu {
-            height: 24px;
-            line-height: 24px;
-            padding: 0 0.5rem;
-            border-bottom: 1px solid #8b1014;
-            border-top: 1px solid #8b1014;
-        }
-
-        .row {
-            margin-bottom: 0px !important;
-        }
     </style>
     <!--GUI Lib-->
     <script src="lib/d3.v5.min.js"></script>
+    <script src="lib/queue.v1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="lib/jquery-3.4.1.js"></script>
     <script src="lib/materialize/js/materialize.js"></script>
     <!--ML Lib-->
     <script src="lib/tf.min.js"></script>
     <!--custom-->
-    <script src="js/charts.min.js"></script>
+    <script src="lib/charts.min.js"></script>
+    <!--    <script src="js/chart/charts.js"></script>-->
     <script src="js/toast/toast.js"></script>
     <script src="lib/playpausebutton/playpause.js"></script>
     <script src="lib/cssvariable/cssvariables.js"></script>
@@ -76,11 +67,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="container center" style="display: table;">
-                        <div id="trainingButtonContainer" style="display: table-cell; vertical-align:middle;"></div>
-                    </div>
-                </div>
+
                 <div class="row">
                     <div class="col s12">
                         <div class="input-field col s4">
@@ -98,14 +85,21 @@
                     </div>
                 </div>
                 <div class="row" style="margin-bottom: 10px">
-                    <a href="#" class="btn btn-menu" id="saveModelMenu" onclick="displaySaveModelDialog()">Save
+                    <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load
                         model</a>
-                    <a href="#" class="btn btn-menu" onclick="displayLoadModelDialog()" id="loadModelMenu">load
+                    <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i
+                            class="material-icons right" id="playPausedIcon">play_arrow</i>Start</a>
+                    <a class="btn btn-menu " id="saveModelMenu" onclick="displaySaveModelDialog()">Save
                         model</a>
                 </div>
             </div>
             <div class="col s8">
                 <div id="trainTestLoss" class="center" style="margin-left: auto; display: inline-block;"></div>
+                <!--                <p class="range-field"-->
+                <!--                   style="margin-top: 0px; height: 13px; width: 790px; line-height: 0.0;right: 0;padding-left: 60px">-->
+                <!--                    <label for="stepFilter">Filter step</label>-->
+                <!--                    <input type="range" id="stepFilter" min="0" max="584" step="1" value="584"/>-->
+                <!--                </p>-->
             </div>
         </div>
     </div>
@@ -149,51 +143,48 @@
             </div>
         </div>
         <!-- Dynamic part here. -->
-        <div class="grid-item" style="width: 800px !important;" id="layerOutput">
+        <div class="grid-item" style="width: 400px !important;" id="layerOutput">
             <div class="row">
-                <div class="col s6">
-                    <a href="#" class="btn-small btn-floating modal-trigger"><i
-                            class="material-icons" onclick="displayAddLayerDialog()">add</i></a>
-                    <b>Output</b>
-                    <br/>
-                    x-axis:
-                    <RUL></RUL>
-                    <br/>
-                    y-axis: engines
-                    <div class="divider" style="margin-bottom: 5px;"></div>
-                    <div class="row">
-                        <svg style="overflow: visible;" height="25" width="100">
-                            <g id="outputColorScale"></g>
-                        </svg>
-                        <p class="range-field"
-                           style="float: right;margin-top: 0px; height: 13px; width: 180px; line-height: 0.0;">
-                            <label for="weightFilter">Filter weight (absolute)</label>
-                            <input type="range" id="weightFilter" min="0.0" max="1.0" step="0.01" value="0.0"
-                                   oninput="onWeightFilterInput()"/>
-                        </p>
-                    </div>
-                    <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
-                    <div class="row">
-                        <div id="outputContainer" class="col s12" style="width: 400px;"></div>
-                    </div>
-                    <div class="row">
-                        <div id="testContainer" class="col s12" style="width: 400px;"></div>
-                    </div>
-                </div>
 
-
-                <div id="networkContainer" class="col s6">
-                    <p class="range-field">
-                        <label for="weightFilter">Contribution filter</label>
-                        <input type="range" id="contributionFilter" min="0.0" max="1.0" step="0.05" value="0.0"
-                               oninput="changeContributionFilter()"/>
+                <a href="#" class="btn-small btn-floating modal-trigger"><i
+                        class="material-icons" onclick="displayAddLayerDialog()">add</i></a>
+                <b>Output</b>
+                <br/>
+                x-axis:
+                <RUL></RUL>
+                <br/>
+                y-axis: engines
+                <div class="divider" style="margin-bottom: 5px;"></div>
+                <div class="row">
+                    <svg style="overflow: visible;" height="25" width="100">
+                        <g id="outputColorScale"></g>
+                    </svg>
+                    <p class="range-field"
+                       style="float: right;margin-top: 0px; height: 13px; width: 180px; line-height: 0.0;">
+                        <label for="weightFilter">Filter weight (absolute)</label>
+                        <input type="range" id="weightFilter" min="0.0" max="1.0" step="0.01" value="0.0"
+                               oninput="onWeightFilterInput()"/>
                     </p>
-                    <svg id="network" class="network-svg"></svg>
+                </div>
+                <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
+                <div class="row">
+                    <div id="outputContainer" class="col s12" style="width: 400px;"></div>
+                </div>
+                <div class="row">
+                    <div id="testContainer" class="col s12" style="width: 400px;"></div>
                 </div>
             </div>
         </div>
     </div>
-
+    <div id="networkContainer" class="col s6">
+        <p class="range-field">
+            <label for="weightFilter">Contribution filter</label>
+            <input type="range" id="contributionFilter" min="0.0" max="1.0" step="0.05" value="0.0"
+                   oninput="changeContributionFilter()"/>
+        </p>
+        <svg id="network" class="network-svg"></svg>
+        <svg id="matrix" class="matrix-svg"></svg>
+    </div>
 </div>
 <div class="divider"></div>
 

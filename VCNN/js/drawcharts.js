@@ -151,7 +151,6 @@ async function drawHeatmaps(data, container, selector) {
             mapObjects[selector + featureIdx] = hm;
         } else {
             let hm = mapObjects[selector + featureIdx];
-            // debugger;
             hm.update({x: x, y: y, z: z});
         }
 
@@ -195,12 +194,6 @@ function drawLinechartDetails(selector, d, data) {
 
     let mapDetails = M.Modal.getInstance(document.getElementById("mapDetails"));
     mapDetails.open();
-}
-
-async function drawNetwork(weights) {
-    let network = d3.select("#network");
-
-
 }
 
 async function drawLineCharts(data, normalizer, target, container, selector, lineChartSettings, noBorder) {

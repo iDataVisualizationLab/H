@@ -26,7 +26,8 @@ function saveModelClick() {
 function saveModel(toFile) {
     let modelName = $("#modelName").val(),
         epochs = $("#epochs").val(),
-        batchSize = $("#batchSize").val();
+        batchSize = $("#batchSize").val(),
+        learningRate = $("#learningRate").val();
 
     let valid = true;
     if (!modelName) {
@@ -42,6 +43,7 @@ function saveModel(toFile) {
         saveModelData(modelName, "layersConfig", layersConfig, obj);
         saveModelData(modelName, "epochs", epochs, obj);
         saveModelData(modelName, "batchSize", batchSize, obj);
+        saveModelData(modelName, "learningRate", learningRate, obj);
         //Save train loss data.
         saveModelData(modelName, "trainLosses", trainLosses, obj);
         saveModelData(modelName, "testLosses", testLosses, obj);
@@ -49,6 +51,7 @@ function saveModel(toFile) {
         saveModelData(modelName, "y_train", y_train, obj);
         saveModelData(modelName, "X_test", X_test, obj);
         saveModelData(modelName, "y_test", y_test, obj);
+        saveModelData(modelName, "process", trainingProcess, obj);
         //Save the model
         if (toFile) {
             currentModel.save(`downloads://${modelName}`);
@@ -189,20 +192,26 @@ async function loadModelFromServer(modelName) {
     });
 }
 
+// async function loadAllPretrainModelFromServer(modelName) {
+//     showLoader();
+//     const model = await tf.loadLayersModel(`data/networkModel/${modelName}_model.json`);
+//     //Now load data.
+//     d3.json(`data/networkModel/${modelName}_model_data.json`).then(modelData => {
+//         target_variable = modelName;
+//
+//         populateModelGUIFromData(model, modelData);
+//         hideLoader();
+//     });
+// }
+
 async function loadAllPretrainModelFromServer(modelName) {
     showLoader();
     const model = await tf.loadLayersModel(`data/networkModel/${modelName}_model.json`);
     //Now load data.
     d3.json(`data/networkModel/${modelName}_model_data.json`).then(modelData => {
-        target_variable = modelName;
-        model.summary();
-
         populateModelGUIFromData(model, modelData);
         hideLoader();
     });
-
-    let weights = await model.layers[0].getWeights()[0];
-    console.log(weights.dataSync());
 }
 
 async function loadAllPretrainKerasModelFromServer(modelName) {

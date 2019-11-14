@@ -2,14 +2,15 @@ let width = 800,
     height = 800;
 let networkSvg = null, nodes = [], links = [], allLinks = [], linkNodes = [];
 let center = {x: width / 2, y: height / 2};
-let target_variable = "allVariables";
-let isKerasModel = true;
+let target_variable = "arrTemperature0";
+let isKerasModel = false;
 let target_variable_V2 = "data/models_for_stat/arrTemp0_8_8_8_4_100";
 let timeStep = 100;
 let kerasModel = null;
 let kerasWeights = null;
 let loadingAll = false;
 let pretrainedMode = false;
+let circleRadius = 10;
 let variables = [
     {id: -1, name: 'allVariables'},
     {id: 0, name: 'arrTemperature0'},
@@ -27,10 +28,8 @@ let network;
 let selector = d3.select("#target-variables");
 let networkRadius = 250;
 const tooltip = floatingTooltip("chart-tooltip", 100);
-let networkColor = d3.scaleOrdinal(d3.schemeCategory10);
 let thicknessScale = d3.scaleSqrt()
     .range([1, 5]);
-
 
 let options = selector
     .selectAll("option")
@@ -50,7 +49,11 @@ selector.on("change", function (d) {
 
 function varNetworkInitialization() {
 
-    networkSvg = d3.select("#network")
+    networkSvg = d3.select("#network");
+
+    networkSvg.selectAll("*").remove();
+
+    networkSvg
         .attr("width", width)
         .attr("height", height);
 
@@ -80,6 +83,31 @@ function varNetworkInitialization() {
 
     networkSvg.append("g")
         .attr("class", "linkNode");
+}
+
+function createAdjacencyMatrix() {
+    var edgeHash = {};
+    links.forEach(function (d) {
+        let id = d.source.id + "-" + d.target.id;
+        edgeHash[id] = d;
+    });
+
+    let matrix = [];
+
+    nodes.forEach(function (a) {
+        nodes.forEach(function (b) {
+            let grid = {id: a.id + "-" + b.id, x: b, y: a, weight: 0};
+            if (edgeHash[grid.id]) {
+                grid.weight = edgeHash[grid.id].score;
+            }
+            matrix.push(grid)
+        })
+    });
+
+    let matrixSvg = d3.select("#networkContainer").select("#matrix");
+
+    matrixSvg.append("g")
+        .attr("");
 }
 
 function redrawNetwork() {
@@ -115,7 +143,7 @@ function redrawNetwork() {
     node_n
         .append("circle")
         .attr("class", "node")
-        .attr("r", 10)
+        .attr("r", circleRadius)
         .attr("fill", "#828282")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1);
@@ -129,7 +157,7 @@ function redrawNetwork() {
         .data(links, d => d.source.id + "" + d.target.id);
 
     linkNet.select("path")
-        .attr("stroke-width", d => d.scale * 2 /*2*/);
+        .attr("stroke-width", d => d.scale * 2);
 
     linkNet.exit().remove();
 
@@ -138,9 +166,7 @@ function redrawNetwork() {
         .attr("stroke", "#5b5b5b")
         .append("path")
         .attr("fill", "none")
-        .attr("stroke-width", d => {
-            return d.scale * 2
-        })
+        .attr("stroke-width", d => d.scale * 2)
         .on('mouseover', showLinkDetail)
         .on('mouseout', hideLinkDetail)
         .attr("marker-end", "url(#end)");
@@ -269,12 +295,16 @@ function calculateLinks(contributionFilter) {
 }
 
 function calculateLinksJs(contributionFilter) {
+
     if (!weightsPathData['layer0Weights']) {
         return;
     }
 
     let weights = weightsPathData['layer0Weights'].lineData;
-    let numOfLstmUnits = 4;
+    let numOfLstmUnits = layersConfig[0].units;
+    let minContribution = 1000000;
+    let maxContribution = -1;
+    let targetVariableId = variables.filter(d => d.id !== -1).find(d => d.name === target_variable).id;
 
     let varContribution = variables.filter(d => d.id !== -1).map(d => {
         return {id: d.id, name: d.name, score: 0};
@@ -283,17 +313,26 @@ function calculateLinksJs(contributionFilter) {
     for (let i = 0; i < variables.length - 1; i++) {
         let sum = 0;
         for (let j = 0; j < numOfLstmUnits; j++) {
-            let weightIndex = i * 4 * numOfLstmUnits + j * numOfLstmUnits;
+            let weightIndex = i * 4 * numOfLstmUnits + j * 4;
             sum += Math.abs(weights[weightIndex].weight);
         }
         varContribution[i].score = sum;
+        if (sum > maxContribution && i !== targetVariableId) {
+            maxContribution = sum;
+        } else if (sum < minContribution) {
+            minContribution = sum;
+        }
     }
+
+    const contributionScale = d3.scaleLinear()
+        .range([0.1, 1])
+        .domain([minContribution, maxContribution]);
 
     if (!pretrainedMode) {
         links = []
     }
     //Create links
-    let targetVariableId = variables.filter(d => d.id !== -1).find(d => d.name === target_variable).id;
+    // let targetVariableId = variables.filter(d => d.id !== -1).find(d => d.name === target_variable).id;
     varContribution.forEach(function (d) {
         let source = d.id;
         if (d.score > 0 && source !== targetVariableId) {
@@ -302,17 +341,27 @@ function calculateLinksJs(contributionFilter) {
                 link.score = d.score;
             } else {
                 if (loadingAll) {
-                    allLinks.push({source: source, target: targetVariableId, score: d.score});
+                    allLinks.push({
+                        source: source,
+                        target: targetVariableId,
+                        score: d.score,
+                        scale: contributionScale(d.score)
+                    });
                 }
-                links.push({source: source, target: targetVariableId, score: d.score});
+                links.push({
+                    source: source,
+                    target: targetVariableId,
+                    score: d.score,
+                    scale: contributionScale(d.score)
+                });
             }
         }
     });
 
     if (pretrainedMode) {
-        links = allLinks.filter(d => d.score >= contributionFilter);
+        links = allLinks.filter(d => d.scale >= contributionFilter);
     } else {
-        links = links.filter(d => d.score >= contributionFilter);
+        links = links.filter(d => d.scale >= contributionFilter);
     }
 }
 
@@ -324,7 +373,7 @@ function calculateLinksKeras(contributionFilter) {
 
 
     let weights = kerasWeights;
-    let numOfLstmUnits = 8;
+    let numOfLstmUnits = layersConfig[0].units;
     let minContribution = 1000000;
     let maxContribution = -1;
 
@@ -421,6 +470,13 @@ function updateVarNetwork(contributionFilter) {
 
     simulation
         .on("tick", function () {
+            node
+                .attr("transform", function (d) {
+                    d.x = Math.max(circleRadius, Math.min(width - circleRadius, d.x));
+                    d.y = Math.max(circleRadius, Math.min(height - circleRadius, d.y));
+                    return `translate(${d.x}, ${d.y})`;
+                });
+
             linkNet
                 .attr("d", function (d) {
                     var dx = d.target.x - d.source.x,
@@ -428,21 +484,6 @@ function updateVarNetwork(contributionFilter) {
                         dr = Math.sqrt(dx * dx + dy * dy);
                     return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
                 });
-
-            // link.attr("x1", d => d.source.x)
-            //     .attr("y1", d => d.source.y)
-            //     .attr("x2", d => d.target.x)
-            //     .attr("y2", d => d.target.y);
-
-            node
-                .attr("transform", function (d) {
-                    return `translate(${d.x}, ${d.y})`;
-                });
-
-            // if (simulation.alpha() <= 0.1001) {
-            //     simulation.stop()
-            // }
-
         });
     if (target_variable === variables[variables.length - 1].name) {
         loadingAll = false;

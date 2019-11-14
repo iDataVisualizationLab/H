@@ -558,9 +558,9 @@ function createNetwork() {
     .domain([1, maxThickness]);
 
   simulation = d3.forceSimulation()
-    .force('charge', d3.forceManyBody().strength(-10).distanceMin(10).distanceMax(150))
+    .force('charge', d3.forceManyBody().strength(-10).distanceMin(1).distanceMax(150))
     .force('collision', d3.forceCollide().radius(function (d) {
-      return radiusScale(d.values.length + 10);
+      return radiusScale(d.values.length+1);
     }))
     .force('x', d3.forceX().strength(function (d) {
       if (d.isFake) {

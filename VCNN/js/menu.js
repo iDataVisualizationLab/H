@@ -1,6 +1,8 @@
 dispatch.on("change", () => {
     //If it is training toggle button
-    btnTrain.classList.remove("paused");
+    // btnTrain.classList.remove("paused");
+    btnTrain.innerHTML = '<i class="material-icons right" id="playPausedIcon">play_arrow</i>Start';
+    $("#trainingButtonContainer").addClass("paused");
     stopTraining();
     currentModel = null;
 });
@@ -27,6 +29,7 @@ dispatch.on("changeInput", () => {
         processInputs(selectedFeatures);
     });
 });
+
 dispatch.on("changeWeightFilter", () => {
     let weightFilter = +$("#weightFilter").val();
     onWeightFilterChanged(weightFilter);
@@ -58,19 +61,20 @@ function populateModelGUIFromData(model, modelData) {
     let layersConfig_ = loadModelDataFromObj(modelData, "layersConfig");
     let epochs_ = loadModelDataFromObj(modelData, "epochs");
     let batchSize_ = loadModelDataFromObj(modelData, "batchSize");
+    let learningRate_ = loadModelDataFromObj(modelData, "learningRate");
     let trainLosses_ = loadModelDataFromObj(modelData, "trainLosses");
     let testLosses_ = loadModelDataFromObj(modelData, "testLosses");
     let X_train_ = loadModelDataFromObj(modelData, "X_train");
     let y_train_ = loadModelDataFromObj(modelData, "y_train");
     let X_test_ = loadModelDataFromObj(modelData, "X_test");
     let y_test_ = loadModelDataFromObj(modelData, "y_test");
+    let trainingProcess_ = loadModelDataFromObj(modelData, "process");
 
 
-    console.log(modelData);
-    console.log("hihi")
     // currentModel = model;//Don't do this coz we need to re-compile things if would like to continue to train from here
     trainLosses = trainLosses_;
     testLosses = testLosses_;
+    trainingProcess = trainingProcess_;
     //clear current map object (so we will redraw instead of updating)
     mapObjects = {};
     $("#epochs").val(epochs_);
@@ -91,7 +95,7 @@ function populateModelGUIFromData(model, modelData) {
 
         //Draw the color scales for the intermediate outputs
         drawColorScales(layersConfig);
-        trainModel(model, X_train, y_train, X_test, y_test, epochs_, batchSize_, true);
+        trainModel(model, X_train, y_train, X_test, y_test, epochs_, batchSize_, learningRate_,true);
     });
     return layersConfig;
 }
@@ -101,6 +105,8 @@ function setTrainingConfigEditable(val) {
     $("#batchSize").prop("disabled", !val);
     $("#epochs").prop("disabled", !val);
     $("#learningRate").prop("disabled", !val);
+    $('#loadModelMenu').attr("disabled", !val);
+    $('#saveModelMenu').attr("disabled", !val);
 }
 
 function stopTraining() {

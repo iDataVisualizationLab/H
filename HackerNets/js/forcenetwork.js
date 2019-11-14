@@ -566,7 +566,7 @@ function createNetwork() {
       if (d.isFake) {
         return 1
       }
-      return 0.005
+      return 0.5//0.005
     }).x(d => {
       return getCluster(d).x
     }))
@@ -574,7 +574,7 @@ function createNetwork() {
       if (d.isFake) {
         return 1
       }
-      return 0.005
+      return 0.5//0.005
     }).y(d => getCluster(d).y))
     .velocityDecay(0.2)
     .alphaTarget(0.1);

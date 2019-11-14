@@ -1,7 +1,7 @@
 let trainRULOrder;
 let testRULOrder;
 let X_train, y_train, X_test, y_test;
-let X_trainOrg, y_tstartTrainingrainOrg, X_testOrig, y_testOrig;
+let X_trainOrg, y_trainOrg, X_testOrig, y_testOrig;
 let trainStartTime = null;
 let link = d3.linkHorizontal()
     .x(function (d) {
@@ -29,10 +29,12 @@ function updateInputs() {
             if (pretrainedMode) {
                 loadAllVariablesModel();
             } else {
+                loadAllPretrainModelFromServer("arrTemperature0_20_process");
                 // loadAllPretrainModelFromServer(target_variable);
-                loadAllPretrainKerasModelFromServer(target_variable);
+                // loadAllPretrainKerasModelFromServer(target_variable);
             }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
+            // createDefaultLayers();
         });
     });
 }
@@ -64,7 +66,7 @@ function populateFeatureSelection(features) {
 }
 
 function configInput() {
-    dispatch.call("change", null, undefined);//Pause training first.
+    dispatch.call("change", null, undefined); //Pause training first.
 }
 
 function selectFeatures() {
@@ -250,17 +252,6 @@ async function createTrainingGUI(layersConfig) {
             createLayerGUI(layerInfo);
         }
     });
-    btnTrain = createButton("trainingButtonContainer", (action) => {
-        return new Promise(resolve => {
-            //Process
-            if (action === "start") {
-                startTraining();
-            }
-            if (action === "pause") {
-                stopTraining();
-            }
-        });
-    });
 }
 
 function startTraining() {
@@ -270,6 +261,8 @@ function startTraining() {
     let learningRate = +$("#learningRate").val();
 
     const inputShape = [X_train[0].length, X_train[0][0].length];
+
+    console.log(currentModel);
 
     //Toggle
     setTrainingConfigEditable(false);
@@ -371,3 +364,26 @@ function onWeightFilterChanged(weightFilter) {
         });
     }
 }
+
+btnTrain = document.getElementById("trainingButtonContainer");
+
+$('#trainingButtonContainer').click(function () {
+    // $('#trainingButtonContainer').unbind('click');
+    console.log("click");
+    if ($(this).attr('class').includes("paused")) {
+        btnTrain.innerHTML = '<i class="material-icons right" id="playPausedIcon">pause</i>Pause';
+        console.log("Start");
+        $(this).removeClass("paused");
+        startTraining();
+    } else {
+        btnTrain.innerHTML = '<i class="material-icons right" id="playPausedIcon">play_arrow</i>Start';
+        console.log("paused");
+        $(this).addClass("paused");
+        stopTraining();
+    }
+});
+
+
+
+
+
