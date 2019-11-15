@@ -2,95 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../HackerNets/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../HackerNets/.idea/HackerNets.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../HackerNets/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../HackerNets/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../HackerNets/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/alldata_11_9.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/alldata_new_11_9.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_0_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_1_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_2_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_3_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_4_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_1_best_model_fold_0_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_1_best_model_fold_1_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_1_best_model_fold_2_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_1_best_model_fold_3_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_1_best_model_fold_4_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_2_best_model_fold_0_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_2_best_model_fold_1_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_2_best_model_fold_2_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_2_best_model_fold_3_config_8_4_2_ts100.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_2_best_model_fold_4_config_8_4_2_ts100.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HackerNets/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/../HackerNets/js/forcenetwork.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/word_stream_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/word_stream_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/forcenetwork.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/vendor/venn.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vendor/venn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/vennchart.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/vennchart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/wordstream.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/wordstream.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAP646488.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAP646488.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAP646488_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAPSS323288.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAPSS323288.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAPSS323288_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAPSS8884.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAPSS8884.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/CMAPSS8884_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/HPCC4Good.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/HPCC4Good.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/HPCC4Good_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/HPCC8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/HPCC8.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/HPCC8_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures84.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures84.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures84_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures8884.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures8884.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures8884_1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures8884_1.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures8884_1_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models/fullfeatures8884_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_4_100.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_4_100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_4_100.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_4_100_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_4_20.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_8_8_4_100.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_8_8_4_100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_8_8_4_100.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_8_8_4_100_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/arrTemp0_8_8_8_4_20.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/attTemp0_8_4_20.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/attTemp0_8_4_20.weights.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/models_for_stat/attTemp0_8_4_20_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/networkModel/arrCPU_load0_model_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/networkModel/arrCPU_load0_model_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/new_hpcc_temperature-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/new_hpcc_temperature-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_X_test_HPCC_100.json" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_X_test_HPCC_100.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_X_train_HPCC_100.json" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_X_train_HPCC_100.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_y_test_HPCC_100.json" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_y_test_HPCC_100.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_y_train_HPCC_100.json" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newData/arrTemperature0_target_y_train_HPCC_100.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_0_config_8_8_8_4_ts100.h5" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_0_config_8_8_8_4_ts100.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_1_config_8_8_8_4_ts100.h5" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_1_config_8_8_8_4_ts100.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_2_config_8_8_8_4_ts100.h5" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_2_config_8_8_8_4_ts100.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_3_config_8_8_8_4_ts100.h5" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_3_config_8_8_8_4_ts100.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_4_config_8_8_8_4_ts100.h5" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/newModel/arrTemperature0_training_time_0_best_model_fold_4_config_8_8_8_4_ts100.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/js/charts.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/lib/charts.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/js/datamanagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/datamanagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/js/drawcharts.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/drawcharts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/js/menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/js/modelmanagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/modelmanagement.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/js/variablesnetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/variablesnetwork.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/lib/playpausebutton/playpause.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/lib/playpausebutton/playpause.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VCNN/lib/playpausebutton/playpause.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/lib/playpausebutton/playpause.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -188,6 +100,7 @@
       <workItem from="1573165217468" duration="4020000" />
       <workItem from="1573257438849" duration="2267000" />
       <workItem from="1573267197050" duration="35988000" />
+      <workItem from="1573778610049" duration="22000" />
     </task>
     <servers />
   </component>
