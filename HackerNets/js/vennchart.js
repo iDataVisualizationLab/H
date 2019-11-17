@@ -29,6 +29,7 @@ function createVenn(data) {
       {'sets': ['IoT', 'Big Data', 'Security'], 'label': 'I - B - S', size: counter.ABD}
     ];
 
+    console.log(sets);
 
     let vennChart = venn.VennDiagram()
       .width(width)
@@ -163,15 +164,16 @@ function createVenn(data) {
 
 
   const counter = calculateIntersection(usersContribution);
+  mainSvg.select(".venn").remove();
   var vennSvg = mainSvg.append("svg")
     .attr("class", "venn")
     .attr("width", width)
-    .attr("height", 800);
+    .attr("height", 800)
+    .attr("transform", "translate(0,100)");
 
   // var vennCenters = createVennIntersect(vennSvg, counter);
   //
   // return vennCenters;
-
 
   draw(vennSvg, counter);
 

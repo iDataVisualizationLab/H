@@ -21,6 +21,7 @@ let vennToggle = false;
 let brushToggle = false;
 let brush = null;
 let wordStreamData = null;
+let tempYearObjs = {};
 
 let docs = [
   "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter.",
@@ -38,7 +39,7 @@ function wsTimeFilter(wordStreamData, values) {
   return wordStreamData.filter(function (d) {
     var time = new Date(d.date);
     var left = values[0];
-    var right = new Date(values[1]).getTime() + 365 * 24 * 60 * 60 * 1000;
+    var right = new Date(values[1]).getTime();
     if (time >= values[0] && time <= right) {
       return true;
     }
@@ -250,8 +251,6 @@ function brushFilter() {
     })
   });
 
-  console.log(newWordStreamData);
-
   updateWordStreamV2(newWordStreamData);
 }
 
@@ -327,15 +326,19 @@ function idToUsernameMap() {
 }
 
 function timeFilter(data, values) {
+  let doYear = new Date(values[0]);
+  let upYear = new Date(values[1]);
+
+  // let newData = data.filter(d => d.time * 1000 <= values[1] && d.time * 1000 >= values[0]);
+  // newData.forEach(function (d) {
+  //   console.log(new Date(d.time * 1000).getFullYear())
+  // });
+
   return data.filter(d => d.time * 1000 <= values[1] && d.time * 1000 >= values[0])
 }
 
 function createNodes(data) {
-  var temp = d3.nest().key(d => d.by).entries(data);
-
-  return temp.filter(function (d) {
-    return d.values.length >= 10;
-  });
+  return d3.nest().key(d => d.by).entries(data);
 }
 
 function updateNodeConnections(key, nodes) {
@@ -404,9 +407,56 @@ function createStream(wordStreamData) {
 }
 
 $(document).ready(function () {
-  d3.json('data/alldata.json', function (err, rawData) {
+  d3.json('data/alldata_11_9.json', function (err, rawData) {
+    console.log(rawData.length);
+    let posts = rawData.filter(d => d.type === "story");
+    console.log("posts", posts.length);
+    // console.log(rawData.length);
+    // for (let i = 2007; i < 2019; i++) {
+    //   tempYearObjs[i] = {time: i, sum: 0, iot: 0, cybersecurity: 0, bigdata: 0, other: 0};
+    // }
+    // rawData.forEach(function (d) {
+    //   let year = new Date(d.time * 1000).getFullYear();
+    //   if (d.type === "comment")
+    //     return;
+    //   tempYearObjs[year]['sum'] += 1;
+    // });
+    // console.log(tempYearObjs);
+
     const data = preprocessData(rawData);
     createChart(data);
+
+    // nodes.forEach(function (author) {
+    //   author.values.forEach(function (d) {
+    //     if (d.type === "comment")
+    //       return;
+    //     let year = new Date(d.time * 1000).getFullYear();
+    //     if (d.topic.includes("iot")) {
+    //       tempYearObjs[year]['iot'] += 1;
+    //     }
+    //     if (d.topic.includes("bigdata")) {
+    //       tempYearObjs[year]['bigdata'] += 1;
+    //     }
+    //     if (d.topic.includes("security")) {
+    //       tempYearObjs[year]['cybersecurity'] += 1;
+    //     }
+    //   })
+    // });
+    //
+    // console.log(tempYearObjs);
+    //
+    // let statForStream = [];
+    // for (let key in tempYearObjs) {
+    //   let obj = tempYearObjs[key];
+    //   if (obj['time'] === 2017 || obj['time'] === 2018)
+    //   obj['sum'] = Math.round(obj['sum']/2);
+    //   obj['other'] = obj['sum'] - obj['iot'] - obj['bigdata'] - obj['cybersecurity'];
+    //   statForStream.push(obj)
+    // }
+    //
+    // console.log(statForStream);
+    // download(JSON.stringify(statForStream), 'stream_data', 'application/json');
+
     d3.json("data/word_stream_data.json", function (err, wordData) {
       // createCloud();
       wordStreamData = wordData;
@@ -415,6 +465,15 @@ $(document).ready(function () {
     });
   });
 });
+
+function download(content, fileName, contentType) {
+  var a = document.createElement("a");
+  var file = new Blob([content], {type: contentType});
+  a.href = URL.createObjectURL(file);
+  a.download = fileName;
+  a.click();
+}
+
 
 function preprocessData(rawData) {
   var uniqueData = [];
@@ -428,5 +487,25 @@ function preprocessData(rawData) {
     }
   });
 
-  return uniqueData.filter(d => d.by);
+  uniqueData = uniqueData.filter(d => d.by);
+  nodes = createNodes(uniqueData);
+
+  nodes = nodes.filter(function (d) {
+    return d.values.length >= 10;
+  });
+
+  let filtered_data = [];
+
+  nodes.forEach(function (d) {
+    d.values.forEach(function (v) {
+      let temp = uniqueData.find(x => v.id === x.id);
+      if (temp) {
+        filtered_data.push(temp);
+      }
+    })
+  });
+
+  console.log(filtered_data);
+
+  return filtered_data;
 }

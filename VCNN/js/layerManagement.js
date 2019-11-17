@@ -56,9 +56,12 @@ function createLayerGUI(layerInfo) {
                     </div>
                     <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
                     <div class="row">
-                        <div class="col s6 layerContainer" id="layerContainer${layerInfo.timeStamp}" ></div>
-                        <div class="col s6 weightsContainer">
-                            <svg id="weightsContainer${layerInfo.timeStamp}" width="100" style="overflow: visible"></svg>
+                        <div class="col s4 layerContainer" id="layerContainer${layerInfo.timeStamp}" ></div>
+                        <div class="col s4 trainingWeightsContainer left">
+                            <svg id="training_weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>
+                        </div>
+                        <div class="col s4 weightsContainer right">
+                            <svg id="weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>
                         </div>
                     </div>
                  </div>`);

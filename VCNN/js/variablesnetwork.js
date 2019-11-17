@@ -25,7 +25,7 @@ let variables = [
     {id: 9, name: 'arrPower_usage0'}];
 let simulation = null;
 let network;
-let matrixSvg = null;
+let matrixG = null;
 let selector = d3.select("#target-variables");
 let networkRadius = 250;
 const tooltip = floatingTooltip("chart-tooltip", 100);
@@ -85,18 +85,18 @@ function varNetworkInitialization() {
     networkSvg.append("g")
         .attr("class", "linkNode");
 
-
-    matrixSvg = d3.select("#networkContainer").select("#matrix")
+    matrixG = d3.select("#networkContainer").select("#matrix")
         .attr("width", 400)
-        .attr("height", 400);
+        .attr("height", 400)
+        .append("g")
+        .attr("transform", "translate(100,100)")
+        .attr("id", "adjacencyG");
 }
 
-function createAdjacencyMatrix() {
+function updateAdjacencyMatrix() {
     var edgeHash = {};
-    console.log(links);
     links.forEach(function (d) {
         let id = d.source + "-" + d.target;
-        console.log(d.source);
         edgeHash[id] = d;
     });
 
@@ -107,19 +107,20 @@ function createAdjacencyMatrix() {
             let grid = {id: a.id + "-" + b.id, x: idx_b, y: idx_a, weight: 0};
             if (edgeHash[grid.id]) {
                 grid.weight = edgeHash[grid.id].score;
-                console.log(edgeHash[grid.id].score);
             }
             matrix.push(grid)
         })
     });
 
+    let rects =matrixG.selectAll("rect")
+        .data(matrix, d => d.id)
+        .style("fill-opacity", function (d) {
+            return d.weight * .2
+        });
 
-    matrixSvg.append("g")
-        .attr("transform", "translate(100,100)")
-        .attr("id", "adjacencyG")
-        .selectAll("rect")
-        .data(matrix)
-        .enter()
+    matrixG.exit().remove();
+
+    rects.enter()
         .append("rect")
         .attr("width", 25)
         .attr("height", 25)
@@ -138,25 +139,36 @@ function createAdjacencyMatrix() {
         .on("mouseover", gridOver)
         .on("mouseout", gridLeave);
 
-    var scaleSize = nodes.length * 25;
-    var nameScale = d3.scaleBand().domain(nodes.map(d => d.name)).range([0, scaleSize]);
-
-    let xAxis = d3.axisTop().scale(nameScale);
-    let yAxis = d3.axisLeft().scale(nameScale);
-    matrixSvg.select("#adjacencyG").append("g").call(xAxis).selectAll("text").style("text-anchor", "end").attr("transform", "translate(-10,-10) rotate(90)");
-    matrixSvg.select("#adjacencyG").append("g").call(yAxis);
-
     function gridOver(d) {
-        matrixSvg.selectAll("rect").style("stroke-width", function (p) {
+        matrixG.selectAll("rect").style("stroke-width", function (p) {
             return p.x === d.x || p.y === d.y ? "3px" : "1px";
         })
     }
 
     function gridLeave() {
-        matrixSvg.selectAll("rect").style("stroke-width", function () {
+        matrixG.selectAll("rect").style("stroke-width", function () {
             return "1px";
         })
     }
+}
+
+function createAdjacencyMatrix() {
+    matrixG.select("*").remove();
+
+    updateAdjacencyMatrix();
+
+    var scaleSize = nodes.length * 25;
+    var nameScale = d3.scaleBand().domain(nodes.map(d => d.name)).range([0, scaleSize]);
+
+    let xAxis = d3.axisTop().scale(nameScale);
+    let yAxis = d3.axisLeft().scale(nameScale);
+    matrixG
+        .append("g")
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("transform", "translate(-10,-10) rotate(90)");
+    matrixG.append("g").call(yAxis);
 }
 
 function redrawNetwork() {
@@ -512,7 +524,7 @@ function dragended(d) {
 
 function updateVarNetwork(contributionFilter) {
     calculateLinks(contributionFilter);
-    createAdjacencyMatrix();
+    updateAdjacencyMatrix();
 
 
     let {node, linkNet, linkNode} = redrawNetwork();
@@ -559,6 +571,7 @@ function createVarNetwork() {
     calculateNodes();
 
     updateVarNetwork();
+    createAdjacencyMatrix();
 }
 
 function changeContributionFilter() {

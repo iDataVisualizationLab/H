@@ -297,6 +297,7 @@ function onWeightFilterChanged(weightFilter) {
         let weightContainerId = getWeightsContainerId(i);
         if (layersConfig[i].layerType === "lstm") {
             drawLSTMWeights(weightContainerId);
+            drawTrainingWeights(weightContainerId)
         }
         if (layersConfig[i].layerType === "dense") {
             drawDenseWeights(weightContainerId);

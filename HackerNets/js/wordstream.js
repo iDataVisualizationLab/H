@@ -33,10 +33,12 @@ let wordStreamConfig = {
 let yearSvgWidth = 0;
 
 function createWordStreamV2(wordStreamData) {
-  yearSvgWidth = width / 13;
+  // yearSvgWidth = width / 12;
+  yearSvgWidth = 122;
 
-  cloudSvg.attr("width", width)
-    .attr("height", 400);
+  cloudSvg.attr("width", yearSvgWidth * 12)
+    .attr("height", 400)
+    .attr("transform", "translate(60,0)");
 
   let data = wordStreamData.sort(function (a, b) {
     var d1 = new Date(b.date).getTime();
@@ -71,6 +73,9 @@ function updateWordStreamV2(wordStreamData) {
     }
   });
   let numOfDate = data.length;
-  cloudSvg.attr("width", yearSvgWidth * numOfDate);
+  let timeRange = +data[0].date - 2007;
+  console.log(timeRange);
+  cloudSvg.attr("width", yearSvgWidth * numOfDate)
+    .attr("transform", `translate(${timeRange * yearSvgWidth + 60},0)`);
   wordstream(cloudSvg, data, wordStreamConfig)
 }

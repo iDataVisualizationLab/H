@@ -114,7 +114,7 @@ async function drawHeatmaps(data, container, selector) {
             drawHeatmapDetails(selector, d, data);
         });
     } else {
-        enters.append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "10px").style("margin-bottom", "0px").style("border", "1px solid black").style("display", "inline-block").on("click", (d) => {
+        enters.append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "12px").style("margin-bottom", "0px").style("border", "1px solid black").style("display", "inline-block").on("click", (d) => {
             drawHeatmapDetails(selector, d, data);
         });
     }
@@ -153,7 +153,6 @@ async function drawHeatmaps(data, container, selector) {
             let hm = mapObjects[selector + featureIdx];
             hm.update({x: x, y: y, z: z});
         }
-
     }
 }
 
@@ -203,7 +202,7 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs
     let elms = d3.select(`#${container}`).selectAll(`.${selector}`).data(Array.from(Array(noOfFeatures), (x, i) => i), d => d)
-        .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "10px")
+        .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "12px")
         .on("click", (d) => {
             drawLinechartDetails(selector, d, data);
         });
@@ -295,7 +294,9 @@ async function buildWeightPositionData(weightsT, leftNodeHeight, leftNodeMarginT
         let noOfLeftNodes = wShape[0];
         noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
         spanForWeightTypes = spanForWeightTypes ? spanForWeightTypes : 0;
+
         let noOfRightNodes = wShape[1] / noOfWeightTypes;
+
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
             let leftNodeStartY = leftNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
@@ -306,6 +307,145 @@ async function buildWeightPositionData(weightsT, leftNodeHeight, leftNodeMarginT
                     let leftNodeY = leftNodeStartY + typeIdx * spanForWeightTypes;
                     let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
                     let idx = leftIdx * (wShape[1]) + typeIdx * noOfRightNodes + rightIdx;
+                    console.log(leftNodeY);
+                    let item = {
+                        source: {
+                            x: 0,
+                            y: leftNodeY
+                        },
+                        target: {
+                            x: weightWidth,
+                            y: rightNodeY
+                        },
+                        sourceIdx: leftIdx,
+                        targetIdx: rightIdx,
+                        idx: idx,
+                        type: typeIdx,
+                        weight: weightData[idx],
+                        scaledWeight: zeroOneScaler(weightData[idx] > 0 ? weightData[idx] : -weightData[idx])
+                    };
+                    lineData.push(item);
+                    // //TODO: may not break, but for now break for better performance
+                    // break;
+                }
+            }
+        }
+
+        resolve({lineData: lineData, strokeWidthScale: strokeWidthScale, opacityScaler: opacityScaler});
+    });
+}
+
+async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity, epochs) {
+    return new Promise((resolve, reject) => {
+        let opacityScaler;
+        let zeroOneScaler;
+        let strokeWidthScale;
+        let lineData = [];
+
+        let noOfLeftNodes = wShape[0];
+        noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
+        spanForWeightTypes = spanForWeightTypes ? spanForWeightTypes : 0;
+
+        let noOfRightNodes = wShape[1] / noOfWeightTypes;
+
+        let noOfWeights = wShape[1];
+        let spanForWeightsLeft = leftNodeHeight / (noOfWeights - 1);
+
+
+        for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
+            let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
+            let leftNodeStartY = leftNodeCenterY - leftNodeHeight / 2;
+            for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
+                let rightNodeCenterY = rightIdx * (rightNodeHeight + rightNodeMarginTop) + (rightNodeHeight + rightNodeMarginTop) / 2;
+                let rightNodeStartY = rightNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
+
+
+                for (let typeIdx = 0; typeIdx < noOfWeightTypes; typeIdx++) {
+                    let idx = leftIdx * wShape[1] + typeIdx * noOfRightNodes + rightIdx;
+                    let idxInNode = idx % wShape[1];
+                    let leftNodeY = leftNodeStartY + idxInNode * spanForWeightsLeft;
+                    let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
+                    let spanForEpochs = weightWidth / (epochs + 1);
+                    let pathList = [];
+                    let weightList = [];
+
+
+                    for (let epoch = 0; epoch < epochs; epoch++) {
+                        let batches = trainingProcess.length / epochs;
+                        let epochIdx = epoch * batches + batches - 1;
+                        // console.log(epochIdx);
+                        // console.log(i);
+                        let weightData = trainingProcess[epochIdx].weight[i].data[0];
+
+                        weightList.push(weightData[idx]);
+                    }
+
+                    strokeWidthScale = d3.scaleLinear().domain([0, d3.max(weightList.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
+                    opacityScaler = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minOpacity, maxOpacity]);
+                    zeroOneScaler = d3.scaleLinear().domain([0, d3.max(weightList.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
+
+                    weightList.forEach(function (value, index) {
+                        pathList.push({
+                            source: {
+                                x: spanForEpochs * index,
+                                y: leftNodeY
+                            },
+                            target: {
+                                x: spanForEpochs * (index + 1),
+                                y: leftNodeY
+                            },
+                            weight: value,
+                            scaledWeight: zeroOneScaler(value > 0 ? value : -value),
+                            epoch: index
+                        });
+                    });
+
+
+                    let item = {
+                        paths: pathList,
+                        sourceIdx: leftIdx,
+                        targetIdx: rightIdx,
+                        idx: idx,
+                        type: typeIdx,
+                    };
+                    lineData.push(item);
+                }
+            }
+        }
+        resolve({lineData: lineData, strokeWidthScale: strokeWidthScale, opacityScaler: opacityScaler});
+    })
+}
+
+async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity) {
+    return new Promise((resolve, reject) => {
+        let weightData = weightsT.dataSync();
+        let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(weightData.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
+        let opacityScaler = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minOpacity, maxOpacity]);
+        let zeroOneScaler = d3.scaleLinear().domain([0, d3.max(weightData.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
+        let lineData = [];
+
+        let wShape = weightsT.shape;
+        let noOfLeftNodes = wShape[0];
+        noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
+        spanForWeightTypes = spanForWeightTypes ? spanForWeightTypes : 0;
+
+        let noOfRightNodes = wShape[1] / noOfWeightTypes;
+
+        let noOfWeights = wShape[1];
+        let spanForWeightsLeft = leftNodeHeight / (noOfWeights - 1);
+
+
+        for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
+            let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
+            let leftNodeStartY = leftNodeCenterY - leftNodeHeight / 2;
+            for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
+                let rightNodeCenterY = rightIdx * (rightNodeHeight + rightNodeMarginTop) + (rightNodeHeight + rightNodeMarginTop) / 2;
+                let rightNodeStartY = rightNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
+                for (let typeIdx = 0; typeIdx < noOfWeightTypes; typeIdx++) {
+                    let idx = leftIdx * (wShape[1]) + typeIdx * noOfRightNodes + rightIdx;
+                    let idxInNode = idx % wShape[1];
+                    let leftNodeY = leftNodeStartY + idxInNode * spanForWeightsLeft;
+                    let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
                     let item = {
                         source: {
                             x: 0,

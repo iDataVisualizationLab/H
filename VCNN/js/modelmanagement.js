@@ -1,4 +1,5 @@
 let weightsPathData = {};
+let trainingWeightsPathData = {};
 let weightValueColorScheme = ["red", "blue"];
 
 function processLayers(layers) {
@@ -317,7 +318,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 let {epoch, batchInEpoch} = getEpochAndBatch(canvas.width, Math.max(x, 0));
                 verticalPointerText.attr("transform", () => {
                     if (x > 580) {
-                        return `translate(${x-80},90)`
+                        return `translate(${x - 80},90)`
                     } else {
                         return `translate(${x + 65},90)`
                     }
@@ -346,8 +347,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     batchInEpoch = numOfBatchInEpoch - 1;
                 }
                 let selectBatchIdx = epoch * numOfBatchInEpoch + batchInEpoch;
-                console.log(epoch, batchInEpoch);
-                console.log(selectBatchIdx)
 
                 let stepIdx = selectBatchIdx;
                 let step = trainingProcess[stepIdx];
@@ -424,6 +423,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         layersConfig.forEach((l, i) => {
             if (l.layerType === "lstm") {
                 drawLSTMWeights(getWeightsContainerId(i));
+                drawTrainingWeights(getWeightsContainerId(i))
             }
         });
         //Todo: Fix this.
@@ -468,6 +468,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
             if (layersConfig[i].layerType === "lstm") {
                 drawLSTMWeights(containerId);
+                getWeightsContainerId(containerId);
             }
             if (layersConfig[i].layerType === "dense") {
                 drawDenseWeights(containerId);
@@ -692,29 +693,56 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     }
 }
 
+function getLayerTrainingWeight(i) {
+    let layerTrainingWeight = [];
+    trainingProcess.forEach(function (batch) {
+        layerTrainingWeight = layerTrainingWeight.concat(Object.values(batch.weight[i].data[0]));
+    });
+
+    return layerTrainingWeight;
+}
+
 async function displayLayerWeights(model, i, containerId) {
     let layer = model.layers[i];
     let weights = layer.getWeights()[0];
 
+    let layerTrainingWeight = getLayerTrainingWeight(i);
+    let minStrokeWidth = 0,
+        maxStrokeWidth = 3;
+
+    let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
+    let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
+    let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
+
     if (layer.name.indexOf("lstm") >= 0) {
-        buildWeightPositionData(weights, heatmapH, 17.5, 100, 17.5, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity).then((result) => {
+
+        buildWeightPositionDataV2(weights, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity).then((result) => {
             weightsPathData[containerId] = result;//Store to use on click
             drawLSTMWeights(containerId);
             updateVarNetwork();
         });
+        buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, 30).then((result) => {
+            trainingWeightsPathData[containerId] = result;
+            drawTrainingWeights(containerId);
+        })
     } else if (layer.name.indexOf("dense") >= 0 && i - 1 >= 0 && model.layers[i - 1].name.indexOf("flatten") >= 0) {//Is dense, but its previous one is flatten
         let flattenSplits = model.layers[i - 2].units;//Number of splits (divide weights in these number of splits then combine them in each split)
         buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
-            buildWeightPositionData(cumulativeT, heatmapH, 17.5, 100, 17.5, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity).then((result) => {
+            buildWeightPositionDataV2(cumulativeT, heatmapH, 19, 100, 19, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity).then((result) => {
                 weightsPathData[containerId] = result;
                 drawDenseWeights(containerId);
             });
         });
     } else if (model.layers[i].name.indexOf("dense") >= 0) {//Remember this must be else if to avoid conflict with prev case.
-        buildWeightPositionData(weights, 100, 17.5, 100, 17.5, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity).then((result) => {
+        buildWeightPositionDataV2(weights, 100, 19, 100, 19, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity).then((result) => {
             weightsPathData[containerId] = result;
             drawDenseWeights(containerId);
         });
+
+        // buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, 30).then((result) => {
+        //     trainingWeightsPathData[containerId] = result;
+        //     drawTrainingWeights(containerId);
+        // });
     }
 
 
@@ -728,11 +756,52 @@ function toggleWeightsMenu() {
     d3.selectAll(".weightColor").attr("opacity", (d, i) => i === 0 ? 1 : 0.5 + 0.5 * weightTypeDisplay[i - 1]);//The first one is for click to toggle and will be visible by default
 }
 
+function makeFlattenTrainingWeights(result) {
+    let flatten = [];
+    result.lineData.filter(d => lstmWeightTypeDisplay[d.type] === 1 && weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1).forEach(function (res) {
+        res.paths.forEach(list => {
+            flatten = flatten.concat(list)
+        });
+    });
+    return flatten;
+}
+
+function drawTrainingWeights(containerId) {
+    let result = trainingWeightsPathData[containerId];
+    if (result) {
+        d3.select("#training_" + containerId).selectAll(".trainingWeight")
+            .data(makeFlattenTrainingWeights(result), d => d.idx)
+            .join('path')
+            .attr("class", "trainingWeight")
+            .classed("weightLineTraining", isTraining)
+            .attr("d", d => {
+                return link(d)
+            })
+            .attr("fill", "none")
+            .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
+            .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
+            .attr("opacity", d => {
+                if (d.scaledWeight >= $("#weightFilter").val()) {
+                    return result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                } else {
+                    return 0;
+                }
+            })
+            .on("mouseover", (d) => {
+                showTip(`Epoch: ${d.epoch} weight: ${d.weight.toFixed(2)}`);
+            })
+            .on("mouseout", () => {
+                hideTip();
+            });
+    }
+}
+
 function drawDenseWeights(containerId) {
     let result = weightsPathData[containerId];
     if (result) {
         d3.select("#" + containerId).selectAll(".weightLine")
-            .data(result.lineData.filter(d => weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx, d => d.idx).join('path')
+            .data(result.lineData.filter(d => weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx, d => d.idx)
+            .join('path')
             .attr("class", "weightLine")
             .classed("weightLineTraining", isTraining)
             .attr("d", d => link(d))
@@ -760,7 +829,8 @@ function drawLSTMWeights(containerId) {
     let result = weightsPathData[containerId];
     if (result) {
         d3.select("#" + containerId).selectAll(".weightLine")
-            .data(result.lineData.filter(d => lstmWeightTypeDisplay[d.type] === 1 && weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx).join('path')
+            .data(result.lineData.filter(d => lstmWeightTypeDisplay[d.type] === 1 && weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx)
+            .join('path')
             .attr("class", "weightLine")
             .classed("weightLineTraining", isTraining)
             .attr("d", d => link(d))
