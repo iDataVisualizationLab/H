@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../VCNN/js/variablesnetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/js/variablesnetwork.js" afterDir="false" />
-    </list>
+    <list default="true" id="4df037b3-d1f7-46e6-ace2-b9ce99a95760" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,6 +99,7 @@
       <workItem from="1573257438849" duration="2267000" />
       <workItem from="1573267197050" duration="35988000" />
       <workItem from="1573778610049" duration="22000" />
+      <workItem from="1573967964752" duration="544000" />
     </task>
     <servers />
   </component>

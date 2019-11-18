@@ -24,3 +24,5 @@ const trainTestLossColorScheme = ["#a0a0a0", "#f5008c", "#0877bd"];//Used for tr
 const testOutputColorScheme = ["#a8aaab", "#f5008c", "#0877bd"];//Used for the test output color scheme
 const outputColorScheme = ["#a8aaab", "#6a8759", "#0877bd"];//Used for training output and also immediate layer training output
 let trainingProcess = [];
+let noOfEpochs = 30;
+let noOfBatches = 39;

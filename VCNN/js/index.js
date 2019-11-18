@@ -262,8 +262,6 @@ function startTraining() {
 
     const inputShape = [X_train[0].length, X_train[0][0].length];
 
-    console.log(currentModel);
-
     //Toggle
     setTrainingConfigEditable(false);
     isTraining = true;
