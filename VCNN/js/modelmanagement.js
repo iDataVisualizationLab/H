@@ -616,25 +616,25 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     trainLosses.push(trainLoss);
                     testLosses.push(testLoss);
                     plotTrainLossData(trainLosses, testLosses);
-                    let weights = [];
-                    model.layers.forEach(function (layer, idx) {
-                        if (!layer.getConfig().name.includes("flatten")) {
-                            let tWeight = [];
-                            layer.getWeights().forEach(function (w) {
-                                tWeight.push(w.dataSync());
-                                // console.log(w.dataSync());
-                            });
-                            weights.push({name: layer.getConfig().name, data: tWeight});
-                        } else {
-                            weights.push({name: layer.getConfig().name, data: []});
-                        }
-                    });
-                    trainingProcess.push({
-                        batch: batch,
-                        log: logs,
-                        loss: {trainLoss: trainLoss, testLoss: testLoss},
-                        weight: weights
-                    });
+                    // let weights = [];
+                    // model.layers.forEach(function (layer, idx) {
+                    //     if (!layer.getConfig().name.includes("flatten")) {
+                    //         let tWeight = [];
+                    //         layer.getWeights().forEach(function (w) {
+                    //             tWeight.push(w.dataSync());
+                    //             // console.log(w.dataSync());
+                    //         });
+                    //         weights.push({name: layer.getConfig().name, data: tWeight});
+                    //     } else {
+                    //         weights.push({name: layer.getConfig().name, data: []});
+                    //     }
+                    // });
+                    // trainingProcess.push({
+                    //     batch: batch,
+                    //     log: logs,
+                    //     loss: {trainLoss: trainLoss, testLoss: testLoss},
+                    //     weight: weights
+                    // });
                 });
             }
         );
@@ -680,21 +680,51 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     function onEpochEnd(epoch, logs) {
         currentEpoch = epoch + 1;
-        console.log("current epoch", currentEpoch);
-        hideLoader();
-        displayEpochData(model, logs.loss);
-        // console.log(model.layers[0].getWeights()[0].dataSync());
-        if (epoch === 0) {
-            console.log("create network");
-            // createVarNetwork();
-        } else {
-            console.log("update network");
-            // updateVarNetwork();
-        }
-        if (epoch > 1) {
-            //We don't update for the first epoch
-            dispatch.call("changeWeightFilter");
-        }
+
+        model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
+                let trainLoss = trainRet[0];
+                model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
+                    let testLoss = testRet[0];
+                    trainLosses.push(trainLoss);
+                    testLosses.push(testLoss);
+                    plotTrainLossData(trainLosses, testLosses);
+                    let weights = [];
+                    model.layers.forEach(function (layer, idx) {
+                        if (!layer.getConfig().name.includes("flatten")) {
+                            let tWeight = [];
+                            layer.getWeights().forEach(function (w) {
+                                tWeight.push(w.dataSync());
+                                // console.log(w.dataSync());
+                            });
+                            weights.push({name: layer.getConfig().name, data: tWeight});
+                        } else {
+                            weights.push({name: layer.getConfig().name, data: []});
+                        }
+                    });
+                    trainingProcess.push({
+                        epoch: epoch,
+                        log: logs,
+                        loss: {trainLoss: trainLoss, testLoss: testLoss},
+                        weight: weights
+                    });
+                    hideLoader();
+                    displayEpochData(model, logs.loss);
+                    // console.log(model.layers[0].getWeights()[0].dataSync());
+                    if (epoch === 0) {
+                        console.log("create network");
+                        // createVarNetwork();
+                    } else {
+                        console.log("update network");
+                        // updateVarNetwork();
+                    }
+                    if (epoch > 1) {
+                        //We don't update for the first epoch
+                        dispatch.call("changeWeightFilter");
+                    }
+                });
+
+            }
+        )
     }
 }
 
@@ -727,7 +757,6 @@ async function displayLayerWeights(model, i, containerId) {
             drawLSTMWeights(containerId);
             updateVarNetwork();
         });
-        console.log(layer.name);
         buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             trainingWeightsPathData[containerId] = result;
             drawTrainingWeights(containerId);
@@ -735,35 +764,31 @@ async function displayLayerWeights(model, i, containerId) {
     } else if (layer.name.indexOf("dense") >= 0 && i - 1 >= 0 && model.layers[i - 1].name.indexOf("flatten") >= 0) {//Is dense, but its previous one is flatten
         let flattenSplits = model.layers[i - 2].units;//Number of splits (divide weights in these number of splits then combine them in each split)
 
-        let cumulativeTrainingWeights = await buildTrainingWeightForFlattenLayer(i, flattenSplits, weights.shape);
-        let wShape = [flattenSplits, cumulativeTrainingWeights[0].length / flattenSplits];
+        buildTrainingWeightForFlattenLayer(i, flattenSplits, weights.shape).then((cumulativeTrainingWeights) => {
+            let wShape = [flattenSplits, cumulativeTrainingWeights[0].length / flattenSplits];
 
-        let newTrainingWeight = [];
-        console.log(cumulativeTrainingWeights);
-        cumulativeTrainingWeights.forEach(function (d) {
-            newTrainingWeight = newTrainingWeight.concat(Array.prototype.slice.call(d));
-        });
-
-        console.log(newTrainingWeight);
-
-        let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(newTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
-        let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
-        let zeroOneScale = d3.scaleLinear().domain([0, d3.max(newTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
-
-        buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
-            buildWeightPositionDataV2(cumulativeT, heatmapH, 19, 100, 19, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
-                weightsPathData[containerId] = result;
-                drawDenseWeights(containerId);
+            let newTrainingWeight = [];
+            cumulativeTrainingWeights.forEach(function (d) {
+                newTrainingWeight = newTrainingWeight.concat(Array.prototype.slice.call(d));
             });
+
+            let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(newTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
+            let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
+            let zeroOneScale = d3.scaleLinear().domain([0, d3.max(newTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
+
+            buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
+                buildWeightPositionDataV2(cumulativeT, heatmapH, 19, 100, 19, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+                    weightsPathData[containerId] = result;
+                    drawDenseWeights(containerId);
+                });
+            });
+
+            buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, heatmapH, 19, 100, 19, 100, 1, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+                trainingWeightsPathData[containerId] = result;
+                drawTrainingWeights(containerId);
+            });
+
         });
-
-        buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, heatmapH, 19, 100, 19, 100, 1, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
-            trainingWeightsPathData[containerId] = result;
-            drawTrainingWeights(containerId);
-        });
-
-        console.log(layer.name);
-
 
     } else if (model.layers[i].name.indexOf("dense") >= 0) {//Remember this must be else if to avoid conflict with prev case.
         let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
@@ -774,8 +799,6 @@ async function displayLayerWeights(model, i, containerId) {
             weightsPathData[containerId] = result;
             drawDenseWeights(containerId);
         });
-
-        console.log(layer.name);
 
         buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 100, 1, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             trainingWeightsPathData[containerId] = result;

@@ -349,7 +349,6 @@ async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMargin
         let noOfWeights = wShape[1];
         let spanForWeightsLeft = leftNodeHeight / noOfWeights;
 
-
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
             let leftNodeStartY = leftNodeCenterY - leftNodeHeight / 2 + spanForWeightsLeft / 2;
@@ -357,32 +356,20 @@ async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMargin
                 let rightNodeCenterY = rightIdx * (rightNodeHeight + rightNodeMarginTop) + (rightNodeHeight + rightNodeMarginTop) / 2;
                 let rightNodeStartY = rightNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
 
-
                 for (let typeIdx = 0; typeIdx < noOfWeightTypes; typeIdx++) {
                     let idx = leftIdx * wShape[1] + typeIdx * noOfRightNodes + rightIdx;
                     let idxInNode = idx % wShape[1];
                     let leftNodeY = leftNodeStartY + idxInNode * spanForWeightsLeft;
                     let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
-                    let spanForEpochs = weightWidth / (epochs + 1);
+                    let spanForEpochs = weightWidth / epochs;
                     let pathList = [];
                     let weightList = [];
 
-
                     for (let epoch = 0; epoch < epochs; epoch++) {
-                        let epochIdx = epoch * noOfBatches + noOfBatches - 1;
-
-                        if (isTraining){
-
-                            console.log("epoch",epoch);
-                            console.log("epochIdx", epochIdx);
-
-                            console.log(trainingProcess);
-                        }
-                        let weightData = trainingProcess[epochIdx].weight[i].data[0];
-
+                        // let epochIdx = epoch * noOfBatches + noOfBatches - 1;
+                        let weightData = trainingProcess[epoch].weight[i].data[0];
                         weightList.push(weightData[idx]);
                     }
-
                     weightList.forEach(function (value, index) {
                         pathList.push({
                             source: {
@@ -398,8 +385,6 @@ async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMargin
                             epoch: index
                         });
                     });
-
-
                     let item = {
                         paths: pathList,
                         sourceIdx: leftIdx,
@@ -442,13 +427,12 @@ async function buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wSha
                     let idxInNode = idx % wShape[1];
                     let leftNodeY = leftNodeStartY + idxInNode * spanForWeightsLeft;
                     let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
-                    let spanForEpochs = weightWidth / (epochs + 1);
+                    let spanForEpochs = weightWidth / epochs;
                     let pathList = [];
                     let weightList = [];
 
                     for (let epoch = 0; epoch < epochs; epoch++) {
-                        let epochIdx = epoch * noOfBatches + noOfBatches - 1;
-                        let weightData = cumulativeTrainingWeights[epochIdx];
+                        let weightData = cumulativeTrainingWeights[epoch];
 
                         weightList.push(weightData[idx]);
                     }
@@ -553,12 +537,11 @@ async function buildWeightForFlattenLayer(weightsT, noOfLeftNodes) {
 async function buildTrainingWeightForFlattenLayer(i, noOfLeftNodes, shape) {
     let cumulativeTrainingWeights = [];
     for (let idx = 0; idx < trainingProcess.length; idx++) {
-        let batch = trainingProcess[idx];
-        let weight = tf.tensor(Object.values(batch.weight[i].data[0]), shape);
+        let epoch = trainingProcess[idx];
+        let weight = tf.tensor(Object.values(epoch.weight[i].data[0]), shape);
         let newWeight = await buildWeightForFlattenLayer(weight, noOfLeftNodes);
         cumulativeTrainingWeights.push(newWeight.dataSync());
     }
-
     return cumulativeTrainingWeights;
 }
 
