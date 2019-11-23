@@ -258,23 +258,27 @@ function plotColorBar(theSvg, colorScale, id, width, height, orientation) {
     const domain = colorScale.domain();
     const minVal = domain[0];
     const domainSize = domain[domain.length - 1] - domain[0];
-    const legend = theSvg.append('defs')
-        .append('linearGradient')
-        .attr('id', 'gradient' + id)
-        .attr('x1', '0%') // left
-        .attr('y1', '100%')
-        .attr('x2', '100%') // to right
-        .attr('y2', '100%')
-        .attr('spreadMethod', 'pad');
-    colorScale.domain().forEach((dVal) => {
-        legend.append("stop").attr("offset", Math.round((dVal - minVal) * 100 / domainSize) + "%").attr("stop-color", colorScale(dVal))
-            .attr("stop-opacity", 1);
-    });
-    theSvg.append("g").append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("fill", `url(#gradient${id})`)
-        .attr("transform", "translate(0,0)");
+    // const legend = theSvg.append('defs')
+    //     .append('linearGradient')
+    //     .attr('id', 'gradient' + id)
+    //     .attr('x1', '0%') // left
+    //     .attr('y1', '100%')
+    //     .attr('x2', '100%') // to right
+    //     .attr('y2', '100%')
+    //     .attr('spreadMethod', 'pad');
+    // colorScale.domain().forEach((dVal) => {
+    //     legend.append("stop").attr("offset", Math.round((dVal - minVal) * 100 / domainSize) + "%").attr("stop-color", colorScale(dVal))
+    //         .attr("stop-opacity", 1);
+    // });
+    // theSvg.append("g").append("rect")
+    //     .attr("width", width)
+    //     .attr("height", height)
+    //     .attr("fill", `url(#gradient${id})`)
+    //     .attr("transform", "translate(0,0)");
+
+    const legend = theSvg.selectAll('.bar')
+        .data()
+
 
     let axisG = theSvg.append("g").attr("transform", `translate(0,${height})`);
     let axisScale = d3.scaleLinear().domain(d3.extent(domain)).range([0, width]);
