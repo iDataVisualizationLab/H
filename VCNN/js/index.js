@@ -230,9 +230,10 @@ async function drawLSTMColorScale(containerId, width, height) {
 
 async function drawInputColorScale(minZ, avgZ, maxZ) {
     return new Promise(() => {
-        let inputColorScale = d3.scaleLinear()
+        let inputColorScale = d3.scaleSequential()
             .domain([minZ, avgZ, maxZ])
-            .range(["#0877bd", "#e8eaeb", "#f59322"])
+            .interpolator(d3.interpolateSinebow)
+            // .range(["#0877bd", "#e8eaeb", "#f59322"])
             .clamp(true);
         d3.select("#inputColorScale").selectAll("*").remove();
         plotColorBar(d3.select("#inputColorScale"), inputColorScale, "inputColorBar", colorBarW, colorBarH, "horizon");
@@ -295,7 +296,7 @@ function onWeightFilterChanged(weightFilter) {
         let weightContainerId = getWeightsContainerId(i);
         if (layersConfig[i].layerType === "lstm") {
             drawLSTMWeights(weightContainerId);
-            drawTrainingWeights(weightContainerId)
+            drawTrainingWeights(weightContainerId);
         }
         if (layersConfig[i].layerType === "dense") {
             drawDenseWeights(weightContainerId);

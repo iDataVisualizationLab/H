@@ -1,6 +1,9 @@
 let weightsPathData = {};
 let trainingWeightsPathData = {};
 let weightValueColorScheme = ["red", "blue"];
+let weightRainbowScale = d3.scaleSequential()
+    .interpolator(d3.interpolateViridis)
+    .domain([0, 2 * Math.PI]);
 let currentEpoch = null;
 
 function processLayers(layers) {
@@ -896,6 +899,7 @@ function drawLSTMWeights(containerId) {
             .classed("weightLineTraining", isTraining)
             .attr("d", d => link(d))
             .attr("fill", "none")
+            // .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
             .attr("opacity", d => {
@@ -912,6 +916,8 @@ function drawLSTMWeights(containerId) {
                 hideTip();
             });
     }
+
+    drawColorScales(containerId);
 }
 
 //The container id is a bit involving because of the weights is displayed in prev layer, and also we prev 2 layer if the prev layer is flatten layer.
