@@ -98,7 +98,7 @@ function drawHeatmapDetails(selector, d, data) {
     mapDetails.open();
 }
 
-async function drawHeatmaps(data, container, selector) {
+async function drawHeatmaps(data, container, selector, isInputLayer) {
     let noOfItems = data.length;
     let noOfSteps = data[0].length;
     let noOfFeatures = data[0][0].length;
@@ -139,13 +139,17 @@ async function drawHeatmaps(data, container, selector) {
                 paddingBottom: 0,
                 borderWidth: 0,
                 width: 100,
-                height: heatmapH
+                height: heatmapH,
+                minValue: -1,
+                maxValue: 1,
+                isInputLayer: isInputLayer
             };
             // if (selector == "inputDiv") {
             //     hmSettings.title = {text: features[featureIdx], fontSize: 6};
             // } else {
             //     hmSettings.title = {text: 'neuron' + featureIdx, fontSize: 6};
             // }
+
             let hm = new HeatMap(document.getElementById(selector + featureIdx), {x: x, y: y, z: z}, hmSettings);
             hm.plot();
             mapObjects[selector + featureIdx] = hm;
@@ -259,8 +263,8 @@ function plotColorBar(theSvg, colorScale, id, width, height, orientation) {
     const minVal = domain[0];
     const domainSize = domain[domain.length - 1] - domain[0];
 
-    console.log(theSvg);
-    console.log(domain);
+    // console.log(theSvg);
+    // console.log(domain);
     const legend = theSvg.append('defs')
         .append('linearGradient')
         .attr('id', 'gradient' + id)

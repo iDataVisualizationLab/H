@@ -112,7 +112,7 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     let X_train_ordered = trainRULOrder.map(d => X_train[d]);
     X_train_ordered.layerName = "Input";
 
-    drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv").then(() => {
+    drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", true).then(() => {
         hideLoader();
     });
     //Draw sample input for documentation.
@@ -221,9 +221,9 @@ async function drawDenseColorScale(containerId) {
 }
 
 async function drawLSTMColorScale(containerId, width, height) {
-    let lstm1ColorScale = d3.scaleLinear()
-        .domain([-1.0, 0.0, 1.0])
-        .range(["#0877bd", "#e8eaeb", "#f59322"])
+    let lstm1ColorScale = d3.scaleSequential()
+        .interpolator(d3.interpolateTurbo)
+        .domain([-1,1])
         .clamp(true);
     plotColorBar(d3.select("#" + containerId), lstm1ColorScale, containerId, width, height, "horizon");
 }
@@ -231,9 +231,8 @@ async function drawLSTMColorScale(containerId, width, height) {
 async function drawInputColorScale(minZ, avgZ, maxZ) {
     return new Promise(() => {
         let inputColorScale = d3.scaleSequential()
-            .domain([minZ, avgZ, maxZ])
-            .interpolator(d3.interpolateSinebow)
-            // .range(["#0877bd", "#e8eaeb", "#f59322"])
+            .domain([minZ, maxZ])
+            .interpolator(d3.interpolateTurbo)
             .clamp(true);
         d3.select("#inputColorScale").selectAll("*").remove();
         plotColorBar(d3.select("#inputColorScale"), inputColorScale, "inputColorBar", colorBarW, colorBarH, "horizon");
