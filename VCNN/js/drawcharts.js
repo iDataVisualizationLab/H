@@ -61,10 +61,11 @@
 //     lc.plot();
 // }
 
-function drawHeatmapDetails(selector, d, data) {
+function drawHeatmapDetails(selector, d, data, isInputLayer) {
     let theMapContainer = document.getElementById("mapDetailsContent");
     d3.select(theMapContainer).selectAll("*").remove();
     let hmData = mapObjects[selector + d].data;
+
     let hmSettings = {
         noSvg: true,
         showAxes: true,
@@ -87,9 +88,11 @@ function drawHeatmapDetails(selector, d, data) {
         height: 350,
         //TODO: Should make these change automatically depending on the dataset.
         xTickValues: Array.from(new Array(hmData.x.length), (x, i) => i).filter((x, i) => i % 5 === 0),
-        yTickValues: Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 20 === 0)
+        yTickValues: Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 20 === 0),
+        minValue: isInputLayer ? minDataVal : -1,
+        maxValue: isInputLayer ? maxDataVal : 1,
+        isInputLayer: isInputLayer
     };
-
 
     let hm = new HeatMap(theMapContainer, hmData, hmSettings);
     hm.plot();
@@ -111,11 +114,11 @@ async function drawHeatmaps(data, container, selector, isInputLayer) {
     if (container === "inputContainer") {
         enters.append("div").text((d, i) => features.filter((f, fi) => selectedFeatures[fi])[i]).style("font-size", "10px").style("height", "10px").style("width", "100px").style("text-align", "center");
         enters.append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "2px").style("margin-bottom", "0px").style("border", "1px solid black").style("display", "inline-block").on("click", (d) => {
-            drawHeatmapDetails(selector, d, data);
+            drawHeatmapDetails(selector, d, data, true);
         });
     } else {
         enters.append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "12px").style("margin-bottom", "0px").style("border", "1px solid black").style("display", "inline-block").on("click", (d) => {
-            drawHeatmapDetails(selector, d, data);
+            drawHeatmapDetails(selector, d, data, false);
         });
     }
     //Generate data.
@@ -128,6 +131,7 @@ async function drawHeatmaps(data, container, selector, isInputLayer) {
             }
             z.push(row);
         }
+
         if (!mapObjects[selector + featureIdx]) {
             //Draw the feature.
             let hmSettings = {
@@ -140,8 +144,8 @@ async function drawHeatmaps(data, container, selector, isInputLayer) {
                 borderWidth: 0,
                 width: 100,
                 height: heatmapH,
-                minValue: -1,
-                maxValue: 1,
+                minValue: isInputLayer ? minDataVal : -1,
+                maxValue: isInputLayer ? maxDataVal : 1,
                 isInputLayer: isInputLayer
             };
             // if (selector == "inputDiv") {
@@ -261,33 +265,26 @@ function updateGraphTitle(graphId, newText) {
 function plotColorBar(theSvg, colorScale, id, width, height, orientation) {
     const domain = colorScale.domain();
     const minVal = domain[0];
-    const domainSize = domain[domain.length - 1] - domain[0];
+    const maxVal = domain[domain.length - 1];
 
-    // console.log(theSvg);
-    // console.log(domain);
-    const legend = theSvg.append('defs')
-        .append('linearGradient')
-        .attr('id', 'gradient' + id)
-        .attr('x1', '0%') // left
-        .attr('y1', '100%')
-        .attr('x2', '100%') // to right
-        .attr('y2', '100%')
-        .attr('spreadMethod', 'pad');
-    colorScale.domain().forEach((dVal) => {
-        legend.append("stop").attr("offset", Math.round((dVal - minVal) * 100 / domainSize) + "%").attr("stop-color", colorScale(dVal))
-            .attr("stop-opacity", 1);
-    });
-    theSvg.append("g").append("rect")
-        .attr("width", width)
+    const linearScale = d3.scaleLinear()
+        .range([minVal, maxVal])
+        .domain([0, width]);
+
+    theSvg.selectAll(".bars")
+        .data(d3.range(width), d => d)
+        .enter()
+        .append("rect")
+        .attr("class", "bars")
+        .attr("x", function (d, i) {
+            return i;
+        })
+        .attr("y", 0)
         .attr("height", height)
-        .attr("fill", `url(#gradient${id})`)
-        .attr("transform", "translate(0,0)");
-
-    // const legend = theSvg.selectAll('.bar')
-    //     .data(d3.range([]), d => d)
-    //     .enter()
-    //     .append("rect")
-    //     .attr();
+        .attr("width", 1)
+        .style("fill", function (d) {
+            return colorScale(linearScale(d));
+        });
 
 
     let axisG = theSvg.append("g").attr("transform", `translate(0,${height})`);

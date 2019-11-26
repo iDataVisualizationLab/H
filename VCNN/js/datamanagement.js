@@ -225,7 +225,7 @@ async function loadAllPretrainKerasModelFromServer(modelName) {
     // });
     let weights = await kerasModel.layers[0].getWeights()[0];
     kerasWeights = weights.dataSync();
-    updateVarNetwork();
+    // updateVarNetwork();
 
 }
 

@@ -26,3 +26,5 @@ const outputColorScheme = ["#a8aaab", "#6a8759", "#0877bd"];//Used for training 
 let trainingProcess = [];
 let noOfEpochs = 30;
 let noOfBatches = 39;
+let minDataVal = null;
+let maxDataVal = null;

@@ -11,7 +11,7 @@ let link = d3.linkHorizontal()
         return d.y;
     });
 
-createVarNetwork();
+// createVarNetwork();
 
 function updateInputs() {
     if (target_variable === "allVariables") {
@@ -106,7 +106,16 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     let maxZ = d3.max(flattenedZ);
     let avgZ = (maxZ - minZ) / 2 + minZ;
 
-    drawInputColorScale(minZ, avgZ, maxZ);
+    minDataVal = minZ;
+    maxDataVal = maxZ;
+
+    if (Math.abs(maxZ) >= Math.abs(minZ)) {
+        minDataVal = -Math.abs(maxZ)
+    } else {
+        maxDataVal = Math.abs(minZ);
+    }
+
+    drawInputColorScale(minDataVal, avgZ, maxDataVal);
     drawOutputColorScale();
     //Draw input
     let X_train_ordered = trainRULOrder.map(d => X_train[d]);
@@ -223,7 +232,7 @@ async function drawDenseColorScale(containerId) {
 async function drawLSTMColorScale(containerId, width, height) {
     let lstm1ColorScale = d3.scaleSequential()
         .interpolator(d3.interpolateTurbo)
-        .domain([-1,1])
+        .domain([-1, 1]) //Change when using another activation function
         .clamp(true);
     plotColorBar(d3.select("#" + containerId), lstm1ColorScale, containerId, width, height, "horizon");
 }

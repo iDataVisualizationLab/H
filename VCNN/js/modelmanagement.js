@@ -527,7 +527,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (layer.name.indexOf("lstm") >= 0) {
             ts.array().then(data => {
                 data.layerName = "LSTM " + i;
-                drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp);
+                drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp, false);
             });
         } else if (layer.name.indexOf("flatten") >= 0) {
             //For flatten we don't have to do anything.
@@ -758,7 +758,7 @@ async function displayLayerWeights(model, i, containerId) {
         buildWeightPositionDataV2(weights, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             weightsPathData[containerId] = result;//Store to use on click
             drawLSTMWeights(containerId);
-            updateVarNetwork();
+            // updateVarNetwork();
         });
         buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             trainingWeightsPathData[containerId] = result;
