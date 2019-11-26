@@ -91,7 +91,8 @@ function drawHeatmapDetails(selector, d, data, isInputLayer) {
         yTickValues: Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 20 === 0),
         minValue: isInputLayer ? minDataVal : -1,
         maxValue: isInputLayer ? maxDataVal : 1,
-        isInputLayer: isInputLayer
+        isInputLayer: isInputLayer,
+        reverseY: true
     };
 
     let hm = new HeatMap(theMapContainer, hmData, hmSettings);
@@ -122,11 +123,13 @@ async function drawHeatmaps(data, container, selector, isInputLayer) {
         });
     }
     //Generate data.
+    console.log("original", data);
+
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let z = [];
-        for (let stepIdx = 0; stepIdx < noOfSteps; stepIdx++) {
+        for (let itemIdx = noOfItems - 1; itemIdx >= 0; itemIdx--) {//Reverse order of items from big (top) to small (bottom).
             let row = [];
-            for (let itemIdx = noOfItems - 1; itemIdx >= 0; itemIdx--) {//Reverse order of items from big (top) to small (bottom).
+            for (let stepIdx = 0; stepIdx < noOfSteps; stepIdx++) {
                 row.push(data[itemIdx][stepIdx][featureIdx])
             }
             z.push(row);
@@ -146,7 +149,8 @@ async function drawHeatmaps(data, container, selector, isInputLayer) {
                 height: heatmapH,
                 minValue: isInputLayer ? minDataVal : -1,
                 maxValue: isInputLayer ? maxDataVal : 1,
-                isInputLayer: isInputLayer
+                isInputLayer: isInputLayer,
+                reverseY: true
             };
             // if (selector == "inputDiv") {
             //     hmSettings.title = {text: features[featureIdx], fontSize: 6};
