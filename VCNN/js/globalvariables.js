@@ -28,3 +28,6 @@ let noOfEpochs = 30;
 let noOfBatches = 39;
 let minDataVal = null;
 let maxDataVal = null;
+let networkHeight = null;
+let neuronHeight = 119;
+let trainingWeightWidthRatio = 3/8;

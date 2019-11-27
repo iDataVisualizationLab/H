@@ -195,6 +195,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     let xScaleTest = d3.scaleLinear().domain([0, batches]).range([0, trainLossBatchSettings.width - trainLossBatchSettings.paddingLeft - trainLossBatchSettings.paddingRight]);
     trainLossBatchSettings.xScale = xScaleTest;
 
+    networkHeight = calculateNetworkHeight(119);
 
     //Draw the legends for weights
     //Draw weights type on the last layer (to avoid conflict with other types), and also this one sure always there is one.
@@ -328,7 +329,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                         return `translate(${x + 65},90)`
                     }
                 })
-                    .text("Epoch: " + epoch + ", Batch: " + batchInEpoch);
+                // .text("Epoch: " + epoch + ", Batch: " + batchInEpoch);
+                    .text("Epoch: " + epoch);
             }, false);
 
             canvas.addEventListener("mouseover", function () {
@@ -354,7 +356,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 let selectBatchIdx = epoch * numOfBatchInEpoch + batchInEpoch;
 
                 let stepIdx = selectBatchIdx;
-                let step = trainingProcess[stepIdx];
+                console.log(epoch)
+                let step = trainingProcess[epoch];
                 let weights = step.weight;
                 model.layers.forEach(function (layer, idx) {
                     if (!layer.name.includes("flatten")) {
@@ -379,8 +382,9 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     //<editor-fold desc="For LSTM weight types" and its toggling menu">
     async function drawLSTMWeightTypes(container) {
         return new Promise((resolve, reject) => {
+            let layer1padding = 119;
             let lstmTypes = container.selectAll(".lstmTypeContainer").data([1]).join("g").attr("class", "lstmTypeContainer")
-                .attr("transform", "translate(3, 0)")//3 is for the margin.
+                .attr("transform", `translate(28, ${layer1padding - 20})`)//3 is for the margin.
                 .selectAll(".lstmWeightType")
                 .data(lstmWeightTypes);
             //Create the rect for clicking
@@ -395,7 +399,9 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             lstmTypes.join("text").text(d => d)
                 .attr("class", "lstmWeightType")
                 .attr("font-size", 10)
-                .attr("x", 0).attr("y", 0).attr("dy", (d, i) => `${i}em`)
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("dy", (d, i) => `${i}em`)
                 .style("cursor", "pointer")
                 .on("click", function (d, i) {
                     onLSTMWeightTypeClick(i);
@@ -407,7 +413,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     d3.select(this).attr("stroke", "none");
                 });
             //Draw weight guide.
-            container.selectAll(".guidePath").data(["M60,5 C85,5 85,5 100,43", "M60,15 C85,15 85,15 100,53", "M60,25 C85,25 85,25 100,63", "M60,35 C85,35 85,35 100,73"]).join("path")
+            container.selectAll(".guidePath")
+                .data([`M85,${layer1padding - 12} C110,${layer1padding - 12} 110,${layer1padding - 12} 125,${layer1padding + 33}`, `M85,${layer1padding - 2} C110,${layer1padding - 2} 110,${layer1padding - 2} 125,${layer1padding + 53}`, `M85,${layer1padding + 8} C110,${layer1padding + 8} 110,${layer1padding + 8} 125,${layer1padding + 73}`, `M85,${layer1padding + 18} C110,${layer1padding + 18} 110,${layer1padding + 18} 125,${layer1padding + 93}`]).join("path")
                 .attr("d", d => d)
                 .attr("marker-end", "url(#arrow)")
                 .attr("fill", "none")
@@ -697,7 +704,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                             let tWeight = [];
                             layer.getWeights().forEach(function (w) {
                                 tWeight.push(w.dataSync());
-                                // console.log(w.dataSync());
                             });
                             weights.push({name: layer.getConfig().name, data: tWeight});
                         } else {
@@ -755,12 +761,12 @@ async function displayLayerWeights(model, i, containerId) {
         let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
-        buildWeightPositionDataV2(weights, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        buildWeightPositionDataV2(weights, heatmapH, 19, 100, 19, 200 * (1 - trainingWeightWidthRatio), 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             weightsPathData[containerId] = result;//Store to use on click
             drawLSTMWeights(containerId);
             // updateVarNetwork();
         });
-        buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 100, 4, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             trainingWeightsPathData[containerId] = result;
             drawTrainingWeights(containerId);
         });
@@ -780,13 +786,13 @@ async function displayLayerWeights(model, i, containerId) {
             let zeroOneScale = d3.scaleLinear().domain([0, d3.max(newTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
             buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
-                buildWeightPositionDataV2(cumulativeT, heatmapH, 19, 100, 19, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+                buildWeightPositionDataV2(cumulativeT, heatmapH, 19, 100, 19, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                     weightsPathData[containerId] = result;
                     drawDenseWeights(containerId);
                 });
             });
 
-            buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, heatmapH, 19, 100, 19, 100, 1, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+            buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, heatmapH, 19, 100, 19, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                 trainingWeightsPathData[containerId] = result;
                 drawTrainingWeights(containerId);
             });
@@ -798,12 +804,12 @@ async function displayLayerWeights(model, i, containerId) {
         let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
-        buildWeightPositionDataV2(weights, heatmapH, 19, 100, 19, 100, 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        buildWeightPositionDataV2(weights, heatmapH, 19, 100, 19, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             weightsPathData[containerId] = result;
             drawDenseWeights(containerId);
         });
 
-        buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 100, 1, 10, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             trainingWeightsPathData[containerId] = result;
             drawTrainingWeights(containerId);
         });

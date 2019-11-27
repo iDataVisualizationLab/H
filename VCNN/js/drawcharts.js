@@ -123,7 +123,6 @@ async function drawHeatmaps(data, container, selector, isInputLayer) {
         });
     }
     //Generate data.
-    console.log("original", data);
 
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let z = [];
@@ -353,8 +352,6 @@ async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMargin
     return new Promise((resolve, reject) => {
         let lineData = [];
 
-        console.log("layer idx", i);
-
         let noOfLeftNodes = wShape[0];
         noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
         spanForWeightTypes = spanForWeightTypes ? spanForWeightTypes : 0;
@@ -489,6 +486,7 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
         let weightData = weightsT.dataSync();
         let lineData = [];
 
+
         let wShape = weightsT.shape;
         let noOfLeftNodes = wShape[0];
         noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
@@ -499,6 +497,9 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
         let noOfWeights = wShape[1];
 
         let spanForWeightsLeft = leftNodeHeight / noOfWeights;
+        let topPadding = (noOfLeftNodes - noOfRightNodes) * neuronHeight / 2;
+
+        console.log(topPadding);
 
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
@@ -510,7 +511,7 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
                     let idx = leftIdx * (wShape[1]) + typeIdx * noOfRightNodes + rightIdx;
                     let idxInNode = idx % wShape[1];
                     let leftNodeY = leftNodeStartY + idxInNode * spanForWeightsLeft;
-                    let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
+                    let rightNodeY = topPadding + rightNodeStartY + typeIdx * spanForWeightTypes;
 
                     let item = {
                         source: {

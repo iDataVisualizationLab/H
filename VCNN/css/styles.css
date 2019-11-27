@@ -95,7 +95,7 @@
 }
 
 .indigo {
-    background-color: #26a69a !important;
+    background-color: #828282 !important;
 }
 
 i.right {
@@ -106,6 +106,11 @@ i.right {
     height: 24px;
     line-height: 24px;
     padding: 0 0.5rem;
+    background-color: #828282;
+}
+
+.btn-small {
+    background-color: #828282;
 }
 
 .row {

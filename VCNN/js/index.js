@@ -109,11 +109,11 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     minDataVal = minZ;
     maxDataVal = maxZ;
 
-    if (Math.abs(maxZ) >= Math.abs(minZ)) {
-        minDataVal = -Math.abs(maxZ)
-    } else {
-        maxDataVal = Math.abs(minZ);
-    }
+    // if (Math.abs(maxZ) >= Math.abs(minZ)) {
+    //     minDataVal = -Math.abs(maxZ)
+    // } else {
+    //     maxDataVal = Math.abs(minZ);
+    // }
 
     drawInputColorScale(minDataVal, avgZ, maxDataVal);
     drawOutputColorScale();
@@ -258,6 +258,7 @@ async function createTrainingGUI(layersConfig) {
     // }
     layersConfig.forEach(layerInfo => {
         if (layerInfo.id !== "output" && layerInfo.layerType !== "flatten") {
+            networkHeight = calculateNetworkHeight();
             createLayerGUI(layerInfo);
         }
     });

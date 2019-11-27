@@ -35,6 +35,17 @@ function createLayer(layerType, units, activation, timeStamp) {
     return layerInfo;
 }
 
+function calculateNetworkHeight() {
+    let maxNoNeurons = X_train[0][0].length;
+    layersConfig.forEach(function (layer) {
+        if (maxNoNeurons < layer.units) {
+            maxNoNeurons = layer.units
+        }
+    });
+
+    return neuronHeight * maxNoNeurons;
+}
+
 /**
  * Used to create GUI for the layer
  * @param layerInfo
@@ -49,21 +60,24 @@ function createLayerGUI(layerInfo) {
     let div = $(`<div class='grid-item' id="${idVal}">
                     <a class="btn-small btn-floating"><i class="material-icons" onclick="deleteLayer('${idVal}')">delete</i></a> <span id="layerInfoStr${idVal}">${layerInfoStr}</span>
                     <div class="divider" style="margin-bottom: 5px;"></div>
-                    <div class="row">
-                        <svg style="overflow: visible; margin-left: 10px;" height="25">
-                            <g id="colorScale${layerInfo.timeStamp}"></g>
-                        </svg>
+                    <div class="row" >
+                         <svg style="overflow: visible; margin-left: 10px;" height="25">
+                             <g id="colorScale${layerInfo.timeStamp}"></g>
+                         </svg>
                     </div>
                     <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
-                    <div class="row">
-                        <div class="col s4 layerContainer" id="layerContainer${layerInfo.timeStamp}" ></div>
-                        <div class="col s4 trainingWeightsContainer left">
+                    <div class="row valign-wrapper" style="height: ${networkHeight + "px"}">
+                    <div>
+                    <div class="col s4 layerContainer" id="layerContainer${layerInfo.timeStamp}" ></div>
+                        <div class="col s3 trainingWeightsContainer left">
                             <svg id="training_weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>
                         </div>
-                        <div class="col s4 weightsContainer right">
+                        <div class="col s5 weightsContainer right">
                             <svg id="weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>
                         </div>
                     </div>
+                        
+                     </div>
                  </div>`);
     div.insertBefore($("#layerOutput"));
 }
