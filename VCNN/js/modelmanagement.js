@@ -165,7 +165,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         },
         colorScheme: testOutputColorScheme
     };
-    let trainLossW = 800;
+    let trainLossW = 500;
     let trainLossH = 200;
     let trainLossBatchSettings = {
         noSvg: false,
@@ -224,8 +224,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     toggleWeightsMenu();
 
     if (!reviewMode) {
-        console.log("Test2");
-        console.log(epochs);
         trainingProcess = [];
         model.fit(X_train_T, y_train_T, {
             batchSize: batchSize,
@@ -235,33 +233,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             callbacks: {onEpochEnd: onEpochEnd, onBatchEnd: onBatchEnd, onTrainEnd: onTrainEnd},
         });
     } else {
-        console.log("test");
-
-        // $('#stepFilter').on('input', function () {
-        //     let stepIdx = $('#stepFilter').val();
-        //     let step = trainingProcess[stepIdx];
-        //     let weights = step.weight;
-        //     model.layers.forEach(function (layer, idx) {
-        //         if (!layer.name.includes("flatten")) {
-        //             let tWeight = [];
-        //             weights[idx].data.forEach(function (w, sidx) {
-        //                 // let arr = [];
-        //                 // w.forEach(function (v) {
-        //                 //     arr.push(v)
-        //                 // });
-        //                 let tempW = tf.tensor(Object.values(w), layer.getWeights()[sidx].shape);
-        //                 tWeight.push(tempW);
-        //             });
-        //             layer.setWeights(tWeight);
-        //         } else {
-        //             layer.setWeights([]);
-        //         }
-        //         // console.log(layer.name, layer.getWeights()[0].dataSync());
-        //     });
-        //
-        //     displayEpochData(model, trainLosses[testLosses.length - 1], testLosses[testLosses.length - 1]);
-        // });
-
         plotTrainLossData(trainLosses, testLosses).then(() => {
             var canvas = document.getElementById("trainTestLossCanvas");
 
@@ -303,18 +274,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             canvas.addEventListener("mousemove", function (e) {
                 var pos = getPosition(this);
                 var x = e.pageX - pos.x;
-                var y = e.pageY - pos.y;
-                var coord = "x=" + x + ", y=" + y;
-                var c = this.getContext('2d');
-                var p = c.getImageData(x, y, 1, 1).data;
-
-                // If transparency on the image
-                if ((p[0] === 0) && (p[1] === 0) && (p[2] === 0) && (p[3] === 0)) {
-                    coord += " (Transparent color detected, cannot be converted to HEX)";
-                }
-
-
-                // var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
 
                 verticalPointerLine.attr("x1", x + 60)
                     .attr("y1", 20)
@@ -387,15 +346,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 .attr("transform", `translate(28, ${layer1padding - 20})`)//3 is for the margin.
                 .selectAll(".lstmWeightType")
                 .data(lstmWeightTypes);
-            //Create the rect for clicking
-            // lstmTypes.join("rect")
-            //     .attr("x", 5).attr("y", (d, i) => (i - 1) * 10)
-            //     .attr("fill", "white")
-            //     .attr("width", 60).attr("height", 9)
-            //     .style("cursor", "pointer")
-            //     .on("click", function (d, i) {
-            //         onLSTMWeightTypeClick(i);
-            //     });
+
             lstmTypes.join("text").text(d => d)
                 .attr("class", "lstmWeightType")
                 .attr("font-size", 10)
@@ -607,7 +558,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             //Draw the feature.
             d3.select("#trainTestLoss").on("click", () => {
                 // plotTrainLossDetails();
-
             });
             let lc = new LineChart(document.getElementById('trainTestLoss'), lineChartData, trainLossBatchSettings);
             lc.plot();

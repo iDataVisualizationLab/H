@@ -54,31 +54,43 @@
 </nav>
 <div class="divider" style="margin-bottom: 10px;"></div>
 <div class="row">
-    <div class="container">
-        <div class="row" style="height: 90px; width: 100%">
+    <div class="">
+        <div class="row" style="height: 50px; width: 80%">
             <div class="col s8">
                 <!--<a href="#" class="btn-menu">train data</a>-->
                 <!--<a href="#" class="btn-menu">testing data</a>-->
 
-                <div class="row form-group col s3">
-                    <label for="target-variables" class="col-3 col-form-label">Select target</label>
-                    <select class="form-control col-9" id="target-variables">
-                    </select>
+                <div class="row col s4">
+                    <div class="input-field col s4" style="text-align: right">
+                        Target
+                    </div>
+                    <div class="input-field col s8">
+                        <select id="target-variables"></select>
+                    </div>
                 </div>
 
-                <div class="input-field col s3">
-                    <input id="epochs" type="number" value="30">
-                    <label for="epochs">Epochs</label>
+                <div class="col s2">
+                    <div class="input-field col s5" style="text-align: right">Epoch</div>
+                    <div class="input-field col s7">
+                        <input id="epochs" type="number" value="30" style="text-align: center">
+                    </div>
                 </div>
-                <div class="input-field col s3">
-                    <input id="batchSize" type="number" value="8">
-                    <label for="batchSize">Batch</label>
+
+                <div class="col s2">
+                    <div class="input-field col s5" style="text-align: right">Batch</div>
+                    <div class="input-field col s7">
+                        <input id="batchSize" type="number" value="8" style="text-align: center">
+                    </div>
                 </div>
-                <div class="input-field col s3">
-                    <input id="learningRate" type="number" value="0.005">
-                    <label for="learningRate">Learning rate</label>
+                <div class="col s4">
+                    <div class="input-field col s5" style="text-align: right">Learning Rate</div>
+                    <div class="input-field col s5">
+                        <input id="learningRate" type="number" value="0.005" style="text-align: center">
+                    </div>
                 </div>
             </div>
+
+
             <div class="row col s4 valign-wrapper" style="height: 100%">
                 <div class="row" style="margin-bottom: 10px">
                     <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load
@@ -91,6 +103,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 <div class="divider"></div>
 <!--</editor-fold>-->
@@ -174,7 +187,7 @@
                         </div>
                         <div class="row">
                             <div id="trainTestLoss" class="col s12 center"
-                                 style="margin-left: auto; display: inline-block;"></div>
+                                 style="margin-left: auto; display: inline-block; position: relative; right: 20%"></div>
                         </div>
                     </div>
                 </div>
