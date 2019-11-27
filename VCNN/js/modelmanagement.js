@@ -815,7 +815,6 @@ async function displayLayerWeights(model, i, containerId) {
         });
     }
 
-
     //Don't have to draw weights of flatten, will only use it next layer (model.layersConfig[i].name.indexOf("flatten"))
 
 }
