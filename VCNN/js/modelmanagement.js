@@ -471,6 +471,9 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         //Enable the save/load buttons
         d3.select("#saveModelMenu").attr("disabled", null);
         d3.select("#loadModelMenu").attr("disabled", null);
+        d3.select("#epochs").attr("disabled", null);
+        d3.select("#batchSize").attr("disabled", null);
+        d3.select("#learningRate").attr("disabled", null);
         btnTrain.innerHTML = '<i class="material-icons right" id="playPausedIcon">play_arrow</i>Start';
         $("#trainingButtonContainer").addClass("paused");
     }
