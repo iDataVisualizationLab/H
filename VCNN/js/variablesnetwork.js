@@ -21,8 +21,8 @@ let variables = [
     {id: 6, name: 'arrFans_health1'},
     {id: 7, name: 'arrFans_health2'},
     {id: 8, name: 'arrFans_health3'},
-    {id: 9, name: 'arrPower_usage0'}];
-    {id: -1, name: 'allVariables'},
+    {id: 9, name: 'arrPower_usage0'},
+    {id: -1, name: 'allVariables'}];
 let simulation = null;
 let network;
 let matrixG = null;
