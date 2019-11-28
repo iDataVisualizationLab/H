@@ -25,16 +25,14 @@ function updateInputs() {
 
     processInputs().then(() => {
         //Create default layersConfig.
+        createDefaultLayers();
         createTrainingGUI(layersConfig).then(() => {
-            if (pretrainedMode) {
-                loadAllVariablesModel();
-            } else {
-                loadAllPretrainModelFromServer("arrTemperature0_20_process");
-                // loadAllPretrainModelFromServer(target_variable);
-                // loadAllPretrainKerasModelFromServer(target_variable);
-            }
+            // if (pretrainedMode) {
+            //     loadAllVariablesModel();
+            // } else {
+            //     loadAllPretrainModelFromServer("arrTemperature0_20_process");
+            // }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
-            // createDefaultLayers();
         });
     });
 }
@@ -174,10 +172,14 @@ async function processInputs(sFs) {
         //                 features = [2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 20, 21].map(ss => "sensor" + ss);
         //                 predictedVariable = "RUL";
         //                 dataItemName = "Engines";
-        d3.json("data/newData/" + target_variable + "_target_X_train_HPCC_" + timeStep + ".json").then(X_trainR => {
-            d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
-                d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
-                    d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
+        // d3.json("data/newData/" + target_variable + "_target_X_train_HPCC_" + timeStep + ".json").then(X_trainR => {
+        //     d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
+        //         d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
+        //             d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
+        d3.json("data/newData/X_train_HPCC_1_100.json").then(X_trainR => {
+            d3.json("data/newData/y_train_HPCC_1_100.json").then(y_trainR => {
+                d3.json("data/newData/X_test_HPCC_1_100.json").then(X_testR => {
+                    d3.json("data/newData/y_test_HPCC_1_100.json").then(y_testR => {
                         features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
                         predictedVariable = target_variable;
                         dataItemName = "Computes";
