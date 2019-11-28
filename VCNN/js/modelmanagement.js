@@ -488,7 +488,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (layer.name.indexOf("lstm") >= 0) {
             ts.array().then(data => {
                 data.layerName = "LSTM " + i;
-                drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp,false);
+                drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp, false);
             });
         } else if (layer.name.indexOf("flatten") >= 0) {
             //For flatten we don't have to do anything.
@@ -721,7 +721,7 @@ async function displayLayerWeights(model, i, containerId) {
         });
         buildTrainingWeightData(i, weights.shape, heatmapH, 19, 100, 19, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             trainingWeightsPathData[containerId] = result;
-            drawTrainingWeights(containerId);
+            drawLstmTrainingWeights(containerId);
         });
     } else if (layer.name.indexOf("dense") >= 0 && i - 1 >= 0 && model.layers[i - 1].name.indexOf("flatten") >= 0) {//Is dense, but its previous one is flatten
         let flattenSplits = model.layers[i - 2].units;//Number of splits (divide weights in these number of splits then combine them in each split)
@@ -780,15 +780,55 @@ function toggleWeightsMenu() {
 
 function makeFlattenTrainingWeights(result) {
     let flatten = [];
-    result.lineData.filter(d => lstmWeightTypeDisplay[d.type] === 1 && weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1).forEach(function (res) {
-        res.paths.forEach(list => {
-            flatten = flatten.concat(list)
+    result.lineData.filter(d => {
+        console.log(d.type);
+        return lstmWeightTypeDisplay[d.type] === 1 /*&& weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1*/
+    })
+        .forEach(function (res) {
+            res.paths.forEach(list => {
+                flatten = flatten.concat(list)
+            });
         });
-    });
     return flatten;
 }
 
 function drawTrainingWeights(containerId) {
+    let result = trainingWeightsPathData[containerId];
+    if (result) {
+        console.log(containerId);
+        console.log(result);
+
+        d3.select("#training_" + containerId).selectAll(".trainingWeight")
+            .data(result, d => d.idx)
+            .join('path')
+            .attr("class", "trainingWeight")
+            .classed("weightLineTraining", isTraining)
+            .attr("d", d => {
+                if (result.length === 8) {
+                    console.log(link(d));
+                }
+                return link(d)
+            })
+            .attr("fill", "none")
+            .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
+            .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
+            .attr("opacity", d => {
+                if (d.scaledWeight >= $("#weightFilter").val()) {
+                    return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                } else {
+                    return 0;
+                }
+            })
+            .on("mouseover", (d) => {
+                showTip(`Epoch: ${d.epoch} weight: ${d.weight.toFixed(2)}`);
+            })
+            .on("mouseout", () => {
+                hideTip();
+            });
+    }
+}
+
+function drawLstmTrainingWeights(containerId) {
     let result = trainingWeightsPathData[containerId];
     if (result) {
         d3.select("#training_" + containerId).selectAll(".trainingWeight")
@@ -797,6 +837,10 @@ function drawTrainingWeights(containerId) {
             .attr("class", "trainingWeight")
             .classed("weightLineTraining", isTraining)
             .attr("d", d => {
+                if (result.length === 8) {
+                    console.log(link(d));
+
+                }
                 return link(d)
             })
             .attr("fill", "none")
@@ -804,7 +848,7 @@ function drawTrainingWeights(containerId) {
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
             .attr("opacity", d => {
                 if (d.scaledWeight >= $("#weightFilter").val()) {
-                    return result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                    return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
                 } else {
                     return 0;
                 }
@@ -833,7 +877,7 @@ function drawDenseWeights(containerId) {
             .attr("opacity",
                 d => {
                     if (d.scaledWeight >= $("#weightFilter").val()) {
-                        return result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                        return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
                     } else {
                         return 0;
                     }
@@ -862,7 +906,7 @@ function drawLSTMWeights(containerId) {
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
             .attr("opacity", d => {
                 if (d.scaledWeight >= $("#weightFilter").val()) {
-                    return result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                    return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
                 } else {
                     return 0;
                 }

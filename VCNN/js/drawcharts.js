@@ -613,7 +613,8 @@ async function buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wSha
                             scaledWeight: zeroOneScale(value > 0 ? value : -value),
                             epoch: index,
                             sourceIdx: leftIdx,
-                            targetIdx: rightIdx
+                            targetIdx: rightIdx,
+                            type: typeIdx,
                         });
                     });
 
