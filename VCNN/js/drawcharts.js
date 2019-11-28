@@ -103,7 +103,7 @@ function drawHeatmapDetails(selector, d, data, isInputLayer) {
 }
 
 function showRelatedEntities(parent, timeStamp, neuronIdx) {
-    if (timeStamp === 0) {
+    if (timeStamp === -1) {
         let selector = "inputDiv";
 
         d3.selectAll(`.${selector}`).style("opacity", 0.02);
@@ -139,7 +139,9 @@ function showRelatedEntities(parent, timeStamp, neuronIdx) {
         let previousWeightsSelector = `#weightsContainer${previousTimeStamp}`;
         let previousTrainingSelector = `#training_weightsContainer${previousTimeStamp}`;
 
-        if (previousTimeStamp === 0) {
+        console.log(previousTimeStamp);
+
+        if (previousTimeStamp === -1) {
             previousWeightsSelector = "#layer0Weights";
             previousTrainingSelector = "#training_layer0Weights";
         }
@@ -155,7 +157,7 @@ function showRelatedEntities(parent, timeStamp, neuronIdx) {
 }
 
 function findPreviousLayerTimeStamp(timeStamp) {
-    let previousTimeStamp = 0;
+    let previousTimeStamp = -1;
     layersConfig.find(function (d) {
         if (!d.timeStamp) return false;
         if (d.timeStamp === timeStamp) {
@@ -170,7 +172,7 @@ function findPreviousLayerTimeStamp(timeStamp) {
 }
 
 function undoShowRelatedEntities(parent, timeStamp, neuronIdx) {
-    if (timeStamp === 0) {
+    if (timeStamp === -1) {
         let selector = "inputDiv";
 
         d3.selectAll(`.${selector}`).style("opacity", 1);
@@ -200,7 +202,7 @@ function undoShowRelatedEntities(parent, timeStamp, neuronIdx) {
         let previousWeightsSelector = `#weightsContainer${previousTimeStamp}`;
         let previousTrainingSelector = `#training_weightsContainer${previousTimeStamp}`;
 
-        if (previousTimeStamp === 0) {
+        if (previousTimeStamp === -1) {
             previousWeightsSelector = "#layer0Weights";
             previousTrainingSelector = "#training_layer0Weights";
         }
