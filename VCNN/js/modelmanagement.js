@@ -778,12 +778,22 @@ function toggleWeightsMenu() {
     d3.selectAll(".weightColor").attr("opacity", (d, i) => i === 0 ? 1 : 0.5 + 0.5 * weightTypeDisplay[i - 1]);//The first one is for click to toggle and will be visible by default
 }
 
-function makeFlattenTrainingWeights(result) {
+function makeFlattenLstmTrainingWeights(result) {
     let flatten = [];
     result.lineData.filter(d => {
-        console.log(d.type);
-        return lstmWeightTypeDisplay[d.type] === 1 /*&& weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1*/
+        return lstmWeightTypeDisplay[d.type] === 1 && weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1
     })
+        .forEach(function (res) {
+            res.paths.forEach(list => {
+                flatten = flatten.concat(list)
+            });
+        });
+    return flatten;
+}
+
+function makeFlattenTrainingWeights(result) {
+    let flatten = [];
+    result.lineData
         .forEach(function (res) {
             res.paths.forEach(list => {
                 flatten = flatten.concat(list)
@@ -795,11 +805,11 @@ function makeFlattenTrainingWeights(result) {
 function drawTrainingWeights(containerId) {
     let result = trainingWeightsPathData[containerId];
     if (result) {
-        console.log(containerId);
-        console.log(result);
+        // console.log(containerId);
+        // console.log(result);
 
         d3.select("#training_" + containerId).selectAll(".trainingWeight")
-            .data(result, d => d.idx)
+            .data(makeFlattenTrainingWeights(result), d => d.idx)
             .join('path')
             .attr("class", "trainingWeight")
             .classed("weightLineTraining", isTraining)
@@ -832,7 +842,7 @@ function drawLstmTrainingWeights(containerId) {
     let result = trainingWeightsPathData[containerId];
     if (result) {
         d3.select("#training_" + containerId).selectAll(".trainingWeight")
-            .data(makeFlattenTrainingWeights(result), d => d.idx)
+            .data(makeFlattenLstmTrainingWeights(result), d => d.idx)
             .join('path')
             .attr("class", "trainingWeight")
             .classed("weightLineTraining", isTraining)
