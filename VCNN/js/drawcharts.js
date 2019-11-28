@@ -102,7 +102,120 @@ function drawHeatmapDetails(selector, d, data, isInputLayer) {
     mapDetails.open();
 }
 
-async function drawHeatmaps(data, container, selector, isInputLayer) {
+function showRelatedEntities(parent, timeStamp, neuronIdx) {
+    if (timeStamp === 0) {
+        let selector = "inputDiv";
+
+        d3.selectAll(`.${selector}`).style("opacity", 0.02);
+        let selectedNeuron = d3.select(`#${selector}${neuronIdx}`);
+        selectedNeuron.style("opacity", 1);
+
+        d3.select(`#training_layer0Weights`)
+            .selectAll("path")
+            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+
+        d3.select(`#layer0Weights`)
+            .selectAll(".weightLine")
+            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+    } else {
+        let selector = "layer" + timeStamp;
+
+        d3.selectAll(`.${selector}`).style("opacity", 0.02);
+        let selectedNeuron = d3.select(`#${selector}${neuronIdx}`);
+        selectedNeuron.style("opacity", 1);
+
+        console.log(`#training_weightsContainer${timeStamp}`);
+
+        d3.select(`#training_weightsContainer${timeStamp}`)
+            .selectAll("path")
+            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+
+        d3.select(`#weightsContainer${timeStamp}`)
+            .selectAll(".weightLine")
+            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+
+        let previousTimeStamp = findPreviousLayerTimeStamp(timeStamp);
+
+        let previousWeightsSelector = `#weightsContainer${previousTimeStamp}`;
+        let previousTrainingSelector = `#training_weightsContainer${previousTimeStamp}`;
+
+        if (previousTimeStamp === 0) {
+            previousWeightsSelector = "#layer0Weights";
+            previousTrainingSelector = "#training_layer0Weights";
+        }
+
+        d3.select(previousTrainingSelector)
+            .selectAll("path")
+            .style("opacity", d => d.targetIdx === neuronIdx ? 1 : 0.02);
+
+        d3.select(previousWeightsSelector)
+            .selectAll(".weightLine")
+            .style("opacity", d => d.targetIdx === neuronIdx ? 1 : 0.02);
+    }
+}
+
+function findPreviousLayerTimeStamp(timeStamp) {
+    let previousTimeStamp = 0;
+    layersConfig.find(function (d) {
+        if (!d.timeStamp) return false;
+        if (d.timeStamp === timeStamp) {
+            return true;
+        } else {
+            previousTimeStamp = d.timeStamp;
+            return false;
+        }
+    });
+
+    return previousTimeStamp;
+}
+
+function undoShowRelatedEntities(parent, timeStamp, neuronIdx) {
+    if (timeStamp === 0) {
+        let selector = "inputDiv";
+
+        d3.selectAll(`.${selector}`).style("opacity", 1);
+
+        d3.select(`#training_layer0Weights`)
+            .selectAll("path")
+            .style("opacity", 1);
+
+        d3.select(`#layer0Weights`)
+            .selectAll(".weightLine")
+            .style("opacity", 1);
+    } else {
+        let selector = "layer" + timeStamp;
+
+        d3.selectAll(`.${selector}`).style("opacity", 1);
+
+        d3.select(`#training_weightsContainer${timeStamp}`)
+            .selectAll("path")
+            .style("opacity", 1);
+
+        d3.select(`#weightsContainer${timeStamp}`)
+            .selectAll(".weightLine")
+            .style("opacity", 1);
+
+        let previousTimeStamp = findPreviousLayerTimeStamp(timeStamp);
+
+        let previousWeightsSelector = `#weightsContainer${previousTimeStamp}`;
+        let previousTrainingSelector = `#training_weightsContainer${previousTimeStamp}`;
+
+        if (previousTimeStamp === 0) {
+            previousWeightsSelector = "#layer0Weights";
+            previousTrainingSelector = "#training_layer0Weights";
+        }
+
+        d3.select(previousTrainingSelector)
+            .selectAll("path")
+            .style("opacity", 1);
+
+        d3.select(previousWeightsSelector)
+            .selectAll(".weightLine")
+            .style("opacity", 1);
+    }
+}
+
+async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) {
     let noOfItems = data.length;
     let noOfSteps = data[0].length;
     let noOfFeatures = data[0][0].length;
@@ -111,16 +224,51 @@ async function drawHeatmaps(data, container, selector, isInputLayer) {
     //Generate items
     let y = Array.from(Array(noOfItems), (x, i) => i).reverse();//reverse since we sort from lower engine number to higher engine number
     //Generate div for the inputs
-    let enters = d3.select(`#${container}`).selectAll(`.${selector}`).data(Array.from(Array(noOfFeatures), (x, i) => i), d => d).enter().append("div").style("width", "100px");
+    let enters = d3.select(`#${container}`)
+        .selectAll(`.${selector}`)
+        .data(Array.from(Array(noOfFeatures), (x, i) => i), d => d).enter()
+        .append("div")
+        .style("width", "100px");
     if (container === "inputContainer") {
-        enters.append("div").text((d, i) => features.filter((f, fi) => selectedFeatures[fi])[i]).style("font-size", "10px").style("height", "10px").style("width", "100px").style("text-align", "center");
-        enters.append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "2px").style("margin-bottom", "0px").style("border", "1px solid black").style("display", "inline-block").on("click", (d) => {
-            drawHeatmapDetails(selector, d, data, true);
-        });
+        enters.append("div")
+            .text((d, i) => features.filter((f, fi) => selectedFeatures[fi])[i])
+            .style("font-size", "10px")
+            .style("height", "10px")
+            .style("width", "100px")
+            .style("text-align", "center");
+        enters.append("div")
+            .attr("class", selector)
+            .attr("id", d => selector + d)
+            .style("margin-top", "2px")
+            .style("margin-bottom", "0px")
+            .style("border", "1px solid black")
+            .style("display", "inline-block")
+            .on("click", (d) => {
+                drawHeatmapDetails(selector, d, data, true);
+            })
+            .on("mouseover", (d) => {
+                showRelatedEntities(enters, timeStamp, d);
+            })
+            .on("mouseout", (d) => {
+                undoShowRelatedEntities(enters, timeStamp, d);
+            });
     } else {
-        enters.append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "12px").style("margin-bottom", "0px").style("border", "1px solid black").style("display", "inline-block").on("click", (d) => {
-            drawHeatmapDetails(selector, d, data, false);
-        });
+        enters.append("div")
+            .attr("class", selector)
+            .attr("id", d => selector + d)
+            .style("margin-top", "12px")
+            .style("margin-bottom", "0px")
+            .style("border", "1px solid black")
+            .style("display", "inline-block")
+            .on("click", (d) => {
+                drawHeatmapDetails(selector, d, data, false);
+            })
+            .on("mouseover", (d) => {
+                showRelatedEntities(enters, timeStamp, d);
+            })
+            .on("mouseout", (d) => {
+                undoShowRelatedEntities(enters, timeStamp, d);
+            })
     }
     //Generate data.
 
@@ -394,7 +542,9 @@ async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMargin
                             },
                             weight: value,
                             scaledWeight: zeroOneScale(value > 0 ? value : -value),
-                            epoch: index
+                            epoch: index,
+                            sourceIdx: leftIdx,
+                            targetIdx: rightIdx
                         });
                     });
                     let item = {
@@ -461,7 +611,9 @@ async function buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wSha
                             },
                             weight: value,
                             scaledWeight: zeroOneScale(value > 0 ? value : -value),
-                            epoch: index
+                            epoch: index,
+                            sourceIdx: leftIdx,
+                            targetIdx: rightIdx
                         });
                     });
 

@@ -488,7 +488,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (layer.name.indexOf("lstm") >= 0) {
             ts.array().then(data => {
                 data.layerName = "LSTM " + i;
-                drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp, false);
+                drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp,false);
             });
         } else if (layer.name.indexOf("flatten") >= 0) {
             //For flatten we don't have to do anything.
