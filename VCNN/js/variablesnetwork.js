@@ -12,7 +12,6 @@ let loadingAll = false;
 let pretrainedMode = false;
 let circleRadius = 10;
 let variables = [
-    {id: -1, name: 'allVariables'},
     {id: 0, name: 'arrTemperature0'},
     {id: 1, name: 'arrTemperature1'},
     {id: 2, name: 'arrTemperature2'},
@@ -23,6 +22,7 @@ let variables = [
     {id: 7, name: 'arrFans_health2'},
     {id: 8, name: 'arrFans_health3'},
     {id: 9, name: 'arrPower_usage0'}];
+    {id: -1, name: 'allVariables'},
 let simulation = null;
 let network;
 let matrixG = null;
