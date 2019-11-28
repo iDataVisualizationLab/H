@@ -386,7 +386,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         layersConfig.forEach((l, i) => {
             if (l.layerType === "lstm") {
                 drawLSTMWeights(getWeightsContainerId(i));
-                drawTrainingWeights(getWeightsContainerId(i))
+                drawLstmTrainingWeights(getWeightsContainerId(i))
             }
         });
         //Todo: Fix this.
@@ -847,10 +847,6 @@ function drawLstmTrainingWeights(containerId) {
             .attr("class", "trainingWeight")
             .classed("weightLineTraining", isTraining)
             .attr("d", d => {
-                if (result.length === 8) {
-                    console.log(link(d));
-
-                }
                 return link(d)
             })
             .attr("fill", "none")
