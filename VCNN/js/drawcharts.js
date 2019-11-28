@@ -159,7 +159,7 @@ function showRelatedEntities(parent, timeStamp, neuronIdx) {
 function findPreviousLayerTimeStamp(timeStamp) {
     let previousTimeStamp = -1;
     layersConfig.find(function (d) {
-        if (!d.timeStamp) return false;
+        if (d.timeStamp === -1) return false;
         if (d.timeStamp === timeStamp) {
             return true;
         } else {
