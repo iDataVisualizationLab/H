@@ -25,14 +25,14 @@ function updateInputs() {
 
     processInputs().then(() => {
         //Create default layersConfig.
-        // createDefaultLayers();
+        createDefaultLayers();
         createTrainingGUI(layersConfig).then(() => {
-            if (pretrainedMode) {
-                loadAllVariablesModel();
-            } else {
-                // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
-                loadAllPretrainModelFromServer("arrTemp0_100_e30_process");
-            }
+            // if (pretrainedMode) {
+            //     loadAllVariablesModel();
+            // } else {
+            //     // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
+            //     loadAllPretrainModelFromServer("arrTemp0_100_e30_process");
+            // }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
         });
     });
