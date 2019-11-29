@@ -25,13 +25,13 @@ function updateInputs() {
 
     processInputs().then(() => {
         //Create default layersConfig.
-        // createDefaultLayers();
+        createDefaultLayers();
         createTrainingGUI(layersConfig).then(() => {
             // if (pretrainedMode) {
             //     loadAllVariablesModel();
             // } else {
             //     // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
-                loadAllPretrainModelFromServer("arrTemp0_ts100_e10_process");
+            //     loadAllPretrainModelFromServer("arrTemp0_ts100_e10_process");
             // }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
         });
