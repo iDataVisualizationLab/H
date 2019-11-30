@@ -177,13 +177,13 @@ async function processInputs(sFs) {
         //     d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
         //         d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
         //             d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
-        d3.json("data/newData/X_train_HPCC_1_20_312.json").then(X_trainR => {
-            d3.json("data/newData/y_train_HPCC_1_20_312.json").then(y_trainR => {
-                d3.json("data/newData/X_test_HPCC_1_20_312.json").then(X_testR => {
-                    d3.json("data/newData/y_test_HPCC_1_20_312.json").then(y_testR => {
+        d3.json("data/newData/X_train_HPCC_1_20_testsplitter.json").then(X_trainR => {
+            d3.json("data/newData/y_train_HPCC_1_20_testsplitter.json").then(y_trainR => {
+                d3.json("data/newData/X_test_HPCC_1_20_testsplitter.json").then(X_testR => {
+                    d3.json("data/newData/y_test_HPCC_1_20_testsplitter.json").then(y_testR => {
                         features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
                         predictedVariable = target_variable;
-                        dataItemName = "Computes";
+                        dataItemName = "Data Entries";
                         populateFeatureSelection(features);
                         if (!sFs) {
                             selectedFeatures = features.map(_ => true);
