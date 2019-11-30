@@ -578,26 +578,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     let testLoss = testRet[0];
                     trainLosses.push(trainLoss);
                     testLosses.push(testLoss);
-                    plotTrainLossData(trainLosses, testLosses);
-                    // let weights = [];
-                    // model.layers.forEach(function (layer, idx) {
-                    //     if (!layer.getConfig().name.includes("flatten")) {
-                    //         let tWeight = [];
-                    //         layer.getWeights().forEach(function (w) {
-                    //             tWeight.push(w.dataSync());
-                    //             // console.log(w.dataSync());
-                    //         });
-                    //         weights.push({name: layer.getConfig().name, data: tWeight});
-                    //     } else {
-                    //         weights.push({name: layer.getConfig().name, data: []});
-                    //     }
-                    // });
-                    // trainingProcess.push({
-                    //     batch: batch,
-                    //     log: logs,
-                    //     loss: {trainLoss: trainLoss, testLoss: testLoss},
-                    //     weight: weights
-                    // });
+                    // plotTrainLossData(trainLosses, testLosses);
                 });
             }
         );
@@ -650,7 +631,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     let testLoss = testRet[0];
                     trainLosses.push(trainLoss);
                     testLosses.push(testLoss);
-                    plotTrainLossData(trainLosses, testLosses);
+                    // plotTrainLossData(trainLosses, testLosses);
                     let weights = [];
                     model.layers.forEach(function (layer, idx) {
                         if (!layer.getConfig().name.includes("flatten")) {
@@ -663,26 +644,33 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                             weights.push({name: layer.getConfig().name, data: []});
                         }
                     });
-                    trainingProcess.push({
-                        epoch: epoch,
-                        log: logs,
-                        loss: {trainLoss: trainLoss, testLoss: testLoss},
-                        weight: weights
+
+                    model.evaluate(X_test_T_ordered, y_test_T_ordered).data().then(testR => {
+                       let testL = testR[0];
+                       // console.log(testL);
+                        trainingProcess.push({
+                            epoch: epoch,
+                            log: logs,
+                            loss: {trainLoss: logs.loss, testLoss: testL},
+                            weight: weights
+                        });
                     });
+
+
                     hideLoader();
-                    displayEpochData(model, logs.loss);
-                    // console.log(model.layers[0].getWeights()[0].dataSync());
-                    if (epoch === 0) {
-                        console.log("create network");
-                        // createVarNetwork();
-                    } else {
-                        console.log("update network");
-                        // updateVarNetwork();
-                    }
-                    if (epoch > 1) {
-                        //We don't update for the first epoch
-                        dispatch.call("changeWeightFilter");
-                    }
+                    // displayEpochData(model, logs.loss);
+                    // // console.log(model.layers[0].getWeights()[0].dataSync());
+                    // if (epoch === 0) {
+                    //     console.log("create network");
+                    //     // createVarNetwork();
+                    // } else {
+                    //     console.log("update network");
+                    //     // updateVarNetwork();
+                    // }
+                    // if (epoch > 1) {
+                    //     //We don't update for the first epoch
+                    //     dispatch.call("changeWeightFilter");
+                    // }
                 });
 
             }
