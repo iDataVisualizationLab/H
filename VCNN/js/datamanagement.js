@@ -184,11 +184,20 @@ async function loadModelFromLocalStorage(modelName) {
 
 async function loadModelFromServer(modelName) {
     showLoader();
-    if (modelName.indexOf('L8L8') > 0) {
-        modelName = 'l8l8d8d4/'+modelName;
+    if (modelName.indexOf('L16L8') > 0) {
+        modelName = 'l16l8l8d8d4/' + modelName;
+    } else if (modelName.indexOf('L8L8') > 0) {
+        modelName = 'l8l8d8d4/' + modelName;
     } else {
-        modelName = 'l8l4d2/'+modelName;
+        modelName = 'l8l4d2/' + modelName;
     }
+
+    if (modelName.indexOf('stock') > 0) {
+        features = ['Open','High', 'Low', 'Close', 'Volume'];
+    } else {
+        features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
+    }
+
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
     //Now load data.
     d3.json(`data/models/${modelName}_data.json`).then(modelData => {
