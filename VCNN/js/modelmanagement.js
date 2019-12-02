@@ -197,6 +197,12 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     networkHeight = calculateNetworkHeight(119);
 
+    // drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
+    //     hideLoader();
+    // });
+
+    d3.select('.columnWrapper').selectAll('.valign-wrapper').style('height', `${networkHeight}px`)
+
     //Draw the legends for weights
     //Draw weights type on the last layer (to avoid conflict with other types), and also this one sure always there is one.
     drawWeightTypes(d3.select("#" + getWeightsContainerId(layersConfig.length - 1)));
@@ -578,7 +584,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     let testLoss = testRet[0];
                     trainLosses.push(trainLoss);
                     testLosses.push(testLoss);
-                    // plotTrainLossData(trainLosses, testLosses);
+                    plotTrainLossData(trainLosses, testLosses);
                 });
             }
         );
@@ -631,7 +637,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     let testLoss = testRet[0];
                     trainLosses.push(trainLoss);
                     testLosses.push(testLoss);
-                    // plotTrainLossData(trainLosses, testLosses);
+                    plotTrainLossData(trainLosses, testLosses);
                     let weights = [];
                     model.layers.forEach(function (layer, idx) {
                         if (!layer.getConfig().name.includes("flatten")) {
@@ -658,19 +664,19 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
 
                     hideLoader();
-                    // displayEpochData(model, logs.loss);
-                    // // console.log(model.layers[0].getWeights()[0].dataSync());
-                    // if (epoch === 0) {
-                    //     console.log("create network");
-                    //     // createVarNetwork();
-                    // } else {
-                    //     console.log("update network");
-                    //     // updateVarNetwork();
-                    // }
-                    // if (epoch > 1) {
-                    //     //We don't update for the first epoch
-                    //     dispatch.call("changeWeightFilter");
-                    // }
+                    displayEpochData(model, logs.loss);
+                    // console.log(model.layers[0].getWeights()[0].dataSync());
+                    if (epoch === 0) {
+                        console.log("create network");
+                        // createVarNetwork();
+                    } else {
+                        console.log("update network");
+                        // updateVarNetwork();
+                    }
+                    if (epoch > 1) {
+                        //We don't update for the first epoch
+                        dispatch.call("changeWeightFilter");
+                    }
                 });
 
             }

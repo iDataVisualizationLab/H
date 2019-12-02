@@ -31,8 +31,9 @@ function updateInputs() {
                 loadAllVariablesModel();
             } else {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
-                let num = 13;
-                loadAllPretrainModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_"+num);
+                let num = 1;
+                // loadAllPretrainModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_"+num);
+                loadAllPretrainModelFromServer("stock_ts19_e30_b8_lr0005_L8L8D8D4_"+num);
             }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
         });
@@ -178,11 +179,12 @@ async function processInputs(sFs) {
         //     d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
         //         d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
         //             d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
-        d3.json("data/newData/X_train_HPCC_1_20_312.json").then(X_trainR => {
-            d3.json("data/newData/y_train_HPCC_1_20_312.json").then(y_trainR => {
-                d3.json("data/newData/X_test_HPCC_1_20_312.json").then(X_testR => {
-                    d3.json("data/newData/y_test_HPCC_1_20_312.json").then(y_testR => {
-                        features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
+        d3.json("data/newData/X_train_stock.json").then(X_trainR => {
+            d3.json("data/newData/y_train_stock.json").then(y_trainR => {
+                d3.json("data/newData/X_test_stock.json").then(X_testR => {
+                    d3.json("data/newData/y_test_stock.json").then(y_testR => {
+                        // features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
+                        features = ['Open','High', 'Low', 'Close', 'Volume'];
                         predictedVariable = target_variable;
                         dataItemName = "Data Entries";
                         populateFeatureSelection(features);

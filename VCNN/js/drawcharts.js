@@ -232,6 +232,7 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
         .append("div")
         .style("width", "100px");
     if (container === "inputContainer") {
+        console.log("input");
         enters.append("div")
             .text((d, i) => features.filter((f, fi) => selectedFeatures[fi])[i])
             .style("font-size", "10px")

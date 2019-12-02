@@ -2,7 +2,8 @@ let width = 800,
     height = 800;
 let networkSvg = null, nodes = [], links = [], allLinks = [], linkNodes = [];
 let center = {x: width / 2, y: height / 2};
-let target_variable = "arrTemperature0";
+// let target_variable = "arrTemperature0";
+let target_variable = "Close";
 let isKerasModel = false;
 let target_variable_V2 = "data/models_for_stat/arrTemp0_8_8_8_4_100";
 let timeStep = 100;
