@@ -184,6 +184,11 @@ async function loadModelFromLocalStorage(modelName) {
 
 async function loadModelFromServer(modelName) {
     showLoader();
+    if (modelName.indexOf('L8L8') > 0) {
+        modelName = 'l8l8d8d4/'+modelName;
+    } else {
+        modelName = 'l8l4d2/'+modelName;
+    }
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
     //Now load data.
     d3.json(`data/models/${modelName}_data.json`).then(modelData => {
@@ -206,9 +211,11 @@ async function loadModelFromServer(modelName) {
 
 async function loadAllPretrainModelFromServer(modelName) {
     showLoader();
-    const model = await tf.loadLayersModel(`data/networkModel/${modelName}_model.json`);
+    const model = await tf.loadLayersModel(`data/models/l8l8d8d4/${modelName}.json`);
     //Now load data.
-    d3.json(`data/networkModel/${modelName}_model_data.json`).then(modelData => {
+    console.log(modelName);
+
+    d3.json(`data/models/l8l8d8d4/${modelName}_data.json`).then(modelData => {
         populateModelGUIFromData(model, modelData);
         hideLoader();
     });
