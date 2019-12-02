@@ -660,23 +660,25 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                             loss: {trainLoss: logs.loss, testLoss: testL},
                             weight: weights
                         });
+
+                        hideLoader();
+                        displayEpochData(model, logs.loss);
+                        // console.log(model.layers[0].getWeights()[0].dataSync());
+                        // if (epoch === 0) {
+                        //     console.log("create network");
+                        //     // createVarNetwork();
+                        // } else {
+                        //     console.log("update network");
+                        //     // updateVarNetwork();
+                        // }
+                        if (epoch > 1) {
+                            //We don't update for the first epoch
+                            dispatch.call("changeWeightFilter");
+                        }
                     });
 
 
-                    hideLoader();
-                    displayEpochData(model, logs.loss);
-                    // console.log(model.layers[0].getWeights()[0].dataSync());
-                    if (epoch === 0) {
-                        console.log("create network");
-                        // createVarNetwork();
-                    } else {
-                        console.log("update network");
-                        // updateVarNetwork();
-                    }
-                    if (epoch > 1) {
-                        //We don't update for the first epoch
-                        dispatch.call("changeWeightFilter");
-                    }
+
                 });
 
             }
