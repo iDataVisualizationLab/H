@@ -321,8 +321,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 let selectBatchIdx = epoch * numOfBatchInEpoch + batchInEpoch;
 
                 let stepIdx = selectBatchIdx;
-                console.log(epoch)
                 let step = trainingProcess[epoch];
+                noOfEpochs = epoch;
                 let weights = step.weight;
                 model.layers.forEach(function (layer, idx) {
                     if (!layer.name.includes("flatten")) {
@@ -704,6 +704,8 @@ async function displayLayerWeights(model, i, containerId) {
     let layerTrainingWeight = getLayerTrainingWeight(i);
     let minStrokeWidth = 0,
         maxStrokeWidth = 3;
+
+    console.log(currentEpoch);
 
     if (layer.name.indexOf("lstm") >= 0) {
         let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
