@@ -282,7 +282,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 var x = e.pageX - pos.x;
 
                 verticalPointerLine.attr("x1", x + 60)
-                    .attr("y1", 20)
+                    .attr("y1", 40)
                     .attr("x2", x + 60)
                     .attr("y2", 260);
 
