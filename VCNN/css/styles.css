@@ -154,3 +154,7 @@ body {
 a {
     color: #000000;
 }
+
+#trainTestLoss {
+    margin-top: 10px;
+}

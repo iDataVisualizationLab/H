@@ -264,7 +264,7 @@ async function createTrainingGUI(layersConfig) {
     // }
     layersConfig.forEach(layerInfo => {
         if (layerInfo.id !== "output" && layerInfo.layerType !== "flatten") {
-            networkHeight = calculateNetworkHeight();
+            networkHeight = calculateNetworkHeight(122);
             createLayerGUI(layerInfo);
         }
     });
