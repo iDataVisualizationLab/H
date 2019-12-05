@@ -195,8 +195,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     let xScaleTest = d3.scaleLinear().domain([0, epochs]).range([0, trainLossBatchSettings.width - trainLossBatchSettings.paddingLeft - trainLossBatchSettings.paddingRight]);
     trainLossBatchSettings.xScale = xScaleTest;
 
-    console.log(xScaleTest.domain())
-
     networkHeight = calculateNetworkHeight(122);
 
     // drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
@@ -482,7 +480,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             container.selectAll(".flattenLegend").data(["Flatten layer", "(cumulative weights)"]).join("text").text(d => d)
                 .attr("class", "flattenLegend")
                 .attr("font-size", 10)
-                .attr("x", 3).attr("y", 0).attr("dy", (d, i) => `${i + 1}em`);
+                .attr("x", 3).attr("y", -5).attr("dy", (d, i) => `${i + 1}em`);
             //Draw the guide.
             container.selectAll(".guidePath").data(["M50,25 C50,40 25,57 3,57"]).join("path")
                 .attr("d", d => d)
@@ -575,28 +573,27 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     }
 
     async function plotTrainLossData(trainLosses, testLosses) {
-        
+
         let epochsArr = [];
         for (let i = 0; i < epochs; i++) {
             epochsArr.push(i);
         }
 
-        let logTrainLosses = trainLosses.map(d => Math.log(d));
-        let logTestLosses = testLosses.map(d => Math.log(d));
-
         if (!trainLossBatchSettings.yScale) {
-            trainLossBatchSettings.yScale = d3.scaleLinear().domain([0, logTrainLosses[0] > logTestLosses[0] ? logTrainLosses[0] : logTestLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
+            trainLossBatchSettings.yScale = d3.scaleLog().domain([0.1, trainLosses[0] > testLosses[0] ? trainLosses[0] : testLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
         }
+
+        console.log(trainLossBatchSettings.yScale(10000));
 
         const lineChartData = [
             {
                 x: epochsArr,
-                y: logTrainLosses,
+                y: trainLosses,
                 series: 'training MSE',
             },
             {
                 x: epochsArr,
-                y: logTestLosses,
+                y: testLosses,
                 series: 'testing MSE',
             }
         ];
