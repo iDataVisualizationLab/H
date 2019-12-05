@@ -33,6 +33,7 @@ function updateInputs() {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
                 let num = 1;
                 // loadAllPretrainModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_"+num);
+                // loadAllPretrainModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
                 loadAllPretrainModelFromServer("emp_ts12_e100_b8_lr0005_L16L8L8D8D4_" + num);
             }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
