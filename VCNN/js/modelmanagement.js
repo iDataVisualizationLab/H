@@ -325,8 +325,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             });
 
             canvas.addEventListener("mouseout", function () {
-                verticalPointerLine.style("display", "none");
-                verticalPointerText.style("display", "none");
+                // verticalPointerLine.style("display", "none");
+                // verticalPointerText.style("display", "none");
             });
 
             canvas.addEventListener("click", function (e) {
