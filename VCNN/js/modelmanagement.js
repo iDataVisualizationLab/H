@@ -580,7 +580,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         }
 
         if (!trainLossBatchSettings.yScale) {
-            trainLossBatchSettings.yScale = d3.scaleLog().domain([0.1, trainLosses[0] > testLosses[0] ? trainLosses[0] : testLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
+            trainLossBatchSettings.yScale = d3.scaleLinear().domain([0, trainLosses[0] > testLosses[0] ? trainLosses[0] : testLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
         }
 
         console.log(trainLossBatchSettings.yScale(10000));
@@ -734,10 +734,10 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
             trainLosses.push(logs.loss);
             testLosses.push(testL);
-            plotTrainLossData(trainLosses, testLosses);
+            // plotTrainLossData(trainLosses, testLosses);
 
             hideLoader();
-            displayEpochData(model, logs.loss);
+            // displayEpochData(model, logs.loss);
             if (epoch > 1) {
                 //We don't update for the first epoch
                 dispatch.call("changeWeightFilter");
