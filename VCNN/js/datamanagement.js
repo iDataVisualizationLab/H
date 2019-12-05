@@ -195,7 +195,7 @@ async function loadModelFromServer(modelName) {
     if (modelName.indexOf('stock') > 0) {
         features = ['Open','High', 'Low', 'Close', 'Volume'];
     } else {
-        features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
+        features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
     }
 
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
@@ -205,18 +205,6 @@ async function loadModelFromServer(modelName) {
         hideLoader();
     });
 }
-
-// async function loadAllPretrainModelFromServer(modelName) {
-//     showLoader();
-//     const model = await tf.loadLayersModel(`data/networkModel/${modelName}_model.json`);
-//     //Now load data.
-//     d3.json(`data/networkModel/${modelName}_model_data.json`).then(modelData => {
-//         target_variable = modelName;
-//
-//         populateModelGUIFromData(model, modelData);
-//         hideLoader();
-//     });
-// }
 
 async function loadAllPretrainModelFromServer(modelName) {
     showLoader();

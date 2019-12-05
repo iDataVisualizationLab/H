@@ -172,13 +172,13 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         showAxes: true,
         paddingLeft: 60,
         paddingRight: 10,
-        paddingTop: 40,
+        paddingTop: 20,
         paddingBottom: 40,
         width: trainLossW,
         height: trainLossH,
         colorScheme: trainTestLossColorScheme,
         legend: {
-            x: trainLossW - 50,
+            x: trainLossW - 100,
             y: 35
         },
         title: {
@@ -194,6 +194,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     };
     let xScaleTest = d3.scaleLinear().domain([0, epochs]).range([0, trainLossBatchSettings.width - trainLossBatchSettings.paddingLeft - trainLossBatchSettings.paddingRight]);
     trainLossBatchSettings.xScale = xScaleTest;
+
+    console.log(xScaleTest.domain())
 
     networkHeight = calculateNetworkHeight(122);
 
@@ -430,7 +432,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     //<editor-fold desc="For positive/negative weight types">
     async function drawWeightTypes(container) {
         return new Promise((resolve, reject) => {
-            container.selectAll(".weightTypeGroup").data([1]).join("g").attr("class", "weightTypeGroup").selectAll(".weightColor").data(["(click to toggle)", "-- negative", "-- positive"]).join("text").text(d => d)
+            container.selectAll(".weightTypeGroup").data([1]).join("g").attr("class", "weightTypeGroup").attr("transform", "translate(0,-20)").selectAll(".weightColor").data(["(click to toggle)", "-- negative", "-- positive"]).join("text").text(d => d)
                 .attr("font-size", 10)
                 .attr("class", "weightColor")
                 .attr("x", 5).attr("y", 0).attr("dy", (d, i) => `${i + 1}em`)
@@ -573,27 +575,29 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     }
 
     async function plotTrainLossData(trainLosses, testLosses) {
-        if (!trainLossBatchSettings.yScale) {
-            trainLossBatchSettings.yScale = d3.scaleLinear().domain([0, trainLosses[0] > testLosses[0] ? trainLosses[0] : testLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
-        }
-
-        console.log(batches);
-
+        
         let epochsArr = [];
         for (let i = 0; i < epochs; i++) {
             epochsArr.push(i);
         }
 
+        let logTrainLosses = trainLosses.map(d => Math.log(d));
+        let logTestLosses = testLosses.map(d => Math.log(d));
+
+        if (!trainLossBatchSettings.yScale) {
+            trainLossBatchSettings.yScale = d3.scaleLinear().domain([0, logTrainLosses[0] > logTestLosses[0] ? logTrainLosses[0] : logTestLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
+        }
+
         const lineChartData = [
             {
                 x: epochsArr,
-                y: trainLosses,
-                series: 'train',
+                y: logTrainLosses,
+                series: 'training MSE',
             },
             {
                 x: epochsArr,
-                y: testLosses,
-                series: 'test',
+                y: logTestLosses,
+                series: 'testing MSE',
             }
         ];
         if (!mapObjects['trainTestLoss']) {

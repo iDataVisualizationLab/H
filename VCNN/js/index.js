@@ -177,7 +177,7 @@ async function processInputs(sFs) {
             d3.json("data/newData/y_train_stock_ts4_fri.json").then(y_trainR => {
                 d3.json("data/newData/X_test_stock_ts4_fri.json").then(X_testR => {
                     d3.json("data/newData/y_test_stock_ts4_fri.json").then(y_testR => {
-                        // features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
+                        // features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
                         features = ['Open', 'High', 'Low', 'Close', 'Volume'];
                         // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
                         predictedVariable = target_variable;
