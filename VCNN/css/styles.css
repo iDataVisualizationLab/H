@@ -139,11 +139,11 @@ select {
     line-height: normal !important;
 }
 
-.col.s8 .col.s5,.col.s6,.col.s7 {
+.col.s8 .col.s5, .col.s6, .col.s7 {
     padding: 0px;
 }
 
-.col.s2,.col.s8 .col.s4 {
+.col.s2, .col.s8 .col.s4 {
     padding: 0px 10px 0px 0px;
 }
 
@@ -157,4 +157,8 @@ a {
 
 #trainTestLoss {
     margin-bottom: 10px;
+    margin-left: 20px;
+    display: inline-block;
+    position: relative;
+    right: 20%
 }

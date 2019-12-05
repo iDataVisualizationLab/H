@@ -598,9 +598,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         ];
         if (!mapObjects['trainTestLoss']) {
             //Draw the feature.
-            d3.select("#trainTestLoss").on("click", () => {
-                // plotTrainLossDetails();
-            });
             let lc = new LineChart(document.getElementById('trainTestLoss'), lineChartData, trainLossBatchSettings);
             lc.plot();
             mapObjects['trainTestLoss'] = lc;
