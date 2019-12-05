@@ -72,10 +72,17 @@ function populateModelGUIFromData(model, modelData) {
 
 
     // currentModel = model;//Don't do this coz we need to re-compile things if would like to continue to train from here
-    trainLosses = trainLosses_;
-    testLosses = testLosses_;
+    // trainLosses = trainLosses_;
+    // testLosses = testLosses_;
     trainingProcess = trainingProcess_;
     noOfEpochs = +epochs_;
+
+    trainLosses = [];
+    testLosses = [];
+    trainingProcess_.forEach(function (d) {
+        trainLosses.push(d.loss.trainLoss);
+        testLosses.push(d.loss.testLoss);
+    });
     //clear current map object (so we will redraw instead of updating)
     mapObjects = {};
     $("#epochs").val(epochs_);

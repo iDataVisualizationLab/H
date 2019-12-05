@@ -366,7 +366,7 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs
     let elms = d3.select(`#${container}`).selectAll(`.${selector}`).data(Array.from(Array(noOfFeatures), (x, i) => i), d => d)
-        .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "12px")
+        .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "15px")
         .on("click", (d) => {
             drawLinechartDetails(selector, d, data);
         });
@@ -656,8 +656,6 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
 
         let spanForWeightsLeft = leftNodeHeight / noOfWeights;
         let topPadding = (noOfLeftNodes - noOfRightNodes) * neuronHeight / 2;
-
-        console.log(topPadding);
 
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;

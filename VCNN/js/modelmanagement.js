@@ -186,13 +186,13 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         },
 
         xAxisLabel: {
-            text: 'Batch'
+            text: 'Epoch'
         },
         yAxisLabel: {
             text: 'Loss'
         }
     };
-    let xScaleTest = d3.scaleLinear().domain([0, batches]).range([0, trainLossBatchSettings.width - trainLossBatchSettings.paddingLeft - trainLossBatchSettings.paddingRight]);
+    let xScaleTest = d3.scaleLinear().domain([0, epochs]).range([0, trainLossBatchSettings.width - trainLossBatchSettings.paddingLeft - trainLossBatchSettings.paddingRight]);
     trainLossBatchSettings.xScale = xScaleTest;
 
     networkHeight = calculateNetworkHeight(122);
@@ -205,7 +205,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     //Draw the legends for weights
     //Draw weights type on the last layer (to avoid conflict with other types), and also this one sure always there is one.
-    drawWeightTypes(d3.select("#" + getWeightsContainerId(layersConfig.length - 1)));
+    let containerId = "training_" + getWeightsContainerId(layersConfig.length - 1);
+    drawWeightTypes(d3.select("#" + containerId));
 
     //Draw the lstm to the first layer.
     for (let i = 0; i < layersConfig.length; i++) {
@@ -357,7 +358,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     }
                 });
 
-                displayEpochData(model, trainLosses[stepIdx], testLosses[stepIdx]);
+                displayEpochData(model, trainLosses[epoch], testLosses[epoch]);
             });
         });
         displayEpochData(model, trainLosses[testLosses.length - 1], testLosses[testLosses.length - 1]);
@@ -575,14 +576,22 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (!trainLossBatchSettings.yScale) {
             trainLossBatchSettings.yScale = d3.scaleLinear().domain([0, trainLosses[0] > testLosses[0] ? trainLosses[0] : testLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
         }
+
+        console.log(batches);
+
+        let epochsArr = [];
+        for (let i = 0; i < epochs; i++) {
+            epochsArr.push(i);
+        }
+
         const lineChartData = [
             {
-                x: trainBatches,
+                x: epochsArr,
                 y: trainLosses,
                 series: 'train',
             },
             {
-                x: trainBatches,
+                x: epochsArr,
                 y: testLosses,
                 series: 'test',
             }
@@ -602,16 +611,16 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     }
 
     function onBatchEnd(batch, logs) {
-        model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
-                let trainLoss = trainRet[0];
-                model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
-                    let testLoss = testRet[0];
-                    trainLosses.push(trainLoss);
-                    testLosses.push(testLoss);
-                    plotTrainLossData(trainLosses, testLosses);
-                });
-            }
-        );
+        // model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
+        //         let trainLoss = trainRet[0];
+        //         model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
+        //             let testLoss = testRet[0];
+        //             trainLosses.push(trainLoss);
+        //             testLosses.push(testLoss);
+        //             // plotTrainLossData(trainLosses, testLosses);
+        //         });
+        //     }
+        // );
 
 
         //TODO: This is slow, due to asynchronous behavior so putting it in epoch ends may have visual display bug, therefore we put it here, but it lowers the perf.
@@ -655,57 +664,91 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     function onEpochEnd(epoch, logs) {
         currentEpoch = epoch + 1;
 
-        model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
-                let trainLoss = trainRet[0];
-                model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
-                    let testLoss = testRet[0];
-                    trainLosses.push(trainLoss);
-                    testLosses.push(testLoss);
-                    plotTrainLossData(trainLosses, testLosses);
-                    let weights = [];
-                    model.layers.forEach(function (layer, idx) {
-                        if (!layer.getConfig().name.includes("flatten")) {
-                            let tWeight = [];
-                            layer.getWeights().forEach(function (w) {
-                                tWeight.push(w.dataSync());
-                            });
-                            weights.push({name: layer.getConfig().name, data: tWeight});
-                        } else {
-                            weights.push({name: layer.getConfig().name, data: []});
-                        }
-                    });
+        // model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
+        //         let trainLoss = trainRet[0];
+        //         model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
+        //             let testLoss = testRet[0];
+        //             trainLosses.push(trainLoss);
+        //             testLosses.push(testLoss);
+        //             plotTrainLossData(trainLosses, testLosses);
+        //             let weights = [];
+        //             model.layers.forEach(function (layer, idx) {
+        //                 if (!layer.getConfig().name.includes("flatten")) {
+        //                     let tWeight = [];
+        //                     layer.getWeights().forEach(function (w) {
+        //                         tWeight.push(w.dataSync());
+        //                     });
+        //                     weights.push({name: layer.getConfig().name, data: tWeight});
+        //                 } else {
+        //                     weights.push({name: layer.getConfig().name, data: []});
+        //                 }
+        //             });
+        //
+        //             model.evaluate(X_test_T_ordered, y_test_T_ordered).data().then(testR => {
+        //                 let testL = testR[0];
+        //                 // console.log(testL);
+        //                 trainingProcess.push({
+        //                     epoch: epoch,
+        //                     log: logs,
+        //                     loss: {trainLoss: logs.loss, testLoss: testL},
+        //                     weight: weights
+        //                 });
+        //
+        //                 hideLoader();
+        //                 displayEpochData(model, logs.loss);
+        //                 if (epoch > 1) {
+        //                     //We don't update for the first epoch
+        //                     dispatch.call("changeWeightFilter");
+        //                 }
+        //             });
+        //         });
+        //
+        //     }
+        // )
 
-                    model.evaluate(X_test_T_ordered, y_test_T_ordered).data().then(testR => {
-                        let testL = testR[0];
-                        // console.log(testL);
-                        trainingProcess.push({
-                            epoch: epoch,
-                            log: logs,
-                            loss: {trainLoss: logs.loss, testLoss: testL},
-                            weight: weights
-                        });
+        // model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
+        //         let trainLoss = trainRet[0];
+        //         model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
+        //             let testLoss = testRet[0];
 
-                        hideLoader();
-                        displayEpochData(model, logs.loss);
-                        // console.log(model.layers[0].getWeights()[0].dataSync());
-                        // if (epoch === 0) {
-                        //     console.log("create network");
-                        //     // createVarNetwork();
-                        // } else {
-                        //     console.log("update network");
-                        //     // updateVarNetwork();
-                        // }
-                        if (epoch > 1) {
-                            //We don't update for the first epoch
-                            dispatch.call("changeWeightFilter");
-                        }
-                    });
-
-
+        let weights = [];
+        model.layers.forEach(function (layer, idx) {
+            if (!layer.getConfig().name.includes("flatten")) {
+                let tWeight = [];
+                layer.getWeights().forEach(function (w) {
+                    tWeight.push(w.dataSync());
                 });
-
+                weights.push({name: layer.getConfig().name, data: tWeight});
+            } else {
+                weights.push({name: layer.getConfig().name, data: []});
             }
-        )
+        });
+
+        model.evaluate(X_test_T_ordered, y_test_T_ordered).data().then(testR => {
+            let testL = testR[0];
+            // console.log(testL);
+            trainingProcess.push({
+                epoch: epoch,
+                log: logs,
+                loss: {trainLoss: logs.loss, testLoss: testL},
+                weight: weights
+            });
+
+            trainLosses.push(logs.loss);
+            testLosses.push(testL);
+            plotTrainLossData(trainLosses, testLosses);
+
+            hideLoader();
+            displayEpochData(model, logs.loss);
+            if (epoch > 1) {
+                //We don't update for the first epoch
+                dispatch.call("changeWeightFilter");
+            }
+        });
+        //         });
+        //
+        //     }
+        // )
     }
 }
 
@@ -727,8 +770,6 @@ async function displayLayerWeights(model, i, containerId) {
     let layerTrainingWeight = getLayerTrainingWeight(i);
     let minStrokeWidth = 0,
         maxStrokeWidth = 3;
-
-    console.log(currentEpoch);
 
     if (layer.name.indexOf("lstm") >= 0) {
         let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);

@@ -110,12 +110,6 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     minDataVal = minZ;
     maxDataVal = maxZ;
 
-    // if (Math.abs(maxZ) >= Math.abs(minZ)) {
-    //     minDataVal = -Math.abs(maxZ)
-    // } else {
-    //     maxDataVal = Math.abs(minZ);
-    // }
-
     drawInputColorScale(minDataVal, avgZ, maxDataVal);
     drawOutputColorScale();
     //Draw input
@@ -179,12 +173,13 @@ async function processInputs(sFs) {
         //     d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
         //         d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
         //             d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
-        d3.json("data/newData/X_train_stock_ts4_fri.json").then(X_trainR => {
-            d3.json("data/newData/y_train_stock_ts4_fri.json").then(y_trainR => {
-                d3.json("data/newData/X_test_stock_ts4_fri.json").then(X_testR => {
-                    d3.json("data/newData/y_test_stock_ts4_fri.json").then(y_testR => {
+        d3.json("data/newData/X_train_employment.json").then(X_trainR => {
+            d3.json("data/newData/y_train_employment.json").then(y_trainR => {
+                d3.json("data/newData/X_test_employment.json").then(X_testR => {
+                    d3.json("data/newData/y_test_employment.json").then(y_testR => {
                         // features = ['arrTemperature0', 'arrTemperature1', 'arrTemperature2', 'arrCPU_load0', 'arrMemory_usage0', 'arrFans_health0', 'arrFans_health1', 'arrFans_health2', 'arrFans_health3', 'arrPower_usage0'];
                         features = ['Open','High', 'Low', 'Close', 'Volume'];
+                        // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
                         predictedVariable = target_variable;
                         dataItemName = "Data Entries";
                         populateFeatureSelection(features);
