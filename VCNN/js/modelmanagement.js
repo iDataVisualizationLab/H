@@ -737,10 +737,10 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
             trainLosses.push(logs.loss);
             testLosses.push(testL);
-            // plotTrainLossData(trainLosses, testLosses);
+            plotTrainLossData(trainLosses, testLosses);
 
             hideLoader();
-            // displayEpochData(model, logs.loss);
+            displayEpochData(model, logs.loss);
             if (epoch > 1) {
                 //We don't update for the first epoch
                 dispatch.call("changeWeightFilter");

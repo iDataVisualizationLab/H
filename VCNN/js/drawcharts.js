@@ -112,11 +112,11 @@ function showRelatedEntities(parent, timeStamp, neuronIdx) {
 
         d3.select(`#training_layer0Weights`)
             .selectAll("path")
-            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+            .attr("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
 
         d3.select(`#layer0Weights`)
             .selectAll(".weightLine")
-            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+            .attr("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
     } else {
         let selector = "layer" + timeStamp;
 
@@ -124,22 +124,18 @@ function showRelatedEntities(parent, timeStamp, neuronIdx) {
         let selectedNeuron = d3.select(`#${selector}${neuronIdx}`);
         selectedNeuron.style("opacity", 1);
 
-        console.log(`#training_weightsContainer${timeStamp}`);
-
         d3.select(`#training_weightsContainer${timeStamp}`)
             .selectAll("path")
-            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+            .attr("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
 
         d3.select(`#weightsContainer${timeStamp}`)
             .selectAll(".weightLine")
-            .style("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
+            .attr("opacity", d => d.sourceIdx === neuronIdx ? 1 : 0.02);
 
         let previousTimeStamp = findPreviousLayerTimeStamp(timeStamp);
 
         let previousWeightsSelector = `#weightsContainer${previousTimeStamp}`;
         let previousTrainingSelector = `#training_weightsContainer${previousTimeStamp}`;
-
-        console.log(previousTimeStamp);
 
         if (previousTimeStamp === -1) {
             previousWeightsSelector = "#layer0Weights";
@@ -148,11 +144,11 @@ function showRelatedEntities(parent, timeStamp, neuronIdx) {
 
         d3.select(previousTrainingSelector)
             .selectAll("path")
-            .style("opacity", d => d.targetIdx === neuronIdx ? 1 : 0.02);
+            .attr("opacity", d => d.targetIdx === neuronIdx ? 1 : 0.02);
 
         d3.select(previousWeightsSelector)
             .selectAll(".weightLine")
-            .style("opacity", d => d.targetIdx === neuronIdx ? 1 : 0.02);
+            .attr("opacity", d => d.targetIdx === neuronIdx ? 1 : 0.02);
     }
 }
 
@@ -179,11 +175,11 @@ function undoShowRelatedEntities(parent, timeStamp, neuronIdx) {
 
         d3.select(`#training_layer0Weights`)
             .selectAll("path")
-            .style("opacity", 1);
+            .attr("opacity", 1);
 
         d3.select(`#layer0Weights`)
             .selectAll(".weightLine")
-            .style("opacity", 1);
+            .attr("opacity", 1);
     } else {
         let selector = "layer" + timeStamp;
 
@@ -191,11 +187,11 @@ function undoShowRelatedEntities(parent, timeStamp, neuronIdx) {
 
         d3.select(`#training_weightsContainer${timeStamp}`)
             .selectAll("path")
-            .style("opacity", 1);
+            .attr("opacity", 1);
 
         d3.select(`#weightsContainer${timeStamp}`)
             .selectAll(".weightLine")
-            .style("opacity", 1);
+            .attr("opacity", 1);
 
         let previousTimeStamp = findPreviousLayerTimeStamp(timeStamp);
 
@@ -209,11 +205,11 @@ function undoShowRelatedEntities(parent, timeStamp, neuronIdx) {
 
         d3.select(previousTrainingSelector)
             .selectAll("path")
-            .style("opacity", 1);
+            .attr("opacity", 1);
 
         d3.select(previousWeightsSelector)
             .selectAll(".weightLine")
-            .style("opacity", 1);
+            .attr("opacity", 1);
     }
 }
 

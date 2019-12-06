@@ -346,11 +346,11 @@ function onWeightFilterChanged(weightFilter) {
                 }
             });
             //All the rest are belonging invisible.
-            theLayer.selectAll(".layer" + layerInfo.timeStamp).style("opacity", (d, i) => {
+            theLayer.selectAll(".layer" + layerInfo.timeStamp).style("visibility", (d, i) => {
                 if (visibleIndexes.indexOf(i) >= 0) {
-                    return 1.0;
+                    return "visible";
                 } else {
-                    return 0;
+                    return "hidden";
                 }
             });
         }
@@ -368,11 +368,11 @@ function onWeightFilterChanged(weightFilter) {
             }
         });
         //All the rest are belonging invisible.
-        theLayer.selectAll(".inputDiv").style("opacity", (d, i) => {
+        theLayer.selectAll(".inputDiv").style("visibility", (d, i) => {
             if (visibleIndexes.indexOf(i) >= 0) {
-                return 1.0;
+                return "visible";
             } else {
-                return 0;
+                return "hidden";
             }
         });
     }
