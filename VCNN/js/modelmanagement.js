@@ -82,7 +82,6 @@ function shuffle(array) {
 
 async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, batchSize = 8, learningRate, reviewMode) {
 
-    console.log(learningRate);
 
     let X_train_T = tf.tensor(X_train);
     let y_train_T = tf.tensor(y_train);
@@ -372,7 +371,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             let layer1height = layersConfig[0].units * neuronHeight;
             let padding = -(layer1height - inputHeight) / 2;
             let lstmTypes = container.selectAll(".lstmTypeContainer").data([1]).join("g").attr("class", "lstmTypeContainer")
-                .attr("transform", `translate(28, ${padding - 20})`)//3 is for the margin.
+                .attr("transform", `translate(28, ${padding})`)//3 is for the margin.
                 .selectAll(".lstmWeightType")
                 .data(lstmWeightTypes);
 
@@ -394,7 +393,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 });
             //Draw weight guide.
             container.selectAll(".guidePath")
-                .data([`M85,${padding - 12} C110,${padding - 12} 110,${padding - 12} 125,${padding + 33}`, `M85,${padding - 2} C110,${padding - 2} 110,${padding - 2} 125,${padding + 53}`, `M85,${padding + 8} C110,${padding + 8} 110,${padding + 8} 125,${padding + 73}`, `M85,${padding + 18} C110,${padding + 18} 110,${padding + 18} 125,${padding + 93}`])
+                .data([`M85,${padding+8} C110,${padding +8} 110,${padding +8} 125,${padding + 33}`, `M85,${padding +18} C110,${padding +18} 110,${padding +18} 125,${padding + 53}`, `M85,${padding + 28} C110,${padding + 28} 110,${padding + 28} 125,${padding + 73}`, `M85,${padding + 38} C110,${padding + 38} 110,${padding + 38} 125,${padding + 93}`])
                 .join("path")
                 .attr("class", "guidePath")
                 .attr("d", d => d)
@@ -404,6 +403,12 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             resolve(true);
         });
     }
+
+    // async function drawToggleScaler() {
+    //     return new Promise(((resolve, reject) => {
+    //         let
+    //     }))
+    // }
 
     function onLSTMWeightTypeClick(typeIdx) {
         if (typeIdx === 0) {//toggle all
@@ -582,8 +587,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (!trainLossBatchSettings.yScale) {
             trainLossBatchSettings.yScale = d3.scaleLog().domain([0.1, trainLosses[0] > testLosses[0] ? trainLosses[0] : testLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
         }
-
-        console.log(trainLossBatchSettings.yScale(10000));
 
         const lineChartData = [
             {
@@ -875,9 +878,6 @@ function drawTrainingWeights(containerId) {
             .attr("class", d => "trainingWeight trainingEpoch" + d.epoch)
             .classed("weightLineTraining", isTraining)
             .attr("d", d => {
-                if (result.length === 8) {
-                    console.log(link(d));
-                }
                 return link(d)
             })
             .attr("fill", "none")

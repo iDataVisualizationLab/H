@@ -247,6 +247,7 @@ async function drawInputColorScale(minZ, avgZ, maxZ) {
             .clamp(true);
         d3.select("#inputColorScale").selectAll("*").remove();
         plotColorBar(d3.select("#inputColorScale"), inputColorScale, "inputColorBar", colorBarW, colorBarH, "horizon");
+        // d3.select('#inputColorScale').append('text').text("Click to toggle color scale");
     });
 }
 
