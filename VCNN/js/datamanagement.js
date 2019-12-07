@@ -176,6 +176,7 @@ async function loadModelDataFromLocalStorage(modelName) {
 }
 
 async function loadModelFromLocalStorage(modelName) {
+    showLoader();
     let model = await tf.loadLayersModel(`localstorage://${modelName}`);
     loadModelDataFromLocalStorage(modelName).then(modelData => {
         populateModelGUIFromData(model, modelData);
@@ -188,14 +189,18 @@ async function loadModelFromServer(modelName) {
         modelName = 'l16l8l8d8d4/' + modelName;
     } else if (modelName.indexOf('L8L8') > 0) {
         modelName = 'l8l8d8d4/' + modelName;
-    } else {
+    } else if (modelName.indexOf('L8L4D2') > 0) {
         modelName = 'l8l4d2/' + modelName;
+    } else {
+        modelName = 'large_model/' + modelName;
     }
 
     if (modelName.indexOf('stock') > 0) {
-        features = ['Open','High', 'Low', 'Close', 'Volume'];
-    } else {
+        features = ['Open', 'High', 'Low', 'Close', 'Volume'];
+    } else if (modelName.indexOf('arrTemp') > 0) {
         features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
+    } else {
+        features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
     }
 
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
@@ -208,10 +213,10 @@ async function loadModelFromServer(modelName) {
 
 async function loadAllPretrainModelFromServer(modelName) {
     showLoader();
-    const model = await tf.loadLayersModel(`data/models/l8l8d8d4/${modelName}.json`);
+    const model = await tf.loadLayersModel(`data/models/l16l8l8d8d4/${modelName}.json`);
     //Now load data.
 
-    d3.json(`data/models/l8l8d8d4/${modelName}_data.json`).then(modelData => {
+    d3.json(`data/models/l16l8l8d8d4/${modelName}_data.json`).then(modelData => {
         populateModelGUIFromData(model, modelData);
         hideLoader();
     });

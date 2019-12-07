@@ -48,7 +48,6 @@ function loadModelChange(sourceType, theElm) {
     selectedFeatures = features.map(_=>true);
     let modelName = theElm.value;
     isTraining = false;
-    showLoader();
     if (sourceType === "server") {
         loadModelFromServer(modelName);
     } else if (sourceType === "localstorage") {
@@ -87,6 +86,7 @@ function populateModelGUIFromData(model, modelData) {
     mapObjects = {};
     $("#epochs").val(epochs_);
     $("#batchSize").val(batchSize_);
+    $("#learningRate").val(learningRate_);
     //Clear prev input
     d3.select("#inputContainer").selectAll("*").remove();
     //Clear prev output and test
