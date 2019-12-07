@@ -32,9 +32,9 @@ function updateInputs() {
             } else {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
                 let num = 1;
-                // loadAllPretrainModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_"+num);
+                loadAllPretrainModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_"+num);
                 // loadAllPretrainModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
-                loadAllPretrainModelFromServer("emp_ts12_e100_b8_lr0005_L16L8L8D8D4_" + num);
+                // loadAllPretrainModelFromServer("emp_ts12_e100_b8_lr0005_L16L8L8D8D4_" + num);
             }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
         });
@@ -174,13 +174,13 @@ async function processInputs(sFs) {
         //     d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
         //         d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
         //             d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
-        d3.json("data/newData/X_train_employment.json").then(X_trainR => {
-            d3.json("data/newData/y_train_employment.json").then(y_trainR => {
-                d3.json("data/newData/X_test_employment.json").then(X_testR => {
-                    d3.json("data/newData/y_test_employment.json").then(y_testR => {
-                        // features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
+        d3.json("data/newData/X_train_HPCC_1_20_312.json").then(X_trainR => {
+            d3.json("data/newData/y_train_HPCC_1_20_312.json").then(y_trainR => {
+                d3.json("data/newData/X_test_HPCC_1_20_312.json").then(X_testR => {
+                    d3.json("data/newData/y_test_HPCC_1_20_312.json").then(y_testR => {
+                        features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
                         // features = ['Open', 'High', 'Low', 'Close', 'Volume'];
-                        features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
+                        // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
                         predictedVariable = target_variable;
                         dataItemName = "Data Entries";
                         populateFeatureSelection(features);

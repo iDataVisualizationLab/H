@@ -208,10 +208,10 @@ async function loadModelFromServer(modelName) {
 
 async function loadAllPretrainModelFromServer(modelName) {
     showLoader();
-    const model = await tf.loadLayersModel(`data/models/l16l8l8d8d4/${modelName}.json`);
+    const model = await tf.loadLayersModel(`data/models/l8l8d8d4/${modelName}.json`);
     //Now load data.
 
-    d3.json(`data/models/l16l8l8d8d4/${modelName}_data.json`).then(modelData => {
+    d3.json(`data/models/l8l8d8d4/${modelName}_data.json`).then(modelData => {
         populateModelGUIFromData(model, modelData);
         hideLoader();
     });
