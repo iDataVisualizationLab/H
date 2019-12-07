@@ -180,8 +180,8 @@ async function processInputs(sFs) {
                 d3.json("data/newData/X_test_stock_ts4_fri.json").then(X_testR => {
                     d3.json("data/newData/y_test_stock_ts4_fri.json").then(y_testR => {
                         // features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
-                        features = ['Open', 'High', 'Low', 'Close', 'Volume'];
-                        // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
+                        // features = ['Open', 'High', 'Low', 'Close', 'Volume'];
+                        features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
                         predictedVariable = target_variable;
                         dataItemName = "Data Entries";
                         populateFeatureSelection(features);
