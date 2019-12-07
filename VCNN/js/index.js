@@ -34,8 +34,8 @@ function updateInputs() {
                 let num = "";
                 // loadAllPretrainModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_"+num);
                 // loadAllPretrainModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
-                // loadModelFromServer("emp_super_large_settings" + num);
-                loadModelFromServer("stock_large_model_2" + num);
+                loadModelFromServer("emp_super_large_settings" + num);
+                // loadModelFromServer("stock_large_model_2" + num);
             }
             // loadAllPretrainModelFromServerV2(target_variable_V2);
         });
