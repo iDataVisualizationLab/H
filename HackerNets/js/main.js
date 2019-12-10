@@ -408,6 +408,7 @@ $(document).ready(function () {
 
 function preprocessData(rawData) {
   let uniqueData = [];
+  rawData = rawData.filter(d => !d.topic.includes('cps'));
   rawData.forEach(function (d) {
     let item = uniqueData.find(e => e.id === d.id);
     if (!item) {
@@ -435,7 +436,6 @@ function preprocessData(rawData) {
       }
     })
   });
-
 
   return filtered_data;
 }
