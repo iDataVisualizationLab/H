@@ -1,26 +1,3 @@
-function createWordStream() {
-  cloudSvg.attr("width", width)
-    .attr("height", height);
-
-  d3.csv("data/time_arc.csv", function (err, filteredWords) {
-
-    let filteredData = [];
-
-    filteredWords.forEach(function (d) {
-      var tempText = "";
-      d.keywords.split("|").forEach(function (kw) {
-        tempText += kw + " ";
-      });
-      filteredData.push({
-        time: d.time,
-        title: tempText
-      })
-    });
-
-    loadNewsData(filteredData, drawWordStream);
-  })
-}
-
 let wordStreamConfig = {
   topWord: 100,
   minFont: 10,
@@ -33,7 +10,6 @@ let wordStreamConfig = {
 let yearSvgWidth = 0;
 
 function createWordStreamV2(wordStreamData) {
-  // yearSvgWidth = width / 12;
   yearSvgWidth = 122;
 
   cloudSvg.attr("width", yearSvgWidth * 12)

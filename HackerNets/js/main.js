@@ -30,16 +30,10 @@ let docs = [
   "It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love."
 ];
 
-function createCloud() {
-  createWordCloud();
-  showNewWords();
-}
-
 function wsTimeFilter(wordStreamData, values) {
   return wordStreamData.filter(function (d) {
-    var time = new Date(d.date);
-    var left = values[0];
-    var right = new Date(values[1]).getTime();
+    let time = new Date(d.date);
+    let right = new Date(values[1]).getTime();
     if (time >= values[0] && time <= right) {
       return true;
     }
@@ -48,7 +42,7 @@ function wsTimeFilter(wordStreamData, values) {
 }
 
 function createFilter(rawData, wordStreamData) {
-  var minYear = rawData[0].time, maxYear = rawData[0].time;
+  let minYear = rawData[0].time, maxYear = rawData[0].time;
 
   rawData.forEach(function (d) {
     if (d.time < minYear) {
@@ -59,17 +53,17 @@ function createFilter(rawData, wordStreamData) {
     }
   });
 
-  var minTime = new Date(minYear * 1000);
-  var maxTime = new Date(maxYear * 1000);
+  let minTime = new Date(minYear * 1000);
+  let maxTime = new Date(maxYear * 1000);
 
-  var filters = filterSvg
+  let filters = filterSvg
     .attr("class", "filters");
 
-  var sliderContainer = filters.append("g")
+  let sliderContainer = filters.append("g")
     .attr("class", "filter-slider")
     .attr("transform", `translate(82.5, 10)`);
 
-  var slider = d3.sliderHorizontal()
+  let slider = d3.sliderHorizontal()
     .min(new Date(minTime.getFullYear(), 0, 0))
     .max(new Date(maxTime.getFullYear() + 1, 0, 1))
     .step(365 * 24 * 60 * 60 * 1000)
@@ -137,7 +131,7 @@ function createFilter(rawData, wordStreamData) {
     .on("brush", highlightBrushed)
     .on("end", brushFilter);
 
-  var brushShowToggle = filters.append('g')
+  let brushShowToggle = filters.append('g')
     .attr("class", "brush")
     .attr("stroke", "#999")
     .attr("transform", `translate(${margin.left + 180},70)`);
@@ -207,10 +201,10 @@ function highlightBrushed() {
     let allLinks = forceSvg.select('.links').selectAll('g');
     allLinks.attr("class", "non-brushed");
 
-    var brushCoords = d3.brushSelection(this);
+    let brushCoords = d3.brushSelection(this);
 
     let brushedNodes = allNodes.filter(function (d) {
-      var cx = d.x + radiusScale(d.values.length + 10),
+      let cx = d.x + radiusScale(d.values.length + 10),
         cy = d.y + radiusScale(d.values.length + 10);
 
       return isBrushed(brushCoords, cx, cy);
@@ -234,7 +228,7 @@ function brushFilter() {
   if (!d3.event || !d3.event.selection) return;
 
   d3.select(this).call(brush.move, null);
-  var brushedObject = forceSvg.select('.nodes').selectAll(".brushed");
+  let brushedObject = forceSvg.select('.nodes').selectAll(".brushed");
 
   let newWordStreamData = [];
   let tempDate = [];
@@ -256,7 +250,7 @@ function brushFilter() {
 
 function isBrushed(brushCoords, cx, cy) {
 
-  var x0 = brushCoords[0][0],
+  let x0 = brushCoords[0][0],
     x1 = brushCoords[1][0],
     y0 = brushCoords[0][1],
     y1 = brushCoords[1][1];
@@ -315,7 +309,7 @@ function updateData(data) {
 }
 
 function idToUsernameMap() {
-  var map = {};
+  let map = {};
   nodes.forEach(function (d) {
     d.values.forEach(function (v) {
       map[v.id] = d.key;
@@ -326,14 +320,6 @@ function idToUsernameMap() {
 }
 
 function timeFilter(data, values) {
-  let doYear = new Date(values[0]);
-  let upYear = new Date(values[1]);
-
-  // let newData = data.filter(d => d.time * 1000 <= values[1] && d.time * 1000 >= values[0]);
-  // newData.forEach(function (d) {
-  //   console.log(new Date(d.time * 1000).getFullYear())
-  // });
-
   return data.filter(d => d.time * 1000 <= values[1] && d.time * 1000 >= values[0])
 }
 
@@ -354,15 +340,15 @@ function updateNodeConnections(key, nodes) {
 }
 
 function createLinks(data) {
-  var tempLinks = [];
+  let tempLinks = [];
 
   data.forEach(function (d) {
-    var name = d.by;
-    var parentId = d.parent;
-    var label = d.label;
-    var parentName = idToUsername[parentId];
-    var source = '';
-    var target = '';
+    let name = d.by;
+    let parentId = d.parent;
+    let label = d.label;
+    let parentName = idToUsername[parentId];
+    let source = '';
+    let target = '';
 
     if (!userName.includes(name) || !userName.includes(parentName)) {
       return;
@@ -390,7 +376,7 @@ function createLinks(data) {
     }
   });
 
-  var uniqueLinks = d3.nest()
+  let uniqueLinks = d3.nest()
     .key(function (d) {
       return d.temp_key;
     })
@@ -408,57 +394,10 @@ function createStream(wordStreamData) {
 
 $(document).ready(function () {
   d3.json('data/alldata_11_9.json', function (err, rawData) {
-    console.log(rawData.length);
-    let posts = rawData.filter(d => d.type === "story");
-    console.log("posts", posts.length);
-    // console.log(rawData.length);
-    // for (let i = 2007; i < 2019; i++) {
-    //   tempYearObjs[i] = {time: i, sum: 0, iot: 0, cybersecurity: 0, bigdata: 0, other: 0};
-    // }
-    // rawData.forEach(function (d) {
-    //   let year = new Date(d.time * 1000).getFullYear();
-    //   if (d.type === "comment")
-    //     return;
-    //   tempYearObjs[year]['sum'] += 1;
-    // });
-    // console.log(tempYearObjs);
-
     const data = preprocessData(rawData);
     createChart(data);
 
-    // nodes.forEach(function (author) {
-    //   author.values.forEach(function (d) {
-    //     if (d.type === "comment")
-    //       return;
-    //     let year = new Date(d.time * 1000).getFullYear();
-    //     if (d.topic.includes("iot")) {
-    //       tempYearObjs[year]['iot'] += 1;
-    //     }
-    //     if (d.topic.includes("bigdata")) {
-    //       tempYearObjs[year]['bigdata'] += 1;
-    //     }
-    //     if (d.topic.includes("security")) {
-    //       tempYearObjs[year]['cybersecurity'] += 1;
-    //     }
-    //   })
-    // });
-    //
-    // console.log(tempYearObjs);
-    //
-    // let statForStream = [];
-    // for (let key in tempYearObjs) {
-    //   let obj = tempYearObjs[key];
-    //   if (obj['time'] === 2017 || obj['time'] === 2018)
-    //   obj['sum'] = Math.round(obj['sum']/2);
-    //   obj['other'] = obj['sum'] - obj['iot'] - obj['bigdata'] - obj['cybersecurity'];
-    //   statForStream.push(obj)
-    // }
-    //
-    // console.log(statForStream);
-    // download(JSON.stringify(statForStream), 'stream_data', 'application/json');
-
     d3.json("data/word_stream_data.json", function (err, wordData) {
-      // createCloud();
       wordStreamData = wordData;
       createStream(wordStreamData);
       createFilter(data, wordStreamData);
@@ -466,19 +405,11 @@ $(document).ready(function () {
   });
 });
 
-function download(content, fileName, contentType) {
-  var a = document.createElement("a");
-  var file = new Blob([content], {type: contentType});
-  a.href = URL.createObjectURL(file);
-  a.download = fileName;
-  a.click();
-}
-
 
 function preprocessData(rawData) {
-  var uniqueData = [];
+  let uniqueData = [];
   rawData.forEach(function (d) {
-    var item = uniqueData.find(e => e.id === d.id);
+    let item = uniqueData.find(e => e.id === d.id);
     if (!item) {
       d.topic = [d.topic];
       uniqueData.push(d);
@@ -505,7 +436,6 @@ function preprocessData(rawData) {
     })
   });
 
-  console.log(filtered_data);
 
   return filtered_data;
 }

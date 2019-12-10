@@ -408,9 +408,8 @@ function createStream(wordStreamData) {
 
 $(document).ready(function () {
   d3.json('data/alldata_11_9.json', function (err, rawData) {
-    console.log(rawData.length);
-    let posts = rawData.filter(d => d.type === "story");
-    console.log("posts", posts.length);
+    // let posts = rawData.filter(d => d.type === "story");
+    // console.log("posts", posts.length);
     // console.log(rawData.length);
     // for (let i = 2007; i < 2019; i++) {
     //   tempYearObjs[i] = {time: i, sum: 0, iot: 0, cybersecurity: 0, bigdata: 0, other: 0};
