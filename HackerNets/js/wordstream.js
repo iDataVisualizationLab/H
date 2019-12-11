@@ -48,11 +48,14 @@ function updateWordStreamV2(wordStreamData) {
             }
         }
     });
-    let numOfDate = data.length;
-    let timeRange = +data[0].date - 2007;
-    console.log(timeRange);
+    let minYear = +data[0].date;
+    let maxYear = +data[data.length - 1].date;
+
+    console.log(minYear, maxYear);
+    timeSlider.value([new Date(minYear-1, 11, 31).getTime(), new Date(maxYear, 11, 31).getTime()]);
+
     let trackFill = d3.select('.track-fill');
-    let translateX = +trackFill.attr('x1')+60;
+    let translateX = +trackFill.attr('x1') + 60;
     console.log(translateX);
     cloudSvg.attr("width", trackFill.attr('x2') - trackFill.attr('x1') + 45)
         .attr("transform", `translate(${translateX},0)`);

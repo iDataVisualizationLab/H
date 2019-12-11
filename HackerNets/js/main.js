@@ -1,6 +1,8 @@
 let svgWidth = 1600,
     svgHeight = 1000;
 
+let timeSlider = null;
+
 let margin = {top: 10, right: 10, bottom: 10, left: 10, axisx: 0, axisy: 60, storyTop: 40},
     width = svgWidth - margin.left - margin.right - margin.axisx,
     height = svgHeight - margin.top - margin.storyTop - margin.axisx - margin.bottom;
@@ -21,14 +23,6 @@ let vennToggle = false;
 let brushToggle = false;
 let brush = null;
 let wordStreamData = null;
-let tempYearObjs = {};
-
-let docs = [
-    "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter.",
-    "The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon.",
-    "When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton.",
-    "It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love."
-];
 
 function wsTimeFilter(wordStreamData, values) {
     return wordStreamData.filter(function (d) {
@@ -63,7 +57,7 @@ function createFilter(rawData, wordStreamData) {
         .attr("class", "filter-slider")
         .attr("transform", `translate(82.5, 10)`);
 
-    let slider = d3.sliderHorizontal()
+    timeSlider = d3.sliderHorizontal()
         .min(new Date(minTime.getFullYear(), 0, 0))
         .max(new Date(maxTime.getFullYear() + 1, 0, 1))
         .step(365 * 24 * 60 * 60 * 1000)
@@ -82,10 +76,10 @@ function createFilter(rawData, wordStreamData) {
             turnOffBrush(filterSvg.select(".brush"));
         });
 
-    sliderContainer.call(slider);
+    sliderContainer.call(timeSlider);
 
 
-    var vennShowToggle = filters.append('g')
+    let vennShowToggle = filters.append('g')
         .attr("class", "toggles")
         .attr("stroke", "#999")
         .attr("transform", `translate(${margin.left},70)`);
