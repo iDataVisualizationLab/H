@@ -498,9 +498,6 @@ function getCluster(node) {
 
   text = text.trim();
 
-  console.log(node);
-  console.log(text);
-
   var cluster = clustersPosition.find(function (d) {
     return d.name === text;
   });
