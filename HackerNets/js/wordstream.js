@@ -52,7 +52,7 @@ function updateWordStreamV2(wordStreamData) {
     let maxYear = +data[data.length - 1].date;
 
     console.log(minYear, maxYear);
-    timeSlider.value([new Date(minYear-1, 11, 31).getTime(), new Date(maxYear, 11, 31).getTime()]);
+    timeSlider.silentValue([new Date(minYear-1, 11, 31).getTime(), new Date(maxYear, 11, 31).getTime()]);
 
     let trackFill = d3.select('.track-fill');
     let translateX = +trackFill.attr('x1') + 60;
