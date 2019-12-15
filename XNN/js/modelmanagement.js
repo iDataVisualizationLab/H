@@ -294,7 +294,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                         return `translate(${x + 65},90)`
                     }
                 })
-                // .text("Epoch: " + epoch + ", Batch: " + batchInEpoch);
+                    // .text("Epoch: " + epoch + ", Batch: " + batchInEpoch);
                     .text("Epoch: " + epoch);
 
                 d3.selectAll(`.trainingWeight`).attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0]);
@@ -393,7 +393,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 });
             //Draw weight guide.
             container.selectAll(".guidePath")
-                .data([`M85,${padding+8} C110,${padding +8} 110,${padding +8} 125,${padding + 33}`, `M85,${padding +18} C110,${padding +18} 110,${padding +18} 125,${padding + 53}`, `M85,${padding + 28} C110,${padding + 28} 110,${padding + 28} 125,${padding + 73}`, `M85,${padding + 38} C110,${padding + 38} 110,${padding + 38} 125,${padding + 93}`])
+                .data([`M85,${padding + 8} C110,${padding + 8} 110,${padding + 8} 125,${padding + 33}`, `M85,${padding + 18} C110,${padding + 18} 110,${padding + 18} 125,${padding + 53}`, `M85,${padding + 28} C110,${padding + 28} 110,${padding + 28} 125,${padding + 73}`, `M85,${padding + 38} C110,${padding + 38} 110,${padding + 38} 125,${padding + 93}`])
                 .join("path")
                 .attr("class", "guidePath")
                 .attr("d", d => d)
@@ -737,10 +737,10 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
             trainLosses.push(logs.loss);
             testLosses.push(testL);
-            // plotTrainLossData(trainLosses, testLosses);
+            plotTrainLossData(trainLosses, testLosses);
 
             hideLoader();
-            // displayEpochData(model, logs.loss);
+            displayEpochData(model, logs.loss);
             if (epoch > 1) {
                 //We don't update for the first epoch
                 dispatch.call("changeWeightFilter");

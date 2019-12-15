@@ -299,6 +299,39 @@ function startTraining() {
     }
 }
 
+function onHeatmapShowingCheckbox() {
+    let checked = $('#heatmapShowingCheckbox').prop('checked');
+    if (checked) {
+        for (let neuron in mapObjects) {
+            if (mapObjects[neuron].type === 'lstmheatmap') {
+                let config = mapObjects[neuron];
+                let htmlContainer = config.canvas.node().parentNode.parentNode;
+                htmlContainer.removeChild(htmlContainer.lastChild);
+                config.settings.xScale = null;
+                config.settings.yScale = null;
+                let newNeuron = new HeatMap(htmlContainer, config.data, config.settings);
+                newNeuron.plot();
+                mapObjects[neuron] = newNeuron;
+            }
+        }
+        neuronShowingHeatmap = true;
+    } else {
+        for (let neuron in mapObjects) {
+            if (mapObjects[neuron].type === 'heatmap') {
+                let config = mapObjects[neuron];
+                let htmlContainer = config.canvas.node().parentNode.parentNode;
+                htmlContainer.removeChild(htmlContainer.firstChild);
+                config.settings.xScale = null;
+                config.settings.yScale = null;
+                let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
+                newNeuron.plot();
+                mapObjects[neuron] = newNeuron;
+            }
+        }
+        neuronShowingHeatmap = false;
+    }
+}
+
 function onWeightFilterInput() {
     dispatch.call("changeWeightFilter", null, undefined);
 }

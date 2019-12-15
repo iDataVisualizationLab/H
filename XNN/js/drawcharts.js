@@ -95,11 +95,14 @@ function drawHeatmapDetails(selector, d, data, isInputLayer) {
         reverseY: true
     };
 
-    // let hm = new HeatMap(theMapContainer, hmData, hmSettings);
-    // hm.plot();
+    if (neuronShowingHeatmap) {
+        let hm = new HeatMap(theMapContainer, hmData, hmSettings);
+        hm.plot();
+    } else {
+        let hmTest = new LstmLineChart(theMapContainer, hmData, hmSettings);
+        hmTest.plot();
+    }
 
-    let hmTest = new LstmLineChart(theMapContainer, hmData, hmSettings);
-    hmTest.plot();
 
     let mapDetails = M.Modal.getInstance(document.getElementById("mapDetails"));
     mapDetails.open();
@@ -308,11 +311,19 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
             //     hmSettings.title = {text: 'neuron' + featureIdx, fontSize: 6};
             // }
 
-            let hm = new HeatMap(document.getElementById(selector + featureIdx), {x: x, y: y, z: z}, hmSettings);
-            hm.plot();
-
-            mapObjects[selector + featureIdx] = hm;
-
+            if (neuronShowingHeatmap) {
+                let hm = new HeatMap(document.getElementById(selector + featureIdx), {x: x, y: y, z: z}, hmSettings);
+                hm.plot();
+                mapObjects[selector + featureIdx] = hm;
+            } else {
+                let hm = new LstmLineChart(document.getElementById(selector + featureIdx), {
+                    x: x,
+                    y: y,
+                    z: z
+                }, hmSettings);
+                hm.plot();
+                mapObjects[selector + featureIdx] = hm;
+            }
         } else {
             let hm = mapObjects[selector + featureIdx];
             hm.update({x: x, y: y, z: z});
@@ -359,9 +370,18 @@ function drawLinechartDetails(selector, d, data) {
     mapDetails.open();
 }
 
+function detectOutlierByMAE(y, y_predicted) {
+    y.forEach((d, idx) => {
+        // if (d === y_predicted[idx])
+        let mae = Math.abs(d - y_predicted[idx]);
+        console.log(d, y_predicted[idx], mae);
+    });
+}
+
 async function drawLineCharts(data, normalizer, target, container, selector, lineChartSettings, noBorder) {
     let noOfItems = data.length;
     let noOfFeatures = data[0].length;
+    detectOutlierByMAE(target, data);
     //Generate steps
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs

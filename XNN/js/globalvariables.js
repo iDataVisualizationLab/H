@@ -31,3 +31,4 @@ let maxDataVal = null;
 let networkHeight = null;
 let neuronHeight = 122;
 let trainingWeightWidthRatio = 3/8;
+let neuronShowingHeatmap = false;

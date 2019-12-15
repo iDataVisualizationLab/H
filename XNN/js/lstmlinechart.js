@@ -21,6 +21,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         }
     }
     this.data = heatMapData;
+    this.type = 'lstmheatmap';
 
     if (this.settings.showAxes || this.settings.showColorBar || this.settings.title) {
         this.settings.noSvg = false;
@@ -59,16 +60,6 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
             .domain([maxZ, minZ])
             .range([0, contentHeight]);
     }
-
-    var flattenedZ = [].concat.apply([], this.data.z);
-    var minZ = d3.min(flattenedZ);
-    var maxZ = d3.max(flattenedZ);
-
-    this.settings.colorScale = d3.scaleSequential()
-        .interpolator(d3.interpolateTurbo)
-        // .domain([this.settings.minValue, this.settings.maxValue])
-        .domain([minZ, maxZ])
-        .clamp(true);
 
     var container = d3.select(htmlContainer).append("div")
         .style("width", this.settings.width + "px")
@@ -152,6 +143,14 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
 LstmLineChart.prototype.plot = async function () {
     this.canvas.node().getContext("2d").clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
+    var flattenedZ = [].concat.apply([], this.data.z);
+    var minZ = d3.min(flattenedZ);
+    var maxZ = d3.max(flattenedZ);
+
+    this.settings.yScale = d3.scaleLinear()
+        .domain([maxZ, minZ])
+        .range([0, this.canvasHeight]);
+
     let self = this;
     let x = self.data.x;
     self.data.y.forEach(yVal => {
@@ -173,7 +172,6 @@ LstmLineChart.prototype.draw = async function (x, y, lineWidth, strokeStyle) {
         }
     });
 
-
     let ctx = this.canvas.node().getContext("2d");
     let xScale = this.settings.xScale;
     let yScale = this.settings.yScale;
@@ -184,5 +182,4 @@ LstmLineChart.prototype.draw = async function (x, y, lineWidth, strokeStyle) {
     ctx.strokeStyle = strokeStyle;
     line(lineData);
     ctx.stroke();
-
 };
