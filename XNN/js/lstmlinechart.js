@@ -153,9 +153,13 @@ LstmLineChart.prototype.plot = async function () {
 
     let self = this;
     let x = self.data.x;
-    self.data.y.forEach(yVal => {
+    self.data.y.forEach((yVal, idx) => {
         let y = self.data.z[yVal];
-        this.draw(x, y, this.settings.lineWidth, 'rgba(0,0,0,0.2)')
+        let color = 'rgba(0,0,0,0.2)';
+        if (isOutlierGlobal[idx]) {
+            color = 'rgba(255,165,0,0.5)'
+        }
+        this.draw(x, y, this.settings.lineWidth, color)
     });
 };
 

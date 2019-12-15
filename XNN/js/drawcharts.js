@@ -371,17 +371,22 @@ function drawLinechartDetails(selector, d, data) {
 }
 
 function detectOutlierByMAE(y, y_predicted) {
+    let isOutlier = [];
     y.forEach((d, idx) => {
-        // if (d === y_predicted[idx])
         let mae = Math.abs(d - y_predicted[idx]);
-        console.log(d, y_predicted[idx], mae);
+        if (mae > 5) {
+            isOutlier.push(true);
+        } else {
+            isOutlier.push(false);
+        }
     });
+    return isOutlier;
 }
 
 async function drawLineCharts(data, normalizer, target, container, selector, lineChartSettings, noBorder) {
     let noOfItems = data.length;
     let noOfFeatures = data[0].length;
-    detectOutlierByMAE(target, data);
+
     //Generate steps
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs
@@ -394,6 +399,11 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     if (typeof noBorder === 'undefined' || !noBorder) {
         elms.style("border", "1px solid black").style("display", "inline-block");
     }
+    let isOutlier = null;
+    if (!normalizer && container === 'outputContainer') {
+        isOutlier = detectOutlierByMAE(target, data);
+        isOutlierGlobal = isOutlier;
+    }
     //Generate data.
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let x = [];
@@ -405,6 +415,7 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
             {
                 x: x,
                 y: y,
+                isOutlier: isOutlier,
                 series: 'output',
                 marker: 'o',
                 type: 'scatter'

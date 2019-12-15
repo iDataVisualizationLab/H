@@ -658,7 +658,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 //Update test loss
                 testLoss = reviewMode ? testLoss : model.evaluate(X_test_T_ordered, y_test_T_ordered).dataSync()[0];
                 updateGraphTitle("testContainer", "Testing, MSE: " + testLoss.toFixed(2));
-            });
+            }).then(() => $('#heatmapShowingCheckbox').prop('checked', false));
         });
     }
 
