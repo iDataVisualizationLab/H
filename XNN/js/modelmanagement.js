@@ -323,10 +323,10 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 verticalPointerText.style("display", "block");
             });
 
-            canvas.addEventListener("mouseout", function () {
-                // verticalPointerLine.style("display", "none");
-                // verticalPointerText.style("display", "none");
-            });
+            // canvas.addEventListener("mouseout", function () {
+            //     verticalPointerLine.style("display", "none");
+            //     verticalPointerText.style("display", "none");
+            // });
 
             canvas.addEventListener("click", function (e) {
                 var pos = getPosition(this);
@@ -637,7 +637,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         }
 
         //it will display recursively.
-        displayLayersOutputs(model, 0, X_train_T_ordered);
+        // displayLayersOutputs(model, 0, X_train_T_ordered);
 
         //Draw output
         let ts = model.predict(X_train_T_ordered);
@@ -647,6 +647,10 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             drawLineCharts(data, null, y_train_flat_ordered, "outputContainer", "output", outputSettings, true).then(() => {
                 //Update the training loss
                 updateGraphTitle("outputContainer", "Training, MSE: " + trainLoss.toFixed(2));
+                drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
+                    hideLoader();
+                });
+                displayLayersOutputs(model, 0, X_train_T_ordered);
             });
         });
         //Draw the testing data.

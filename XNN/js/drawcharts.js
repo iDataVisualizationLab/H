@@ -380,6 +380,7 @@ function detectOutlierByMAE(y, y_predicted) {
             isOutlier.push(false);
         }
     });
+    isOutlierGlobal = isOutlier;
     return isOutlier;
 }
 
@@ -399,10 +400,9 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     if (typeof noBorder === 'undefined' || !noBorder) {
         elms.style("border", "1px solid black").style("display", "inline-block");
     }
-    let isOutlier = null;
+    let isOutlier = isOutlierGlobal;
     if (!normalizer && container === 'outputContainer') {
         isOutlier = detectOutlierByMAE(target, data);
-        isOutlierGlobal = isOutlier;
     }
     //Generate data.
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
