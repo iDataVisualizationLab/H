@@ -403,6 +403,8 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     let isOutlier = isOutlierGlobal;
     if (!normalizer && container === 'outputContainer') {
         isOutlier = detectOutlierByMAE(target, data);
+    } else if (container === 'testContainer') {
+        isOutlier = null;
     }
     //Generate data.
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
