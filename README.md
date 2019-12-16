@@ -6,4 +6,6 @@ TTUHSC: https://idatavisualizationlab.github.io/H/TTUHSC/bubble.html
 
 HackerNets: https://idatavisualizationlab.github.io/H/HackerNets/
 
-VCNN: https://idatavisualizationlab.github.io/H/VCNN/
+DeepViz: https://idatavisualizationlab.github.io/H/VCNN/
+
+XNN: https://idatavisualizationlab.github.io/H/XNN/
