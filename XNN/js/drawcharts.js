@@ -370,16 +370,21 @@ function drawLinechartDetails(selector, d, data) {
     mapDetails.open();
 }
 
-function detectOutlierByMAE(y, y_predicted) {
+function detectOutlierByMAE(y, y_predicted, topPercentage) {
     let isOutlier = [];
+    let mae_array = [];
     y.forEach((d, idx) => {
         let mae = Math.abs(d - y_predicted[idx]);
-        if (mae > 5) {
-            isOutlier.push(true);
-        } else {
-            isOutlier.push(false);
-        }
+        mae_array.push({mae: mae, idx: idx});
+        isOutlier.push(false);
     });
+    mae_array.sort((a, b) => b.mae - a.mae);
+
+    let topIdx = Math.ceil(mae_array.length * topPercentage / 100);
+    for (let i = 0; i < topIdx; i++) {
+        isOutlier[mae_array[i].idx] = true;
+    }
+    console.log(isOutlier);
     isOutlierGlobal = isOutlier;
     return isOutlier;
 }
@@ -402,7 +407,7 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     }
     let isOutlier = isOutlierGlobal;
     if (!normalizer && container === 'outputContainer') {
-        isOutlier = detectOutlierByMAE(target, data);
+        isOutlier = detectOutlierByMAE(target, data, 5);
     } else if (container === 'testContainer') {
         isOutlier = null;
     }
