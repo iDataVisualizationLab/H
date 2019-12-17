@@ -695,6 +695,21 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
         let spanForWeightsLeft = leftNodeHeight / noOfWeights;
         let topPadding = (noOfLeftNodes - noOfRightNodes) * neuronHeight / 2;
 
+        let nodeWeightSumArray = [];
+        for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
+            let nodeWeightSum = 0;
+            for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
+                if (noOfWeightTypes === 4) {
+                    nodeWeightSum += weightData[leftIdx * (wShape[1]) + 3 * noOfRightNodes + rightIdx];
+                } else {
+                    nodeWeightSum += weightData[leftIdx * (wShape[1]) + rightIdx];
+                }
+            }
+            nodeWeightSumArray.push({weightSum: nodeWeightSum, idx: leftIdx});
+        }
+        nodeWeightSumArray.sort((a, b) => b.weightSum - a.weightSum);
+        console.log(nodeWeightSumArray);
+
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
             let leftNodeStartY = leftNodeCenterY - leftNodeHeight / 2 + spanForWeightsLeft / 2;
@@ -723,6 +738,7 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
                         weight: weightData[idx],
                         scaledWeight: zeroOneScale(weightData[idx] > 0 ? weightData[idx] : -weightData[idx])
                     };
+
                     lineData.push(item);
                     // //TODO: may not break, but for now break for better performance
                     // break;
@@ -730,7 +746,7 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
             }
         }
 
-        resolve({lineData: lineData, strokeWidthScale: strokeWidthScale, opacityScaler: opacityScale});
+        resolve({lineData: lineData, strokeWidthScale: strokeWidthScale, opacityScaler: opacityScale, weightSumData: nodeWeightSumArray});
     });
 }
 

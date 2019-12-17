@@ -32,7 +32,7 @@ function updateInputs() {
             } else {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
                 let num = 2;
-                loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_"+num);
+                loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
                 // loadModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
                 // loadModelFromServer("emp_super_large_settings" + num);
                 // loadModelFromServer("stock_large_model_2" + num);
@@ -297,6 +297,60 @@ function startTraining() {
     } else {
         trainModel(currentModel, X_train, y_train, X_test, y_test, epochs, batchSize, learningRate, false);
     }
+}
+
+function findSortedTarget(targetIdx, sorted) {
+    let sortedTargetIdx = null;
+    sorted.find(function (d, i) {
+        if (d.idx === targetIdx) {
+            sortedTargetIdx = i;
+            return true;
+        }
+    });
+    return sortedTargetIdx;
+}
+
+function onReorderNeuronsCheckbox() {
+    let keys = Object.keys(weightsPathData);
+    keys.forEach(function (key, keyIdx) {
+        let weightsPaths = weightsPathData[key];
+        let weightsTraining = trainingWeightsPathData[key];
+        let sorted = weightsPaths.weightSumData;
+        let nextKeyIdx = (keyIdx + 1) < keys.length ? (keyIdx + 1) : 0;
+        let nextSorted = weightsPathData[keys[nextKeyIdx]].weightSumData;
+        let htmlContainerId = "";
+        if (key === 'layer0Weights') {
+            htmlContainerId = 'inputContainer';
+        } else {
+            htmlContainerId = key.replace('weights', 'layer');
+        }
+        let htmlContainer = $(`#${htmlContainerId}`);
+        let currentNeurons = htmlContainer.children();
+        htmlContainer.empty();
+        sorted.forEach(function (d, i) {
+            htmlContainer.append(currentNeurons[d.idx]);
+            weightsPaths.lineData.filter(line => line.sourceIdx === d.idx).forEach(function (v) {
+                v.source.y = v.source.y - (d.idx - i) * 122;
+                if (keyIdx + 1 < keys.length) {
+                    let sortedTargetIdx = findSortedTarget(v.targetIdx, nextSorted);
+                    v.target.y = v.target.y + (sortedTargetIdx - v.targetIdx) * 122;
+                }
+            });
+            weightsTraining.lineData.filter(line => line.sourceIdx === d.idx).forEach(function (v) {
+                v.paths.forEach(function (path) {
+                    path.source.y = path.source.y - (d.idx - i) * 122;
+                    path.target.y = path.target.y - (d.idx - i) * 122;
+                })
+            });
+        });
+        if (weightsPaths.layerType === 'lstm') {
+            drawLSTMWeights(key);
+            drawLstmTrainingWeights(key);
+        } else {
+            drawDenseWeights(key);
+            drawTrainingWeights(key);
+        }
+    })
 }
 
 function onHeatmapShowingCheckbox() {

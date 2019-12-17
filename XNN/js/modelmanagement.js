@@ -514,7 +514,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         $("#trainingButtonContainer").addClass("paused");
     }
 
-    async function displayLayersOutputs(model, i, input) {
+    async function displayLayersOutputs(model, i, input, recursive) {
         if (i >= model.layers.length - 1) {
             return;//Do not draw the final output
         }
@@ -535,46 +535,9 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             });
         }
         //Recurse
-        if (i < model.layers.length - 1) {//We will draw the output separately.
-            displayLayersOutputs(model, i + 1, ts);
+        if (i < model.layers.length - 1 && recursive) {//We will draw the output separately.
+            displayLayersOutputs(model, i + 1, ts, recursive);
         }
-    }
-
-    function plotTrainLossDetails() {
-        let theMapContainer = document.getElementById("mapDetailsContent");
-        d3.select(theMapContainer).selectAll("*").remove();
-
-        let trainLossBatchSettings = {
-            noSvg: false,
-            showAxes: true,
-            paddingLeft: 60,
-            paddingRight: 10,
-            paddingTop: 20,
-            paddingBottom: 40,
-            width: 350,
-            height: 350,
-            legend: {
-                x: 350 - 50,
-                y: 35
-            },
-            title: {
-                text: 'Training loss vs. testing loss.'
-            },
-            xAxisLabel: {
-                text: 'Epoch'
-            },
-            yAxisLabel: {
-                text: 'Loss'
-            },
-            colorScheme: trainTestLossColorScheme
-
-        };
-
-        let lc = new LineChart(theMapContainer, mapObjects['trainTestLoss'].data, trainLossBatchSettings);
-        lc.plot();
-
-        let mapDetails = M.Modal.getInstance(document.getElementById("mapDetails"));
-        mapDetails.open();
     }
 
     async function plotTrainLossData(trainLosses, testLosses) {
@@ -623,7 +586,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         //     }
         // );
 
-
         //TODO: This is slow, due to asynchronous behavior so putting it in epoch ends may have visual display bug, therefore we put it here, but it lowers the perf.
         if (Math.ceil(X_train.length / batchSize) > 1) {
             dispatch.call("changeWeightFilter");
@@ -650,7 +612,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
                     hideLoader();
                 });
-                displayLayersOutputs(model, 0, X_train_T_ordered);
+                displayLayersOutputs(model, 0, X_train_T_ordered, true);
             });
         });
         //Draw the testing data.
@@ -782,11 +744,13 @@ async function displayLayerWeights(model, i, containerId) {
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
         buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+            result['layerType'] = 'lstm';
             weightsPathData[containerId] = result;//Store to use on click
             drawLSTMWeights(containerId);
             // updateVarNetwork();
         });
         buildTrainingWeightData(i, weights.shape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+            result['layerType'] = 'lstm';
             trainingWeightsPathData[containerId] = result;
             drawLstmTrainingWeights(containerId);
         });
@@ -807,12 +771,16 @@ async function displayLayerWeights(model, i, containerId) {
 
             buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
                 buildWeightPositionDataV2(cumulativeT, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+                    result['layerType'] = 'dense';
+
                     weightsPathData[containerId] = result;
                     drawDenseWeights(containerId);
                 });
             });
 
             buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+                result['layerType'] = 'dense';
+
                 trainingWeightsPathData[containerId] = result;
                 drawTrainingWeights(containerId);
             });
@@ -825,11 +793,15 @@ async function displayLayerWeights(model, i, containerId) {
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
         buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+            result['layerType'] = 'dense';
+
             weightsPathData[containerId] = result;
             drawDenseWeights(containerId);
         });
 
         buildTrainingWeightData(i, weights.shape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+            result['layerType'] = 'dense';
+
             trainingWeightsPathData[containerId] = result;
             drawTrainingWeights(containerId);
         });
