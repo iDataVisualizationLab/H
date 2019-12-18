@@ -137,6 +137,9 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
 LstmLineChart.prototype.plot = async function () {
     this.canvas.node().getContext("2d").clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
+    this.canvas.node().getContext("2d").fillStyle = 'white';
+    this.canvas.node().getContext("2d").fillRect(0,0, this.canvasWidth, this.canvasHeight);
+
     var flattenedZ = [].concat.apply([], this.data.z);
     var minZ = d3.min(flattenedZ);
     var maxZ = d3.max(flattenedZ);

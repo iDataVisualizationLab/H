@@ -336,10 +336,10 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
     sortNeuronByMse(container, averageLineArr);
 }
 
-let globalError = 1000000;
+let globalError = {};
 let globalSelected = {};
 
-function recursiveMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {
+function recursiveFinding(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {
     for (let i = 0; i < noOfNeurons; i++) {
         if (!isSelected[i]) {
             isSelected[i] = true;
@@ -347,22 +347,22 @@ function recursiveMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, 
             if (currentIdx > 0) {
                 sumError += mseMatrix[selected[currentIdx - 1]][currentIdx];
             }
-            if (sumError > globalError) {
+            if (sumError > globalError[container]) {
                 isSelected[i] = false;
                 selected[currentIdx] = -1;
                 return
             }
-            if (currentIdx === noOfNeurons - 1 && sumError < globalError) {
-                globalError = sumError;
-                globalSelected = selected;
-                selected.forEach(function (d,i) {
-                let newRow = { idx: d};
+            if (currentIdx === noOfNeurons - 1 && sumError < globalError[container]) {
+                globalError[container] = sumError;
+                globalSelected[container] = selected;
+                selected.forEach(function (d, i) {
+                    let newRow = {idx: d};
                     neuronData[container]['sortedData'][i] = newRow;
                 });
                 console.log(globalError);
                 console.log(globalSelected);
             } else {
-                recursiveMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumError, container);
+                recursiveFinding(mseMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumError, container);
             }
             isSelected[i] = false;
             selected[currentIdx] = -1;
@@ -392,10 +392,45 @@ function sortNeuronByMse(container, averageLineArr) {
     }
     let selected = [];
     globalSelected[container] = [];
-    globalError = 1000000;
+    globalError[container] = 1000000;
     neuronData[container]['sortedData'] = [];
-    recursiveMse(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
+    recursiveFinding(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
+}
 
+function mean(arr) {
+    let sum = arr.reduce((a, b) => a + b, 0);
+    return sum / arr.length;
+}
+
+function calculateCrossCorrelation(first) {
+
+}
+
+function sortNeuronByCorrelation(container, averageLineArr) {
+    let corrMatrix = [];
+    let isSelected = [];
+    for (let i = 0; i < averageLineArr.length; i++) {
+        corrMatrix[i] = [];
+        for (let j = 0; j < averageLineArr.length; j++) {
+            if (i === j) {
+                corrMatrix[i][j] = Infinity;
+                continue;
+            }
+            let firstLine = averageLineArr[i].data;
+            let secondLine = averageLineArr[j].data;
+            let meanFirstLine = mean(firstLine);
+            let meanSecondLine = mean(secondLine);
+
+            // corrMatrix[i][j] = ;
+            // corrMatrix[j][i] = corrMatrix[i][j];
+        }
+        isSelected.push(false);
+    }
+    let selected = [];
+    globalSelected[container] = [];
+    globalError[container] = 1000000;
+    neuronData[container]['sortedData'] = [];
+    recursiveFinding(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
 }
 
 function calculateAverageLineForLstm(data) {
