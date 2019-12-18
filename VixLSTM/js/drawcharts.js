@@ -277,18 +277,21 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
 let globalError = {};
 let globalSelected = {};
 
-function recursiveFinding(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {
+function recursiveFindingMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {
     for (let i = 0; i < noOfNeurons; i++) {
         if (!isSelected[i]) {
             isSelected[i] = true;
             selected[currentIdx] = i;
             if (currentIdx > 0) {
-                sumError += mseMatrix[selected[currentIdx - 1]][currentIdx];
+                sumError += mseMatrix[selected[currentIdx - 1]][i];
             }
             if (sumError > globalError[container]) {
                 isSelected[i] = false;
                 selected[currentIdx] = -1;
-                return
+                if (currentIdx > 0) {
+                    sumError -= mseMatrix[selected[currentIdx - 1]][i];
+                }
+                continue;
             }
             if (currentIdx === noOfNeurons - 1 && sumError < globalError[container]) {
                 globalError[container] = sumError;
@@ -297,13 +300,14 @@ function recursiveFinding(mseMatrix, noOfNeurons, selected, isSelected, currentI
                     let newRow = {idx: d};
                     neuronData[container]['sortedData'][i] = newRow;
                 });
-                // console.log(globalError);
-                // console.log(globalSelected);
             } else {
-                recursiveFinding(mseMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumError, container);
+                recursiveFindingMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumError, container);
             }
             isSelected[i] = false;
             selected[currentIdx] = -1;
+            if (currentIdx > 0) {
+                sumError += mseMatrix[selected[currentIdx - 1]][i];
+            }
         }
     }
 }
@@ -318,10 +322,6 @@ function recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelect
             }
 
             if (sumCorr + (noOfNeurons - currentIdx - 1) <= globalError[container]) {
-                // if (container === 'layerContainer1') {
-                //     console.log("cut", selected, noOfNeurons - currentIdx - 1);
-                //
-                // }
                 isSelected[i] = false;
                 selected[currentIdx] = -1;
                 if (currentIdx > 0) {
@@ -338,9 +338,6 @@ function recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelect
                     let newRow = {idx: d};
                     neuronData[container]['sortedData'][i] = newRow;
                 });
-
-                // console.log(sumCorr);
-                // console.log(selected);
             } else {
                 recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumCorr, container);
             }
@@ -377,7 +374,7 @@ function sortNeuronByMse(container, averageLineArr) {
     globalSelected[container] = [];
     globalError[container] = 1000000;
     neuronData[container]['sortedData'] = [];
-    recursiveFinding(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
+    recursiveFindingMse(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
 }
 
 function mean(arr) {
