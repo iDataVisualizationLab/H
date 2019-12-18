@@ -162,3 +162,11 @@ a {
     position: relative;
     right: 20%
 }
+
+.layerBox {
+    position: absolute;
+    width: 120px;
+    border-width: 2px 0px 2px 2px;
+    border-color: black;
+    border-style: solid;
+}

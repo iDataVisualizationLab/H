@@ -277,6 +277,7 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
             })
     }
     //Generate data.
+    let averageLineArr = [];
 
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let z = [];
@@ -328,7 +329,91 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
             let hm = mapObjects[selector + featureIdx];
             hm.update({x: x, y: y, z: z});
         }
+        averageLineArr.push({data: calculateAverageLineForLstm({x: x, y: y, z: z}), idx: featureIdx});
     }
+    neuronData[container] = {};
+    neuronData[container]['unsortedData'] = averageLineArr;
+    sortNeuronByMse(container, averageLineArr);
+}
+
+let globalError = 1000000;
+let globalSelected = {};
+
+function recursiveMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {
+    for (let i = 0; i < noOfNeurons; i++) {
+        if (!isSelected[i]) {
+            isSelected[i] = true;
+            selected[currentIdx] = i;
+            if (currentIdx > 0) {
+                sumError += mseMatrix[selected[currentIdx - 1]][currentIdx];
+            }
+            if (sumError > globalError) {
+                isSelected[i] = false;
+                selected[currentIdx] = -1;
+                return
+            }
+            if (currentIdx === noOfNeurons - 1 && sumError < globalError) {
+                globalError = sumError;
+                globalSelected = selected;
+                selected.forEach(function (d,i) {
+                let newRow = { idx: d};
+                    neuronData[container]['sortedData'][i] = newRow;
+                });
+                console.log(globalError);
+                console.log(globalSelected);
+            } else {
+                recursiveMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumError, container);
+            }
+            isSelected[i] = false;
+            selected[currentIdx] = -1;
+        }
+    }
+}
+
+function sortNeuronByMse(container, averageLineArr) {
+    let mseMatrix = [];
+    let isSelected = [];
+    for (let i = 0; i < averageLineArr.length; i++) {
+        mseMatrix[i] = [];
+        for (let j = 0; j < averageLineArr.length; j++) {
+            if (i === j) {
+                mseMatrix[i][j] = Infinity;
+                continue;
+            }
+            let firstLine = averageLineArr[i].data;
+            let secondLine = averageLineArr[j].data;
+            let sse = 0;
+            firstLine.forEach(function (ele, idx) {
+                sse += Math.pow(ele - secondLine[idx], 2);
+            });
+            mseMatrix[i][j] = sse / firstLine.length;
+        }
+        isSelected.push(false);
+    }
+    let selected = [];
+    globalSelected[container] = [];
+    globalError = 1000000;
+    neuronData[container]['sortedData'] = [];
+    recursiveMse(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
+
+}
+
+function calculateAverageLineForLstm(data) {
+    let averageLine = [];
+    data.x.forEach(function (xVal) {
+        let sum = 0;
+        data.y.forEach(function (yVal) {
+            sum += data.z[yVal][xVal];
+        });
+        averageLine.push(sum / data.y.length);
+    });
+
+    return averageLine;
+}
+
+function calculateAverageLineForDense(data) {
+    console.log(data);
+
 }
 
 function drawLinechartDetails(selector, d, data) {
@@ -384,7 +469,6 @@ function detectOutlierByMAE(y, y_predicted, topPercentage) {
     for (let i = 0; i < topIdx; i++) {
         isOutlier[mae_array[i].idx] = true;
     }
-    console.log(isOutlier);
     isOutlierGlobal = isOutlier;
     return isOutlier;
 }
@@ -412,6 +496,8 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
         isOutlier = null;
     }
     //Generate data.
+    let averageLineArr = [];
+
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let x = [];
         for (let itemIdx = 0; itemIdx < noOfItems; itemIdx++) {
@@ -448,7 +534,13 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
             let lc = mapObjects[selector + featureIdx];
             lc.update(lineChartData);
         }
+        // averageLineArr.push({data: calculateAverageLineForDense({x: x, y: y}), idx: featureIdx});
     }
+    // if (container !== 'outputContainer' && container !== 'testContainer') {
+    //     neuronData[container] = {};
+    //     neuronData[container]['unsortedData'] = averageLineArr;
+    //     sortNeuronByMse(container, averageLineArr);
+    // }
 }
 
 function updateGraphTitle(graphId, newText) {
@@ -677,6 +769,23 @@ async function buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wSha
     })
 }
 
+function sortNeuronByWeightsSum(noOfLeftNodes, noOfRightNodes, noOfWeightTypes, weightData, wShape) {
+    let nodeWeightSumArray = [];
+    for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
+        let nodeWeightSum = 0;
+        for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
+            if (noOfWeightTypes === 4) {
+                nodeWeightSum += weightData[leftIdx * (wShape[1]) + 3 * noOfRightNodes + rightIdx];
+            } else {
+                nodeWeightSum += weightData[leftIdx * (wShape[1]) + rightIdx];
+            }
+        }
+        nodeWeightSumArray.push({weightSum: nodeWeightSum, idx: leftIdx});
+    }
+    nodeWeightSumArray.sort((a, b) => b.weightSum - a.weightSum);
+    return nodeWeightSumArray;
+}
+
 async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity, strokeWidthScale, opacityScale, zeroOneScale) {
     return new Promise((resolve, reject) => {
         let weightData = weightsT.dataSync();
@@ -695,20 +804,7 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
         let spanForWeightsLeft = leftNodeHeight / noOfWeights;
         let topPadding = (noOfLeftNodes - noOfRightNodes) * neuronHeight / 2;
 
-        let nodeWeightSumArray = [];
-        for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
-            let nodeWeightSum = 0;
-            for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
-                if (noOfWeightTypes === 4) {
-                    nodeWeightSum += weightData[leftIdx * (wShape[1]) + 3 * noOfRightNodes + rightIdx];
-                } else {
-                    nodeWeightSum += weightData[leftIdx * (wShape[1]) + rightIdx];
-                }
-            }
-            nodeWeightSumArray.push({weightSum: nodeWeightSum, idx: leftIdx});
-        }
-        nodeWeightSumArray.sort((a, b) => b.weightSum - a.weightSum);
-        console.log(nodeWeightSumArray);
+        let nodeWeightSumArray = sortNeuronByWeightsSum(noOfLeftNodes, noOfRightNodes, noOfWeightTypes, weightData, wShape);
 
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
@@ -738,15 +834,19 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
                         weight: weightData[idx],
                         scaledWeight: zeroOneScale(weightData[idx] > 0 ? weightData[idx] : -weightData[idx])
                     };
-
                     lineData.push(item);
                     // //TODO: may not break, but for now break for better performance
-                    // break;
                 }
             }
         }
 
-        resolve({lineData: lineData, strokeWidthScale: strokeWidthScale, opacityScaler: opacityScale, weightSumData: nodeWeightSumArray});
+        resolve({
+            lineData: lineData,
+            strokeWidthScale: strokeWidthScale,
+            opacityScaler: opacityScale,
+            sortedData: nodeWeightSumArray,
+            originalData: []
+        });
     });
 }
 

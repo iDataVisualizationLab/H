@@ -310,39 +310,83 @@ function findSortedTarget(targetIdx, sorted) {
     return sortedTargetIdx;
 }
 
+function reorderNeuronByMse() {
+    let keys = Object.keys(neuronData);
+    let isChecked = $('#orderNeuronCheckbox').prop('checked');
+    keys.forEach(function (key, keyIdx) {
+        let averageLine = neuronData[key].unsortedData;
+
+    })
+}
+
 function onReorderNeuronsCheckbox() {
     let keys = Object.keys(weightsPathData);
+    let isChecked = $('#orderNeuronCheckbox').prop('checked');
     keys.forEach(function (key, keyIdx) {
-        let weightsPaths = weightsPathData[key];
-        let weightsTraining = trainingWeightsPathData[key];
-        let sorted = weightsPaths.weightSumData;
-        let nextKeyIdx = (keyIdx + 1) < keys.length ? (keyIdx + 1) : 0;
-        let nextSorted = weightsPathData[keys[nextKeyIdx]].weightSumData;
+
         let htmlContainerId = "";
         if (key === 'layer0Weights') {
             htmlContainerId = 'inputContainer';
         } else {
             htmlContainerId = key.replace('weights', 'layer');
         }
+        if (neuronData[htmlContainerId]) {
+            weightsPathData[key].sortedData = neuronData[htmlContainerId].sortedData;
+        } else {
+            weightsPathData[key].sortedData = neuronData['inputContainer'].unsortedData;
+        }
+
+        let weightsPaths = weightsPathData[key];
+        let weightsTraining = trainingWeightsPathData[key];
+        let nextKeyIdx = (keyIdx + 1) < keys.length ? (keyIdx + 1) : 0;
+        let sorted = null;
+        let nextSorted = null;
+        if (isChecked) {
+            sorted = weightsPaths.sortedData;
+            nextSorted = weightsPathData[keys[nextKeyIdx]].sortedData;
+        } else {
+            sorted = weightsPaths.originalData;
+            nextSorted = weightsPathData[keys[nextKeyIdx]].originalData;
+        }
+
+
+
         let htmlContainer = $(`#${htmlContainerId}`);
         let currentNeurons = htmlContainer.children();
         htmlContainer.empty();
         sorted.forEach(function (d, i) {
             htmlContainer.append(currentNeurons[d.idx]);
-            weightsPaths.lineData.filter(line => line.sourceIdx === d.idx).forEach(function (v) {
+            let sourceIdx = 0;
+            if (isChecked) {
+                sourceIdx = d.idx;
+            } else {
+                sourceIdx = i;
+            }
+            if (weightsPaths.originalData.length < weightsPaths.sortedData.length) {
+                let oriIdx = findSortedTarget(i, sorted);
+                weightsPaths.originalData.push({weightSum: sorted[oriIdx].weightSum, idx: oriIdx})
+            }
+            weightsPaths.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
                 v.source.y = v.source.y - (d.idx - i) * 122;
+                // v.newSourceIdx = i;
                 if (keyIdx + 1 < keys.length) {
                     let sortedTargetIdx = findSortedTarget(v.targetIdx, nextSorted);
                     v.target.y = v.target.y + (sortedTargetIdx - v.targetIdx) * 122;
+                    // v.newTargetIdx = sortedTargetIdx;
                 }
             });
-            weightsTraining.lineData.filter(line => line.sourceIdx === d.idx).forEach(function (v) {
+            weightsTraining.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
                 v.paths.forEach(function (path) {
+                    // path.newSourceIdx = sourceIdx;
                     path.source.y = path.source.y - (d.idx - i) * 122;
                     path.target.y = path.target.y - (d.idx - i) * 122;
                 })
             });
         });
+
+        // weightsPaths.lineData.forEach(d => {d.sourceIdx = d.newSourceIdx; d.targetIdx = d.newTargetIdx});
+        // weightsTraining.lineData.forEach(d => d.sourceIdx = d.newSourceIdx);
+
         if (weightsPaths.layerType === 'lstm') {
             drawLSTMWeights(key);
             drawLstmTrainingWeights(key);
@@ -350,7 +394,7 @@ function onReorderNeuronsCheckbox() {
             drawDenseWeights(key);
             drawTrainingWeights(key);
         }
-    })
+    });
 }
 
 function onHeatmapShowingCheckbox() {
@@ -395,11 +439,11 @@ function onWeightFilterChanged(weightFilter) {
     for (let i = 0; i < layersConfig.length; i++) {
         let weightContainerId = getWeightsContainerId(i);
         if (layersConfig[i].layerType === "lstm") {
-            drawLSTMWeights(weightContainerId);
+            // drawLSTMWeights(weightContainerId);
             drawLstmTrainingWeights(weightContainerId);
         }
         if (layersConfig[i].layerType === "dense") {
-            drawDenseWeights(weightContainerId);
+            // drawDenseWeights(weightContainerId);
             drawTrainingWeights(weightContainerId);
         }
     }

@@ -213,7 +213,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (layersConfig[i].layerType === "lstm") {
             let containerId = getWeightsContainerId(i);
             let theContainer = d3.select("#" + containerId);
-            drawLSTMWeightTypes(theContainer);
+            // drawLSTMWeightTypes(theContainer);
             break;//Draw only one => so break after this.
         }
     }
@@ -772,7 +772,6 @@ async function displayLayerWeights(model, i, containerId) {
             buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
                 buildWeightPositionDataV2(cumulativeT, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                     result['layerType'] = 'dense';
-
                     weightsPathData[containerId] = result;
                     drawDenseWeights(containerId);
                 });
@@ -780,7 +779,6 @@ async function displayLayerWeights(model, i, containerId) {
 
             buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                 result['layerType'] = 'dense';
-
                 trainingWeightsPathData[containerId] = result;
                 drawTrainingWeights(containerId);
             });
@@ -918,6 +916,7 @@ function drawDenseWeights(containerId) {
             .attr("fill", "none")
             .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
+            .style('display', 'none')
             .attr("opacity",
                 d => {
                     if (d.scaledWeight >= $("#weightFilter").val()) {
@@ -948,6 +947,7 @@ function drawLSTMWeights(containerId) {
             // .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
+            .style('display', 'none')
             .attr("opacity", d => {
                 if (d.scaledWeight >= $("#weightFilter").val()) {
                     return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);

@@ -132,12 +132,6 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
             .attr("transform", "translate(0," + (this.settings.height / 2) + ")rotate(-90)")
             .text("Value").attr("dx", "1em"); //Also move right one text size.
     }
-    // if (this.settings.showColorBar) {
-    //     var colorBarG = this.svg.append("g")
-    //         .attr("class", "colorBar")
-    //         .attr("transform", "translate(" + (this.settings.paddingLeft + contentWidth + 5) + ", " + this.settings.paddingTop + ")");
-    //     this.plotColorBar(colorBarG, new Date().getTime(), 10, contentHeight, "vertical");
-    // }
 };
 
 LstmLineChart.prototype.plot = async function () {
