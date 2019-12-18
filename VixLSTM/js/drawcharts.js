@@ -316,11 +316,19 @@ function recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelect
             if (currentIdx > 0) {
                 sumCorr += corrMatrix[selected[currentIdx - 1]][i];
             }
-            // if (sumCorr > globalError[container]) {
-            //     isSelected[i] = false;
-            //     selected[currentIdx] = -1;
-            //     return
-            // }
+
+            if (sumCorr + (noOfNeurons - currentIdx - 1) <= globalError[container]) {
+                // if (container === 'layerContainer1') {
+                //     console.log("cut", selected, noOfNeurons - currentIdx - 1);
+                //
+                // }
+                isSelected[i] = false;
+                selected[currentIdx] = -1;
+                if (currentIdx > 0) {
+                    sumCorr -= corrMatrix[selected[currentIdx - 1]][i];
+                }
+                continue;
+            }
 
             if (currentIdx === noOfNeurons - 1 && sumCorr > globalError[container]) {
                 globalError[container] = sumCorr;
@@ -331,8 +339,8 @@ function recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelect
                     neuronData[container]['sortedData'][i] = newRow;
                 });
 
-                console.log(sumCorr);
-                console.log(selected);
+                // console.log(sumCorr);
+                // console.log(selected);
             } else {
                 recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumCorr, container);
             }
