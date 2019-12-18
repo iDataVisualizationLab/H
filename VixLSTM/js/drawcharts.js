@@ -270,7 +270,8 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
     }
     neuronData[container] = {};
     neuronData[container]['unsortedData'] = averageLineArr;
-    sortNeuronByMse(container, averageLineArr);
+    // sortNeuronByMse(container, averageLineArr);
+    sortNeuronByCorrelation(container, averageLineArr);
 }
 
 let globalError = {};
@@ -296,13 +297,50 @@ function recursiveFinding(mseMatrix, noOfNeurons, selected, isSelected, currentI
                     let newRow = {idx: d};
                     neuronData[container]['sortedData'][i] = newRow;
                 });
-                console.log(globalError);
-                console.log(globalSelected);
+                // console.log(globalError);
+                // console.log(globalSelected);
             } else {
                 recursiveFinding(mseMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumError, container);
             }
             isSelected[i] = false;
             selected[currentIdx] = -1;
+        }
+    }
+}
+
+function recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelected, currentIdx, sumCorr, container) {
+    for (let i = 0; i < noOfNeurons; i++) {
+        if (!isSelected[i]) {
+            isSelected[i] = true;
+            selected[currentIdx] = i;
+            if (currentIdx > 0) {
+                sumCorr += corrMatrix[selected[currentIdx - 1]][i];
+            }
+            // if (sumCorr > globalError[container]) {
+            //     isSelected[i] = false;
+            //     selected[currentIdx] = -1;
+            //     return
+            // }
+
+            if (currentIdx === noOfNeurons - 1 && sumCorr > globalError[container]) {
+                globalError[container] = sumCorr;
+                globalSelected[container] = selected;
+
+                selected.forEach(function (d, i) {
+                    let newRow = {idx: d};
+                    neuronData[container]['sortedData'][i] = newRow;
+                });
+
+                console.log(sumCorr);
+                console.log(selected);
+            } else {
+                recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumCorr, container);
+            }
+            isSelected[i] = false;
+            selected[currentIdx] = -1;
+            if (currentIdx > 0) {
+                sumCorr -= corrMatrix[selected[currentIdx - 1]][i];
+            }
         }
     }
 }
@@ -339,8 +377,42 @@ function mean(arr) {
     return sum / arr.length;
 }
 
-function calculateCrossCorrelation(first) {
+function calculateCrossCorrelationV2(x, y) {
+    let n = x.length;
+    let sum_xy = 0;
+    let sum_x = 0;
+    let sum_y = 0;
+    let ss_x = 0;
+    let ss_y = 0;
+    console.log(x, y);
+    x.forEach(function (xVal, idx) {
+        sum_xy += xVal * y[idx];
+        ss_x += Math.pow(xVal, 2);
+        ss_y += Math.pow(y[idx], 2);
+        sum_x += xVal;
+        sum_y += y[idx];
+    });
 
+    let corr = (n * sum_xy - sum_x * sum_y) / (Math.sqrt((n * ss_x - Math.pow(sum_x, 2)) * (n * ss_y - Math.pow(sum_y, 2))));
+
+    return corr;
+}
+
+
+function calculateCrossCorrelation(x, y) {
+    let mean_x = mean(x);
+    let mean_y = mean(y);
+    let s_xy = 0;
+    let s_x = 0;
+    let s_y = 0;
+    x.forEach(function (xVal, idx) {
+        s_xy += (xVal - mean_x) * (y[idx] - mean_y);
+        s_x += Math.pow(xVal - mean_x, 2);
+        s_y += Math.pow(y[idx] - mean_y, 2);
+    });
+
+    // console.log(s_xy / (Math.sqrt(s_x) * Math.sqrt(s_y)));
+    return s_xy / (Math.sqrt(s_x) * Math.sqrt(s_y));
 }
 
 function sortNeuronByCorrelation(container, averageLineArr) {
@@ -350,24 +422,23 @@ function sortNeuronByCorrelation(container, averageLineArr) {
         corrMatrix[i] = [];
         for (let j = 0; j < averageLineArr.length; j++) {
             if (i === j) {
-                corrMatrix[i][j] = Infinity;
+                corrMatrix[i][j] = -1000000;
                 continue;
             }
             let firstLine = averageLineArr[i].data;
             let secondLine = averageLineArr[j].data;
-            let meanFirstLine = mean(firstLine);
-            let meanSecondLine = mean(secondLine);
 
-            // corrMatrix[i][j] = ;
-            // corrMatrix[j][i] = corrMatrix[i][j];
+            corrMatrix[i][j] = calculateCrossCorrelation(firstLine, secondLine);
+            // corrMatrix[i][j] = calculateCrossCorrelationV2(firstLine, secondLine);
         }
         isSelected.push(false);
     }
     let selected = [];
     globalSelected[container] = [];
-    globalError[container] = 1000000;
+    globalError[container] = -1000000;
     neuronData[container]['sortedData'] = [];
-    recursiveFinding(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
+    console.log(corrMatrix);
+    recursiveFindingCorrelation(corrMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
 }
 
 function calculateAverageLineForLstm(data) {
