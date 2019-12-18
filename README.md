@@ -8,4 +8,4 @@ HackerNets: https://idatavisualizationlab.github.io/H/HackerNets/
 
 DeepViz: https://idatavisualizationlab.github.io/H/VCNN/
 
-XNN: https://idatavisualizationlab.github.io/H/XNN/demo.html
+VixLSTM: https://idatavisualizationlab.github.io/H/VixLSTM/demo.html
