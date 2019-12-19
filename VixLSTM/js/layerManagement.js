@@ -75,12 +75,12 @@ function createLayerGUI(layerInfo) {
                     <div class="row valign-wrapper " style="height: ${networkHeight + "px"}">
                     <div class="layerBox" style="height: ${networkHeight+"px"}">
                         </div>
-                    <div>
+                    <div style="width: 100%">
                     
-                    <div class="col s4 layerContainer" id="layerContainer${layerInfo.timeStamp}">
+                    <div class="col s5 layerContainer" id="layerContainer${layerInfo.timeStamp}">
                      </div>
-                        <div class="col s8 trainingWeightsContainer left">
-                            <svg id="training_weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="189.125" style="overflow: visible"></svg>
+                        <div class="col s7 trainingWeightsContainer left">
+                            <svg id="training_weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="139.125" style="overflow: visible"></svg>
                         </div>`+
                         // `<div class="col s5 weightsContainer right">
                         //     <svg id="weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>

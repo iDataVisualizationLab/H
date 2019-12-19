@@ -11,7 +11,7 @@
 /*For the columns*/
 .columnWrapper {
     display: grid;
-    grid-template-columns: repeat(calc(var(--colNum) + 2), 300px);
+    grid-template-columns: repeat(calc(var(--colNum) + 2), 240px);
     width: calc(var(--colNum) * 200px);
 }
 
@@ -139,7 +139,7 @@ select {
     line-height: normal !important;
 }
 
-.col.s8 .col.s5, .col.s6, .col.s7 {
+.col.s8 .col.s5, toolbar .col.s6, toolbar .col.s7 {
     padding: 0px;
 }
 
