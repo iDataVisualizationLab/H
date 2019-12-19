@@ -765,7 +765,7 @@ async function displayLayerWeights(model, i, containerId) {
             };
             buildUnorderedData(convertedContainerId, result.sortedData.length);
 
-            drawLSTMWeights(containerId);
+            // drawLSTMWeights(containerId);
             // updateVarNetwork();
         });
         buildTrainingWeightData(i, weights.shape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {

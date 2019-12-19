@@ -171,5 +171,5 @@ a {
     border-style: solid;
     border-radius: 10px;
     background-color: lightgrey;
-    z-index: -1;
+    z-index: -10;
 }

@@ -421,7 +421,6 @@ function sortNeuronByCorrelation(container, averageLineArr) {
     globalSelected[container] = [];
     globalError[container] = -1000000;
     neuronData.correlation[container]['sortedData'] = [];
-    console.log(corrMatrix);
     recursiveFindingCorrelation(corrMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
 }
 
@@ -436,11 +435,6 @@ function calculateAverageLineForLstm(data) {
     });
 
     return averageLine;
-}
-
-function calculateAverageLineForDense(data) {
-    console.log(data);
-
 }
 
 function drawLinechartDetails(selector, d, data) {
@@ -561,13 +555,17 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
             let lc = mapObjects[selector + featureIdx];
             lc.update(lineChartData);
         }
-        // averageLineArr.push({data: calculateAverageLineForDense({x: x, y: y}), idx: featureIdx});
+        averageLineArr.push({data: x, idx: featureIdx});
     }
-    // if (container !== 'outputContainer' && container !== 'testContainer') {
-    //     neuronData[container] = {};
-    //     neuronData[container]['unsortedData'] = averageLineArr;
-    //     sortNeuronByMse(container, averageLineArr);
-    // }
+    if (normalizer) {
+        neuronData.mse[container] = {};
+        neuronData.mse[container]['unsortedData'] = [];
+        neuronData.correlation[container] = {};
+        neuronData.correlation[container]['unsortedData'] = averageLineArr;
+
+        sortNeuronByMse(container, averageLineArr);
+        sortNeuronByCorrelation(container, averageLineArr);
+    }
 }
 
 function updateGraphTitle(graphId, newText) {
@@ -606,57 +604,57 @@ function plotColorBar(theSvg, colorScale, id, width, height, orientation) {
     axisG.call(axisBottom);
 }
 
-async function buildWeightPositionData(weightsT, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity) {
-    return new Promise((resolve, reject) => {
-        let weightData = weightsT.dataSync();
-        let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(weightData.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
-        let opacityScaler = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minOpacity, maxOpacity]);
-        let zeroOneScaler = d3.scaleLinear().domain([0, d3.max(weightData.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
-        let lineData = [];
-
-        let wShape = weightsT.shape;
-        let noOfLeftNodes = wShape[0];
-        noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
-        spanForWeightTypes = spanForWeightTypes ? spanForWeightTypes : 0;
-
-        let noOfRightNodes = wShape[1] / noOfWeightTypes;
-
-        for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
-            let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
-            let leftNodeStartY = leftNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
-            for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
-                let rightNodeCenterY = rightIdx * (rightNodeHeight + rightNodeMarginTop) + (rightNodeHeight + rightNodeMarginTop) / 2;
-                let rightNodeStartY = rightNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
-                for (let typeIdx = 0; typeIdx < noOfWeightTypes; typeIdx++) {
-                    let leftNodeY = leftNodeStartY + typeIdx * spanForWeightTypes;
-                    let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
-                    let idx = leftIdx * (wShape[1]) + typeIdx * noOfRightNodes + rightIdx;
-                    let item = {
-                        source: {
-                            x: 0,
-                            y: leftNodeY
-                        },
-                        target: {
-                            x: weightWidth,
-                            y: rightNodeY
-                        },
-                        sourceIdx: leftIdx,
-                        targetIdx: rightIdx,
-                        idx: idx,
-                        type: typeIdx,
-                        weight: weightData[idx],
-                        scaledWeight: zeroOneScaler(weightData[idx] > 0 ? weightData[idx] : -weightData[idx])
-                    };
-                    lineData.push(item);
-                    // //TODO: may not break, but for now break for better performance
-                    // break;
-                }
-            }
-        }
-
-        resolve({lineData: lineData, strokeWidthScale: strokeWidthScale, opacityScaler: opacityScaler});
-    });
-}
+// async function buildWeightPositionData(weightsT, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity) {
+//     return new Promise((resolve, reject) => {
+//         let weightData = weightsT.dataSync();
+//         let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(weightData.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
+//         let opacityScaler = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minOpacity, maxOpacity]);
+//         let zeroOneScaler = d3.scaleLinear().domain([0, d3.max(weightData.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
+//         let lineData = [];
+//
+//         let wShape = weightsT.shape;
+//         let noOfLeftNodes = wShape[0];
+//         noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
+//         spanForWeightTypes = spanForWeightTypes ? spanForWeightTypes : 0;
+//
+//         let noOfRightNodes = wShape[1] / noOfWeightTypes;
+//
+//         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
+//             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
+//             let leftNodeStartY = leftNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
+//             for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
+//                 let rightNodeCenterY = rightIdx * (rightNodeHeight + rightNodeMarginTop) + (rightNodeHeight + rightNodeMarginTop) / 2;
+//                 let rightNodeStartY = rightNodeCenterY - (noOfWeightTypes - 1) * spanForWeightTypes / 2;
+//                 for (let typeIdx = 0; typeIdx < noOfWeightTypes; typeIdx++) {
+//                     let leftNodeY = leftNodeStartY + typeIdx * spanForWeightTypes;
+//                     let rightNodeY = rightNodeStartY + typeIdx * spanForWeightTypes;
+//                     let idx = leftIdx * (wShape[1]) + typeIdx * noOfRightNodes + rightIdx;
+//                     let item = {
+//                         source: {
+//                             x: 0,
+//                             y: leftNodeY
+//                         },
+//                         target: {
+//                             x: weightWidth,
+//                             y: rightNodeY
+//                         },
+//                         sourceIdx: leftIdx,
+//                         targetIdx: rightIdx,
+//                         idx: idx,
+//                         type: typeIdx,
+//                         weight: weightData[idx],
+//                         scaledWeight: zeroOneScaler(weightData[idx] > 0 ? weightData[idx] : -weightData[idx])
+//                     };
+//                     lineData.push(item);
+//                     // //TODO: may not break, but for now break for better performance
+//                     // break;
+//                 }
+//             }
+//         }
+//
+//         resolve({lineData: lineData, strokeWidthScale: strokeWidthScale, opacityScaler: opacityScaler});
+//     });
+// }
 
 async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity, epochs, strokeWidthScale, opacityScale, zeroOneScale) {
     return new Promise((resolve, reject) => {

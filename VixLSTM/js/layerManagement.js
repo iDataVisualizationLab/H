@@ -79,13 +79,13 @@ function createLayerGUI(layerInfo) {
                     
                     <div class="col s4 layerContainer" id="layerContainer${layerInfo.timeStamp}">
                      </div>
-                        <div class="col s3 trainingWeightsContainer left">
-                            <svg id="training_weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>
-                        </div>
-                        <div class="col s5 weightsContainer right">
-                            <svg id="weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>
-                        </div>
-                    </div>
+                        <div class="col s8 trainingWeightsContainer left">
+                            <svg id="training_weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="189.125" style="overflow: visible"></svg>
+                        </div>`+
+                        // `<div class="col s5 weightsContainer right">
+                        //     <svg id="weightsContainer${layerInfo.timeStamp}" transform="translate(0,5)" width="100" style="overflow: visible"></svg>
+                        // </div>`+
+                    `</div>
                         
                      </div>
                  </div>`);
