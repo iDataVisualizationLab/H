@@ -268,9 +268,11 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
         }
         averageLineArr.push({data: calculateAverageLineForLstm({x: x, y: y, z: z}), idx: featureIdx});
     }
-    neuronData[container] = {};
-    neuronData[container]['unsortedData'] = averageLineArr;
-    // sortNeuronByMse(container, averageLineArr);
+    neuronData.mse[container] = {};
+    neuronData.mse[container]['unsortedData'] = [];
+    neuronData.correlation[container] = {};
+    neuronData.correlation[container]['unsortedData'] = averageLineArr;
+    sortNeuronByMse(container, averageLineArr);
     sortNeuronByCorrelation(container, averageLineArr);
 }
 
@@ -298,7 +300,7 @@ function recursiveFindingMse(mseMatrix, noOfNeurons, selected, isSelected, curre
                 globalSelected[container] = selected;
                 selected.forEach(function (d, i) {
                     let newRow = {idx: d};
-                    neuronData[container]['sortedData'][i] = newRow;
+                    neuronData.mse[container]['sortedData'][i] = newRow;
                 });
             } else {
                 recursiveFindingMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumError, container);
@@ -336,7 +338,7 @@ function recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelect
 
                 selected.forEach(function (d, i) {
                     let newRow = {idx: d};
-                    neuronData[container]['sortedData'][i] = newRow;
+                    neuronData.correlation[container]['sortedData'][i] = newRow;
                 });
             } else {
                 recursiveFindingCorrelation(corrMatrix, noOfNeurons, selected, isSelected, currentIdx + 1, sumCorr, container);
@@ -373,7 +375,7 @@ function sortNeuronByMse(container, averageLineArr) {
     let selected = [];
     globalSelected[container] = [];
     globalError[container] = 1000000;
-    neuronData[container]['sortedData'] = [];
+    neuronData.mse[container]['sortedData'] = [];
     recursiveFindingMse(mseMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
 }
 
@@ -381,28 +383,6 @@ function mean(arr) {
     let sum = arr.reduce((a, b) => a + b, 0);
     return sum / arr.length;
 }
-
-function calculateCrossCorrelationV2(x, y) {
-    let n = x.length;
-    let sum_xy = 0;
-    let sum_x = 0;
-    let sum_y = 0;
-    let ss_x = 0;
-    let ss_y = 0;
-    console.log(x, y);
-    x.forEach(function (xVal, idx) {
-        sum_xy += xVal * y[idx];
-        ss_x += Math.pow(xVal, 2);
-        ss_y += Math.pow(y[idx], 2);
-        sum_x += xVal;
-        sum_y += y[idx];
-    });
-
-    let corr = (n * sum_xy - sum_x * sum_y) / (Math.sqrt((n * ss_x - Math.pow(sum_x, 2)) * (n * ss_y - Math.pow(sum_y, 2))));
-
-    return corr;
-}
-
 
 function calculateCrossCorrelation(x, y) {
     let mean_x = mean(x);
@@ -416,7 +396,6 @@ function calculateCrossCorrelation(x, y) {
         s_y += Math.pow(y[idx] - mean_y, 2);
     });
 
-    // console.log(s_xy / (Math.sqrt(s_x) * Math.sqrt(s_y)));
     return s_xy / (Math.sqrt(s_x) * Math.sqrt(s_y));
 }
 
@@ -434,14 +413,13 @@ function sortNeuronByCorrelation(container, averageLineArr) {
             let secondLine = averageLineArr[j].data;
 
             corrMatrix[i][j] = calculateCrossCorrelation(firstLine, secondLine);
-            // corrMatrix[i][j] = calculateCrossCorrelationV2(firstLine, secondLine);
         }
         isSelected.push(false);
     }
     let selected = [];
     globalSelected[container] = [];
     globalError[container] = -1000000;
-    neuronData[container]['sortedData'] = [];
+    neuronData.correlation[container]['sortedData'] = [];
     console.log(corrMatrix);
     recursiveFindingCorrelation(corrMatrix, averageLineArr.length, selected, isSelected, 0, 0, container);
 }
@@ -893,7 +871,7 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
             strokeWidthScale: strokeWidthScale,
             opacityScaler: opacityScale,
             sortedData: nodeWeightSumArray,
-            originalData: []
+            unsortedData: []
         });
     });
 }

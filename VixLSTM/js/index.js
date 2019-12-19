@@ -310,71 +310,68 @@ function findSortedTarget(targetIdx, sorted) {
     return sortedTargetIdx;
 }
 
-function reorderNeuronByMse() {
-    let keys = Object.keys(neuronData);
-    let isChecked = $('#orderNeuronCheckbox').prop('checked');
+$('#orderNeuronsSelect').on('change', function () {
+    let selected;
+    switch ($(this).val()) {
+        case '1':
+            selected = "unordered";
+            break;
+        case '2':
+            selected = "weights";
+            break;
+        case '3':
+            selected = "mse";
+            break;
+        case '4':
+            selected = "correlation";
+            break;
+        default:
+            selected = "correlation";
+            break;
+    }
+
+    onReorderNeuronsCheckbox(selected);
+});
+
+function onReorderNeuronsCheckbox(measure) {
+
+    let keys = Object.keys(neuronData[measure]);
     keys.forEach(function (key, keyIdx) {
-        let averageLine = neuronData[key].unsortedData;
 
-    })
-}
-
-function onReorderNeuronsCheckbox() {
-    let keys = Object.keys(weightsPathData);
-    let isChecked = $('#orderNeuronCheckbox').prop('checked');
-    keys.forEach(function (key, keyIdx) {
-
-        let htmlContainerId = "";
-        if (key === 'layer0Weights') {
-            htmlContainerId = 'inputContainer';
+        let htmlContainerId = key;
+        let convertedKey;
+        if (key === 'inputContainer') {
+            convertedKey = 'layer0Weights';
         } else {
-            htmlContainerId = key.replace('weights', 'layer');
-        }
-        if (neuronData[htmlContainerId]) {
-            weightsPathData[key].sortedData = neuronData[htmlContainerId].sortedData;
-        } else {
-            weightsPathData[key].sortedData = neuronData['inputContainer'].unsortedData;
+            convertedKey = key.replace('layer', 'weights');
         }
 
-        let weightsPaths = weightsPathData[key];
-        let weightsTraining = trainingWeightsPathData[key];
+        let weightsPaths = weightsPathData[convertedKey];
+        let weightsTraining = trainingWeightsPathData[convertedKey];
         let nextKeyIdx = (keyIdx + 1) < keys.length ? (keyIdx + 1) : 0;
-        let sorted = null;
-        let nextSorted = null;
-        if (isChecked) {
-            sorted = weightsPaths.sortedData;
-            nextSorted = weightsPathData[keys[nextKeyIdx]].sortedData;
-        } else {
-            sorted = weightsPaths.originalData;
-            nextSorted = weightsPathData[keys[nextKeyIdx]].originalData;
-        }
 
-
+        let sorted = neuronData[measure][key].sortedData;
+        let nextSorted = neuronData[measure][keys[nextKeyIdx]].sortedData;
 
         let htmlContainer = $(`#${htmlContainerId}`);
-        let currentNeurons = htmlContainer.children();
+
+        if (!originalNeurons[key]) {
+            originalNeurons[key] = htmlContainer.children();
+        }
         htmlContainer.empty();
         sorted.forEach(function (d, i) {
-            htmlContainer.append(currentNeurons[d.idx]);
-            let sourceIdx = 0;
-            if (isChecked) {
-                sourceIdx = d.idx;
-            } else {
-                sourceIdx = i;
-            }
-            if (weightsPaths.originalData.length < weightsPaths.sortedData.length) {
-                let oriIdx = findSortedTarget(i, sorted);
-                weightsPaths.originalData.push({weightSum: sorted[oriIdx].weightSum, idx: oriIdx})
-            }
-            weightsPaths.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
-                v.source.y = v.source.y - (d.idx - i) * 122;
-                // v.newSourceIdx = i;
-                if (keyIdx + 1 < keys.length) {
-                    let sortedTargetIdx = findSortedTarget(v.targetIdx, nextSorted);
-                    v.target.y = v.target.y + (sortedTargetIdx - v.targetIdx) * 122;
-                    // v.newTargetIdx = sortedTargetIdx;
-                }
-            });
+
+            htmlContainer.append(originalNeurons[key][d.idx]);
+            let sourceIdx = d.idx;
+            // weightsPaths.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
+            //     v.source.y = v.source.y - (d.idx - i) * 122;
+            //     // v.newSourceIdx = i;
+            //     if (keyIdx + 1 < keys.length) {
+            //         let sortedTargetIdx = findSortedTarget(v.targetIdx, nextSorted);
+            //         v.target.y = v.target.y + (sortedTargetIdx - v.targetIdx) * 122;
+            //         // v.newTargetIdx = sortedTargetIdx;
+            //     }
+            // });
             weightsTraining.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
                 v.paths.forEach(function (path) {
                     // path.newSourceIdx = sourceIdx;
@@ -388,11 +385,12 @@ function onReorderNeuronsCheckbox() {
         // weightsTraining.lineData.forEach(d => d.sourceIdx = d.newSourceIdx);
 
         if (weightsPaths.layerType === 'lstm') {
-            drawLSTMWeights(key);
-            drawLstmTrainingWeights(key);
+            console.log("hi");
+            drawLSTMWeights(convertedKey);
+            drawLstmTrainingWeights(convertedKey);
         } else {
-            drawDenseWeights(key);
-            drawTrainingWeights(key);
+            drawDenseWeights(convertedKey);
+            drawTrainingWeights(convertedKey);
         }
     });
 }

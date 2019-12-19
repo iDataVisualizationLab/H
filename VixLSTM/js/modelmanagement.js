@@ -738,6 +738,14 @@ async function displayLayerWeights(model, i, containerId) {
     let minStrokeWidth = 0,
         maxStrokeWidth = 3;
 
+
+    let convertedContainerId = null;
+    if (containerId === 'layer0Weights') {
+        convertedContainerId = 'inputContainer'
+    } else {
+        convertedContainerId = containerId.replace('weights', 'layer');
+    }
+
     if (layer.name.indexOf("lstm") >= 0) {
         let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
         let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
@@ -745,7 +753,16 @@ async function displayLayerWeights(model, i, containerId) {
 
         buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             result['layerType'] = 'lstm';
-            weightsPathData[containerId] = result;//Store to use on click
+            weightsPathData[containerId] = {
+                lineData: result.lineData,
+                strokeWidthScale: result.strokeWidthScale,
+                opacityScale: result.opacityScale,
+                layerType: 'lstm'
+            };//Store to use on click
+            neuronData.weights[convertedContainerId] = {
+                sortedData: result.sortedData,
+                unsortedData: result.unsortedData
+            };
             drawLSTMWeights(containerId);
             // updateVarNetwork();
         });
@@ -772,7 +789,16 @@ async function displayLayerWeights(model, i, containerId) {
             buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
                 buildWeightPositionDataV2(cumulativeT, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                     result['layerType'] = 'dense';
-                    weightsPathData[containerId] = result;
+                    weightsPathData[containerId] = {
+                        lineData: result.lineData,
+                        strokeWidthScale: result.strokeWidthScale,
+                        opacityScale: result.opacityScale,
+                        layerType: 'dense'
+                    };//Store to use on click
+                    neuronData.weights[convertedContainerId] = {
+                        sortedData: result.sortedData,
+                        unsortedData: result.unsortedData
+                    };
                     drawDenseWeights(containerId);
                 });
             });
@@ -792,8 +818,17 @@ async function displayLayerWeights(model, i, containerId) {
 
         buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             result['layerType'] = 'dense';
+            weightsPathData[containerId] = {
+                lineData: result.lineData,
+                strokeWidthScale: result.strokeWidthScale,
+                opacityScale: result.opacityScale,
+                layerType: 'dense'
+            };//Store to use on click
+            neuronData.weights[convertedContainerId] = {
+                sortedData: result.sortedData,
+                unsortedData: result.unsortedData
+            };
 
-            weightsPathData[containerId] = result;
             drawDenseWeights(containerId);
         });
 
