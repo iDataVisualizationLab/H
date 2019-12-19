@@ -272,6 +272,7 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
     neuronData.mse[container]['unsortedData'] = [];
     neuronData.correlation[container] = {};
     neuronData.correlation[container]['unsortedData'] = averageLineArr;
+
     sortNeuronByMse(container, averageLineArr);
     sortNeuronByCorrelation(container, averageLineArr);
 }

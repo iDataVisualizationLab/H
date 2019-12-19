@@ -35,3 +35,5 @@ let neuronShowingHeatmap = false;
 let isOutlierGlobal = [];
 let neuronData = {unordered: {}, mse: {}, correlation: {}, weights: {}};
 let originalNeurons = {};
+let originalTrainingWeights = null;
+let originalWeights = null;

@@ -336,6 +336,14 @@ $('#orderNeuronsSelect').on('change', function () {
 function onReorderNeuronsCheckbox(measure) {
 
     let keys = Object.keys(neuronData[measure]);
+    if (!originalWeights) {
+        originalWeights = $.extend(true, {}, weightsPathData);
+        originalTrainingWeights = $.extend(true, {}, trainingWeightsPathData);
+    } else {
+        weightsPathData = $.extend(true, {}, originalWeights);
+        trainingWeightsPathData = $.extend(true, {}, originalTrainingWeights);
+    }
+
     keys.forEach(function (key, keyIdx) {
 
         let htmlContainerId = key;
@@ -385,7 +393,6 @@ function onReorderNeuronsCheckbox(measure) {
         // weightsTraining.lineData.forEach(d => d.sourceIdx = d.newSourceIdx);
 
         if (weightsPaths.layerType === 'lstm') {
-            console.log("hi");
             drawLSTMWeights(convertedKey);
             drawLstmTrainingWeights(convertedKey);
         } else {

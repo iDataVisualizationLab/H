@@ -763,6 +763,8 @@ async function displayLayerWeights(model, i, containerId) {
                 sortedData: result.sortedData,
                 unsortedData: result.unsortedData
             };
+            buildUnorderedData(convertedContainerId, result.sortedData.length);
+
             drawLSTMWeights(containerId);
             // updateVarNetwork();
         });
@@ -799,6 +801,8 @@ async function displayLayerWeights(model, i, containerId) {
                         sortedData: result.sortedData,
                         unsortedData: result.unsortedData
                     };
+                    buildUnorderedData(convertedContainerId, result.sortedData.length);
+
                     drawDenseWeights(containerId);
                 });
             });
@@ -828,6 +832,7 @@ async function displayLayerWeights(model, i, containerId) {
                 sortedData: result.sortedData,
                 unsortedData: result.unsortedData
             };
+            buildUnorderedData(convertedContainerId, result.sortedData.length);
 
             drawDenseWeights(containerId);
         });
@@ -842,6 +847,16 @@ async function displayLayerWeights(model, i, containerId) {
 
     //Don't have to draw weights of flatten, will only use it next layer (model.layersConfig[i].name.indexOf("flatten"))
 
+}
+
+function buildUnorderedData(containerId, n) {
+    let sortedUnordered = [];
+    for (let i = 0; i < n; i++) {
+        sortedUnordered.push({idx: i});
+    }
+    neuronData.unordered[containerId] = {
+        sortedData: sortedUnordered
+    };
 }
 
 function toggleWeightsMenu() {
