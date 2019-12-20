@@ -51,6 +51,27 @@ document.addEventListener('DOMContentLoaded', function() {
 $(document).ready(function(){
     $('.sidenav').sidenav();
     $('select').formSelect();
-
 });
+
+// function exportData() {
+//     let X_train_outlier = [];
+//     let X_train_not_outlier = [];
+//     let y_train_outlier = [];
+//     let y_train_not_outlier = [];
+//
+//     isOutlierGlobal.forEach(function (d, i) {
+//         if (d) {
+//             X_train_outlier.push(X_train[i]);
+//             y_train_outlier.push(y_train[i]);
+//         } else {
+//             X_train_not_outlier.push(X_train[i]);
+//             y_train_not_outlier.push(y_train[i]);
+//         }
+//     });
+//
+//     // download(JSON.stringify(X_train_outlier), 'X_train_outlier.json', 'text/plain')
+//     download(JSON.stringify(X_train_not_outlier), 'X_train_not_outlier.json', 'text/plain')
+//     // download(JSON.stringify(y_train_outlier), 'y_train_outlier.json', 'text/plain')
+//     download(JSON.stringify(y_train_not_outlier), 'y_train_not_outlier.json', 'text/plain')
+// }
 
