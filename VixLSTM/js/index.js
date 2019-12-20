@@ -371,15 +371,15 @@ function onReorderNeuronsCheckbox(measure) {
 
             htmlContainer.append(originalNeurons[key][d.idx]);
             let sourceIdx = d.idx;
-            // weightsPaths.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
-            //     v.source.y = v.source.y - (d.idx - i) * 122;
-            //     // v.newSourceIdx = i;
-            //     if (keyIdx + 1 < keys.length) {
-            //         let sortedTargetIdx = findSortedTarget(v.targetIdx, nextSorted);
-            //         v.target.y = v.target.y + (sortedTargetIdx - v.targetIdx) * 122;
-            //         // v.newTargetIdx = sortedTargetIdx;
-            //     }
-            // });
+            weightsPaths.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
+                v.source.y = v.source.y - (d.idx - i) * 122;
+                // v.newSourceIdx = i;
+                if (keyIdx + 1 < keys.length) {
+                    let sortedTargetIdx = findSortedTarget(v.targetIdx, nextSorted);
+                    v.target.y = v.target.y + (sortedTargetIdx - v.targetIdx) * 122;
+                    // v.newTargetIdx = sortedTargetIdx;
+                }
+            });
             weightsTraining.lineData.filter(line => line.sourceIdx === sourceIdx).forEach(function (v) {
                 v.paths.forEach(function (path) {
                     // path.newSourceIdx = sourceIdx;

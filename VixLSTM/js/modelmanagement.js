@@ -820,7 +820,12 @@ async function displayLayerWeights(model, i, containerId) {
         let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
-        buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        let isLastLayer = false;
+        if (containerId.replace('weightsContainer', 'layer') === layersConfig[layersConfig.length - 2].id) {
+            isLastLayer = true;
+        }
+
+        buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, isLastLayer ? 49.125 : 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             result['layerType'] = 'dense';
             weightsPathData[containerId] = {
                 lineData: result.lineData,
@@ -837,7 +842,7 @@ async function displayLayerWeights(model, i, containerId) {
             drawDenseWeights(containerId);
         });
 
-        buildTrainingWeightDataV2(i, weights.shape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 0).then((result) => {
+        buildTrainingWeightDataV2(i, weights.shape, heatmapH, 22, 100, 22, isLastLayer ? 80 :200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 0).then((result) => {
             result['layerType'] = 'dense';
 
             trainingWeightsPathData[containerId] = result;
@@ -966,7 +971,7 @@ function drawDenseWeights(containerId) {
             .attr("fill", "none")
             .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
-            .style('display', 'none')
+            // .style('display', 'none')
             .attr("opacity",
                 d => {
                     if (d.scaledWeight >= $("#weightFilter").val()) {

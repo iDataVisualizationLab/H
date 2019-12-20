@@ -738,12 +738,9 @@ async function buildTrainingWeightDataV2(i, wShape, leftNodeHeight, leftNodeMarg
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeMarginTop) / 2;
             let leftNodeStartY = leftNodeCenterY + 6 * spanForWeightsLeft / 2;
-            console.log(leftNodeCenterY);
-            console.log(leftNodeStartY);
             for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
                 let idx = leftIdx * wShape[1] + weightTypeIdx * noOfRightNodes + rightIdx;
                 let idxInNode = idx % noOfWeights;
-                console.log(idxInNode);
                 let leftNodeY = leftNodeStartY + idxInNode * spanForWeightsLeft;
                 let spanForEpochs = weightWidth / epochs;
                 let pathList = [];
