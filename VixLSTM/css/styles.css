@@ -169,10 +169,10 @@ a {
     position: absolute;
     width: 120px;
     border-width: 1px 0px 1px 1px;
-    border-color: rgba(205,205,205,0.7);
+    border-color: rgba(0,0,0,0.5);
     border-style: solid;
     border-radius: 10px;
-    background-color: #F1F1F1;
+    background-color: #DDDDDD;
     z-index: -10;
 }
 

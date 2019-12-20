@@ -438,6 +438,7 @@ function calculateAverageLineForLstm(data) {
 }
 
 function drawLinechartDetails(selector, d, data) {
+    console.log(selector);
     let theMapContainer = document.getElementById("mapDetailsContent");
     d3.select(theMapContainer).selectAll("*").remove();
     let mData = mapObjects[selector + d].data;

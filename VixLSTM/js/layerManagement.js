@@ -131,9 +131,9 @@ function clearMiddleLayerGUI() {
 function getLayerInfo(layerInfo) {
     let result = "";
     if (layerInfo.layerType === "lstm") {
-        result = `<b><a href="#" onclick="updateLayer('${layerInfo.id}')">LSTM (${layerInfo.units} units)</a></b><br/>x-axis: time sequences<br/>y-axis: instances`;
+        result = `<b><a href="#" onclick="updateLayer('${layerInfo.id}')">LSTM (${layerInfo.units} units)</a></b><br/>x-axis: time sequences<br/>y-axis: data instances`;
     } else if (layerInfo.layerType === "dense") {
-        result = `<b><a href="#" onclick="updateLayer('${layerInfo.id}')">Dense (${layerInfo.units} units)</a></b><br/>x-axis: output values<br/>y-axis: instances`
+        result = `<b><a href="#" onclick="updateLayer('${layerInfo.id}')">Dense (${layerInfo.units} units)</a></b><br/>x-axis: output values<br/>y-axis: data instances`
     }
     return result;
 }
