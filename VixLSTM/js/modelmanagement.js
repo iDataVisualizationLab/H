@@ -205,7 +205,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     //Draw the legends for weights
     //Draw weights type on the last layer (to avoid conflict with other types), and also this one sure always there is one.
     let containerId = "training_" + getWeightsContainerId(layersConfig.length - 1);
-    drawWeightTypes(d3.select("#" + containerId));
+    // drawWeightTypes(d3.select("#" + containerId));
 
     //Draw the lstm to the first layer.
     for (let i = 0; i < layersConfig.length; i++) {
@@ -736,7 +736,7 @@ async function displayLayerWeights(model, i, containerId) {
 
     let layerTrainingWeight = getLayerTrainingWeight(i);
     let minStrokeWidth = 0,
-        maxStrokeWidth = 5;
+        maxStrokeWidth = 3;
 
 
     let convertedContainerId = null;
@@ -913,11 +913,12 @@ function drawTrainingWeights(containerId) {
             .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
             .attr("opacity", d => {
-                if (d.scaledWeight >= $("#weightFilter").val()) {
-                    return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
-                } else {
-                    return 0;
-                }
+                // if (d.scaledWeight >= $("#weightFilter").val()) {
+                //     return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                // } else {
+                //     return 0;
+                // }
+                return 1;
             })
             .on("mouseover", (d) => {
                 showTip(`Epoch: ${d.epoch} weight: ${d.weight.toFixed(2)}`);
@@ -944,11 +945,12 @@ function drawLstmTrainingWeights(containerId) {
             .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
             .attr("opacity", d => {
-                if (d.scaledWeight >= $("#weightFilter").val()) {
-                    return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
-                } else {
-                    return 0;
-                }
+                // if (d.scaledWeight >= $("#weightFilter").val()) {
+                //     return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                // } else {
+                //     return 0;
+                // }
+                return 1;
             })
             .on("mouseover", (d) => {
                 showTip(`Epoch: ${d.epoch} weight: ${d.weight.toFixed(2)}`);
@@ -974,11 +976,12 @@ function drawDenseWeights(containerId) {
             // .style('display', 'none')
             .attr("opacity",
                 d => {
-                    if (d.scaledWeight >= $("#weightFilter").val()) {
-                        return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
-                    } else {
-                        return 0;
-                    }
+                    // if (d.scaledWeight >= $("#weightFilter").val()) {
+                    //     return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                    // } else {
+                    //     return 0;
+                    // }
+                    return 1;
                 })
             .on("mouseover", (d) => {
                 showTip(`Current weight: ${d.weight.toFixed(2)}`);
@@ -1004,11 +1007,12 @@ function drawLSTMWeights(containerId) {
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
             .style('display', 'none')
             .attr("opacity", d => {
-                if (d.scaledWeight >= $("#weightFilter").val()) {
-                    return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
-                } else {
-                    return 0;
-                }
+                // if (d.scaledWeight >= $("#weightFilter").val()) {
+                //     return 1;//result.opacityScaler(d.weight > 0 ? d.weight : -d.weight);
+                // } else {
+                //     return 0;
+                // }
+                return 1;
             })
             .on("mouseover", (d) => {
                 showTip(`Current weight: ${d.weight.toFixed(2)}`);

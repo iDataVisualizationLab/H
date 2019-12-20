@@ -113,7 +113,8 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     maxDataVal = maxZ;
 
     // drawInputColorScale(minDataVal, avgZ, maxDataVal);
-    drawOutputColorScale();
+    // drawOutputColorScale();
+
     //Draw input
     let X_train_ordered = trainRULOrder.map(d => X_train[d]);
     X_train_ordered.layerName = "Input";
@@ -388,9 +389,6 @@ function onReorderNeuronsCheckbox(measure) {
                 })
             });
         });
-
-        // weightsPaths.lineData.forEach(d => {d.sourceIdx = d.newSourceIdx; d.targetIdx = d.newTargetIdx});
-        // weightsTraining.lineData.forEach(d => d.sourceIdx = d.newSourceIdx);
 
         if (weightsPaths.layerType === 'lstm') {
             drawLSTMWeights(convertedKey);

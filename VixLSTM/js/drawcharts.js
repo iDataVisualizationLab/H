@@ -530,14 +530,14 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
                 x: x,
                 y: y,
                 isOutlier: isOutlier,
-                series: 'output',
+                series: 'predicted',
                 marker: 'o',
                 type: 'scatter'
             },
             {
                 x: target,
                 y: y,
-                series: 'target',
+                series: 'actual',
                 marker: 'x',
                 type: 'scatter'
             }

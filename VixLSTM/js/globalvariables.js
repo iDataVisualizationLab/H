@@ -37,3 +37,20 @@ let neuronData = {unordered: {}, mse: {}, correlation: {}, weights: {}};
 let originalNeurons = {};
 let originalTrainingWeights = null;
 let originalWeights = null;
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, options);
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems, options);
+});
+
+$(document).ready(function(){
+    $('.sidenav').sidenav();
+    $('select').formSelect();
+
+});
+

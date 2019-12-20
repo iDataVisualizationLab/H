@@ -160,16 +160,25 @@ a {
     margin-left: 20px;
     display: inline-block;
     position: relative;
-    right: 20%
+    right: 10%
 }
 
 .layerBox {
     position: absolute;
     width: 120px;
-    border-width: 2px 0px 2px 2px;
-    border-color: black;
+    border-width: 1px 0px 1px 1px;
+    border-color: rgba(205,205,205,0.7);
     border-style: solid;
     border-radius: 10px;
-    background-color: lightgrey;
+    background-color: #F1F1F1;
     z-index: -10;
+}
+
+.input-field {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.sidenav {
+    width: 350px;
 }

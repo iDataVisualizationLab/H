@@ -41,47 +41,38 @@
 
 <!--<editor-fold desc="Header">-->
 <nav class="nav-wrapper indigo">
-    <div class="container" style="margin-left: auto;margin-right: auto; width: 100%">
+    <div class="container">
+
         <a href="#" class="brand-logo"><strong>VixLSTM</strong>: <strong>V</strong>isual <strong>E</strong>xplainable
             <strong>LSTM</strong> for Multivariate Time Series</a>
     </div>
 </nav>
-<div class="divider" style="margin-bottom: 10px;"></div>
-<div class="row">
-    <div class="row" style="height: 50px; width: 90%" id="toolbar">
-        <div class="col s6">
-            <!--<a href="#" class="btn-menu">train data</a>-->
-            <!--<a href="#" class="btn-menu">testing data</a>-->
 
-            <!--            <div class="row col s4" style="display: none">-->
-            <!--                <div class="input-field col s4" style="text-align: right">-->
-            <!--                    Target-->
-            <!--                </div>-->
-            <!--                <div class="input-field col s8">-->
-            <!--                    <select id="target-variables"></select>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <div class="col s4">
-                <div class="input-field col s5" style="text-align: right">Epoch</div>
-                <div class="input-field col s7">
-                    <input id="epochs" type="number" value="30" style="text-align: center">
-                </div>
-            </div>
-            <div class="col s4">
-                <div class="input-field col s5" style="text-align: right">Batch</div>
-                <div class="input-field col s7">
-                    <input id="batchSize" type="number" value="8" style="text-align: center">
-                </div>
-            </div>
-            <div class="col s4">
-                <div class="input-field col s7" style="text-align: right">Learning Rate</div>
-                <div class="input-field col s5">
-                    <input id="learningRate" type="number" value="0.005" style="text-align: center">
-                </div>
+<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+<ul id="slide-out" class="sidenav">
+    <li>
+        <div class="row">
+            <div class="input-field col s5" style="text-align: left">Epoch</div>
+            <div class="input-field col s7">
+                <input id="epochs" type="number" value="30" style="text-align: center">
             </div>
         </div>
-
-        <div class="row col s3 valign-wrapper" style="height: 100%">
+        <div class="row">
+            <div class="input-field col s5" style="text-align: left">Batch</div>
+            <div class="input-field col s7">
+                <input id="batchSize" type="number" value="8" style="text-align: center">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s5" style="text-align: left">Learning Rate</div>
+            <div class="input-field col s7">
+                <input id="learningRate" type="number" value="0.005" style="text-align: center">
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="row valign-wrapper" style="height: 100%">
             <div class="row" style="margin-bottom: 10px">
                 <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load
                     model</a>
@@ -91,56 +82,105 @@
                     model</a>
             </div>
         </div>
+    </li>
+    <li>
+        <form action="#" style="padding-left: 0.75rem;padding-right: 0.75rem">
+            <p style="float: left">
+                <label>
+                    <input type="checkbox" class="filled-in" id="heatmapShowingCheckbox"
+                           onchange="onHeatmapShowingCheckbox()"/>
+                    <span>Heat Map on neurons</span>
+                </label>
+            </p>
+        </form>
+    </li>
 
-        <div class="col s3">
-            <!--<a href="#" class="btn-menu">train data</a>-->
-            <!--<a href="#" class="btn-menu">testing data</a>-->
-            <div>
-                <div class="col s7">
-                    <p class="range-field"
-                       style="float: left;margin-top: 0px; height: 13px; width: 180px; line-height: 0.0;">
-                        <label for="weightFilter">Filter weight (absolute)</label>
-                        <input type="range" id="weightFilter" min="0.0" max="1.0" step="0.01" value="0.0"
-                               oninput="onWeightFilterInput()"/>
-                    </p>
-
-                    <form action="#">
-                        <p style="float: left">
-                            <label>
-                                <input type="checkbox" class="filled-in" id="heatmapShowingCheckbox"
-                                       onchange="onHeatmapShowingCheckbox()"/>
-                                <span>Heat Map on neurons</span>
-                            </label>
-                        </p>
-                    </form>
-
-                    <!--                <form action="#" >-->
-                    <!--                    <p style="float: right">-->
-                    <!--                        <label>-->
-                    <!--                            <input type="checkbox" class="filled-in" id="orderNeuronCheckbox" onchange="onReorderNeuronsCheckbox()"/>-->
-                    <!--                            <span>Reorder neurons</span>-->
-                    <!--                        </label>-->
-                    <!--                    </p>-->
-                    <!--                </form>-->
-                </div>
-
-                <div class="input-field col s7">
-                    <select id="orderNeuronsSelect">
-                        <option value="" disabled selected>Reorder neurons</option>
-                        <option value="1">Unordered</option>
-                        <option value="2">Weights</option>
-                        <option value="3">MSE</option>
-                        <option value="4">Correlation</option>
-                    </select>
-                </div>
-            </div>
-
-
+    <li>
+        <div class="input-field" style="padding-left: 0.75rem;padding-right: 0.75rem">
+            <select id="orderNeuronsSelect">
+                <option value="" disabled selected>Reorder neurons</option>
+                <option value="1">Unordered</option>
+                <option value="2">Weights</option>
+                <option value="3">MSE</option>
+                <option value="4">Correlation</option>
+            </select>
         </div>
-    </div>
-</div>
-</div>
-<div class="divider"></div>
+    </li>
+</ul>
+
+<div class="divider" style="margin-bottom: 10px;"></div>
+<!--<div class="row">-->
+<!--    <div class="row" style="height: 50px; width: 90%" id="toolbar">-->
+        <!--        <div class="col s6">-->
+        <!--            <div class="col s4">-->
+        <!--                <div class="input-field col s5" style="text-align: right">Epoch</div>-->
+        <!--                <div class="input-field col s7">-->
+        <!--                    <input id="epochs" type="number" value="30" style="text-align: center">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="col s4">-->
+        <!--                <div class="input-field col s5" style="text-align: right">Batch</div>-->
+        <!--                <div class="input-field col s7">-->
+        <!--                    <input id="batchSize" type="number" value="8" style="text-align: center">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="col s4">-->
+        <!--                <div class="input-field col s7" style="text-align: right">Learning Rate</div>-->
+        <!--                <div class="input-field col s5">-->
+        <!--                    <input id="learningRate" type="number" value="0.005" style="text-align: center">-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <!--        <div class="row col s3 valign-wrapper" style="height: 100%">-->
+        <!--            <div class="row" style="margin-bottom: 10px">-->
+        <!--                <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load-->
+        <!--                    model</a>-->
+        <!--                <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i-->
+        <!--                        class="material-icons right" id="playPausedIcon">play_arrow</i>Start</a>-->
+        <!--                <a class="btn btn-menu " id="saveModelMenu" onclick="displaySaveModelDialog()">Save-->
+        <!--                    model</a>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+<!--                <div class="col s3">-->
+<!--                    <div>-->
+<!--                        <div class="col s7">-->
+<!--                            <p class="range-field"-->
+<!--                               style="float: left;margin-top: 0px; height: 13px; width: 180px; line-height: 0.0;">-->
+<!--                                <label for="weightFilter">Filter weight (absolute)</label>-->
+<!--                                <input type="range" id="weightFilter" min="0.0" max="1.0" step="0.01" value="0.0"-->
+<!--                                       oninput="onWeightFilterInput()"/>-->
+<!--                            </p>-->
+
+<!--                            <form action="#">-->
+<!--                                <p style="float: left">-->
+<!--                                    <label>-->
+<!--                                        <input type="checkbox" class="filled-in" id="heatmapShowingCheckbox"-->
+<!--                                               onchange="onHeatmapShowingCheckbox()"/>-->
+<!--                                        <span>Heat Map on neurons</span>-->
+<!--                                    </label>-->
+<!--                                </p>-->
+<!--                            </form>-->
+<!--                        </div>-->
+
+        <!--                <div class="input-field col s7">-->
+        <!--                    <select id="orderNeuronsSelect">-->
+        <!--                        <option value="" disabled selected>Reorder neurons</option>-->
+        <!--                        <option value="1">Unordered</option>-->
+        <!--                        <option value="2">Weights</option>-->
+        <!--                        <option value="3">MSE</option>-->
+        <!--                        <option value="4">Correlation</option>-->
+        <!--                    </select>-->
+        <!--                </div>-->
+        <!--            </div>-->
+
+
+        <!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="divider"></div>-->
 <!--</editor-fold>-->
 
 <div class="container pageWidth" style="margin: auto; margin-top: 10px;">
@@ -153,7 +193,7 @@
                 <br/>
                 x-axis: time sequences
                 <br/>
-                y-axis: value
+                y-axis: instances
                 <div class="divider" style="margin-bottom: 5px;"></div>
                 <div class="row">
                     <svg style="overflow: visible;margin-left: 10px;" height="25">
@@ -169,18 +209,18 @@
                                  style="overflow: visible;">
                             </svg>
                         </div>
-<!--                        <div class="col s5 right">-->
-<!--                            &lt;!&ndash;for the first svg, add also the defs for arrow (to be used in all other places)&ndash;&gt;-->
-<!--                            <svg id="layer0Weights" width="100" transform="translate(0,5)" style="overflow: visible;">-->
-<!--                                <defs>-->
-<!--                                    <marker id="arrow" markerWidth="5" markerHeight="5" refX="5" refY="2.5"-->
-<!--                                            orient="auto"-->
-<!--                                            markerUnits="userSpaceOnUse">-->
-<!--                                        <path d="M0,0 L5,2.5 L0,5 z"></path>-->
-<!--                                    </marker>-->
-<!--                                </defs>-->
-<!--                            </svg>-->
-<!--                        </div>-->
+                        <!--                        <div class="col s5 right">-->
+                        <!--                            &lt;!&ndash;for the first svg, add also the defs for arrow (to be used in all other places)&ndash;&gt;-->
+                        <!--                            <svg id="layer0Weights" width="100" transform="translate(0,5)" style="overflow: visible;">-->
+                        <!--                                <defs>-->
+                        <!--                                    <marker id="arrow" markerWidth="5" markerHeight="5" refX="5" refY="2.5"-->
+                        <!--                                            orient="auto"-->
+                        <!--                                            markerUnits="userSpaceOnUse">-->
+                        <!--                                        <path d="M0,0 L5,2.5 L0,5 z"></path>-->
+                        <!--                                    </marker>-->
+                        <!--                                </defs>-->
+                        <!--                            </svg>-->
+                        <!--                        </div>-->
                     </div>
                 </div>
             </div>
@@ -193,10 +233,10 @@
                         class="material-icons" onclick="displayAddLayerDialog()">add</i></a>
                 <b>Output</b>
                 <br/>
-                x-axis:
+                x-axis: output values
                 <RUL></RUL>
                 <br/>
-                y-axis: engines
+                y-axis: instances
                 <div class="divider" style="margin-bottom: 5px;"></div>
                 <div class="row">
                     <svg style="overflow: visible;" height="25" width="100">
