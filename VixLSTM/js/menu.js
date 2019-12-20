@@ -102,7 +102,7 @@ function populateModelGUIFromData(model, modelData) {
         createTrainingGUI(layersConfig);
 
         //Draw the color scales for the intermediate outputs
-        drawColorScales(layersConfig);
+        // drawColorScales(layersConfig);
         trainModel(model, X_train, y_train, X_test, y_test, epochs_, batchSize_, learningRate_,true);
     });
     return layersConfig;

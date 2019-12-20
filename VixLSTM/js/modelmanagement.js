@@ -1018,7 +1018,7 @@ function drawLSTMWeights(containerId) {
             });
     }
 
-    drawColorScales(containerId);
+    // drawColorScales(containerId);
 }
 
 //The container id is a bit involving because of the weights is displayed in prev layer, and also we prev 2 layer if the prev layer is flatten layer.

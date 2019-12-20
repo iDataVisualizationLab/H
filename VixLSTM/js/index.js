@@ -112,7 +112,7 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     minDataVal = minZ;
     maxDataVal = maxZ;
 
-    drawInputColorScale(minDataVal, avgZ, maxDataVal);
+    // drawInputColorScale(minDataVal, avgZ, maxDataVal);
     drawOutputColorScale();
     //Draw input
     let X_train_ordered = trainRULOrder.map(d => X_train[d]);
@@ -285,7 +285,7 @@ function startTraining() {
             //Clear all current outputs if there are
             d3.selectAll(".weightLine").remove();
             //Draw the color scales for the intermediate outputs
-            drawColorScales(layersConfig);
+            // drawColorScales(layersConfig);
             if (model !== null) {
                 currentModel = model;
                 //Reset train losses, test losses for the first creation.
