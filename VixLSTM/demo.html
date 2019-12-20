@@ -194,12 +194,6 @@
                 x-axis: time sequences
                 <br/>
                 y-axis: instances
-                <div class="divider" style="margin-bottom: 5px;"></div>
-                <div class="row">
-                    <svg style="overflow: visible;margin-left: 10px;" height="25">
-                        <g id="inputColorScale"></g>
-                    </svg>
-                </div>
                 <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
                 <div class="row valign-wrapper" style="height: 100%">
                     <div>
@@ -237,12 +231,6 @@
                 <RUL></RUL>
                 <br/>
                 y-axis: instances
-                <div class="divider" style="margin-bottom: 5px;"></div>
-                <div class="row">
-                    <svg style="overflow: visible;" height="25" width="100">
-                        <g id="outputColorScale"></g>
-                    </svg>
-                </div>
                 <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
                 <div class="valign-wrapper" style="height: 1190px">
                     <div>
@@ -526,14 +514,15 @@
             <li class="collection-item">
                 Change number of epochs/batch size if needed.
             </li>
+<!--            <li class="collection-item">-->
+<!--                Click on <label><input type="checkbox" class="filled-in"-->
+<!--                                       checked="checked" disabled="true"/><span>snapshots</span></label> checkbox to-->
+<!--                enable/disable-->
+<!--                saving training snapshots, so user could review the trained model later on.-->
+<!--            </li>-->
             <li class="collection-item">
-                Click on <label><input type="checkbox" class="filled-in"
-                                       checked="checked" disabled="true"/><span>snapshots</span></label> checkbox to
-                enable/disable
-                saving training snapshots, so user could review the trained model later on.
-            </li>
-            <li class="collection-item">
-                Click on <i class="material-icons grey-text">play_arrow</i> button to start training process.
+                Click on <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i
+                    class="material-icons right">play_arrow</i>Start</a> button to start training process.
             </li>
             <li class="collection-header"><b>Model weights and intermediate outputs view</b></li>
             <li class="collection-item">
@@ -548,46 +537,34 @@
                 a saved, trained model.
             </li>
         </ul>
-        <!--        <h5>Dataset</h5>-->
-        <!--        This ML Solution works on the <a-->
-        <!--            href="https://ti.arc.nasa.gov/tech/dash/groups/pcoe/prognostic-data-repository/#turbofan"-->
-        <!--            target="_blank">Turbofan Engine Degradation Simulation Data Set</a>.-->
-        <h5>Graph description</h5>
-        <!--        <div class="row">-->
-        <!--            <div class="col s4 center" id="sampleInput"-->
-        <!--                 style="width: 350px; height: 350px; overflow: visible; margin-left: 20px;"></div>-->
-        <!--            <div class="col s4 center" id="sampleOutput"-->
-        <!--                 style="width: 350px; height: 350px; overflow: visible; margin-left: 20px;"></div>-->
-        <!--            <div class="col s4 center" id="trainRUL"-->
-        <!--                 style="width: 350px; height: 350px; overflow: visible; margin-left: 20px;"></div>-->
-        <!--        </div>-->
-        <P>
-            Please click on each of the graphs to view the graph in details.
-        </P>
-        <p>
-            After loading, the system displays the input in the form of the heat-maps, one heat-map
-            per sensor data column. The system does not display the axes for graphs at the input layer. Instead, it
-            gives their descriptions on top of each layer for the simplicity of the visual display. The x-axis of the
-            heat-map is the engine units (e.g., 0-99 for dataset 1). Its y-axis is the sensor data sequence (the number
-            of cycles). The heat-map color at a specific point represents the sensor's value of a corresponding engine
-            at a
-            time step accordingly. The input units are also sorted by their RUL to see if they appear to have any sensor
-            input pattern. The first panel of the picture above shows the details view of a sample input for one sensor.
-        </p>
-        <p>
-            Similar to the input layer, the outputs from LSTM layers are also sequences with the corresponding number of
-            engines and steps. Therefore, the system also represents them as heat-map (second panel) with a similar
-            specification. The second panel of the picture above shows the details view of a sample LSTM layer output.
-        </p>
-        <p>
-            Outputs of the Dense layers, and the final training and testing outputs are alike and are visualized as
-            scatter plots. Y-axis also represents the number of engines, and x-axis describes the output
-            values. The green circles at the scatter plot represent the predicted outputs of the corresponding engine
-            units as
-            inputs. The gray x symbols are the actual target RULs. The two are scaled linearly to the domain of target
-            RULs for better visualization. The second panel of the picture above shows the details view of a sample
-            Dense layer output.
-        </p>
+<!--        <h5>Graph description</h5>-->
+<!--        <P>-->
+<!--            Please click on each of the graphs to view the graph in details.-->
+<!--        </P>-->
+<!--        <p>-->
+<!--            After loading, the system displays the input in the form of the heat-maps, one heat-map-->
+<!--            per sensor data column. The system does not display the axes for graphs at the input layer. Instead, it-->
+<!--            gives their descriptions on top of each layer for the simplicity of the visual display. The x-axis of the-->
+<!--            heat-map is the engine units (e.g., 0-99 for dataset 1). Its y-axis is the sensor data sequence (the number-->
+<!--            of cycles). The heat-map color at a specific point represents the sensor's value of a corresponding engine-->
+<!--            at a-->
+<!--            time step accordingly. The input units are also sorted by their RUL to see if they appear to have any sensor-->
+<!--            input pattern. The first panel of the picture above shows the details view of a sample input for one sensor.-->
+<!--        </p>-->
+<!--        <p>-->
+<!--            Similar to the input layer, the outputs from LSTM layers are also sequences with the corresponding number of-->
+<!--            engines and steps. Therefore, the system also represents them as heat-map (second panel) with a similar-->
+<!--            specification. The second panel of the picture above shows the details view of a sample LSTM layer output.-->
+<!--        </p>-->
+<!--        <p>-->
+<!--            Outputs of the Dense layers, and the final training and testing outputs are alike and are visualized as-->
+<!--            scatter plots. Y-axis also represents the number of engines, and x-axis describes the output-->
+<!--            values. The green circles at the scatter plot represent the predicted outputs of the corresponding engine-->
+<!--            units as-->
+<!--            inputs. The gray x symbols are the actual target RULs. The two are scaled linearly to the domain of target-->
+<!--            RULs for better visualization. The second panel of the picture above shows the details view of a sample-->
+<!--            Dense layer output.-->
+<!--        </p>-->
     </div>
 </footer>
 <!--UI initialization-->

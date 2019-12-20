@@ -65,12 +65,7 @@ function createLayerGUI(layerInfo) {
     //Create the div.
     let div = $(`<div class='grid-item' id="${idVal}">
                     <a class="btn-small btn-floating"><i class="material-icons" onclick="deleteLayer('${idVal}')">delete</i></a> <span id="layerInfoStr${idVal}">${layerInfoStr}</span>
-                    <div class="divider" style="margin-bottom: 5px;"></div>
-                    <div class="row" >
-                         <svg style="overflow: visible; margin-left: 10px;" height="25">
-                             <g id="colorScale${layerInfo.timeStamp}"></g>
-                         </svg>
-                    </div>
+                  
                     <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
                     <div class="row valign-wrapper " style="height: ${networkHeight + "px"}">
                     <div class="layerBox" style="height: ${networkHeight+"px"}">
@@ -92,12 +87,6 @@ function createLayerGUI(layerInfo) {
     if (layerInfo.id === layersConfig[layersConfig.length-2].id) {
         div = $(`<div class='grid-item' id="${idVal}">
                     <a class="btn-small btn-floating"><i class="material-icons" onclick="deleteLayer('${idVal}')">delete</i></a> <span id="layerInfoStr${idVal}">${layerInfoStr}</span>
-                    <div class="divider" style="margin-bottom: 5px;"></div>
-                    <div class="row" >
-                         <svg style="overflow: visible; margin-left: 10px;" height="25">
-                             <g id="colorScale${layerInfo.timeStamp}"></g>
-                         </svg>
-                    </div>
                     <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
                     <div class="row valign-wrapper " style="height: ${networkHeight + "px"}">
                     <div class="layerBox" style="height: ${networkHeight+"px"}">
