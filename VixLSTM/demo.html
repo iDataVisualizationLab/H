@@ -42,13 +42,16 @@
 <!--<editor-fold desc="Header">-->
 <nav class="nav-wrapper indigo">
     <div class="container">
-
         <a href="#" class="brand-logo"><strong>VixLSTM</strong>: <strong>V</strong>isual <strong>E</strong>xplainable
             <strong>LSTM</strong> for Multivariate Time Series</a>
     </div>
 </nav>
 
-<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+<!--<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">keyboard_arrow_right</i></a>-->
+<a href="#" class="btn-floating btn-small waves-effect waves-light red sidenav-trigger"
+   data-target="slide-out" id="btn-sidenav"><i class="material-icons">keyboard_arrow_right</i></a>
+
 
 <ul id="slide-out" class="sidenav">
     <li>
@@ -108,40 +111,39 @@
     </li>
 </ul>
 
-<div class="divider" style="margin-bottom: 10px;"></div>
 <!--<div class="row">-->
 <!--    <div class="row" style="height: 50px; width: 90%" id="toolbar">-->
-        <!--        <div class="col s6">-->
-        <!--            <div class="col s4">-->
-        <!--                <div class="input-field col s5" style="text-align: right">Epoch</div>-->
-        <!--                <div class="input-field col s7">-->
-        <!--                    <input id="epochs" type="number" value="30" style="text-align: center">-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="col s4">-->
-        <!--                <div class="input-field col s5" style="text-align: right">Batch</div>-->
-        <!--                <div class="input-field col s7">-->
-        <!--                    <input id="batchSize" type="number" value="8" style="text-align: center">-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="col s4">-->
-        <!--                <div class="input-field col s7" style="text-align: right">Learning Rate</div>-->
-        <!--                <div class="input-field col s5">-->
-        <!--                    <input id="learningRate" type="number" value="0.005" style="text-align: center">-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
+<!--        <div class="col s6">-->
+<!--            <div class="col s4">-->
+<!--                <div class="input-field col s5" style="text-align: right">Epoch</div>-->
+<!--                <div class="input-field col s7">-->
+<!--                    <input id="epochs" type="number" value="30" style="text-align: center">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col s4">-->
+<!--                <div class="input-field col s5" style="text-align: right">Batch</div>-->
+<!--                <div class="input-field col s7">-->
+<!--                    <input id="batchSize" type="number" value="8" style="text-align: center">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col s4">-->
+<!--                <div class="input-field col s7" style="text-align: right">Learning Rate</div>-->
+<!--                <div class="input-field col s5">-->
+<!--                    <input id="learningRate" type="number" value="0.005" style="text-align: center">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
-        <!--        <div class="row col s3 valign-wrapper" style="height: 100%">-->
-        <!--            <div class="row" style="margin-bottom: 10px">-->
-        <!--                <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load-->
-        <!--                    model</a>-->
-        <!--                <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i-->
-        <!--                        class="material-icons right" id="playPausedIcon">play_arrow</i>Start</a>-->
-        <!--                <a class="btn btn-menu " id="saveModelMenu" onclick="displaySaveModelDialog()">Save-->
-        <!--                    model</a>-->
-        <!--            </div>-->
-        <!--        </div>-->
+<!--        <div class="row col s3 valign-wrapper" style="height: 100%">-->
+<!--            <div class="row" style="margin-bottom: 10px">-->
+<!--                <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load-->
+<!--                    model</a>-->
+<!--                <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i-->
+<!--                        class="material-icons right" id="playPausedIcon">play_arrow</i>Start</a>-->
+<!--                <a class="btn btn-menu " id="saveModelMenu" onclick="displaySaveModelDialog()">Save-->
+<!--                    model</a>-->
+<!--            </div>-->
+<!--        </div>-->
 
 <!--                <div class="col s3">-->
 <!--                    <div>-->
@@ -164,26 +166,26 @@
 <!--                            </form>-->
 <!--                        </div>-->
 
-        <!--                <div class="input-field col s7">-->
-        <!--                    <select id="orderNeuronsSelect">-->
-        <!--                        <option value="" disabled selected>Reorder neurons</option>-->
-        <!--                        <option value="1">Unordered</option>-->
-        <!--                        <option value="2">Weights</option>-->
-        <!--                        <option value="3">MSE</option>-->
-        <!--                        <option value="4">Correlation</option>-->
-        <!--                    </select>-->
-        <!--                </div>-->
-        <!--            </div>-->
+<!--                <div class="input-field col s7">-->
+<!--                    <select id="orderNeuronsSelect">-->
+<!--                        <option value="" disabled selected>Reorder neurons</option>-->
+<!--                        <option value="1">Unordered</option>-->
+<!--                        <option value="2">Weights</option>-->
+<!--                        <option value="3">MSE</option>-->
+<!--                        <option value="4">Correlation</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
 
 
-        <!--        </div>-->
+<!--        </div>-->
 <!--    </div>-->
 <!--</div>-->
 <!--</div>-->
 <!--<div class="divider"></div>-->
 <!--</editor-fold>-->
 
-<div class="container pageWidth" style="margin: auto; margin-top: 10px;">
+<div class="container pageWidth" style="margin: 10px auto auto;">
     <div class="columnWrapper">
         <div class="grid-item" id="layerInput">
             <div class="row">
@@ -220,7 +222,7 @@
             </div>
         </div>
         <!-- Dynamic part here. -->
-        <div class="grid-item" style="width: 400px !important;" id="layerOutput">
+        <div class="grid-item" style="width: 480px !important;" id="layerOutput">
             <div class="row">
 
                 <a href="#" class="btn-small btn-floating modal-trigger"><i
@@ -514,12 +516,12 @@
             <li class="collection-item">
                 Change number of epochs/batch size if needed.
             </li>
-<!--            <li class="collection-item">-->
-<!--                Click on <label><input type="checkbox" class="filled-in"-->
-<!--                                       checked="checked" disabled="true"/><span>snapshots</span></label> checkbox to-->
-<!--                enable/disable-->
-<!--                saving training snapshots, so user could review the trained model later on.-->
-<!--            </li>-->
+            <!--            <li class="collection-item">-->
+            <!--                Click on <label><input type="checkbox" class="filled-in"-->
+            <!--                                       checked="checked" disabled="true"/><span>snapshots</span></label> checkbox to-->
+            <!--                enable/disable-->
+            <!--                saving training snapshots, so user could review the trained model later on.-->
+            <!--            </li>-->
             <li class="collection-item">
                 Click on <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i
                     class="material-icons right">play_arrow</i>Start</a> button to start training process.
@@ -537,34 +539,34 @@
                 a saved, trained model.
             </li>
         </ul>
-<!--        <h5>Graph description</h5>-->
-<!--        <P>-->
-<!--            Please click on each of the graphs to view the graph in details.-->
-<!--        </P>-->
-<!--        <p>-->
-<!--            After loading, the system displays the input in the form of the heat-maps, one heat-map-->
-<!--            per sensor data column. The system does not display the axes for graphs at the input layer. Instead, it-->
-<!--            gives their descriptions on top of each layer for the simplicity of the visual display. The x-axis of the-->
-<!--            heat-map is the engine units (e.g., 0-99 for dataset 1). Its y-axis is the sensor data sequence (the number-->
-<!--            of cycles). The heat-map color at a specific point represents the sensor's value of a corresponding engine-->
-<!--            at a-->
-<!--            time step accordingly. The input units are also sorted by their RUL to see if they appear to have any sensor-->
-<!--            input pattern. The first panel of the picture above shows the details view of a sample input for one sensor.-->
-<!--        </p>-->
-<!--        <p>-->
-<!--            Similar to the input layer, the outputs from LSTM layers are also sequences with the corresponding number of-->
-<!--            engines and steps. Therefore, the system also represents them as heat-map (second panel) with a similar-->
-<!--            specification. The second panel of the picture above shows the details view of a sample LSTM layer output.-->
-<!--        </p>-->
-<!--        <p>-->
-<!--            Outputs of the Dense layers, and the final training and testing outputs are alike and are visualized as-->
-<!--            scatter plots. Y-axis also represents the number of engines, and x-axis describes the output-->
-<!--            values. The green circles at the scatter plot represent the predicted outputs of the corresponding engine-->
-<!--            units as-->
-<!--            inputs. The gray x symbols are the actual target RULs. The two are scaled linearly to the domain of target-->
-<!--            RULs for better visualization. The second panel of the picture above shows the details view of a sample-->
-<!--            Dense layer output.-->
-<!--        </p>-->
+        <!--        <h5>Graph description</h5>-->
+        <!--        <P>-->
+        <!--            Please click on each of the graphs to view the graph in details.-->
+        <!--        </P>-->
+        <!--        <p>-->
+        <!--            After loading, the system displays the input in the form of the heat-maps, one heat-map-->
+        <!--            per sensor data column. The system does not display the axes for graphs at the input layer. Instead, it-->
+        <!--            gives their descriptions on top of each layer for the simplicity of the visual display. The x-axis of the-->
+        <!--            heat-map is the engine units (e.g., 0-99 for dataset 1). Its y-axis is the sensor data sequence (the number-->
+        <!--            of cycles). The heat-map color at a specific point represents the sensor's value of a corresponding engine-->
+        <!--            at a-->
+        <!--            time step accordingly. The input units are also sorted by their RUL to see if they appear to have any sensor-->
+        <!--            input pattern. The first panel of the picture above shows the details view of a sample input for one sensor.-->
+        <!--        </p>-->
+        <!--        <p>-->
+        <!--            Similar to the input layer, the outputs from LSTM layers are also sequences with the corresponding number of-->
+        <!--            engines and steps. Therefore, the system also represents them as heat-map (second panel) with a similar-->
+        <!--            specification. The second panel of the picture above shows the details view of a sample LSTM layer output.-->
+        <!--        </p>-->
+        <!--        <p>-->
+        <!--            Outputs of the Dense layers, and the final training and testing outputs are alike and are visualized as-->
+        <!--            scatter plots. Y-axis also represents the number of engines, and x-axis describes the output-->
+        <!--            values. The green circles at the scatter plot represent the predicted outputs of the corresponding engine-->
+        <!--            units as-->
+        <!--            inputs. The gray x symbols are the actual target RULs. The two are scaled linearly to the domain of target-->
+        <!--            RULs for better visualization. The second panel of the picture above shows the details view of a sample-->
+        <!--            Dense layer output.-->
+        <!--        </p>-->
     </div>
 </footer>
 <!--UI initialization-->

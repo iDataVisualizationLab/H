@@ -1,6 +1,6 @@
 :root {
     --colNum: 1;
-    --page-width: calc(var(--colNum) * 200px + 800px);
+    --page-width: calc(var(--colNum) * 240px + 800px);
 }
 
 .pageWidth {
@@ -11,8 +11,10 @@
 /*For the columns*/
 .columnWrapper {
     display: grid;
-    grid-template-columns: repeat(calc(var(--colNum) + 2), 240px);
-    width: calc(var(--colNum) * 200px);
+    grid-template-columns: repeat(calc(var(--colNum) + 4), 240px);
+    width: calc((var(--colNum) + 2) * 240px);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .grid-item {
@@ -181,4 +183,9 @@ a {
 
 .sidenav {
     width: 350px;
+}
+
+#btn-sidenav {
+    position: fixed;
+    top: 50%;
 }
