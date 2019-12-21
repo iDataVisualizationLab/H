@@ -183,8 +183,8 @@ async function processInputs(sFs) {
                         features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
                         // features = ['Open', 'High', 'Low', 'Close', 'Volume'];
                         // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
-                        predictedVariable = target_variable;
-                        dataItemName = "Data Entries";
+                        predictedVariable = "CPU1 Temp";
+                        dataItemName = "Data Instances";
                         populateFeatureSelection(features);
                         if (!sFs) {
                             selectedFeatures = features.map(_ => true);

@@ -438,10 +438,10 @@ function calculateAverageLineForLstm(data) {
 }
 
 function drawLinechartDetails(selector, d, data) {
-    console.log(selector);
     let theMapContainer = document.getElementById("mapDetailsContent");
     d3.select(theMapContainer).selectAll("*").remove();
     let mData = mapObjects[selector + d].data;
+
     let mSettings = {
         noSvg: true,
         showAxes: true,
@@ -467,8 +467,11 @@ function drawLinechartDetails(selector, d, data) {
             y: 60
         },
         width: 350,
-        height: 350
+        height: 350,
+        fillWhite: false
     };
+
+    // mSettings.fillWhite = false;
 
     let lc = new LineChart(theMapContainer, mData, mSettings);
     lc.plot();
@@ -519,6 +522,12 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     }
     //Generate data.
     let averageLineArr = [];
+
+    if (selector.indexOf('trainTestLoss') > -1 || selector.indexOf('output') > -1 || selector.indexOf('test') > -1) {
+        lineChartSettings.fillWhite = false;
+    } else {
+        lineChartSettings.fillWhite = true;
+    }
 
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let x = [];
@@ -794,12 +803,12 @@ async function buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wSha
         let noOfRightNodes = wShape[1] / noOfWeightTypes;
 
         let noOfWeights = wShape[1];
-        let spanForWeightsLeft = leftNodeHeight / (noOfWeights+5);
+        let spanForWeightsLeft = leftNodeHeight / (noOfWeights + 5);
 
 
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
-            let leftNodeStartY = leftNodeCenterY - leftNodeHeight / 2 + 6*spanForWeightsLeft / 2;
+            let leftNodeStartY = leftNodeCenterY - leftNodeHeight / 2 + 6 * spanForWeightsLeft / 2;
             for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
                 for (let typeIdx = 0; typeIdx < noOfWeightTypes; typeIdx++) {
                     let idx = leftIdx * wShape[1] + typeIdx * noOfRightNodes + rightIdx;

@@ -16,7 +16,7 @@ const heatmapH = 100;
 const maxLineWeightOpacity = 1.0;
 const minLineWeightOpacity = 0.0;
 let predictedVariable;
-let dataItemName = "Date entries";
+let dataItemName = "Data Instances";
 let features;
 let selectedFeatures;
 let defaultModelIndex = 1;
