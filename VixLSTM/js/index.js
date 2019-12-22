@@ -32,7 +32,8 @@ function updateInputs() {
             } else {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
                 let num = 2;
-                loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
+                // loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
+                loadKerasModelFromServer("eeg_16_8_8_8_8_11");
                 // loadModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
                 // loadModelFromServer("emp_super_large_settings" + num);
                 // loadModelFromServer("stock_large_model_2" + num);
@@ -49,7 +50,7 @@ async function loadAllVariablesModel() {
         // await loadAllPretrainModelFromServer(d);
         target_variable = d;
         console.log(target_variable);
-        await loadAllPretrainKerasModelFromServer(d);
+        await loadKerasModelFromServer(d);
     }
 }
 

@@ -211,26 +211,15 @@ async function loadModelFromServer(modelName) {
     });
 }
 
-async function loadAllPretrainModelFromServer(modelName) {
-    showLoader();
-    const model = await tf.loadLayersModel(`data/models/l8l8d8d4/${modelName}.json`);
-    //Now load data.
-
-    d3.json(`data/models/l16l8l8d8d4/${modelName}_data.json`).then(modelData => {
-        populateModelGUIFromData(model, modelData);
-        hideLoader();
-    });
-}
-
-async function loadAllPretrainKerasModelFromServer(modelName) {
+async function loadKerasModelFromServer(modelName) {
     // showLoader();
-    kerasModel = await tf.loadLayersModel(`data/selectedModel/${modelName}_ts${timeStep}/model.json`);
+    kerasModel = await tf.loadLayersModel(`data/models/${modelName}/model.json`);
     //Now load data.
-    // d3.json(`data/networkModel/${modelName}_model_data.json`).then(modelData => {
-    //     target_variable = modelName;
-    //     populateModelGUIFromData(model, modelData);
-    //     hideLoader();
-    // });
+    d3.json(`data/models/${modelName}/${modelName}_model_data.json`).then(modelData => {
+        target_variable = modelName;
+        populateModelGUIFromData(kerasModel, modelData);
+        // hideLoader();
+    });
     let weights = await kerasModel.layers[0].getWeights()[0];
     kerasWeights = weights.dataSync();
     // updateVarNetwork();
