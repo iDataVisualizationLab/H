@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        @import "lib/materialize/css/materialize.css";
+    </style>
+    <style>
+        @import "lib/playpausebutton/playpause.css";
+        @import "css/styles.css";
+        @import "js/toast/toast.css";
+        @import "js/loader/loader.css";
+        @import "js/tooltip/tooltip.css";
+    </style>
+    <meta charset="UTF-8">
+    <title>DeepViz</title>
+    <script src="lib/materialize/js/materialize.js"></script>
+    <link rel="stylesheet" src="css/styles.css">
+</head>
+<body>
+<nav class="nav-wrapper indigo">
+    <div class="container" style="margin-left: auto;margin-right: auto; width: 100%">
+        <a href="#" class="brand-logo"><strong>VixLSTM</strong>: <strong>V</strong>isual <strong>E</strong>xplainable <strong>LSTM</strong> for Multivariate Time Series</a>
+    </div>
+</nav>
+
+<div style="width: 90%; margin-top: 20px; margin-left: auto; margin-right: auto">
+    <div class="row col s12" style="width: fit-content; margin-left: auto; margin-right: auto; ">
+        <a href="index.html" class="btn btn-menu" id="video">VIDEO</a>
+        <a href="#" class="btn btn-menu" id="article">Use cases</a>
+        <a href="demo.html" class="btn btn-menu" id="demo">DEMO</a>
+    </div>
+
+    <div style="width: 100%">
+        <h5 style="width: fit-content; color: #545454;">High Performance Computing Data: HPC
+            health prediction</h5>
+        <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D: Dense)</h6>
+        <div style="margin-left: auto; margin-right: auto; width: fit-content">
+            <img class="responsive-img" src="img/HPC_large_model.png">
+        </div>
+    </div>
+
+    <div style="width: 100%">
+        <h5 style="width: fit-content; color: #545454">SP500 Stock Data: Stock price prediction</h5>
+        <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D: Dense)</h6>
+        <div style="margin-left: auto; margin-right: auto; width: fit-content">
+            <img class="responsive-img" src="img/stock_large_model_2.png">
+        </div>
+    </div>
+
+    <div style="width: 100%">
+        <h5 style="width: fit-content; color: #545454">US Employment Data: Unemployment rate prediction</h5>
+        <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D: Dense)</h6>
+        <div style="margin-left: auto; margin-right: auto; width: fit-content">
+            <img class="responsive-img" src="img/EMP_large_model.png">
+        </div>
+    </div>
+
+    <div style="width: 100%">
+        <h5 style="width: fit-content; color: #545454">US Employment Data: Unemployment rate prediction</h5>
+        <h6 style="width: fit-content; color: #545454;">Configuration: L64-L64-L48-L32-L16-D16-D8-D4 (L: LSTM, D: Dense)</h6>
+        <div style="margin-left: auto; margin-right: auto; width: fit-content">
+            <img class="responsive-img" src="img/emp_super_large_model.png">
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

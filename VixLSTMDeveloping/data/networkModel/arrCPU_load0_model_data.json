@@ -1,0 +1,10 @@
+[{'path': 'newModel/arrTemperature0_training_time_0_best_model_fold_0_config_8_8_8_4_ts100.h5',
+  'mse': 59.70230544559539},
+ {'path': 'newModel/arrTemperature0_training_time_0_best_model_fold_1_config_8_8_8_4_ts100.h5',
+  'mse': 218.29903230212983},
+ {'path': 'newModel/arrTemperature0_training_time_0_best_model_fold_2_config_8_8_8_4_ts100.h5',
+  'mse': 137.32874175040953},
+ {'path': 'newModel/arrTemperature0_training_time_0_best_model_fold_3_config_8_8_8_4_ts100.h5',
+  'mse': 115.14617969143775},
+ {'path': 'newModel/arrTemperature0_training_time_0_best_model_fold_4_config_8_8_8_4_ts100.h5',
+  'mse': 110.23426868069556}]
