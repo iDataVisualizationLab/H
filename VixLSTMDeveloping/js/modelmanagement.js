@@ -15,8 +15,8 @@ function processLayers(layers) {
             id: "output",
             timeStamp: "output",
             layerType: "dense",
-            units: 1,
-            activation: "relu"
+            units: 11,
+            activation: "softmax"
         });
     }
     //Add flatten layer if needed
@@ -65,8 +65,9 @@ async function createModel(layers, inputShape) {
 
             model.compile({
                 optimizer: 'adam',
-                loss: 'meanSquaredError',
+                loss: 'categoricalCrossentropy',
             });
+            console.log(model.summary());
             resolve(model);
         } catch (e) {
             alert("Error: " + e.message);
@@ -104,9 +105,9 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     let X_test_T_ordered = tf.tensor(X_test_ordered);
     let y_test_T_ordered = tf.tensor(y_test_ordered);
 
-    let y_train_flat_ordered = y_train_ordered.flat();
-    let y_test_flat_ordered = y_test_ordered.flat();
-    let target_ordered = normalizeTarget(y_train_flat_ordered, -1.0, 1.0);
+    let y_train_flat_ordered = y_train_ordered;
+    let y_test_flat_ordered = y_test_ordered;
+    let target_ordered = y_train_flat_ordered;
 
     let lineChartSettings = {
         noSvg: true,
@@ -204,19 +205,20 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     //Draw the legends for weights
     //Draw weights type on the last layer (to avoid conflict with other types), and also this one sure always there is one.
-    let containerId = "training_" + getWeightsContainerId(layersConfig.length - 1);
+
+    // let containerId = "training_" + getWeightsContainerId(layersConfig.length - 1);
     // drawWeightTypes(d3.select("#" + containerId));
 
     //Draw the lstm to the first layer.
-    for (let i = 0; i < layersConfig.length; i++) {
-        let l = layersConfig[i];
-        if (layersConfig[i].layerType === "lstm") {
-            let containerId = getWeightsContainerId(i);
-            let theContainer = d3.select("#" + containerId);
+    // for (let i = 0; i < layersConfig.length; i++) {
+    //     let l = layersConfig[i];
+    //     if (layersConfig[i].layerType === "lstm") {
+            // let containerId = getWeightsContainerId(i);
+            // let theContainer = d3.select("#" + containerId);
             // drawLSTMWeightTypes(theContainer);
-            break;//Draw only one => so break after this.
-        }
-    }
+    //         break;//Draw only one => so break after this.
+    //     }
+    // }
     //Draw the flatten notification for every flatten layer (to the layer before that, in term of display grid element.).
     for (let i = 0; i < layersConfig.length; i++) {
         if (layersConfig[i].layerType === "flatten") {
@@ -231,6 +233,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     if (!reviewMode) {
         trainingProcess = [];
+        console.log(X_train_T);
+        console.log(y_train_T);
         model.fit(X_train_T, y_train_T, {
             batchSize: batchSize,
             epochs: epochs,
@@ -273,8 +277,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 let batch = currentX * batches / canvasWidth;
                 let numOfBatchInEpoch = Math.ceil(y_train_flat_ordered.length / batchSize);
                 let epoch = Math.floor(batch / numOfBatchInEpoch);
-                let batchInEpoch = Math.floor(batch % numOfBatchInEpoch);
-                return {epoch, batchInEpoch};
+                return epoch;
             }
 
             canvas.addEventListener("mousemove", function (e) {
@@ -286,7 +289,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     .attr("x2", x + 60)
                     .attr("y2", 260);
 
-                let {epoch, batchInEpoch} = getEpochAndBatch(canvas.width, Math.max(x, 0));
+                let epoch = getEpochAndBatch(canvas.width, Math.max(x, 0));
                 verticalPointerText.attr("transform", () => {
                     if (x > 360) {
                         return `translate(${x - 30},90)`
@@ -294,9 +297,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                         return `translate(${x + 65},90)`
                     }
                 })
-                    // .text("Epoch: " + epoch + ", Batch: " + batchInEpoch);
                     .text("Epoch: " + epoch);
-
                 d3.selectAll(`.trainingWeight`).attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0]);
                 d3.selectAll(`.trainingEpoch${epoch}`).attr("stroke", "black");
 
@@ -331,16 +332,12 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             canvas.addEventListener("click", function (e) {
                 var pos = getPosition(this);
                 var x = e.pageX - pos.x;
-                let numOfBatchInEpoch = Math.ceil(y_train_flat_ordered.length / batchSize);
 
-                let {epoch, batchInEpoch} = getEpochAndBatch(canvas.width, Math.max(x, 0));
+                let epoch = getEpochAndBatch(canvas.width, Math.max(x, 0));
                 if (epoch >= epochs) {
                     epoch = epochs - 1;
-                    batchInEpoch = numOfBatchInEpoch - 1;
                 }
-                let selectBatchIdx = epoch * numOfBatchInEpoch + batchInEpoch;
 
-                let stepIdx = selectBatchIdx;
                 let step = trainingProcess[epoch];
                 noOfEpochs = epoch + 1;
                 let weights = step.weight;
@@ -403,12 +400,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             resolve(true);
         });
     }
-
-    // async function drawToggleScaler() {
-    //     return new Promise(((resolve, reject) => {
-    //         let
-    //     }))
-    // }
 
     function onLSTMWeightTypeClick(typeIdx) {
         if (typeIdx === 0) {//toggle all
@@ -514,6 +505,20 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         $("#trainingButtonContainer").addClass("paused");
     }
 
+    function classArrayToLabel(actual, predicted) {
+        let actualLabel = [];
+        let predictedLabel = [];
+        actual.forEach(function (v,i) {
+            let actualVal = tf.argMax(v).dataSync()[0];
+            let predictedVal = tf.argMax(predicted[i]).dataSync()[0];
+
+            actualLabel.push(actualVal);
+            predictedLabel.push(predictedVal);
+        });
+
+        return {actual: actualLabel, predicted: predictedLabel};
+    }
+
     async function displayLayersOutputs(model, i, input, recursive) {
         if (i >= model.layers.length - 1) {
             return;//Do not draw the final output
@@ -531,7 +536,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         } else if (layer.name.indexOf("dense") >= 0) {
             ts.array().then(data => {
                 data.layerName = "Dense " + i;
-                drawLineCharts(data, normalizeTarget, target_ordered, "layerContainer" + timeStamp, "layer" + timeStamp, lineChartSettings, false);
+                let {actual, predicted} = classArrayToLabel(data, target_ordered);
+                drawLineCharts(actual, null, predicted, "layerContainer" + timeStamp, "layer" + timeStamp, lineChartSettings, false);
             });
         }
         //Recurse
@@ -541,7 +547,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     }
 
     async function plotTrainLossData(trainLosses, testLosses) {
-
         let epochsArr = [];
         for (let i = 0; i < epochs; i++) {
             epochsArr.push(i);
@@ -587,17 +592,15 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             displayLayerWeights(model, i, containerId);
         }
 
-        //it will display recursively.
-        // displayLayersOutputs(model, 0, X_train_T_ordered);
-
         //Draw output
         let ts = model.predict(X_train_T_ordered);
         ts.array().then(data => {
             //We don't normalize the final result.
             data.layerName = "Training output";
-            drawLineCharts(data, null, y_train_flat_ordered, "outputContainer", "output", outputSettings, true).then(() => {
+            let {actual, predicted} = classArrayToLabel(data, y_train_flat_ordered);
+            drawLineCharts(actual, null, predicted, "outputContainer", "output", outputSettings, true).then(() => {
                 //Update the training loss
-                updateGraphTitle("outputContainer", "Training, MSE: " + trainLoss.toFixed(2));
+                // updateGraphTitle("outputContainer", "Training, MSE: " + trainLoss.toFixed(2));
                 drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
                     hideLoader();
                 });
@@ -609,63 +612,18 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         test.array().then(data => {
             //We don't normalize the final result.
             data.layerName = "Testing output";
-            drawLineCharts(data, null, y_test_flat_ordered, "testContainer", "test", testOutputSettings, true).then(() => {
+            let {actual, predicted} = classArrayToLabel(data, y_test_flat_ordered);
+            drawLineCharts(actual, null, predicted, "testContainer", "test", testOutputSettings, true).then(() => {
                 //Update test loss
                 testLoss = reviewMode ? testLoss : model.evaluate(X_test_T_ordered, y_test_T_ordered).dataSync()[0];
-                updateGraphTitle("testContainer", "Testing, MSE: " + testLoss.toFixed(2));
+                // updateGraphTitle("testContainer", "Testing, MSE: " + testLoss.toFixed(2));
             });
         });
     }
 
     function onEpochEnd(epoch, logs) {
         currentEpoch = epoch + 1;
-
-        // model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
-        //         let trainLoss = trainRet[0];
-        //         model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
-        //             let testLoss = testRet[0];
-        //             trainLosses.push(trainLoss);
-        //             testLosses.push(testLoss);
-        //             plotTrainLossData(trainLosses, testLosses);
-        //             let weights = [];
-        //             model.layers.forEach(function (layer, idx) {
-        //                 if (!layer.getConfig().name.includes("flatten")) {
-        //                     let tWeight = [];
-        //                     layer.getWeights().forEach(function (w) {
-        //                         tWeight.push(w.dataSync());
-        //                     });
-        //                     weights.push({name: layer.getConfig().name, data: tWeight});
-        //                 } else {
-        //                     weights.push({name: layer.getConfig().name, data: []});
-        //                 }
-        //             });
-        //
-        //             model.evaluate(X_test_T_ordered, y_test_T_ordered).data().then(testR => {
-        //                 let testL = testR[0];
-        //                 // console.log(testL);
-        //                 trainingProcess.push({
-        //                     epoch: epoch,
-        //                     log: logs,
-        //                     loss: {trainLoss: logs.loss, testLoss: testL},
-        //                     weight: weights
-        //                 });
-        //
-        //                 hideLoader();
-        //                 displayEpochData(model, logs.loss);
-        //                 if (epoch > 1) {
-        //                     //We don't update for the first epoch
-        //                     dispatch.call("changeWeightFilter");
-        //                 }
-        //             });
-        //         });
-        //
-        //     }
-        // )
-
-        // model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
-        //         let trainLoss = trainRet[0];
-        //         model.evaluate(sample_X_test_T, sample_y_test_T).data().then(testRet => {
-        //             let testLoss = testRet[0];
+        console.log(currentEpoch);
 
         let weights = [];
         model.layers.forEach(function (layer, idx) {
@@ -682,7 +640,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
         model.evaluate(X_test_T_ordered, y_test_T_ordered).data().then(testR => {
             let testL = testR[0];
-            // console.log(testL);
             trainingProcess.push({
                 epoch: epoch,
                 log: logs,
@@ -701,10 +658,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 dispatch.call("changeWeightFilter");
             }
         });
-        //         });
-        //
-        //     }
-        // )
     }
 }
 
@@ -886,9 +839,6 @@ function makeFlattenTrainingWeights(result) {
 function drawTrainingWeights(containerId) {
     let result = trainingWeightsPathData[containerId];
     if (result) {
-        // console.log(containerId);
-        // console.log(result);
-
         d3.select("#training_" + containerId).selectAll(".trainingWeight")
             .data(makeFlattenTrainingWeights(result), d => d.idx)
             .join('path')

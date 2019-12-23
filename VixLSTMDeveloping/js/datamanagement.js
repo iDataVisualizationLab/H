@@ -185,22 +185,26 @@ async function loadModelFromLocalStorage(modelName) {
 
 async function loadModelFromServer(modelName) {
     showLoader();
-    if (modelName.indexOf('L16L8') > 0) {
+    if (modelName.indexOf('L16L8L8D8D4') > -1) {
         modelName = 'l16l8l8d8d4/' + modelName;
-    } else if (modelName.indexOf('L8L8') > 0) {
+    } else if (modelName.indexOf('L8L8D8D4') > -1) {
         modelName = 'l8l8d8d4/' + modelName;
-    } else if (modelName.indexOf('L8L4D2') > 0) {
+    } else if (modelName.indexOf('L8L4D2') > -1) {
         modelName = 'l8l4d2/' + modelName;
+    } else if (modelName.indexOf('L16L8L8D8D8') > -1) {
+        modelName = 'l16l8l8d8d8/' + modelName;
     } else {
         modelName = 'large_model/' + modelName;
     }
 
-    if (modelName.indexOf('stock') > 0) {
+    if (modelName.indexOf('stock') > -1) {
         features = ['Open', 'High', 'Low', 'Close', 'Volume'];
-    } else if (modelName.indexOf('arrTemp') > 0) {
+    } else if (modelName.indexOf('arrTemp') > -1) {
         features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
-    } else {
+    } else if (modelName.indexOf('emp') > -1){
         features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
+    } else if (modelName.indexOf('eeg') > -1) {
+        features = ['feature 0', 'feature 1', 'feature 2', 'feature 3', 'feature 4'];
     }
 
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
@@ -212,13 +216,13 @@ async function loadModelFromServer(modelName) {
 }
 
 async function loadKerasModelFromServer(modelName) {
-    // showLoader();
+    showLoader();
     kerasModel = await tf.loadLayersModel(`data/models/${modelName}/model.json`);
     //Now load data.
     d3.json(`data/models/${modelName}/${modelName}_model_data.json`).then(modelData => {
         target_variable = modelName;
         populateModelGUIFromData(kerasModel, modelData);
-        // hideLoader();
+        hideLoader();
     });
     let weights = await kerasModel.layers[0].getWeights()[0];
     kerasWeights = weights.dataSync();

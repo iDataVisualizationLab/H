@@ -31,8 +31,9 @@ function updateInputs() {
                 loadAllVariablesModel();
             } else {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
-                let num = 2;
-                loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
+                let num = 1;
+                // loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
+                loadModelFromServer("egg_ts1028_e30_b8_lr0005_L16L8L8D8D8_" + num);
                 // loadKerasModelFromServer("eeg_16_8_8_8_8_11");
                 // loadModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
                 // loadModelFromServer("emp_super_large_settings" + num);
