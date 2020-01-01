@@ -34,6 +34,8 @@ function updateInputs() {
                 let num = 1;
                 // loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
                 loadModelFromServer("egg_ts1028_e30_b8_lr0005_L16L8L8D8D8_" + num);
+
+                console.log("egg_ts1028_e30_b8_lr0005_L16L8L8D8D8_" + num)
                 // loadKerasModelFromServer("eeg_16_8_8_8_8_11");
                 // loadModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
                 // loadModelFromServer("emp_super_large_settings" + num);
@@ -182,10 +184,11 @@ async function processInputs(sFs) {
             d3.json("data/newData/y_train_stock_ts4_fri.json").then(y_trainR => {
                 d3.json("data/newData/X_test_stock_ts4_fri.json").then(X_testR => {
                     d3.json("data/newData/y_test_stock_ts4_fri.json").then(y_testR => {
-                        features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
+                        // features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
                         // features = ['Open', 'High', 'Low', 'Close', 'Volume'];
                         // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
-                        predictedVariable = "CPU1 Temp";
+                        features = ['Feature 0', 'Feature 1', 'Feature 2', 'Feature 3', 'Feature 4'];
+                        predictedVariable = "Action";
                         dataItemName = "Data Instances";
                         populateFeatureSelection(features);
                         if (!sFs) {
