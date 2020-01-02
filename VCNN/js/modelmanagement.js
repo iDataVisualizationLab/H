@@ -323,26 +323,23 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 verticalPointerText.style("display", "block");
             });
 
-            canvas.addEventListener("mouseout", function () {
-                // verticalPointerLine.style("display", "none");
-                // verticalPointerText.style("display", "none");
-            });
+            // canvas.addEventListener("mouseout", function () {
+            //     verticalPointerLine.style("display", "none");
+            //     verticalPointerText.style("display", "none");
+            // });
 
             canvas.addEventListener("click", function (e) {
-                var pos = getPosition(this);
-                var x = e.pageX - pos.x;
-                let numOfBatchInEpoch = Math.ceil(y_train_flat_ordered.length / batchSize);
+                let pos = getPosition(this);
+                let x = e.pageX - pos.x;
 
                 let {epoch, batchInEpoch} = getEpochAndBatch(canvas.width, Math.max(x, 0));
                 if (epoch >= epochs) {
                     epoch = epochs - 1;
-                    batchInEpoch = numOfBatchInEpoch - 1;
                 }
-                let selectBatchIdx = epoch * numOfBatchInEpoch + batchInEpoch;
 
-                let stepIdx = selectBatchIdx;
                 let step = trainingProcess[epoch];
-                noOfEpochs = epoch + 1;
+                // Comment if want to show all epochs weight whether selecting epoch on line chart or not
+                // noOfEpochs = epoch + 1;
                 let weights = step.weight;
                 model.layers.forEach(function (layer, idx) {
                     if (!layer.name.includes("flatten")) {
