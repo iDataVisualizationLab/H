@@ -69,6 +69,9 @@
     <div style="width: 100%">
         <h5 style="width: fit-content; color: #545454;">High Performance Computing Data: HPC
             health prediction</h5>
+        <i>The dataset contains ten variables, which are computer health readings for every 5-minute interval within 5
+            hours, including CPU load, fan speeds, memory usage, and power consumption. In total, we have 20 timesteps
+            of 467 nodes in the cluster. Our target variable for this data is the CPU temperature.</i>
         <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D: Dense)</h6>
         <div style="margin-left: auto; margin-right: auto; width: fit-content">
             <img class="responsive-img overview" src="img/HPC_large_model.png" style="height: 90%">
@@ -117,11 +120,13 @@
                 <br>
                 <div>
                     <h6>3) Filtering weights</h6>
-                    <img class="responsive-img figureBig" src="img/filter.png"><br>
+                    <h6 style="width: fit-content; color: #545454;">Configuration: L8-L8-D8-D4 (L: LSTM, D: Dense)</h6>
+                    Notice that the color scales can be select by the users based on their preference.
+                    <img class="responsive-img figureMedium" src="img/filter.png"><br>
                     <div>
                         Filtering weights helps to focus on the raw and extracted features with respect to significant
-                        contributions to the final prediction result. The above figure shows the model of (L8 - L8 -
-                        D8 - D4) with the output gates weight filter threshold set to 0.7.
+                        contributions to the final prediction result. The above figure shows the model with the
+                        output gates weight filter threshold set to 0.75.
                     </div>
                     <div>
                         It shows that the predicted CPU temperature strongly depends on other CPU temperatures, the CPU
@@ -136,75 +141,89 @@
 
             <div style="width: 100%">
                 <h5 style="width: fit-content; color: #545454">S&P500 Stock Data: Stock price prediction</h5>
+                <i>The dataset covers stock records for five weekdays each week,
+                    in the period of 39 years,
+                    from 1980 to 2019. Each
+                    record contains the timestamp, stock price at “Open”,
+                    “High”, “Low”, “Close”, and
+                    “Volume” of the stock that
+                    day. During the training and
+                    testing process, we utilize
+                    the attributes of the stock
+                    price on Monday, Tuesday,
+                    Wednesday, and Thursday to
+                    predict Close price for Friday.</i>
                 <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D:
                     Dense)</h6>
                 <div style="margin-left: auto; margin-right: auto; width: fit-content">
                     <img class="responsive-img overview" src="img/stock_large_model_2.png">
                 </div>
-                The
-                dataset covers stock records
-                for five weekdays each week,
-                in the period of 39 years,
-                from 1980 to 2019. Each
-                record contains the timestamp, stock price at “Open”,
-                “High”, “Low”, “Close”, and
-                “Volume” of the stock that
-                day. During the training and
-                testing process, we utilize
-                the attributes of the stock
-                price on Monday, Tuesday,
-                Wednesday, and Thursday to
-                predict Close price for Friday.
-            </div><br>
+
+            </div>
+            <br>
             <div>
+                <h6 style="width: fit-content; color: #545454;">Configuration: L8-L8-D8-D4 (L: LSTM, D: Dense)</h6>
+
                 DeepViz model for the S&P500 stock market price dataset through two system snapshots: At the 3rd
                 epoch and at the 10th epoch:
-                <img class="responsive-img figureBig" src="img/stockFig2.png"><br>
+
+                <img class="responsive-img figureMedium" src="img/stockFig2.png"><br>
             </div>
             <div>
                 <h6>1) Evolution of weights</h6>
                 <div>
                     <ul>
                         <li>• Panel B1: The thickness of lines decreases significantly over time,
-                            indicating that there is a major reduction in the magnitude of these parameters reduces during the training process,
+                            indicating that there is a major reduction in the magnitude of these parameters reduces
+                            during the training process,
                             hence less contribution of this node to the next output.
                         </li>
                         <li>• Panel A2: There are several negative weights switch into positive right after the first
                             epoch,
-                            resulted in an all-positive set of parameters in later epochs, hence the positive contribution to the following layer.
+                            resulted in an all-positive set of parameters in later epochs, hence the positive
+                            contribution to the following layer.
 
                         </li>
                         <li>• However in panel B2: Major of the parameters have remarkable changes:
-                            The originally thick lines decrease their width, the originally thin, positive lines switch into negative and adjust to
+                            The originally thick lines decrease their width, the originally thin, positive lines switch
+                            into negative and adjust to
                             the larger magnitude.
                         </li>
                     </ul>
-                     There is a corresponding movement in the training - testing loss line chart, where the curve witness a
+                    There is a corresponding movement in the training - testing loss line chart, where the curve witness
+                    a
                     turning point (the 5th or 6th epoch) in both training and testing MSE curves.
                 </div>
-            </div><br>
+            </div>
+            <br>
             <div>
                 <h6>2) Learning process</h6>
                 <div>
                     <ul>
                         <li>• Panel A3: In the early stage of training process (epoch 3),
-                            the scatterplots for training MSE and testing MSE both contain a vertical formation of outputs.
+                            the scatterplots for training MSE and testing MSE both contain a vertical formation of
+                            outputs.
                             <br>This can be explained by the activation function <b>ReLU</b>: Negative input will
                             result in
-                                                                                    zero output,
+                            zero output,
                             as can be seen in the first, third and fourth nodes in the last Dense layer right before
                             the final output.
                             At this stage, the learning process just started and parameters are not tuned properly.
                         </li>
-                        <li>• Panel B3: As we move on to epoch 10, the outputs are now align with the target in better shape. Notice that at the last Dense layer, the only one node has positive weight is the second one from top down, with the outputs align in similar direction as target, whereas the other three nodes possess opposite orientation to the target, hence their negative weights.
+                        <li>• Panel B3: As we move on to epoch 10, the outputs are now align with the target in better
+                            shape. Notice that at the last Dense layer, the only one node has positive weight is the
+                            second one from top down, with the outputs align in similar direction as target, whereas the
+                            other three nodes possess opposite orientation to the target, hence their negative weights.
 
                         </li>
 
                     </ul>
 
-                    This observation correlates with the nature of neural network and machine learning in general: On the process of minimizing loss, there are rewards for positive contributions and penalties for negative contributions.
+                    This observation correlates with the nature of neural network and machine learning in general: On
+                    the process of minimizing loss, there are rewards for positive contributions and penalties for
+                    negative contributions.
                     Without <b>proper arrangement and visual representation,</b> we would not be able to discern these
-                             visual characteristics of parameters in complex neural networks.
+                    visual characteristics of parameters in complex neural networks.
                 </div>
             </div>
             <br>
@@ -213,16 +232,68 @@
 
             <div style="width: 100%">
                 <h5 style="width: fit-content; color: #545454">US Employment Data: Unemployment rate prediction</h5>
+                <i>The US unemployment data comprise monthly for 50 states over 20 years, from 1999 to 2018. The data
+                    were retrieved from the US Bureau of Labor Statistics. There are 15 in the collected data, including
+                    Total Nonfarm, Construction, Manufacturing, Education and Health, and Government. We want to explore
+                    the important economic factor associated with the target variable: the monthly unemployment rates of
+                    the states.
+                </i>
+                <h6 style="width: fit-content; color: #545454;">Configuration: L16-L8-L8-D8-D4 (L: LSTM, D:
+                    Dense)</h6>
+                <div style="margin-left: auto; margin-right: auto; width: fit-content">
+                    <img class="responsive-img overview" src="img/employment_usecase.png">
+                </div>
+                <h6>Observation:</h6>
+                In training vs. testing loss plots, the MSE training is smaller than MSE testing as learning and
+                predicting social behavior is a challenging task (compared to the physical or natural series, such as
+                the CPU temperature in the first use case)
+
+                <h6>
+                    1) Contributions of significant variables:</h6>
+                <img class="responsive-img figureSmall" src="img/emp_closeup.png">
+                <div>
+                    Above is a close up view for the output of L16-L8-L8-D8-D4 configuration.
+                    <ul>
+                        <li>• The first node contributes with greatest positive contributions
+                        </li>
+                        <li>• The second node shows the opposite pattern, hence the opposite sign - negative.
+                        </li>
+                        <li>• The last two nodes make marginal contribute as the observed links are really thin.
+                            These nodes do not demonstrate any clear patterns to learn.
+                        </li>
+                    </ul>
+                </div>
+
+                <h6>
+                    2) Diagonal pattern:</h6>
+                <img class="responsive-img figureSmall" src="img/emp_diagonal.png"><br>
+                <div>
+                    The heatmaps represent original variable <i>(Service_Providing)</i>, on the left versus one sample
+                    learned feature at the last LSTM layer (feature 0, on the right).
+
+                    <ul>
+                        <li>• The linear top-down gradient of the input data has been replaced by the diagonal patterns,
+                            which resemble the actual value curves (the green curve in the output scatterplot).
+                        </li>
+                        <li>• The diagonal pattern is clearly visible on the right.
+                        </li>
+                        <li>• The more resemblance these patterns are,
+                            the better contributions they are into the prediction mechanism.
+                        </li>
+                    </ul>
+
+                    Other network architectures for this dataset:
+                </div>
+
                 <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D:
                     Dense)</h6>
                 <div style="margin-left: auto; margin-right: auto; width: fit-content">
                     <img class="responsive-img overview" src="img/EMP_large_model.png">
                 </div>
             </div>
-            <hr>
+
 
             <div style="width: 100%">
-                <h5 style="width: fit-content; color: #545454">US Employment Data: Unemployment rate prediction</h5>
                 <h6 style="width: fit-content; color: #545454;">Configuration: L64-L64-L48-L32-L16-D16-D8-D4 (L: LSTM,
                     D: Dense)</h6>
                 <div style="margin-left: auto; margin-right: auto; width: fit-content">
