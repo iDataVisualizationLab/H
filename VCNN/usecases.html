@@ -165,67 +165,78 @@
             <div>
                 <h6>DeepViz model for the S&P500 stock market price dataset through two system snapshots: At the 3rd
                     epoch and at the 10th epoch:</h6>
-                <h6 style="width: fit-content; color: #545454;">Configuration: L8-L8-D8-D4 (L: LSTM, D: Dense)</h6>
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <h6 style="width: fit-content; color: #545454;">Configuration: L8-L8-D8-D4 (L: LSTM, D: Dense)</h6>
 
-                <img class="responsive-img figureMedium" src="img/stockFig2.png"><br>
+                            <img style="width: 100%" class="responsive-img" src="img/stockFig2.png"><br>
+                        </td>
+                        <td>
+                            <div>
+                                <h6>1) Evolution of weights</h6>
+                                <div>
+                                    <ul>
+                                        <li>• Panel B1: The thickness of lines decreases significantly over time,
+                                            indicating that there is a major reduction in the magnitude of these parameters reduces
+                                            during the training process,
+                                            hence less contribution of this node to the next output.
+                                        </li>
+                                        <li>• Panel A2: There are several negative weights switch into positive right after the first
+                                            epoch,
+                                            resulted in an all-positive set of parameters in later epochs, hence the positive
+                                            contribution to the following layer.
+
+                                        </li>
+                                        <li>• However in panel B2: Major of the parameters have remarkable changes:
+                                            The originally thick lines decrease their width, the originally thin, positive lines switch
+                                            into negative and adjust to
+                                            the larger magnitude.
+                                        </li>
+                                    </ul>
+                                    There is a corresponding movement in the training - testing loss line chart, where the curve witness
+                                    a
+                                    turning point (the 5th or 6th epoch) in both training and testing MSE curves.
+                                </div>
+                            </div>
+                            <br>
+                            <div>
+                                <h6>2) Learning process</h6>
+                                <div>
+                                    <ul>
+                                        <li>• Panel A3: In the early stage of training process (epoch 3),
+                                            the scatterplots for training MSE and testing MSE both contain a vertical formation of
+                                            outputs.
+                                            <br>This can be explained by the activation function <b>ReLU</b>: Negative input will
+                                            result in
+                                            zero output,
+                                            as can be seen in the first, third and fourth nodes in the last Dense layer right before
+                                            the final output.
+                                            At this stage, the learning process just started and parameters are not tuned properly.
+                                        </li>
+                                        <li>• Panel B3: As we move on to epoch 10, the outputs are now align with the target in better
+                                            shape. Notice that at the last Dense layer, the only one node has positive weight is the
+                                            second one from top down, with the outputs align in similar direction as target, whereas the
+                                            other three nodes possess opposite orientation to the target, hence their negative weights.
+
+                                        </li>
+
+                                    </ul>
+
+                                    This observation correlates with the nature of neural network and machine learning in general: On
+                                    the process of minimizing loss, there are rewards for positive contributions and penalties for
+                                    negative contributions.
+                                    Without <b>proper arrangement and visual representation,</b> we would not be able to discern these
+                                    visual characteristics of parameters in complex neural networks.
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+
             </div>
-            <div>
-                <h6>1) Evolution of weights</h6>
-                <div>
-                    <ul>
-                        <li>• Panel B1: The thickness of lines decreases significantly over time,
-                            indicating that there is a major reduction in the magnitude of these parameters reduces
-                            during the training process,
-                            hence less contribution of this node to the next output.
-                        </li>
-                        <li>• Panel A2: There are several negative weights switch into positive right after the first
-                            epoch,
-                            resulted in an all-positive set of parameters in later epochs, hence the positive
-                            contribution to the following layer.
 
-                        </li>
-                        <li>• However in panel B2: Major of the parameters have remarkable changes:
-                            The originally thick lines decrease their width, the originally thin, positive lines switch
-                            into negative and adjust to
-                            the larger magnitude.
-                        </li>
-                    </ul>
-                    There is a corresponding movement in the training - testing loss line chart, where the curve witness
-                    a
-                    turning point (the 5th or 6th epoch) in both training and testing MSE curves.
-                </div>
-            </div>
-            <br>
-            <div>
-                <h6>2) Learning process</h6>
-                <div>
-                    <ul>
-                        <li>• Panel A3: In the early stage of training process (epoch 3),
-                            the scatterplots for training MSE and testing MSE both contain a vertical formation of
-                            outputs.
-                            <br>This can be explained by the activation function <b>ReLU</b>: Negative input will
-                            result in
-                            zero output,
-                            as can be seen in the first, third and fourth nodes in the last Dense layer right before
-                            the final output.
-                            At this stage, the learning process just started and parameters are not tuned properly.
-                        </li>
-                        <li>• Panel B3: As we move on to epoch 10, the outputs are now align with the target in better
-                            shape. Notice that at the last Dense layer, the only one node has positive weight is the
-                            second one from top down, with the outputs align in similar direction as target, whereas the
-                            other three nodes possess opposite orientation to the target, hence their negative weights.
-
-                        </li>
-
-                    </ul>
-
-                    This observation correlates with the nature of neural network and machine learning in general: On
-                    the process of minimizing loss, there are rewards for positive contributions and penalties for
-                    negative contributions.
-                    Without <b>proper arrangement and visual representation,</b> we would not be able to discern these
-                    visual characteristics of parameters in complex neural networks.
-                </div>
-            </div>
             <br>
 
             <hr>
@@ -282,7 +293,7 @@
                         </li>
                     </ul>
 
-                    Other network architectures for this dataset:
+                    <h6>Other network architectures for this dataset:</h6>
                 </div>
 
                 <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D:
