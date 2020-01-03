@@ -250,12 +250,25 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 .attr("stroke-opacity", 0.2)
                 .attr("stroke-width", 2);
 
+            let verticalClickedLine = d3.select('#trainTestLossSvg')
+                .select("g")
+                .append("line")
+                .attr("class", "pointerLine")
+                .attr("stroke", "black")
+                .attr("stroke-width", 2);
+
             let verticalPointerText = d3.select('#trainTestLossSvg')
                 .select("g")
                 .append("text")
                 .attr("class", "pointerText")
                 .attr("fill", "black")
                 .attr("opacity", 0.5);
+
+            let verticalClickedText = d3.select('#trainTestLossSvg')
+                .select("g")
+                .append("text")
+                .attr("class", "pointerText")
+                .attr("fill", "black");
 
             function getPosition(obj) {
                 var curleft = 0, curtop = 0;
@@ -273,20 +286,24 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 let batch = currentX * batches / canvasWidth;
                 let numOfBatchInEpoch = Math.ceil(y_train_flat_ordered.length / batchSize);
                 let epoch = Math.floor(batch / numOfBatchInEpoch);
-                let batchInEpoch = Math.floor(batch % numOfBatchInEpoch);
-                return {epoch, batchInEpoch};
+                return epoch;
             }
 
+            let oldClickedEpoch = noOfEpochs;
+            let oldSelectedEpoch = null;
+            let oldSelectedData = null;
+            let oldEpoch = noOfEpochs;
+
             canvas.addEventListener("mousemove", function (e) {
-                var pos = getPosition(this);
-                var x = e.pageX - pos.x;
+                let pos = getPosition(this);
+                let x = e.pageX - pos.x;
 
                 verticalPointerLine.attr("x1", x + 60)
                     .attr("y1", 40)
                     .attr("x2", x + 60)
                     .attr("y2", 260);
 
-                let {epoch, batchInEpoch} = getEpochAndBatch(canvas.width, Math.max(x, 0));
+                let epoch = getEpochAndBatch(canvas.width, Math.max(x, 0));
                 verticalPointerText.attr("transform", () => {
                     if (x > 360) {
                         return `translate(${x - 30},90)`
@@ -294,28 +311,26 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                         return `translate(${x + 65},90)`
                     }
                 })
-                // .text("Epoch: " + epoch + ", Batch: " + batchInEpoch);
                     .text("Epoch: " + epoch);
 
-                d3.selectAll(`.trainingWeight`).attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0]);
-                d3.selectAll(`.trainingEpoch${epoch}`).attr("stroke", "black");
 
-                // let epochData = d3.selectAll(`.trainingEpoch${epoch}`).data();
-                // console.log(epochData)
-                // let positions = _.uniq(epochData.map(d => d.source.x));
-                // // let lineWidth = epochData[0].target.x - epochData[0].source.x;
-                // d3.selectAll('.epoch-line')
-                //     .data(positions)
-                //     .enter()
-                //     .append('line')
-                //     .attr("class", "epoch-line")
-                //     .attr("x1", d => d)
-                //     .attr("y1", 0)
-                //     .attr("x2", d => d)
-                //     .attr("y2", 500)
-                //     .attr("stroke", "black")
-                //     .attr("stroke-width", 2);
 
+                if (oldEpoch !== epoch) {
+                    if (oldSelectedData) {
+                        d3.selectAll(`.fillBlack`).attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
+                            .attr('stroke-width', (d, i) => {
+                                return oldSelectedData[i];
+                            })
+                            .classed('fillBlack', false);
+                    }
+                    oldSelectedEpoch = d3.selectAll(`.trainingEpoch${epoch}`);
+                    oldSelectedData = oldSelectedEpoch.nodes().map(d => d.getAttribute('stroke-width'));
+
+                    oldSelectedEpoch.attr("stroke", "black")
+                        .attr('stroke-width', 50)
+                        .classed('fillBlack', true);
+                    oldEpoch = epoch
+                }
             }, false);
 
             canvas.addEventListener("mouseover", function () {
@@ -323,43 +338,78 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 verticalPointerText.style("display", "block");
             });
 
-            // canvas.addEventListener("mouseout", function () {
-            //     verticalPointerLine.style("display", "none");
-            //     verticalPointerText.style("display", "none");
-            // });
+            canvas.addEventListener("mouseout", function () {
+                verticalPointerLine.style("display", "none");
+                verticalPointerText.style("display", "none");
+            });
 
-            canvas.addEventListener("click", function (e) {
+            canvas.addEventListener("click",function (e) {
                 let pos = getPosition(this);
                 let x = e.pageX - pos.x;
 
-                let {epoch, batchInEpoch} = getEpochAndBatch(canvas.width, Math.max(x, 0));
+                let epoch = getEpochAndBatch(canvas.width, Math.max(x, 0));
                 if (epoch >= epochs) {
                     epoch = epochs - 1;
                 }
 
-                let step = trainingProcess[epoch];
-                // Comment if want to show all epochs weight whether selecting epoch on line chart or not
-                // noOfEpochs = epoch + 1;
-                let weights = step.weight;
-                model.layers.forEach(function (layer, idx) {
-                    if (!layer.name.includes("flatten")) {
-                        let tWeight = [];
-                        weights[idx].data.forEach(function (w, sidx) {
-                            let tempW = tf.tensor(Object.values(w), layer.getWeights()[sidx].shape);
-                            tWeight.push(tempW);
-                        });
-                        layer.setWeights(tWeight);
-                    } else {
-                        layer.setWeights([]);
-                    }
-                });
+                verticalClickedLine.attr("x1", x + 60)
+                    .attr("y1", 40)
+                    .attr("x2", x + 60)
+                    .attr("y2", 260);
 
-                displayEpochData(model, trainLosses[epoch], testLosses[epoch]);
+                verticalClickedText.attr("transform", () => {
+                    if (x > 300) {
+                        return `translate(${x - 65},180)`
+                    } else {
+                        return `translate(${x + 65},180)`
+                    }
+                })
+                    .text("Current\nEpoch: " + epoch);
+
+                reconstructEpoch(epoch);
             });
+
+            d3.select('#trainingPlayBtn').on('click', async function() {
+                let i = 0;
+                console.log("hi");
+                while (i < noOfEpochs) {
+                    console.log(i);
+                    await sleep(3000).then(() => {
+                        reconstructEpoch(i);
+                    });
+                    i++;
+                }
+            })
         });
+        hideLoader();
         displayEpochData(model, trainLosses[testLosses.length - 1], testLosses[testLosses.length - 1]);
     }
 
+    const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    };
+
+    function reconstructEpoch(epoch) {
+        let step = trainingProcess[epoch];
+        // Comment if want to show all epochs weight whether selecting epoch on line chart or not
+        // noOfEpochs = epoch + 1;
+        let weights = step.weight;
+
+        model.layers.forEach(function (layer, idx) {
+            if (!layer.name.includes("flatten")) {
+                let tWeight = [];
+                weights[idx].data.forEach(function (w, sidx) {
+                    let tempW = tf.tensor(Object.values(w), layer.getWeights()[sidx].shape);
+                    tWeight.push(tempW);
+                });
+                layer.setWeights(tWeight);
+            } else {
+                layer.setWeights([]);
+            }
+        });
+
+        displayEpochData(model, trainLosses[epoch], testLosses[epoch], epoch);
+    }
 
     //<editor-fold desc="For LSTM weight types" and its toggling menu">
     async function drawLSTMWeightTypes(container) {
@@ -390,7 +440,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 });
             //Draw weight guide.
             container.selectAll(".guidePath")
-                .data([`M85,${padding+8} C110,${padding +8} 110,${padding +8} 125,${padding + 33}`, `M85,${padding +18} C110,${padding +18} 110,${padding +18} 125,${padding + 53}`, `M85,${padding + 28} C110,${padding + 28} 110,${padding + 28} 125,${padding + 73}`, `M85,${padding + 38} C110,${padding + 38} 110,${padding + 38} 125,${padding + 93}`])
+                .data([`M85,${padding + 8} C110,${padding + 8} 110,${padding + 8} 125,${padding + 33}`, `M85,${padding + 18} C110,${padding + 18} 110,${padding + 18} 125,${padding + 53}`, `M85,${padding + 28} C110,${padding + 28} 110,${padding + 28} 125,${padding + 73}`, `M85,${padding + 38} C110,${padding + 38} 110,${padding + 38} 125,${padding + 93}`])
                 .join("path")
                 .attr("class", "guidePath")
                 .attr("d", d => d)
@@ -627,7 +677,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         }
     }
 
-    function displayEpochData(model, trainLoss, testLoss) {
+    function displayEpochData(model, trainLoss, testLoss, epoch) {
+        console.log(epoch);
         for (let i = 0; i < layersConfig.length; i++) {
             let containerId = getWeightsContainerId(i);
             displayLayerWeights(model, i, containerId);
@@ -819,6 +870,10 @@ async function displayLayerWeights(model, i, containerId) {
 
         buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             weightsPathData[containerId] = result;
+            if (containerId === 'weightsContainer3') {
+                console.log('draw dense weight: ' + containerId);
+                console.log(result);
+            }
             drawDenseWeights(containerId);
         });
 
@@ -929,13 +984,18 @@ function drawLstmTrainingWeights(containerId) {
 
 function drawDenseWeights(containerId) {
     let result = weightsPathData[containerId];
+    if (containerId === 'weightsContainer3') {
+        console.log(result);
+    }
     if (result) {
         d3.select("#" + containerId).selectAll(".weightLine")
             .data(result.lineData.filter(d => weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx, d => d.idx)
             .join('path')
             .attr("class", "weightLine")
             .classed("weightLineTraining", isTraining)
-            .attr("d", d => link(d))
+            .attr("d", d => {
+                return link(d)
+            })
             .attr("fill", "none")
             .attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
             .attr("stroke-width", d => result.strokeWidthScale(d.weight > 0 ? d.weight : -d.weight))
@@ -959,6 +1019,7 @@ function drawDenseWeights(containerId) {
 function drawLSTMWeights(containerId) {
     let result = weightsPathData[containerId];
     if (result) {
+        console.log('draw lstm weight');
         d3.select("#" + containerId).selectAll(".weightLine")
             .data(result.lineData.filter(d => lstmWeightTypeDisplay[d.type] === 1 && weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx)
             .join('path')
