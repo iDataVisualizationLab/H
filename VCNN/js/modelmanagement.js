@@ -241,6 +241,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     } else {
         plotTrainLossData(trainLosses, testLosses).then(() => {
             var canvas = document.getElementById("trainTestLossCanvas");
+            let isSimulating = false;
 
             let verticalPointerLine = d3.select('#trainTestLossSvg')
                 .select("g")
@@ -248,14 +249,15 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 .attr("class", "pointerLine")
                 .attr("stroke", "black")
                 .attr("stroke-opacity", 0.2)
-                .attr("stroke-width", 2);
+                .attr("stroke-width", 1);
 
             let verticalClickedLine = d3.select('#trainTestLossSvg')
                 .select("g")
                 .append("line")
                 .attr("class", "pointerLine")
                 .attr("stroke", "black")
-                .attr("stroke-width", 2);
+                .attr('opacity', 0.5)
+                .attr("stroke-width", 1);
 
             let verticalPointerText = d3.select('#trainTestLossSvg')
                 .select("g")
@@ -268,7 +270,15 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 .select("g")
                 .append("text")
                 .attr("class", "pointerText")
+                .attr('opacity', 0.4)
                 .attr("fill", "black");
+
+            let lastEpochX = calculateXPosition(canvas.width, noOfEpochs - 1);
+            setSepLinePosition(verticalClickedLine, verticalClickedText, lastEpochX, noOfEpochs - 1, 210, 65, "Current Epoch", 360);
+
+            d3.selectAll(`.trainingEpoch${noOfEpochs - 1}`).attr("stroke", "black")
+                .attr('stroke-width', 10)
+                .classed('fillBlack', true);
 
             function getPosition(obj) {
                 var curleft = 0, curtop = 0;
@@ -285,8 +295,13 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             function getEpochAndBatch(canvasWidth, currentX) {
                 let batch = currentX * batches / canvasWidth;
                 let numOfBatchInEpoch = Math.ceil(y_train_flat_ordered.length / batchSize);
-                let epoch = Math.floor(batch / numOfBatchInEpoch);
-                return epoch;
+                return Math.floor(batch / numOfBatchInEpoch);
+            }
+
+            function calculateXPosition(canvasWidth, epoch) {
+                let numOfBatchInEpoch = Math.ceil(y_train_flat_ordered.length / batchSize);
+                let batch = epoch * numOfBatchInEpoch;
+                return batch * canvasWidth / batches;
             }
 
             let oldClickedEpoch = noOfEpochs;
@@ -295,25 +310,13 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             let oldEpoch = noOfEpochs;
 
             canvas.addEventListener("mousemove", function (e) {
+                if (isSimulating) return;
                 let pos = getPosition(this);
                 let x = e.pageX - pos.x;
 
-                verticalPointerLine.attr("x1", x + 60)
-                    .attr("y1", 40)
-                    .attr("x2", x + 60)
-                    .attr("y2", 260);
-
                 let epoch = getEpochAndBatch(canvas.width, Math.max(x, 0));
-                verticalPointerText.attr("transform", () => {
-                    if (x > 360) {
-                        return `translate(${x - 30},90)`
-                    } else {
-                        return `translate(${x + 65},90)`
-                    }
-                })
-                    .text("Epoch: " + epoch);
 
-
+                setSepLinePosition(verticalPointerLine, verticalPointerText, x, epoch, 90, 30, "Epoch", 360);
 
                 if (oldEpoch !== epoch) {
                     if (oldSelectedData) {
@@ -334,16 +337,31 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             }, false);
 
             canvas.addEventListener("mouseover", function () {
+                if (isSimulating) return;
                 verticalPointerLine.style("display", "block");
                 verticalPointerText.style("display", "block");
             });
 
             canvas.addEventListener("mouseout", function () {
+                if (isSimulating) return;
                 verticalPointerLine.style("display", "none");
                 verticalPointerText.style("display", "none");
+
+                if (oldSelectedData) {
+                    d3.selectAll(`.fillBlack`).attr("stroke", d => weightValueColorScheme[d.weight > 0 ? 1 : 0])
+                        .attr('stroke-width', (d, i) => {
+                            return oldSelectedData[i];
+                        })
+                        .classed('fillBlack', false);
+                }
+
+                d3.selectAll(`.trainingEpoch${oldClickedEpoch}`).attr("stroke", "black")
+                    .attr('stroke-width', 10)
+                    .classed('fillBlack', true);
+                oldEpoch = oldClickedEpoch;
             });
 
-            canvas.addEventListener("click",function (e) {
+            canvas.addEventListener("click", function (e) {
                 let pos = getPosition(this);
                 let x = e.pageX - pos.x;
 
@@ -351,38 +369,66 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 if (epoch >= epochs) {
                     epoch = epochs - 1;
                 }
-
-                verticalClickedLine.attr("x1", x + 60)
-                    .attr("y1", 40)
-                    .attr("x2", x + 60)
-                    .attr("y2", 260);
-
-                verticalClickedText.attr("transform", () => {
-                    if (x > 300) {
-                        return `translate(${x - 65},180)`
-                    } else {
-                        return `translate(${x + 65},180)`
-                    }
-                })
-                    .text("Current\nEpoch: " + epoch);
+                setSepLinePosition(verticalClickedLine, verticalClickedText, x, epoch, 210, 65, "Current Epoch", 300);
+                oldClickedEpoch = epoch;
 
                 reconstructEpoch(epoch);
             });
 
-            d3.select('#trainingPlayBtn').on('click', async function() {
+            d3.select('#trainingPlayBtn').on('click', async function () {
+                if (isSimulating) return;
+                d3.select('#trainingPlayBtn').text('pause');
+                $('#trainingPlayBtn').parent().prop('disabled', true)
                 let i = 0;
-                console.log("hi");
-                while (i < noOfEpochs) {
-                    console.log(i);
-                    await sleep(3000).then(() => {
+                isTraining = true;
+                isSimulating = true;
+                while (i < noOfEpochs && isSimulating) {
+                    console.log(isSimulating);
+                    // showLoader();
+                    await sleep(1500).then(() => {
+                        currentEpoch = i + 1;
                         reconstructEpoch(i);
                     });
+                    let x = calculateXPosition(canvas.width, i);
+                    setSepLinePosition(verticalClickedLine, verticalClickedText, x, i, 210, 65, "Current Epoch", 300);
                     i++;
+                    // hideLoader();
                 }
+                isSimulating = false;
+                isTraining = false;
+                d3.select('#trainingPlayBtn').text('play_arrow');
+                $('#trainingPlayBtn').parent().prop('disabled', false);
+            });
+
+            d3.select('#trainingSkipBtn').on('click', async function () {
+                isSimulating = false;
+                await sleep(1500).then(() => {
+                    let x = calculateXPosition(canvas.width, noOfEpochs - 1);
+                    setSepLinePosition(verticalClickedLine, verticalClickedText, x, noOfEpochs - 1, 210, 65, "Current Epoch", 300);
+                    reconstructEpoch(noOfEpochs - 1);
+                });
+
+                d3.selectAll(`.trainingEpoch${noOfEpochs - 1}`).attr("stroke", "black")
+                    .attr('stroke-width', 10)
+                    .classed('fillBlack', true);
             })
         });
-        hideLoader();
         displayEpochData(model, trainLosses[testLosses.length - 1], testLosses[testLosses.length - 1]);
+    }
+
+    function setSepLinePosition(verticalLine, verticalText, x, epoch, textYPos, textXMargin, textContent, swapX) {
+        verticalLine.attr("x1", x + 60)
+            .attr("y1", 40)
+            .attr("x2", x + 60)
+            .attr("y2", 260);
+        verticalText.attr("transform", () => {
+            if (x > swapX) {
+                return `translate(${x - textXMargin},${textYPos})`
+            } else {
+                return `translate(${x + 65},${textYPos})`
+            }
+        })
+            .text(textContent + ": " + epoch);
     }
 
     const sleep = (milliseconds) => {
@@ -407,7 +453,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 layer.setWeights([]);
             }
         });
-
         displayEpochData(model, trainLosses[epoch], testLosses[epoch], epoch);
     }
 
@@ -450,12 +495,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             resolve(true);
         });
     }
-
-    // async function drawToggleScaler() {
-    //     return new Promise(((resolve, reject) => {
-    //         let
-    //     }))
-    // }
 
     function onLSTMWeightTypeClick(typeIdx) {
         if (typeIdx === 0) {//toggle all
@@ -677,8 +716,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         }
     }
 
-    function displayEpochData(model, trainLoss, testLoss, epoch) {
-        console.log(epoch);
+    function displayEpochData(model, trainLoss, testLoss) {
         for (let i = 0; i < layersConfig.length; i++) {
             let containerId = getWeightsContainerId(i);
             displayLayerWeights(model, i, containerId);
@@ -794,10 +832,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 dispatch.call("changeWeightFilter");
             }
         });
-        //         });
-        //
-        //     }
-        // )
     }
 }
 
@@ -870,10 +904,6 @@ async function displayLayerWeights(model, i, containerId) {
 
         buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             weightsPathData[containerId] = result;
-            if (containerId === 'weightsContainer3') {
-                console.log('draw dense weight: ' + containerId);
-                console.log(result);
-            }
             drawDenseWeights(containerId);
         });
 
@@ -920,8 +950,6 @@ function makeFlattenTrainingWeights(result) {
 function drawTrainingWeights(containerId) {
     let result = trainingWeightsPathData[containerId];
     if (result) {
-        // console.log(containerId);
-        // console.log(result);
 
         d3.select("#training_" + containerId).selectAll(".trainingWeight")
             .data(makeFlattenTrainingWeights(result), d => d.idx)
@@ -984,9 +1012,6 @@ function drawLstmTrainingWeights(containerId) {
 
 function drawDenseWeights(containerId) {
     let result = weightsPathData[containerId];
-    if (containerId === 'weightsContainer3') {
-        console.log(result);
-    }
     if (result) {
         d3.select("#" + containerId).selectAll(".weightLine")
             .data(result.lineData.filter(d => weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx, d => d.idx)
@@ -1019,7 +1044,6 @@ function drawDenseWeights(containerId) {
 function drawLSTMWeights(containerId) {
     let result = weightsPathData[containerId];
     if (result) {
-        console.log('draw lstm weight');
         d3.select("#" + containerId).selectAll(".weightLine")
             .data(result.lineData.filter(d => lstmWeightTypeDisplay[d.type] === 1 && weightTypeDisplay[d.weight > 0 ? 1 : 0] === 1), d => d.idx)
             .join('path')

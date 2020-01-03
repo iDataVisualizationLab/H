@@ -118,7 +118,7 @@ i.right {
 }
 
 .pointerLine {
-    stroke-dasharray: 9 1;
+    stroke-dasharray: 7 2;
 }
 
 .pointerText {
@@ -165,4 +165,9 @@ a {
     display: inline-block;
     position: relative;
     right: 20%
+}
+
+#trainingPlayBtn {
+    width: fit-content;
+    height: fit-content;
 }

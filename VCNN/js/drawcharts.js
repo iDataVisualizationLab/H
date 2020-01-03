@@ -499,7 +499,7 @@ function plotColorBar(theSvg, colorScale, id, width, height, orientation) {
 async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity, epochs, strokeWidthScale, opacityScale, zeroOneScale) {
     return new Promise((resolve, reject) => {
         let lineData = [];
-
+        console.log(epochs);
         let noOfLeftNodes = wShape[0];
         noOfWeightTypes = noOfWeightTypes ? noOfWeightTypes : 1;
         spanForWeightTypes = spanForWeightTypes ? spanForWeightTypes : 0;
@@ -527,6 +527,7 @@ async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMargin
 
                     for (let epoch = 0; epoch < epochs; epoch++) {
                         // let epochIdx = epoch * noOfBatches + noOfBatches - 1;
+                        // console.log(epoch)
                         let weightData = trainingProcess[epoch].weight[i].data[0];
                         weightList.push(weightData[idx]);
                     }
