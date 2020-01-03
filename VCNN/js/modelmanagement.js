@@ -327,7 +327,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                     oldSelectedData = oldSelectedEpoch.nodes().map(d => d.getAttribute('stroke-width'));
 
                     oldSelectedEpoch.attr("stroke", "black")
-                        .attr('stroke-width', 50)
+                        .attr('stroke-width', 10)
                         .classed('fillBlack', true);
                     oldEpoch = epoch
                 }

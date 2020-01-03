@@ -117,6 +117,10 @@ i.right {
     margin-bottom: 0px !important;
 }
 
+.pointerLine {
+    stroke-dasharray: 9 1;
+}
+
 .pointerText {
     padding-left: 5px;
 }
