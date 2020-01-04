@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        @import "lib/materialize/css/materialize.css";
+    </style>
+    <style>
+        @import "lib/playpausebutton/playpause.css";
+        @import "css/styles.css";
+        @import "js/toast/toast.css";
+        @import "js/loader/loader.css";
+        @import "js/tooltip/tooltip.css";
+    </style>
+    <style>
+        body {
+            color: black;
+        }
+
+        img.figureBig {
+            width: 80%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        img.figureMedium {
+            width: 60%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        img.figureSmall {
+            width: 40%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        li {
+            list-style-type: circle;
+        !important;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>DeepViz</title>
+    <script src="lib/materialize/js/materialize.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" src="css/styles.css">
+</head>
+<body>
+<nav class="nav-wrapper indigo">
+    <div class="container" style="margin-left: auto;margin-right: auto; width: 100%">
+        <a href="#" class="brand-logo">DeepViz: Explaining Long Short-Term Memory Network With High Dimensional Time
+            Series Data</a>
+    </div>
+</nav>
+
+<div style="width: 90%; margin-top: 20px; margin-left: auto; margin-right: auto">
+    <div class="row col s12" style="width: fit-content; margin-left: auto; margin-right: auto; ">
+        <a href="index.html" class="btn btn-menu" id="video">VIDEO</a>
+        <a href="#" class="btn btn-menu" id="usecase-video">use case videos</a>
+        <a href="usecases.html" class="btn btn-menu" id="article">Use cases</a>
+        <a href="demo.html" class="btn btn-menu" id="demo">DEMO</a>
+    </div>
+
+    <div style="width: 100%">
+        <h5 style="width: fit-content; color: #545454;">High Performance Computing Data: HPC
+            health prediction</h5>
+        <i>The dataset contains ten variables, which are computer health readings for every 5-minute interval within 5
+            hours, including CPU load, fan speeds, memory usage, and power consumption. In total, we have 20 timesteps
+            of 467 nodes in the cluster. Our target variable for this data is the CPU temperature.</i>
+        <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D: Dense)</h6>
+
+        <div class="video-container" style="margin-top: 20px">
+            <iframe width="100%" height="100%" src="//www.youtube.com/embed/golMnXUjRoM" frameborder="0"
+                    allowfullscreen></iframe>
+        </div>
+
+        <hr>
+
+        <div style="width: 100%">
+            <h5 style="width: fit-content; color: #545454">S&P500 Stock Data: Stock price prediction</h5>
+            <i>The dataset covers stock records for five weekdays each week,
+                in the period of 39 years,
+                from 1980 to 2019. Each
+                record contains the timestamp, stock price at “Open”,
+                “High”, “Low”, “Close”, and
+                “Volume” of the stock that
+                day. During the training and
+                testing process, we utilize
+                the attributes of the stock
+                price on Monday, Tuesday,
+                Wednesday, and Thursday to
+                predict Close price for Friday.</i>
+            <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D:
+                Dense)</h6>
+
+            <div class="video-container" style="margin-top: 20px">
+                <iframe width="100%" height="100%" src="//www.youtube.com/embed/RznuvSLFhDo" frameborder="0"
+                        allowfullscreen></iframe>
+            </div>
+
+            <hr>
+        </div>
+
+        <div style="width: 100%">
+            <h5 style="width: fit-content; color: #545454">S&P500 Stock Data: Stock price prediction</h5>
+            <i>The dataset covers stock records for five weekdays each week,
+                in the period of 39 years,
+                from 1980 to 2019. Each
+                record contains the timestamp, stock price at “Open”,
+                “High”, “Low”, “Close”, and
+                “Volume” of the stock that
+                day. During the training and
+                testing process, we utilize
+                the attributes of the stock
+                price on Monday, Tuesday,
+                Wednesday, and Thursday to
+                predict Close price for Friday.</i>
+            <h6 style="width: fit-content; color: #545454;">Configuration: L16-L16-L12-L12-L8-D8-D4 (L: LSTM, D:
+                Dense)</h6>
+            <div class="video-container" style="margin-top: 20px">
+                <iframe width="100%" height="100%" src="//www.youtube.com/embed/Vy7dvblx7YA" frameborder="0"
+                        allowfullscreen></iframe>
+            </div>
+
+        </div>
+        <br>
+
+    </div>
+
+</body>
+<script>
+    d3.selectAll(".overview").style("height", window.innerHeight + "px")
+</script>
+</html>
