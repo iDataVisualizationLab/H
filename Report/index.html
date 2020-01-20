@@ -1,0 +1,97 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection"/>
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+<!--[if IE]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
+  your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<div class="container">
+  <h3 style="text-align: center; color:cadetblue">Weekly Report</h3>
+  <h1 style="text-align: center; color:cadetblue">Hao Van</h1>
+
+  <div class="row">
+    <div class="col s3" id="time">
+      <p>
+        <span>Mon, Jan 20, 2020</span>
+      </p>
+    </div>
+    <div class="col s9" id="content">
+      <p>
+        <strong style="font-size: 1.5em">Finished works</strong><br>
+      <ul>
+        <li>Implemented <a href="https://idatavisualizationlab.github.io/H/VCNN/">DeepViz</a>, an application for
+          exploring LSTM network.
+        </li>
+        <li>Submitting a long paper to <a
+          href="https://www.eurovis.org/egev20/for-submitters/eurovis-for-submitters/eurovis-full-papers/">EuroVis</a>
+          conference. The paper is still under review and will be notified on Feb 11.
+        </li>
+        <li><a href="https://idatavisualizationlab.github.io/H/VixLSTM/">VixLSTM</a> - Improving <a
+          href="https://idatavisualizationlab.github.io/H/VCNN/">DeepViz</a>, building outlier detection feature. An
+          observation is considered outlier if it is in top 5% highest mean absolute error of its actual value and
+          predicted value.
+        </li>
+        <li>Calculating and ordering neurons, measures: correlation, weights and MSE. With this feature, users can see
+          correlated neurons side by side and find out some common attributes.
+        </li>
+      </ul>
+      <strong style="font-size: 1.5em">Future works</strong><br>
+      <ul>
+        <li>Using better algorithm for ordering neurons in <a href="https://idatavisualizationlab.github.io/H/VixLSTM/">VixLSTM</a>(Currently, it is really slow).</li>
+        <li>Building classification task for this application (It has only regression task now).</li>
+        <li>Improving <a
+          href="https://idatavisualizationlab.github.io/H/VCNN/">DeepViz</a> when reviews from conference are available.</li>
+      </ul>
+
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="js/vendor/modernizr-3.8.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+<script>
+  window.ga = function () {
+    ga.q.push(arguments)
+  };
+  ga.q = [];
+  ga.l = +new Date;
+  ga('create', 'UA-XXXXX-Y', 'auto');
+  ga('set', 'transport', 'beacon');
+  ga('send', 'pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async></script>
+
+<script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+
+</html>
