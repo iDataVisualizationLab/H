@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5386cf2e-1ed5-42ac-8f39-97250a99dc4e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/ConfusionMap.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/404.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/browserconfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/css/main.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/css/normalize.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/TOC.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/css.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/extend.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/faq.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/html.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/js.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/misc.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/usage.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/humans.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/plugins.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/d3.v5.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/jquery-3.4.1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/jquery-3.4.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/modernizr-3.8.0.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/js/vendor/tf.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/site.webmanifest" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tile-wide.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_test_HPCC_ts20_set_1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_test_HPCC_ts20_set_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_test_HPCC_ts20_set_3.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_train_HPCC_ts20_set_1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_train_HPCC_ts20_set_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_train_HPCC_ts20_set_3.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/y_test_HPCC_ts20_set_1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/y_test_HPCC_ts20_set_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/y_test_HPCC_ts20_set_3.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/y_train_HPCC_ts20_set_1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/y_train_HPCC_ts20_set_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/y_train_HPCC_ts20_set_3.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/models/ozone/ozone_ts29_e50_b32_lr0005_L64_L48_L48_D64_D32_D8_1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/models/ozone/ozone_ts29_e50_b32_lr0005_L64_L48_L48_D64_D32_D8_1.weights.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/models/ozone/ozone_ts29_e50_b32_lr0005_L64_L48_L48_D64_D32_D8_1_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/X_test_ozone_ts29.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/X_train_ozone_ts29.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_test_ozone_ts29.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_train_ozone_ts29.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/confusionmap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HackerNets/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../HackerNets/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IDVLPubPage/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IDVLPubPage/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_test_stock_ts4_fri.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_train_stock_ts4_fri.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/y_test_stock_ts4_fri.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/y_train_stock_ts4_fri.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/HPCCTemperature-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/HPCCTemperature-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/HPCCTemperature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/HPCCTemperature.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/datamanagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/datamanagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/drawcharts.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/drawcharts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/layerManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/layerManagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/modelmanagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/modelmanagement.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1WfymyZ3zE79QGQUV1V9sAmrJT9" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/js/vendor" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/js/vendor" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/ConfusionMap/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.html" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5386cf2e-1ed5-42ac-8f39-97250a99dc4e" name="Default Changelist" comment="" />
+      <created>1579555106815</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1579555106815</updated>
+      <workItem from="1579555108998" duration="4875000" />
+      <workItem from="1579562025609" duration="11093000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
