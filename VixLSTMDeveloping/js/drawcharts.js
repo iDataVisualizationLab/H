@@ -268,13 +268,13 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
         }
         averageLineArr.push({data: calculateAverageLineForLstm({x: x, y: y, z: z}), idx: featureIdx});
     }
-    neuronData.mse[container] = {};
-    neuronData.mse[container]['unsortedData'] = [];
-    neuronData.correlation[container] = {};
-    neuronData.correlation[container]['unsortedData'] = averageLineArr;
-
-    sortNeuronByMse(container, averageLineArr);
-    sortNeuronByCorrelation(container, averageLineArr);
+    // neuronData.mse[container] = {};
+    // neuronData.mse[container]['unsortedData'] = [];
+    // neuronData.correlation[container] = {};
+    // neuronData.correlation[container]['unsortedData'] = averageLineArr;
+    //
+    // sortNeuronByMse(container, averageLineArr);
+    // sortNeuronByCorrelation(container, averageLineArr);
 }
 
 let globalError = {};
@@ -582,15 +582,15 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
         }
         averageLineArr.push({data: x, idx: featureIdx});
     }
-    if (normalizer) {
-        neuronData.mse[container] = {};
-        neuronData.mse[container]['unsortedData'] = [];
-        neuronData.correlation[container] = {};
-        neuronData.correlation[container]['unsortedData'] = averageLineArr;
-
-        sortNeuronByMse(container, averageLineArr);
-        sortNeuronByCorrelation(container, averageLineArr);
-    }
+    // if (normalizer) {
+    //     neuronData.mse[container] = {};
+    //     neuronData.mse[container]['unsortedData'] = [];
+    //     neuronData.correlation[container] = {};
+    //     neuronData.correlation[container]['unsortedData'] = averageLineArr;
+    //
+    //     sortNeuronByMse(container, averageLineArr);
+    //     sortNeuronByCorrelation(container, averageLineArr);
+    // }
 }
 
 function updateGraphTitle(graphId, newText) {

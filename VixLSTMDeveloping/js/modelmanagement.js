@@ -15,8 +15,8 @@ function processLayers(layers) {
             id: "output",
             timeStamp: "output",
             layerType: "dense",
-            units: 11,
-            activation: "softmax"
+            units: 1,
+            activation: "sigmoid"
         });
     }
     //Add flatten layer if needed
@@ -64,8 +64,8 @@ async function createModel(layers, inputShape) {
             });
 
             model.compile({
-                optimizer: 'adam',
-                loss: 'categoricalCrossentropy',
+                optimizer: 'sgd',
+                loss: 'binaryCrossentropy',
             });
             console.log(model.summary());
             resolve(model);
@@ -509,6 +509,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         let actualLabel = [];
         let predictedLabel = [];
         actual.forEach(function (v,i) {
+
             let actualVal = tf.argMax(v).dataSync()[0];
             let predictedVal = tf.argMax(predicted[i]).dataSync()[0];
 
@@ -589,7 +590,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     function displayEpochData(model, trainLoss, testLoss) {
         for (let i = 0; i < layersConfig.length; i++) {
             let containerId = getWeightsContainerId(i);
-            displayLayerWeights(model, i, containerId);
+            // displayLayerWeights(model, i, containerId);
         }
 
         //Draw output
@@ -649,10 +650,10 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
             trainLosses.push(logs.loss);
             testLosses.push(testL);
-            plotTrainLossData(trainLosses, testLosses);
+            // plotTrainLossData(trainLosses, testLosses);
 
             hideLoader();
-            displayEpochData(model, logs.loss);
+            // displayEpochData(model, logs.loss);
             if (epoch > 1) {
                 //We don't update for the first epoch
                 dispatch.call("changeWeightFilter");

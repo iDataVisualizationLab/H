@@ -74,12 +74,13 @@ function updateDraw() {
 
   let pies = node.selectAll("path")
     .data(function (d) {
+      console.log(d);
       return d.pieData.pie;
     })
     .attr('d', d3.arc()
       .innerRadius(0)
       .outerRadius(function (d) {
-        parent = d3.select(this.parentNode).datum();
+        let parent = d3.select(this.parentNode).datum();
         return radiusScale(parent.values.length);
       })
     )

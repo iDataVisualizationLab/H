@@ -33,9 +33,9 @@ function updateInputs() {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
                 let num = 1;
                 // loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
-                loadModelFromServer("egg_ts1028_e30_b8_lr0005_L16L8L8D8D8_" + num);
+                loadModelFromServer("ozone_ts29_e50_b32_lr0005_L64_L48_L48_D64_D32_D8_" + num);
 
-                console.log("egg_ts1028_e30_b8_lr0005_L16L8L8D8D8_" + num)
+                console.log("ozone_ts29_e50_b32_lr0005_L64_L48_L48_D64_D32_D8_" + num)
                 // loadKerasModelFromServer("eeg_16_8_8_8_8_11");
                 // loadModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
                 // loadModelFromServer("emp_super_large_settings" + num);
@@ -180,15 +180,16 @@ async function processInputs(sFs) {
         //     d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
         //         d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
         //             d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
-        d3.json("data/newData/X_train_stock_ts4_fri.json").then(X_trainR => {
-            d3.json("data/newData/y_train_stock_ts4_fri.json").then(y_trainR => {
-                d3.json("data/newData/X_test_stock_ts4_fri.json").then(X_testR => {
-                    d3.json("data/newData/y_test_stock_ts4_fri.json").then(y_testR => {
+        d3.json("data/newData/X_train_ozone_ts29.json").then(X_trainR => {
+            d3.json("data/newData/y_train_ozone_ts29.json").then(y_trainR => {
+                d3.json("data/newData/X_test_ozone_ts29.json").then(X_testR => {
+                    d3.json("data/newData/y_test_ozone_ts29.json").then(y_testR => {
                         // features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
                         // features = ['Open', 'High', 'Low', 'Close', 'Volume'];
                         // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
-                        features = ['Feature 0', 'Feature 1', 'Feature 2', 'Feature 3', 'Feature 4'];
-                        predictedVariable = "Action";
+                        // features = ['Feature 0', 'Feature 1', 'Feature 2', 'Feature 3', 'Feature 4'];
+                        features = ['WSR0','WSR1','WSR2','WSR3','WSR4','WSR5','WSR6','WSR7','WSR8','WSR9','WSR10','WSR11','WSR12','WSR13','WSR14','WSR15','WSR16','WSR17','WSR18','WSR19','WSR20','WSR21','WSR22','WSR23','WSR_PK','WSR_AV','T0','T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17','T18','T19','T20','T21','T22','T23','T_PK','T_AV','T85','RH85','U85','V85','HT85','T70','RH70','U70','V70','HT70','T50','RH50','U50','V50','HT50','KI','TT','SLP','SLP_','Precp'];
+                        predictedVariable = "Ozone day";
                         dataItemName = "Data Instances";
                         populateFeatureSelection(features);
                         if (!sFs) {

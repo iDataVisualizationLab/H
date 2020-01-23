@@ -3,7 +3,9 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     width: confusionMapSettings.width,
     height: confusionMapSettings.height,
     forceStrength: confusionMapSettings.forceStrength,
-    bubbleRadius: confusionMapSettings.bubbleRadius
+    bubbleRadius: confusionMapSettings.bubbleRadius,
+    arcInnerRadius: confusionMapSettings.arcInnerRadius,
+    arcOuterRadius: confusionMapSettings.arcOuterRadius
   };
 
   let center = {x: settings.width / 2, y: settings.height / 2};
@@ -19,6 +21,8 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     .attr('id', 'confusion-svg')
     .attr('width', settings.width)
     .attr('height', settings.height);
+  let clusters = {};
+  let fakeNodes = {};
 
   let bubbles = null, simulation = null;
 
@@ -28,12 +32,13 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
 
     function drawPieBubble() {
       initialization();
-      let nodes = createNodes();
 
-      bubbles = svg.select('.nodes').selectAll(".node").data(nodes, d => d.index);
+      let nodes = createNodes();
+      nodes = createFakeNodes(nodes);
+
+      bubbles = svg.select('.nodes').selectAll(".node").data(nodes.filter(d => !d.isFake), d => d.index);
 
       bubbles.exit().remove();
-
       bubbles
         .enter()
         .append('g')
@@ -42,35 +47,54 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
         .call(d3.drag()
           .on('start', dragstarted)
           .on('drag', dragged)
-          .on('end', dragended))
-        .append('circle')
-        .classed('bubble', true)
-        .attr('r', settings.bubbleRadius)
-        .attr('fill', d => color(d.class_name));
+          .on('end', dragended));
 
-      // bubbles.merge(bubblesE);
       bubbles = svg.select('.nodes').selectAll('.node');
-
-      console.log(nodes);
 
       let arc = d3.arc()
         .innerRadius(0)
         .outerRadius(settings.bubbleRadius);
 
-      // let pies = nodes.selectAll('path')
-      //   .data(d => d.pie)
-      //   .attr('d', d => arc(d));
+      let pies = bubbles.selectAll('path')
+        .data(d => d.pie)
+        .attr('d', d => arc(d))
+        .attr('fill', d => color(d.data.key));
+
+      pies.exit().remove();
+
+      pies
+        .enter()
+        .append('path')
+        .attr('d', d => arc(d))
+        .attr('fill', d => color(d.data.key))
+        .attr("stroke", "white")
+        .attr("stroke-width", 1)
+        .style("stroke-opacity", 0.6);
 
       simulation = d3.forceSimulation()
-        // .velocityDecay(0.2)
-        .force('x', d3.forceX().strength(settings.forceStrength).x(center.x))
-        .force('y', d3.forceY().strength(settings.forceStrength).y(center.y))
-        .force('charge', d3.forceManyBody().strength(charge))
-        .force('collision', d3.forceCollide().radius(settings.bubbleRadius))
+        .force('x', d3.forceX().strength(d => d.isFake ? 1 : settings.forceStrength).x(d => d.isFake ? d.x : center.x))
+        .force('y', d3.forceY().strength(d => d.isFake ? 1 : settings.forceStrength).y(d => d.isFake ? d.y : center.y))
+        .force('charge', d3.forceManyBody().strength(d => d.isFake ? 0 : charge(d)))
+        .force('collision', d3.forceCollide().radius(d => d.isFake ? 0 : settings.bubbleRadius * 2))
         .alphaTarget(0.1)
         .on('tick', ticked);
 
+      svg.select('.legends')
+        .selectAll('.class-legend')
+        .data(d3.entries(clusters))
+        .enter()
+        .append('text')
+        .attr('class', 'class-legend')
+        .text(d => d.key)
+        .attr('fill', d => color(d.key))
+        .attr('transform', d => `translate(${d.value.x > center.x ? d.value.x + 10 : d.value.x - 5}, ${d.value.y + 10 > center.y ? d.value.y + 5 : d.value.y - 5}) rotate(-90)`);
+
       simulation.nodes(nodes);
+      let links = createLinks(nodes);
+
+      console.log(links);
+
+      simulation.force("link", d3.forceLink(links).id(d => d.index).strength(d => d.value / 2));
     }
 
     function initialization() {
@@ -83,13 +107,16 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5)
         .attr("class", "nodes");
+
+      svg.append('g')
+        .attr('class', 'legends');
     }
 
     function drawArc() {
       let chartArc = d3.arc()
-        .outerRadius(200)
-        .innerRadius(170)
-        .padAngle(0.03)
+        .outerRadius(settings.arcOuterRadius)
+        .innerRadius(settings.arcInnerRadius)
+        .padAngle(0.01)
         .context(context);
 
       let chartPie = d3.pie();
@@ -98,10 +125,24 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
       context.translate(settings.width / 2, settings.height / 2);
 
       chartArcs.forEach(function (d, i) {
+        let clusterPoint = {};
+        clusterPoint.angleOnArc = (d.startAngle + d.endAngle) / 2;
+        clusterPoint.x = center.x + settings.arcOuterRadius * Math.cos(clusterPoint.angleOnArc - Math.PI / 2);
+        clusterPoint.y = center.y + settings.arcOuterRadius * Math.sin(clusterPoint.angleOnArc - Math.PI / 2);
         context.beginPath();
         chartArc(d);
         context.fillStyle = color(classes[i].name);
         context.fill();
+
+        clusters[classes[i].name] = clusterPoint;
+
+        //temp drawing for test
+        // svg.append('g')
+        //   .append('rect')
+        //   .attr('x', clusterPoint.x)
+        //   .attr('y', clusterPoint.y)
+        //   .attr('width', '5px')
+        //   .attr('height', '5px');
       });
 
       context.beginPath();
@@ -127,26 +168,83 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
       return classes.find(d => d.index === idx).name;
     }
 
+    function findClass(arr) {
+      if (arr.length === 1) {
+        return binaryClass(arr);
+      } else {
+        categoryClass(arr);
+      }
+    }
+
     function binaryArrCalculator(d) {
-      return [d[0], 1 - d[0]];
+      let result = {};
+      result[classes[0].name] = 1 - d[0];
+      result[classes[1].name] = d[0];
+      return d3.entries(result);
+    }
+
+    function createLinks(nodes) {
+      let links = [];
+
+      nodes.filter(d => d.isFake).forEach(function (d) {
+        clusters[d.class_name].index = d.index;
+      });
+
+      nodes.filter(d => !d.isFake).forEach(function (d) {
+        d.pie.forEach(function (v) {
+          let newLink = {};
+          newLink.source = d.index;
+          newLink.target = clusters[v.data.key].index;
+          newLink.value = v.data.value;
+
+          links.push(newLink);
+        })
+      });
+
+      return links;
     }
 
     function createNodes() {
       let predicted = confusionMapData.predicted;
       return predicted.map(function (d, i) {
-        let pie = d3.pie();
+        let pie = d3.pie().value(function (d) {
+          return d.value;
+        });
         return {
           index: i,
           pie: pie(binaryArrCalculator(d)),
-          class_name: binaryClass(d),
+          class_name: findClass(d),
           x: Math.random() * 900,
-          y: Math.random() * 900
+          y: Math.random() * 900,
+          isFake: false
         };
       });
     }
 
+    function createFakeNodes(nodes) {
+      for (let key in clusters) {
+        let pie = d3.pie().value(function (d) {
+          return d.value;
+        });
+        nodes.push({
+          index: 0,
+          pie: pie(binaryArrCalculator(key === 'ozone' ? [1] : [0])),
+          class_name: key,
+          x: clusters[key].x,
+          y: clusters[key].y,
+          isFake: true
+        })
+      }
+
+      return nodes;
+    }
+
     function ticked() {
       bubbles.attr("transform", d => `translate(${d.x},${d.y})`);
+
+      if (simulation.alpha() <= 0.1001) {
+        simulation.stop()
+      }
     }
 
     function charge(d) {
@@ -154,7 +252,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     }
 
     function dragstarted(d) {
-      if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+      if (!d3.event.active) simulation.alphaTarget(1).restart();
       d.fx = d.x;
       d.fy = d.y;
     }
@@ -165,7 +263,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     }
 
     function dragended(d) {
-      if (!d3.event.active) simulation.alphaTarget(0.3);
+      if (!d3.event.active) simulation.alphaTarget(0.1);
       d.fx = null;
       d.fy = null;
     }
@@ -174,8 +272,8 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
 
 let htmlContainer = document.getElementById('main');
 let classes = [
-  {name: 'ozone', number: 42, index: 0},
-  {name: 'non ozone', number: 44, index: 1}
+  {name: 'non ozone', number: 42, index: 0},
+  {name: 'ozone', number: 44, index: 1}
 ];
 
 let confusionMapData = {};
@@ -184,8 +282,10 @@ confusionMapData.actual = [1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1,
 let confusionMapSettings = {
   width: 500,
   height: 500,
-  forceStrength: 0.1,
-  bubbleRadius: 10
+  forceStrength: 0.04,
+  bubbleRadius: 7,
+  arcInnerRadius: 190,
+  arcOuterRadius: 200
 };
 let map = new ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSettings);
 map.draw();

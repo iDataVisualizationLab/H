@@ -2,44 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5386cf2e-1ed5-42ac-8f39-97250a99dc4e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/ConfusionMap.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/404.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/browserconfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/main.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/normalize.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/TOC.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/css.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/extend.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/faq.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/html.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/js.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/misc.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/usage.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/humans.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/plugins.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/d3.v5.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/jquery-3.4.1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/jquery-3.4.1.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/modernizr-3.8.0.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/vendor/tf.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/robots.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/site.webmanifest" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tile-wide.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tile.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets.zip" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_test_HPCC_ts20_set_1.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_test_HPCC_ts20_set_2.json" afterDir="false" />
@@ -61,8 +23,11 @@
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_test_ozone_ts29.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_train_ozone_ts29.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/confusionmap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HackerNets/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/../HackerNets/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HackerNets/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/../HackerNets/js/forcenetwork.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../IDVLPubPage/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IDVLPubPage/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_test_stock_ts4_fri.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_train_stock_ts4_fri.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/y_test_stock_ts4_fri.json" beforeDir="false" />
@@ -139,8 +104,17 @@
       <option name="presentableId" value="Default" />
       <updated>1579555106815</updated>
       <workItem from="1579555108998" duration="4875000" />
-      <workItem from="1579562025609" duration="11093000" />
+      <workItem from="1579562025609" duration="11682000" />
+      <workItem from="1579673429132" duration="17310000" />
     </task>
+    <task id="LOCAL-00001" summary="update confusion map">
+      <created>1579672847759</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1579672847759</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,5 +122,17 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="update confusion map" />
+    <option name="LAST_COMMIT_MESSAGE" value="update confusion map" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="349" y="99" key="CommitChangelistDialog2" timestamp="1579672845235">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="349" y="99" key="CommitChangelistDialog2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1579672845235" />
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2" timestamp="1579672854792">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1579672854792" />
   </component>
 </project>

@@ -193,6 +193,8 @@ async function loadModelFromServer(modelName) {
         modelName = 'l8l4d2/' + modelName;
     } else if (modelName.indexOf('L16L8L8D8D8') > -1) {
         modelName = 'l16l8l8d8d8/' + modelName;
+    } else if (modelName.indexOf('ozone') > -1) {
+        modelName = 'ozone/' + modelName;
     } else {
         modelName = 'large_model/' + modelName;
     }
@@ -201,10 +203,12 @@ async function loadModelFromServer(modelName) {
         features = ['Open', 'High', 'Low', 'Close', 'Volume'];
     } else if (modelName.indexOf('arrTemp') > -1) {
         features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
-    } else if (modelName.indexOf('emp') > -1){
+    } else if (modelName.indexOf('emp') > -1) {
         features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
     } else if (modelName.indexOf('eeg') > -1) {
         features = ['feature 0', 'feature 1', 'feature 2', 'feature 3', 'feature 4'];
+    } else if  (modelName.indexOf('ozone') > -1) {
+        features = ['WSR0','WSR1','WSR2','WSR3','WSR4','WSR5','WSR6','WSR7','WSR8','WSR9','WSR10','WSR11','WSR12','WSR13','WSR14','WSR15','WSR16','WSR17','WSR18','WSR19','WSR20','WSR21','WSR22','WSR23','WSR_PK','WSR_AV','T0','T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17','T18','T19','T20','T21','T22','T23','T_PK','T_AV','T85','RH85','U85','V85','HT85','T70','RH70','U70','V70','HT70','T50','RH50','U50','V50','HT50','KI','TT','SLP','SLP_','Precp'];
     }
 
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
