@@ -22,12 +22,11 @@
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/X_train_ozone_ts29.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_test_ozone_ts29.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_train_ozone_ts29.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/confusionmap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ConfusionMap.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ConfusionMap.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../HackerNets/js/forcenetwork.js" beforeDir="false" afterPath="$PROJECT_DIR$/../HackerNets/js/forcenetwork.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IDVLPubPage/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IDVLPubPage/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../IoTNetViz/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_test_stock_ts4_fri.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_train_stock_ts4_fri.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/y_test_stock_ts4_fri.json" beforeDir="false" />
@@ -35,11 +34,9 @@
       <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/HPCCTemperature-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/.ipynb_checkpoints/HPCCTemperature-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/HPCCTemperature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/HPCCTemperature.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/new_hpcc_temperature.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/datamanagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/datamanagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/drawcharts.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/drawcharts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/layerManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/layerManagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VixLSTMDeveloping/js/modelmanagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/js/modelmanagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Projects/ttu-sms-server/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Projects/ttu-sms-server/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Projects/ttu-sms-server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../Projects/ttu-sms-server/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Projects/ttu-sms-server/public/userinterface.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../Projects/ttu-sms-server/public/userinterface.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +102,11 @@
       <updated>1579555106815</updated>
       <workItem from="1579555108998" duration="4875000" />
       <workItem from="1579562025609" duration="11682000" />
-      <workItem from="1579673429132" duration="17310000" />
+      <workItem from="1579673429132" duration="18119000" />
+      <workItem from="1579745765296" duration="2201000" />
+      <workItem from="1579882858031" duration="517000" />
+      <workItem from="1579903177370" duration="4582000" />
+      <workItem from="1579909887331" duration="360000" />
     </task>
     <task id="LOCAL-00001" summary="update confusion map">
       <created>1579672847759</created>
@@ -114,7 +115,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579672847759</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="many updates">
+      <created>1579744970777</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1579744970777</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,16 +131,19 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="update confusion map" />
-    <option name="LAST_COMMIT_MESSAGE" value="update confusion map" />
+    <MESSAGE value="many updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="many updates" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="349" y="99" key="CommitChangelistDialog2" timestamp="1579672845235">
+    <state x="349" y="99" key="CommitChangelistDialog2" timestamp="1579744968333">
       <screen x="0" y="23" width="1680" height="947" />
     </state>
+    <state x="349" y="99" key="CommitChangelistDialog2/1680.-74.3840.1577/0.23.1680.947@0.23.1680.947" timestamp="1579744968333" />
     <state x="349" y="99" key="CommitChangelistDialog2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1579672845235" />
-    <state x="440" y="236" key="Vcs.Push.Dialog.v2" timestamp="1579672854792">
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2" timestamp="1579744973531">
       <screen x="0" y="23" width="1680" height="947" />
     </state>
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2/1680.-74.3840.1577/0.23.1680.947@0.23.1680.947" timestamp="1579744973531" />
     <state x="440" y="236" key="Vcs.Push.Dialog.v2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1579672854792" />
   </component>
 </project>

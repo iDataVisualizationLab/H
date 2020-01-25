@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ConfusionMap.iml" filepath="$PROJECT_DIR$/.idea/ConfusionMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Projects/ttu-sms-server/.idea/ttu-sms-server.iml" filepath="$PROJECT_DIR$/../../Projects/ttu-sms-server/.idea/ttu-sms-server.iml" />
     </modules>
   </component>
 </project>

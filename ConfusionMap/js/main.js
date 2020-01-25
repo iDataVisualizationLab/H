@@ -22,7 +22,6 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     .attr('width', settings.width)
     .attr('height', settings.height);
   let clusters = {};
-  let fakeNodes = {};
 
   let bubbles = null, simulation = null;
 
@@ -65,16 +64,22 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
       pies
         .enter()
         .append('path')
-        .attr('d', d => arc(d))
+        .attr('d', d => {
+          return arc(d)
+        })
         .attr('fill', d => color(d.data.key))
         .attr("stroke", "white")
-        .attr("stroke-width", 1)
+        .attr("stroke-width", function (d) {
+          let parent = d3.select(this).node().parentNode;
+          let parentData = d3.select(parent).data()[0];
+          return parentData.isFake ? 0 : 1;
+        })
         .style("stroke-opacity", 0.6);
 
       simulation = d3.forceSimulation()
         .force('x', d3.forceX().strength(d => d.isFake ? 1 : settings.forceStrength).x(d => d.isFake ? d.x : center.x))
         .force('y', d3.forceY().strength(d => d.isFake ? 1 : settings.forceStrength).y(d => d.isFake ? d.y : center.y))
-        .force('charge', d3.forceManyBody().strength(d => d.isFake ? 0 : charge(d)))
+        .force('charge', d3.forceManyBody().strength(d => d.isFake ? 0 : -1))
         .force('collision', d3.forceCollide().radius(d => d.isFake ? 0 : settings.bubbleRadius * 2))
         .alphaTarget(0.1)
         .on('tick', ticked);
@@ -94,7 +99,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
 
       console.log(links);
 
-      simulation.force("link", d3.forceLink(links).id(d => d.index).strength(d => d.value / 2));
+      simulation.force("link", d3.forceLink(links).id(d => d.index).strength(d => d.value+0.03));
     }
 
     function initialization() {
@@ -172,7 +177,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
       if (arr.length === 1) {
         return binaryClass(arr);
       } else {
-        categoryClass(arr);
+        return categoryClass(arr);
       }
     }
 
@@ -181,6 +186,22 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
       result[classes[0].name] = 1 - d[0];
       result[classes[1].name] = d[0];
       return d3.entries(result);
+    }
+
+    function categoryArrCalculator(d) {
+      let result = {};
+      d.forEach(function (val, idx) {
+        result[classes[idx].name] = val;
+      });
+      return d3.entries(result);
+    }
+
+    function arrCalculator(d) {
+      if (d.length === 1) {
+        return binaryArrCalculator(d);
+      } else {
+        return categoryArrCalculator(d);
+      }
     }
 
     function createLinks(nodes) {
@@ -212,13 +233,19 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
         });
         return {
           index: i,
-          pie: pie(binaryArrCalculator(d)),
+          pie: pie(arrCalculator(d)),
           class_name: findClass(d),
           x: Math.random() * 900,
           y: Math.random() * 900,
           isFake: false
         };
       });
+    }
+
+    function createFakeNodeData(key) {
+      let result = Array(classes.length).fill(0);
+      result[classes.find(d => d.name === key).index] = 1;
+      return result;
     }
 
     function createFakeNodes(nodes) {
@@ -228,7 +255,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
         });
         nodes.push({
           index: 0,
-          pie: pie(binaryArrCalculator(key === 'ozone' ? [1] : [0])),
+          pie: pie(arrCalculator(createFakeNodeData(key))),
           class_name: key,
           x: clusters[key].x,
           y: clusters[key].y,
@@ -248,7 +275,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     }
 
     function charge(d) {
-      return -Math.pow(d.radius, 2.0) * settings.forceStrength;
+      return  settings.forceStrength;
     }
 
     function dragstarted(d) {
@@ -272,13 +299,18 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
 
 let htmlContainer = document.getElementById('main');
 let classes = [
-  {name: 'non ozone', number: 42, index: 0},
-  {name: 'ozone', number: 44, index: 1}
+  {name: 'Setosa', number: 17, index: 0},
+  {name: 'Versicolor', number: 19, index: 1},
+  {name: 'Virginica', number: 14, index: 2}
+
+  // {name: 'non ozone', number: 42, index: 0},
+  // {name: 'ozone', number: 19, index: 1}
 ];
 
 let confusionMapData = {};
-confusionMapData.predicted = [[0.6577708], [0.42915076], [0.67946553], [0.7176305], [0.0353395], [0.63791525], [0.78685224], [0.08230406], [0.7602704], [0.68304753], [0.14824548], [0.7761138], [0.6084046], [0.8212285], [0.46098617], [0.5042223], [0.51158625], [0.6585492], [0.6867223], [0.64816785], [0.03317457], [0.65083617], [0.7141204], [0.816728], [0.81557333], [0.70946634], [0.70962924], [0.6819362], [0.75005233], [0.59389687], [0.34191465], [0.58785665], [0.29135382], [0.15907755], [0.71887803], [0.09843683], [0.67772424], [0.71884525], [0.6207421], [0.28317684], [0.73451376], [0.7753835], [0.3498064], [0.41407222], [0.4038518], [0.74512535], [0.3600725], [0.37871638], [0.68230706], [0.37482756], [0.34490275], [0.36609155], [0.57220155], [0.56482685], [0.26698658], [0.02368394], [0.6946526], [0.02224344], [0.72108454], [0.7149951], [0.41166496], [0.6237015], [0.5959014], [0.270209], [0.4460016], [0.76084375], [0.5135251], [0.5709525], [0.65649617], [0.68551797], [0.7107873], [0.7156175], [0.16144592], [0.75257605], [0.678505], [0.04419336], [0.58856833], [0.56649375], [0.01373163], [0.74719054], [0.594821], [0.7706681], [0.6424087], [0.75012887], [0.5791498], [0.32290894]];
-confusionMapData.actual = [1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0];
+// confusionMapData.predicted = [[0.6577708], [0.42915076], [0.67946553], [0.7176305], [0.0353395], [0.63791525], [0.78685224], [0.08230406], [0.7602704], [0.68304753], [0.14824548], [0.7761138], [0.6084046], [0.8212285], [0.46098617], [0.5042223], [0.51158625], [0.6585492], [0.6867223], [0.64816785], [0.03317457], [0.65083617], [0.7141204], [0.816728], [0.81557333], [0.70946634], [0.70962924], [0.6819362], [0.75005233], [0.59389687], [0.34191465], [0.58785665], [0.29135382], [0.15907755], [0.71887803], [0.09843683], [0.67772424], [0.71884525], [0.6207421], [0.28317684], [0.73451376], [0.7753835], [0.3498064], [0.41407222], [0.4038518], [0.74512535], [0.3600725], [0.37871638], [0.68230706], [0.37482756], [0.34490275], [0.36609155], [0.57220155], [0.56482685], [0.26698658], [0.02368394], [0.6946526], [0.02224344], [0.72108454], [0.7149951], [0.41166496], [0.6237015], [0.5959014], [0.270209], [0.4460016], [0.76084375], [0.5135251], [0.5709525], [0.65649617], [0.68551797], [0.7107873], [0.7156175], [0.16144592], [0.75257605], [0.678505], [0.04419336], [0.58856833], [0.56649375], [0.01373163], [0.74719054], [0.594821], [0.7706681], [0.6424087], [0.75012887], [0.5791498], [0.32290894]];
+confusionMapData.predicted = [[1.000, 0.000, 0.000], [0.085, 0.913, 0.002], [0.006, 0.987, 0.007], [0.998, 0.002, 0.000], [0.000, 0.495, 0.505], [0.002, 0.913, 0.085], [0.000, 0.423, 0.577], [0.984, 0.016, 0.000], [0.985, 0.015, 0.000], [0.000, 0.062, 0.938], [0.003, 0.901, 0.096], [0.994, 0.006, 0.000], [0.000, 0.082, 0.918], [0.004, 0.974, 0.021], [0.002, 0.869, 0.129], [0.992, 0.008, 0.000], [0.008, 0.975, 0.017], [0.001, 0.659, 0.340], [0.994, 0.006, 0.000], [0.997, 0.003, 0.000], [0.001, 0.777, 0.221], [0.001, 0.488, 0.511], [0.001, 0.833, 0.166], [0.996, 0.004, 0.000], [0.000, 0.273, 0.727], [0.006, 0.955, 0.039], [0.999, 0.001, 0.000], [0.996, 0.004, 0.000], [0.002, 0.917, 0.082], [0.000, 0.195, 0.805], [0.002, 0.914, 0.084], [0.000, 0.125, 0.875], [0.009, 0.973, 0.018], [0.000, 0.019, 0.981], [0.000, 0.006, 0.994], [0.997, 0.003, 0.000], [0.003, 0.887, 0.110], [0.996, 0.004, 0.000], [0.002, 0.954, 0.044], [0.000, 0.045, 0.955], [0.000, 0.147, 0.853], [0.996, 0.004, 0.000], [0.000, 0.198, 0.802], [0.000, 0.050, 0.950], [0.004, 0.984, 0.012], [0.000, 0.002, 0.998], [0.996, 0.004, 0.000], [0.997, 0.003, 0.000], [0.988, 0.012, 0.000], [0.004, 0.845, 0.151]];
+confusionMapData.actual = [[1., 0., 0.], [1., 0., 0.], [0., 0., 1.], [0., 0., 1.], [0., 0., 1.], [0., 0., 1.], [0., 0., 1.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.], [1., 0., 0.], [0., 0., 1.], [0., 0., 1.], [1., 0., 0.], [1., 0., 0.], [0., 0., 1.], [1., 0., 0.], [0., 0., 1.], [0., 0., 1.], [0., 1., 0.], [0., 1., 0.], [0., 0., 1.], [0., 0., 1.], [1., 0., 0.], [0., 1., 0.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.], [1., 0., 0.], [1., 0., 0.], [1., 0., 0.], [0., 0., 1.], [1., 0., 0.], [0., 1., 0.], [0., 0., 1.], [0., 0., 1.], [1., 0., 0.], [1., 0., 0.], [0., 1., 0.], [1., 0., 0.], [0., 0., 1.], [0., 1., 0.], [0., 0., 1.], [0., 0., 1.], [0., 1., 0.], [0., 0., 1.], [0., 0., 1.], [0., 1., 0.], [1., 0., 0.], [0., 1., 0.], [1., 0., 0.], [0., 1., 0.], [0., 1., 0.], [1., 0., 0.], [0., 1., 0.], [1., 0., 0.], [1., 0., 0.], [0., 0., 1.], [0., 0., 1.], [0., 0., 1.], [1., 0., 0.], [1., 0., 0.], [0., 1., 0.], [1., 0., 0.], [0., 0., 1.], [1., 0., 0.], [0., 0., 1.], [0., 0., 1.], [1., 0., 0.], [0., 0., 1.], [1., 0., 0.], [0., 1., 0.], [1., 0., 0.], [0., 1., 0.], [0., 1., 0.], [1., 0., 0.], [1., 0., 0.], [0., 1., 0.], [1., 0., 0.], [0., 1., 0.], [0., 1., 0.], [1., 0., 0.], [0., 1., 0.], [0., 1., 0.], [0., 1., 0.], [0., 1., 0.], [0., 0., 1.], [1., 0., 0.], [1., 0., 0.], [0., 0., 1.], [0., 1., 0.], [0., 0., 1.], [0., 1., 0.], [0., 0., 1.], [0., 0., 1.], [0., 1., 0.], [0., 0., 1.], [1., 0., 0.]];
 let confusionMapSettings = {
   width: 500,
   height: 500,
