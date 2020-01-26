@@ -22,6 +22,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     .attr('width', settings.width)
     .attr('height', settings.height);
   let clusters = {};
+  let tooltip = floatingTooltip('chart-tooltip', 100);
 
   let bubbles = null, simulation = null;
 
@@ -46,7 +47,9 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
         .call(d3.drag()
           .on('start', dragstarted)
           .on('drag', dragged)
-          .on('end', dragended));
+          .on('end', dragended))
+        .on('mouseover', showDetail)
+        .on('mouseout', hideDetail);
 
       bubbles = svg.select('.nodes').selectAll('.node');
 
@@ -79,7 +82,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
       simulation = d3.forceSimulation()
         .force('x', d3.forceX().strength(d => d.isFake ? 1 : settings.forceStrength).x(d => d.isFake ? d.x : center.x))
         .force('y', d3.forceY().strength(d => d.isFake ? 1 : settings.forceStrength).y(d => d.isFake ? d.y : center.y))
-        .force('charge', d3.forceManyBody().strength(d => d.isFake ? 0 : -1))
+        .force('charge', d3.forceManyBody().strength(d => d.isFake ? 0 : -5))
         .force('collision', d3.forceCollide().radius(d => d.isFake ? 0 : settings.bubbleRadius * 2))
         .alphaTarget(0.1)
         .on('tick', ticked);
@@ -99,7 +102,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
 
       console.log(links);
 
-      simulation.force("link", d3.forceLink(links).id(d => d.index).strength(d => d.value+0.03));
+      simulation.force("link", d3.forceLink(links).id(d => d.index).strength(d => d.value*0.25 + 0.03));
     }
 
     function initialization() {
@@ -275,7 +278,7 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
     }
 
     function charge(d) {
-      return  settings.forceStrength;
+      return settings.forceStrength;
     }
 
     function dragstarted(d) {
@@ -294,6 +297,30 @@ function ConfusionMap(htmlContainer, confusionMapData, classes, confusionMapSett
       d.fx = null;
       d.fy = null;
     }
+
+    function showDetail(d) {
+      d3.select(this).attr("stroke", "black");
+
+      let content = '';
+
+      let pieData = {};
+      d.pie.forEach(v => pieData[v.data.key] = v.data.value);
+
+      classes.forEach(function (c) {
+        content+=`<span style="color:${color(c.name)}">${c.name}: </span><span>${pieData[c.name]}</span><br>`
+      });
+
+      tooltip.showTooltip(content, d3.event);
+    }
+
+    function hideDetail() {
+      d3.select(this)
+        .attr('stroke', function () {
+          return "#ffffff";
+        });
+
+      tooltip.hideTooltip();
+    }
   }
 }
 
@@ -304,7 +331,7 @@ let classes = [
   {name: 'Virginica', number: 14, index: 2}
 
   // {name: 'non ozone', number: 42, index: 0},
-  // {name: 'ozone', number: 19, index: 1}
+  // {name: 'ozone', number: 44, index: 1}
 ];
 
 let confusionMapData = {};
