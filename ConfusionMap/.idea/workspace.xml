@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5386cf2e-1ed5-42ac-8f39-97250a99dc4e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/js/tooltip.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets.zip" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_test_HPCC_ts20_set_1.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VCNN/data/preprocessing/hpcc_datasets/X_test_HPCC_ts20_set_2.json" afterDir="false" />
@@ -24,9 +23,6 @@
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_test_ozone_ts29.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../VixLSTMDeveloping/data/newData/y_train_ozone_ts29.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_test_stock_ts4_fri.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/X_train_stock_ts4_fri.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../VCNN/data/newData/y_test_stock_ts4_fri.json" beforeDir="false" />
@@ -107,7 +103,11 @@
       <workItem from="1579745765296" duration="2201000" />
       <workItem from="1579882858031" duration="517000" />
       <workItem from="1579903177370" duration="4582000" />
-      <workItem from="1579909887331" duration="7252000" />
+      <workItem from="1579909887331" duration="9506000" />
+      <workItem from="1580054564889" duration="942000" />
+      <workItem from="1580158796343" duration="1023000" />
+      <workItem from="1580169674785" duration="2413000" />
+      <workItem from="1580503526003" duration="2000" />
     </task>
     <task id="LOCAL-00001" summary="update confusion map">
       <created>1579672847759</created>
@@ -130,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579911595619</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="add tooltip and update force settings">
+      <created>1580005117199</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1580005117199</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -140,7 +147,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="update confusion map" />
     <MESSAGE value="many updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="many updates" />
+    <MESSAGE value="add tooltip and update force settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="add tooltip and update force settings" />
   </component>
   <component name="WindowStateProjectService">
     <state x="349" y="99" key="CommitChangelistDialog2" timestamp="1580005113174">
@@ -149,11 +157,11 @@
     <state x="349" y="99" key="CommitChangelistDialog2/1680.-74.3840.1577/0.23.1680.947@0.23.1680.947" timestamp="1580005113174" />
     <state x="2478" y="53" key="CommitChangelistDialog2/1680.-74.3840.1577/0.23.1680.947@1680.-74.3840.1577" timestamp="1579911593339" />
     <state x="349" y="99" key="CommitChangelistDialog2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1579672845235" />
-    <state x="2686" y="281" key="Vcs.Push.Dialog.v2" timestamp="1579911601442">
-      <screen x="1680" y="-74" width="3840" height="1577" />
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2" timestamp="1580053438386">
+      <screen x="0" y="23" width="1680" height="947" />
     </state>
     <state x="440" y="236" key="Vcs.Push.Dialog.v2/1680.-74.3840.1577/0.23.1680.947@0.23.1680.947" timestamp="1579744973531" />
     <state x="2686" y="281" key="Vcs.Push.Dialog.v2/1680.-74.3840.1577/0.23.1680.947@1680.-74.3840.1577" timestamp="1579911601442" />
-    <state x="440" y="236" key="Vcs.Push.Dialog.v2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1579672854792" />
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1580053438386" />
   </component>
 </project>

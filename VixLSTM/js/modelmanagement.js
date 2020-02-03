@@ -109,7 +109,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     let target_ordered = normalizeTarget(y_train_flat_ordered, -1.0, 1.0);
 
     let lineChartSettings = {
-        noSvg: true,
+        noSvg: false,
         showAxes: false,
         paddingLeft: 0,
         paddingRight: 0,

@@ -187,6 +187,7 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
             .style("border", "1px solid black")
             .style("display", "inline-block")
             .on("click", (d) => {
+                // container.indexOf('layer')
                 drawHeatmapDetails(selector, d, data, true);
             })
             .on("mouseover", (d) => {
@@ -216,6 +217,7 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
     //Generate data.
     let averageLineArr = [];
 
+
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let z = [];
         for (let itemIdx = noOfItems - 1; itemIdx >= 0; itemIdx--) {//Reverse order of items from big (top) to small (bottom).
@@ -243,11 +245,6 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
                 isInputLayer: isInputLayer,
                 reverseY: true
             };
-            // if (selector == "inputDiv") {
-            //     hmSettings.title = {text: features[featureIdx], fontSize: 6};
-            // } else {
-            //     hmSettings.title = {text: 'neuron' + featureIdx, fontSize: 6};
-            // }
 
             if (neuronShowingHeatmap) {
                 let hm = new HeatMap(document.getElementById(selector + featureIdx), {x: x, y: y, z: z}, hmSettings);
@@ -268,6 +265,10 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
         }
         averageLineArr.push({data: calculateAverageLineForLstm({x: x, y: y, z: z}), idx: featureIdx});
     }
+    // findRelevantHiddenStates(0, data);
+    if (container.indexOf('layer') > -1) {
+        hiddenStates[container] = data;
+    }
     neuronData.mse[container] = {};
     neuronData.mse[container]['unsortedData'] = [];
     neuronData.correlation[container] = {};
@@ -279,6 +280,36 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
 
 let globalError = {};
 let globalSelected = {};
+
+function calculateEuclideanDistance(x, y) {
+    let sum = 0;
+    x.forEach(function (xVal, idx) {
+        sum += Math.pow(mean(xVal) - mean(y[idx]), 2);
+    });
+    return Math.sqrt(sum);
+}
+
+function findRelevantHiddenStates(dataIdx) {
+
+    for (let key in hiddenStates) {
+        let min = 10000, idxMin = 0;
+        let data = hiddenStates[key];
+        let selectedHiddenState = data[dataIdx];
+        data.forEach(function (hiddenState, idx) {
+            if (idx !== dataIdx) {
+                let distance = calculateEuclideanDistance(selectedHiddenState, hiddenState);
+                if (distance < min) {
+                    min = distance;
+                    idxMin = idx;
+                }
+            }
+        });
+
+        d3.select('svg').select()
+
+        console.log(key, min, dataIdx, idxMin);
+    }
+}
 
 function recursiveFindingMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {
     for (let i = 0; i < noOfNeurons; i++) {
@@ -501,14 +532,16 @@ function detectOutlierByMAE(y, y_predicted, topPercentage) {
 async function drawLineCharts(data, normalizer, target, container, selector, lineChartSettings, noBorder) {
     let noOfItems = data.length;
     let noOfFeatures = data[0].length;
-
+    console.log(container);
     //Generate steps
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs
     let elms = d3.select(`#${container}`).selectAll(`.${selector}`).data(Array.from(Array(noOfFeatures), (x, i) => i), d => d)
         .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "15px")
         .on("click", (d) => {
-            drawLinechartDetails(selector, d, data);
+            if (container.indexOf('layer') > -1) {
+                drawLinechartDetails(selector, d, data);
+            }
         });
 
     if (typeof noBorder === 'undefined' || !noBorder) {

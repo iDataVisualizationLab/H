@@ -37,7 +37,7 @@ let neuronData = {unordered: {}, mse: {}, correlation: {}, weights: {}};
 let originalNeurons = {};
 let originalTrainingWeights = null;
 let originalWeights = null;
-
+let hiddenStates = {};
 
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.sidenav');
