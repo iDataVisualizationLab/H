@@ -305,7 +305,22 @@ function findRelevantHiddenStates(dataIdx) {
             }
         });
 
-        d3.select('svg').select()
+        hiddenSimilarity = {'selected': dataIdx, 'similar': idxMin};
+
+        for (let neuron in mapObjects) {
+            if (mapObjects[neuron].type === 'lstmheatmap') {
+                let config = mapObjects[neuron];
+                let htmlContainer = config.canvas.node().parentNode.parentNode;
+                htmlContainer.removeChild(htmlContainer.firstChild);
+                config.settings.xScale = null;
+                config.settings.yScale = null;
+                let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
+                newNeuron.plot();
+                mapObjects[neuron] = newNeuron;
+            }
+        }
+
+
 
         console.log(key, min, dataIdx, idxMin);
     }

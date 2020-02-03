@@ -152,9 +152,14 @@ LstmLineChart.prototype.plot = async function () {
     let x = self.data.x;
     self.data.y.forEach((yVal, idx) => {
         let y = self.data.z[yVal];
-        let color = 'rgba(0,0,0,0.2)';
+        let color = 'rgba(0,0,0,0.1)';
         if (isOutlierGlobal[idx]) {
             color = 'rgba(255,165,0,0.5)'
+        }
+        if (hiddenSimilarity.selected === idx ) {
+            color = 'red';
+        } else if (hiddenSimilarity.similar === idx) {
+            color = 'green';
         }
         this.draw(x, y, this.settings.lineWidth, color)
     });

@@ -30,7 +30,7 @@ let minDataVal = null;
 let maxDataVal = null;
 let networkHeight = null;
 let neuronHeight = 122;
-let trainingWeightWidthRatio = 129.125/200;//3 / 8;
+let trainingWeightWidthRatio = 129.125 / 200;//3 / 8;
 let neuronShowingHeatmap = false;
 let isOutlierGlobal = [];
 let neuronData = {unordered: {}, mse: {}, correlation: {}, weights: {}};
@@ -38,17 +38,18 @@ let originalNeurons = {};
 let originalTrainingWeights = null;
 let originalWeights = null;
 let hiddenStates = {};
+let hiddenSimilarity = {};
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.sidenav');
     var instances = M.Sidenav.init(elems, options);
 });
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('select');
     var instances = M.FormSelect.init(elems, options);
 });
 
-$(document).ready(function(){
+$(document).ready(function () {
     $('.sidenav').sidenav();
     $('select').formSelect();
 });
