@@ -159,7 +159,7 @@ LstmLineChart.prototype.plot = async function () {
         if (hiddenSimilarity.selected === idx ) {
             color = 'red';
         } else if (hiddenSimilarity.similar === idx) {
-            color = 'green';
+            color = 'blue';
         }
         this.draw(x, y, this.settings.lineWidth, color)
     });

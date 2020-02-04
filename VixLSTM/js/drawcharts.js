@@ -281,12 +281,45 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
 let globalError = {};
 let globalSelected = {};
 
-function calculateEuclideanDistance(x, y) {
+//Mean value of variables -> Euclidean
+function calculateEuclideanDistanceV1(x, y) {
     let sum = 0;
     x.forEach(function (xVal, idx) {
         sum += Math.pow(mean(xVal) - mean(y[idx]), 2);
     });
     return Math.sqrt(sum);
+}
+
+//Euclidean of series -> sum eu of variales
+function calculateEuclideanDistanceV2(x, y) {
+    let sum = 0;
+    for (let i = 0; i < x[0].length; i++) {
+        let sumSquare = 0;
+        x.forEach(function (xVal, idx) {
+            sumSquare += Math.pow(xVal[i] - y[idx][i], 2);
+        });
+
+        sum += Math.sqrt(sumSquare);
+    }
+    console.log(sum);
+    return sum;
+}
+
+//Euclidean of variables -> sum eu of time step
+function calculateEuclideanDistanceV3(x, y) {
+    let sum = 0;
+
+    x.forEach(function (xVal, idx) {
+        let sumSquare = 0;
+        xVal.forEach(function (vVal, vIdx) {
+            sumSquare += Math.pow(vVal - y[idx][vIdx], 2);
+        });
+
+        sum += Math.sqrt(sumSquare);
+    });
+
+    console.log(sum);
+    return sum;
 }
 
 function findRelevantHiddenStates(dataIdx) {
@@ -297,7 +330,8 @@ function findRelevantHiddenStates(dataIdx) {
         let selectedHiddenState = data[dataIdx];
         data.forEach(function (hiddenState, idx) {
             if (idx !== dataIdx) {
-                let distance = calculateEuclideanDistance(selectedHiddenState, hiddenState);
+                let distance = calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
+                // calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
                 if (distance < min) {
                     min = distance;
                     idxMin = idx;
@@ -317,10 +351,21 @@ function findRelevantHiddenStates(dataIdx) {
                 let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
                 newNeuron.plot();
                 mapObjects[neuron] = newNeuron;
+            } else if (mapObjects[neuron].type === 'linechart') {
+                let gContainer = d3.select(mapObjects[neuron].svg.node().parentNode)
+                    .select('.predictedContainer');
+                gContainer.selectAll('g').select('text').attr('fill', function (d) {
+                    let color = d.isOutlier ? 'rgba(255,165,0,1)' : mapObjects[neuron].settings.colorScale('predicted');
+                    if (hiddenSimilarity.selected === d.index) {
+                        color = 'red';
+                    } else if (hiddenSimilarity.similar === d.index) {
+                        color = 'blue';
+                    }
+
+                    return color;
+                })
             }
         }
-
-
 
         console.log(key, min, dataIdx, idxMin);
     }
