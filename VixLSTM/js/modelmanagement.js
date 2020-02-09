@@ -52,6 +52,7 @@ async function createModel(layers, inputShape) {
                 //If it is LSTM we add return sequence.
                 if (l.layerType === "lstm") {
                     layerOption.returnSequences = true;
+                    // layerOption.returnState = true;
                 }
                 //If it has activation we add it
                 if (l.activation !== "default") {
@@ -515,6 +516,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     }
 
     async function displayLayersOutputs(model, i, input, recursive) {
+        console.log('draw it');
+
         if (i >= model.layers.length - 1) {
             return;//Do not draw the final output
         }

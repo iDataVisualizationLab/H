@@ -266,9 +266,9 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
         averageLineArr.push({data: calculateAverageLineForLstm({x: x, y: y, z: z}), idx: featureIdx});
     }
     // findRelevantHiddenStates(0, data);
-    if (container.indexOf('layer') > -1) {
-        hiddenStates[container] = data;
-    }
+    // if (container.indexOf('layer') > -1) {
+    hiddenStates[container] = data;
+    // }
     neuronData.mse[container] = {};
     neuronData.mse[container]['unsortedData'] = [];
     neuronData.correlation[container] = {};
@@ -301,7 +301,6 @@ function calculateEuclideanDistanceV2(x, y) {
 
         sum += Math.sqrt(sumSquare);
     }
-    console.log(sum);
     return sum;
 }
 
@@ -322,53 +321,102 @@ function calculateEuclideanDistanceV3(x, y) {
     return sum;
 }
 
-function findRelevantHiddenStates(dataIdx) {
-
-    for (let key in hiddenStates) {
-        let min = 10000, idxMin = 0;
-        let data = hiddenStates[key];
-        let selectedHiddenState = data[dataIdx];
-        data.forEach(function (hiddenState, idx) {
-            if (idx !== dataIdx) {
-                let distance = calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
-                // calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
-                if (distance < min) {
-                    min = distance;
-                    idxMin = idx;
+function findAllHiddenStatesByRanking() {
+    let inputContainer = hiddenStates['inputContainer'];
+    let firstHiddenStates = hiddenStates['layerContainer1'];
+    let max = -1, idxMax = 0;
+    for (let i = 0; i < inputContainer.length; i++) {
+        for (let j = 0; j < inputContainer.length; j++) {
+            if (i !== j) {
+                let inputEu = calculateEuclideanDistanceV2(inputContainer[i], inputContainer[j]);
+                let hiddenEu = calculateEuclideanDistanceV2(firstHiddenStates[i], firstHiddenStates[j]);
+                let ratio = inputEu / hiddenEu;
+                if (ratio > max) {
+                    max = ratio;
+                    idxMax = {'first': i, 'second': j}
                 }
             }
-        });
-
-        hiddenSimilarity = {'selected': dataIdx, 'similar': idxMin};
-
-        for (let neuron in mapObjects) {
-            if (mapObjects[neuron].type === 'lstmheatmap') {
-                let config = mapObjects[neuron];
-                let htmlContainer = config.canvas.node().parentNode.parentNode;
-                htmlContainer.removeChild(htmlContainer.firstChild);
-                config.settings.xScale = null;
-                config.settings.yScale = null;
-                let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
-                newNeuron.plot();
-                mapObjects[neuron] = newNeuron;
-            } else if (mapObjects[neuron].type === 'linechart') {
-                let gContainer = d3.select(mapObjects[neuron].svg.node().parentNode)
-                    .select('.predictedContainer');
-                gContainer.selectAll('g').select('text').attr('fill', function (d) {
-                    let color = d.isOutlier ? 'rgba(255,165,0,1)' : mapObjects[neuron].settings.colorScale('predicted');
-                    if (hiddenSimilarity.selected === d.index) {
-                        color = 'red';
-                    } else if (hiddenSimilarity.similar === d.index) {
-                        color = 'blue';
-                    }
-
-                    return color;
-                })
-            }
         }
-
-        console.log(key, min, dataIdx, idxMin);
     }
+
+
+    hiddenSimilarity = {'selected': idxMax.first, 'similar': idxMax.second};
+    console.log(hiddenSimilarity);
+
+    for (let neuron in mapObjects) {
+        if (mapObjects[neuron].type === 'lstmheatmap') {
+            let config = mapObjects[neuron];
+            let htmlContainer = config.canvas.node().parentNode.parentNode;
+            htmlContainer.removeChild(htmlContainer.firstChild);
+            config.settings.xScale = null;
+            config.settings.yScale = null;
+            let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
+            newNeuron.plot();
+            mapObjects[neuron] = newNeuron;
+        } else if (mapObjects[neuron].type === 'linechart') {
+            let gContainer = d3.select(mapObjects[neuron].svg.node().parentNode)
+                .select('.predictedContainer');
+            gContainer.selectAll('g').select('text').attr('fill', function (d) {
+                let color = d.isOutlier ? 'rgba(255,165,0,1)' : mapObjects[neuron].settings.colorScale('predicted');
+                if (hiddenSimilarity.selected === d.index) {
+                    color = 'red';
+                } else if (hiddenSimilarity.similar === d.index) {
+                    color = 'blue';
+                }
+
+                return color;
+            })
+        }
+    }
+}
+
+function findRelevantHiddenStates(dataIdx) {
+
+    findAllHiddenStatesByRanking();
+
+    // for (let key in hiddenStates) {
+    //     let min = 10000, idxMin = 0;
+    //     let data = hiddenStates[key];
+    //     let selectedHiddenState = data[dataIdx];
+    //     data.forEach(function (hiddenState, idx) {
+    //         if (idx !== dataIdx) {
+    //             let distance = calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
+    //             // calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
+    //             if (distance < min) {
+    //                 min = distance;
+    //                 idxMin = idx;
+    //             }
+    //         }
+    //     });
+    //
+    //     hiddenSimilarity = {'selected': dataIdx, 'similar': idxMin};
+    //
+    //     for (let neuron in mapObjects) {
+    //         if (mapObjects[neuron].type === 'lstmheatmap') {
+    //             let config = mapObjects[neuron];
+    //             let htmlContainer = config.canvas.node().parentNode.parentNode;
+    //             htmlContainer.removeChild(htmlContainer.firstChild);
+    //             config.settings.xScale = null;
+    //             config.settings.yScale = null;
+    //             let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
+    //             newNeuron.plot();
+    //             mapObjects[neuron] = newNeuron;
+    //         } else if (mapObjects[neuron].type === 'linechart') {
+    //             let gContainer = d3.select(mapObjects[neuron].svg.node().parentNode)
+    //                 .select('.predictedContainer');
+    //             gContainer.selectAll('g').select('text').attr('fill', function (d) {
+    //                 let color = d.isOutlier ? 'rgba(255,165,0,1)' : mapObjects[neuron].settings.colorScale('predicted');
+    //                 if (hiddenSimilarity.selected === d.index) {
+    //                     color = 'red';
+    //                 } else if (hiddenSimilarity.similar === d.index) {
+    //                     color = 'blue';
+    //                 }
+    //
+    //                 return color;
+    //             })
+    //         }
+    //     }
+    // }
 }
 
 function recursiveFindingMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {

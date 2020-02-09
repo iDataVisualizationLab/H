@@ -11,7 +11,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         showColorBar: false,
         minValue: -1,
         maxValue: 1,
-        isInputLayer: false,
+        isInputLayer: heatMapSettings.isInputLayer,
         reverseY: true
     };
     //Copy the settings if there are.
@@ -20,6 +20,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
             this.settings[prop] = heatMapSettings[prop];
         }
     }
+
     this.data = heatMapData;
     this.type = 'lstmheatmap';
 
@@ -50,14 +51,21 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         this.settings.xScale = d3.scaleLinear()
             .domain([0, this.data.x.length - 1])
             .range([0, contentWidth]);
+
     }
     if (!this.settings.yScale) {
         let flattenedZ = [].concat.apply([], this.data.z);
         let minZ = d3.min(flattenedZ);
         let maxZ = d3.max(flattenedZ);
 
+        let domain = [-1,1];
+
+        if (this.settings.isInputLayer) {
+            domain = [minZ, maxZ];
+        }
+
         this.settings.yScale = d3.scaleLinear()
-            .domain([maxZ, minZ])
+            .domain(domain)
             .range([0, contentHeight]);
     }
 
@@ -138,14 +146,19 @@ LstmLineChart.prototype.plot = async function () {
     this.canvas.node().getContext("2d").clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     this.canvas.node().getContext("2d").fillStyle = 'white';
-    this.canvas.node().getContext("2d").fillRect(0,0, this.canvasWidth, this.canvasHeight);
+    this.canvas.node().getContext("2d").fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     var flattenedZ = [].concat.apply([], this.data.z);
     var minZ = d3.min(flattenedZ);
     var maxZ = d3.max(flattenedZ);
 
+    let domain = [-1, 1];
+    if (this.settings.isInputLayer) {
+        domain = [minZ, maxZ];
+    }
+
     this.settings.yScale = d3.scaleLinear()
-        .domain([maxZ, minZ])
+        .domain(domain)
         .range([0, this.canvasHeight]);
 
     let self = this;
@@ -156,7 +169,7 @@ LstmLineChart.prototype.plot = async function () {
         if (isOutlierGlobal[idx]) {
             color = 'rgba(255,165,0,0.5)'
         }
-        if (hiddenSimilarity.selected === idx ) {
+        if (hiddenSimilarity.selected === idx) {
             color = 'red';
         } else if (hiddenSimilarity.similar === idx) {
             color = 'blue';
