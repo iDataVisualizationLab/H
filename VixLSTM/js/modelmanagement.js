@@ -527,6 +527,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (layer.name.indexOf("lstm") >= 0) {
             ts.array().then(data => {
                 data.layerName = "LSTM " + i;
+                console.log(data);
                 drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp, false);
             });
         } else if (layer.name.indexOf("flatten") >= 0) {
@@ -830,7 +831,7 @@ async function displayLayerWeights(model, i, containerId) {
             drawDenseWeights(containerId);
         });
 
-        buildTrainingWeightDataV2(i, weights.shape, heatmapH, 22, 100, 22, isLastLayer ? 80 :200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 0).then((result) => {
+        buildTrainingWeightDataV2(i, weights.shape, heatmapH, 22, 100, 22, isLastLayer ? 80 : 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 0).then((result) => {
             result['layerType'] = 'dense';
 
             trainingWeightsPathData[containerId] = result;

@@ -40,7 +40,6 @@ function drawHeatmapDetails(selector, d, data, isInputLayer) {
         hmTest.plot();
     }
 
-
     let mapDetails = M.Modal.getInstance(document.getElementById("mapDetails"));
     mapDetails.open();
 }
@@ -372,51 +371,51 @@ function findAllHiddenStatesByRanking() {
 
 function findRelevantHiddenStates(dataIdx) {
 
-    findAllHiddenStatesByRanking();
+    // findAllHiddenStatesByRanking();
 
-    // for (let key in hiddenStates) {
-    //     let min = 10000, idxMin = 0;
-    //     let data = hiddenStates[key];
-    //     let selectedHiddenState = data[dataIdx];
-    //     data.forEach(function (hiddenState, idx) {
-    //         if (idx !== dataIdx) {
-    //             let distance = calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
-    //             // calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
-    //             if (distance < min) {
-    //                 min = distance;
-    //                 idxMin = idx;
-    //             }
-    //         }
-    //     });
-    //
-    //     hiddenSimilarity = {'selected': dataIdx, 'similar': idxMin};
-    //
-    //     for (let neuron in mapObjects) {
-    //         if (mapObjects[neuron].type === 'lstmheatmap') {
-    //             let config = mapObjects[neuron];
-    //             let htmlContainer = config.canvas.node().parentNode.parentNode;
-    //             htmlContainer.removeChild(htmlContainer.firstChild);
-    //             config.settings.xScale = null;
-    //             config.settings.yScale = null;
-    //             let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
-    //             newNeuron.plot();
-    //             mapObjects[neuron] = newNeuron;
-    //         } else if (mapObjects[neuron].type === 'linechart') {
-    //             let gContainer = d3.select(mapObjects[neuron].svg.node().parentNode)
-    //                 .select('.predictedContainer');
-    //             gContainer.selectAll('g').select('text').attr('fill', function (d) {
-    //                 let color = d.isOutlier ? 'rgba(255,165,0,1)' : mapObjects[neuron].settings.colorScale('predicted');
-    //                 if (hiddenSimilarity.selected === d.index) {
-    //                     color = 'red';
-    //                 } else if (hiddenSimilarity.similar === d.index) {
-    //                     color = 'blue';
-    //                 }
-    //
-    //                 return color;
-    //             })
-    //         }
-    //     }
-    // }
+    for (let key in hiddenStates) {
+        let min = 10000, idxMin = 0;
+        let data = hiddenStates[key];
+        let selectedHiddenState = data[dataIdx];
+        data.forEach(function (hiddenState, idx) {
+            if (idx !== dataIdx) {
+                let distance = calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
+                // calculateEuclideanDistanceV2(selectedHiddenState, hiddenState);
+                if (distance < min) {
+                    min = distance;
+                    idxMin = idx;
+                }
+            }
+        });
+
+        hiddenSimilarity = {'selected': dataIdx, 'similar': idxMin};
+
+        for (let neuron in mapObjects) {
+            if (mapObjects[neuron].type === 'lstmheatmap') {
+                let config = mapObjects[neuron];
+                let htmlContainer = config.canvas.node().parentNode.parentNode;
+                htmlContainer.removeChild(htmlContainer.firstChild);
+                config.settings.xScale = null;
+                config.settings.yScale = null;
+                let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
+                newNeuron.plot();
+                mapObjects[neuron] = newNeuron;
+            } else if (mapObjects[neuron].type === 'linechart') {
+                let gContainer = d3.select(mapObjects[neuron].svg.node().parentNode)
+                    .select('.predictedContainer');
+                gContainer.selectAll('g').select('text').attr('fill', function (d) {
+                    let color = d.isOutlier ? 'rgba(255,165,0,1)' : mapObjects[neuron].settings.colorScale('predicted');
+                    if (hiddenSimilarity.selected === d.index) {
+                        color = 'red';
+                    } else if (hiddenSimilarity.similar === d.index) {
+                        color = 'blue';
+                    }
+
+                    return color;
+                })
+            }
+        }
+    }
 }
 
 function recursiveFindingMse(mseMatrix, noOfNeurons, selected, isSelected, currentIdx, sumError, container) {
