@@ -191,6 +191,8 @@ async function loadModelFromServer(modelName) {
         modelName = 'l8l8d8d4/' + modelName;
     } else if (modelName.indexOf('L8L4D2') > 0) {
         modelName = 'l8l4d2/' + modelName;
+    } else if (modelName.indexOf('L16D8') > 0) {
+        modelName = 'l16d8/' + modelName;
     } else {
         modelName = 'large_model/' + modelName;
     }
@@ -199,6 +201,11 @@ async function loadModelFromServer(modelName) {
         features = ['Open', 'High', 'Low', 'Close', 'Volume'];
     } else if (modelName.indexOf('arrTemp') > 0) {
         features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
+    } else if (modelName.indexOf('pollution') > 0) {
+        features = ['dew', 'temp', 'press', 'wnd_spd', 'snow', 'rain', 'hour_in_date', 'month_in_year'];
+        if (modelName.indexOf('pollution') <= 0) {
+            features = ['pollution'].concat(features)
+        }
     } else {
         features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
     }

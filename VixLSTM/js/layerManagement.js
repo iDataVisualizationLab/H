@@ -2,13 +2,9 @@ let layersConfig = [];
 
 function createDefaultLayers() {
     // createLayer("lstm", 16, "default", 0);
-    createLayer("lstm", 16, "default", 0);
-    createLayer("lstm", 16, "default", 1);
-    createLayer("lstm", 12, "default", 2);
-    createLayer("lstm", 12, "default", 3);
-    createLayer("lstm", 8, "default", 4);
-    createLayer("dense", 8, "default", 5);
-    createLayer("dense", 4, "default", 6);
+    createLayer("lstm", 8, "default", 0);
+    createLayer("lstm", 8, "default", 1);
+    createLayer("dense", 8, "default", 2);
 }
 
 

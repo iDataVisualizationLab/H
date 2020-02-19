@@ -15,8 +15,7 @@ function processLayers(layers) {
             id: "output",
             timeStamp: "output",
             layerType: "dense",
-            units: 1,
-            activation: "relu"
+            units: 1
         });
     }
     //Add flatten layer if needed
@@ -65,7 +64,7 @@ async function createModel(layers, inputShape) {
             });
 
             model.compile({
-                optimizer: 'adam',
+                optimizer: 'rmsprop',
                 loss: 'meanSquaredError',
             });
             resolve(model);
@@ -516,7 +515,6 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     }
 
     async function displayLayersOutputs(model, i, input, recursive) {
-        console.log('draw it');
 
         if (i >= model.layers.length - 1) {
             return;//Do not draw the final output
@@ -623,6 +621,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     function onEpochEnd(epoch, logs) {
         currentEpoch = epoch + 1;
+        console.log(currentEpoch);
 
         // model.evaluate(sample_X_train_T, sample_y_train_T).data().then(trainRet => {
         //         let trainLoss = trainRet[0];
@@ -696,10 +695,11 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
             trainLosses.push(logs.loss);
             testLosses.push(testL);
-            plotTrainLossData(trainLosses, testLosses);
+            console.log(logs.loss, testL);
+            // plotTrainLossData(trainLosses, testLosses);
 
             hideLoader();
-            displayEpochData(model, logs.loss);
+            // displayEpochData(model, logs.loss);
             if (epoch > 1) {
                 //We don't update for the first epoch
                 dispatch.call("changeWeightFilter");
