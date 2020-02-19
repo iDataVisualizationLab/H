@@ -202,9 +202,12 @@ async function loadModelFromServer(modelName) {
     } else if (modelName.indexOf('arrTemp') > 0) {
         features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
     } else if (modelName.indexOf('pollution') > 0) {
-        features = ['dew', 'temp', 'press', 'wnd_spd', 'snow', 'rain', 'hour_in_date', 'month_in_year'];
+        features = ['dew', 'temp', 'press', 'wnd_spd', 'snow', 'rain', 'month_in_year'];
         if (modelName.indexOf('pollution') <= 0) {
             features = ['pollution'].concat(features)
+        }
+        if (modelName.indexOf('hour_in_date') <= 0) {
+            features = ['hour_in_date'].concat(features)
         }
     } else {
         features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
