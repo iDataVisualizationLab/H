@@ -85,15 +85,15 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
 
     let X_train_T = tf.tensor(X_train);
     let y_train_T = tf.tensor(y_train);
-    let X_test_T = tf.tensor(X_test);
-    let y_test_T = tf.tensor(y_test);
-    let trainSampleIndices = shuffle(Array.from(new Array(y_train.length), (d, i) => i)).slice(24);
-    let testSampleIndices = shuffle(Array.from(new Array(y_test.length), (d, i) => i)).slice(24);
-    let sample_X_train_T = tf.tensor(trainSampleIndices.map(i => X_train[i]));
-    let sample_y_train_T = tf.tensor(trainSampleIndices.map(i => y_train[i]));
-
-    let sample_X_test_T = tf.tensor(testSampleIndices.map(i => X_test[i]));
-    let sample_y_test_T = tf.tensor(testSampleIndices.map(i => y_test[i]));
+    // let X_test_T = tf.tensor(X_test);
+    // let y_test_T = tf.tensor(y_test);
+    // let trainSampleIndices = shuffle(Array.from(new Array(y_train.length), (d, i) => i)).slice(24);
+    // let testSampleIndices = shuffle(Array.from(new Array(y_test.length), (d, i) => i)).slice(24);
+    // let sample_X_train_T = tf.tensor(trainSampleIndices.map(i => X_train[i]));
+    // let sample_y_train_T = tf.tensor(trainSampleIndices.map(i => y_train[i]));
+    //
+    // let sample_X_test_T = tf.tensor(testSampleIndices.map(i => X_test[i]));
+    // let sample_y_test_T = tf.tensor(testSampleIndices.map(i => y_test[i]));
 
     let y_train_ordered = trainRULOrder.map(d => y_train[d]);
     let X_train_ordered = trainRULOrder.map(d => X_train[d]);
@@ -525,8 +525,9 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (layer.name.indexOf("lstm") >= 0) {
             ts.array().then(data => {
                 data.layerName = "LSTM " + i;
-                console.log(data);
-                drawHeatmaps(data, "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp, false);
+                console.log(layer.name);
+                console.log(shapValuesMap[layer.name]);
+                drawHeatmaps(data, shapValuesMap[layer.name], "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp, false);
             });
         } else if (layer.name.indexOf("flatten") >= 0) {
             //For flatten we don't have to do anything.
@@ -534,6 +535,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             ts.array().then(data => {
                 data.layerName = "Dense " + i;
                 drawLineCharts(data, normalizeTarget, target_ordered, "layerContainer" + timeStamp, "layer" + timeStamp, lineChartSettings, false);
+                // drawHeatmaps(data, shapValuesMap[layer.name], "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp, false);
             });
         }
         //Recurse
@@ -600,7 +602,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             drawLineCharts(data, null, y_train_flat_ordered, "outputContainer", "output", outputSettings, true).then(() => {
                 //Update the training loss
                 updateGraphTitle("outputContainer", "Training, MSE: " + trainLoss.toFixed(2));
-                drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
+                drawHeatmaps(X_train_ordered, shapValuesArray[0], "inputContainer", "inputDiv", -1, true).then(() => {
                     hideLoader();
                 });
                 displayLayersOutputs(model, 0, X_train_T_ordered, true);

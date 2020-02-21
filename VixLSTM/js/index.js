@@ -107,12 +107,8 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     testRULOrder = Array.from(y_test, (val, i) => i);
     testRULOrder = testRULOrder.sort((a, b) => y_test[a] - y_test[b]);
     let flattenedZ = X_train.flat().flat();
-    let minZ = d3.min(flattenedZ);
-    let maxZ = d3.max(flattenedZ);
-    let avgZ = (maxZ - minZ) / 2 + minZ;
-
-    minDataVal = minZ;
-    maxDataVal = maxZ;
+    minDataVal = d3.min(flattenedZ);
+    maxDataVal = d3.max(flattenedZ);
 
     // drawInputColorScale(minDataVal, avgZ, maxDataVal);
     // drawOutputColorScale();
@@ -121,7 +117,7 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     let X_train_ordered = trainRULOrder.map(d => X_train[d]);
     X_train_ordered.layerName = "Input";
 
-    drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
+    drawHeatmaps(X_train_ordered, shapValuesArray[0], "inputContainer", "inputDiv", -1, true).then(() => {
         hideLoader();
     });
     //Draw sample input for documentation.

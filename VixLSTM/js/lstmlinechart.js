@@ -9,8 +9,10 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         paddingBottom: 0,
         paddingRight: 0,
         showColorBar: false,
-        minValue: -1,
-        maxValue: 1,
+        minInputValue: heatMapSettings.minInputValue,
+        maxInputValue: heatMapSettings.maxInputValue,
+        minShapValue: heatMapSettings.minShapValue,
+        maxShapValue: heatMapSettings.maxShapValue,
         isInputLayer: heatMapSettings.isInputLayer,
         reverseY: true
     };
@@ -57,8 +59,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         let flattenedZ = [].concat.apply([], this.data.z);
         let minZ = d3.min(flattenedZ);
         let maxZ = d3.max(flattenedZ);
-
-        let domain = [-1,1];
+        let domain = [-1, 1];
 
         if (this.settings.isInputLayer) {
             domain = [minZ, maxZ];
@@ -66,7 +67,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
 
         this.settings.yScale = d3.scaleLinear()
             .domain(domain)
-            .range([0, contentHeight]);
+            .range([contentHeight, 0]);
     }
 
     var container = d3.select(htmlContainer).append("div")
@@ -95,16 +96,19 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         this.svg.append("g").attr("class", "test");
     }
     if (this.settings.showAxes) {
-        var xAxis = d3.axisBottom()
+        let xAxis = d3.axisBottom()
             .scale(this.settings.xScale);
         if (this.settings.xTickValues) {
             xAxis.tickValues(this.settings.xTickValues);
         }
-        var yAxis = d3.axisLeft()
+        let yAxis = d3.axisLeft()
             .scale(this.settings.yScale);
         if (this.settings.yTickValues) {
-            yAxis.tickValues(this.settings.yTickValues);
+            yAxis.tickValues(this.settings.yTickValues.reverse());
         }
+
+        console.log(this.settings.yScale.range());
+
         this.svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(" + this.settings.paddingLeft + "," + (this.settings.height - this.settings.paddingBottom) + ")")
@@ -148,33 +152,27 @@ LstmLineChart.prototype.plot = async function () {
     this.canvas.node().getContext("2d").fillStyle = 'white';
     this.canvas.node().getContext("2d").fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-    var flattenedZ = [].concat.apply([], this.data.z);
-    var minZ = d3.min(flattenedZ);
-    var maxZ = d3.max(flattenedZ);
+    let domain = [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1];
+    // if (this.settings.isInputLayer) {
+    let minDomain = this.settings.minShapValue;
+    let maxDomain = this.settings.maxShapValue;
+    let avgDomain = (this.settings.minShapValue + this.settings.maxShapValue) / 2;
+    let deltaDomain = (maxDomain - minDomain) / 10;
+    domain = [avgDomain - 5 * deltaDomain, avgDomain - 4 * deltaDomain, avgDomain - 3 * deltaDomain, avgDomain - 2 * deltaDomain, avgDomain - 1 * deltaDomain, avgDomain, avgDomain + 1 * deltaDomain, avgDomain + 2 * deltaDomain, avgDomain + 3 * deltaDomain, avgDomain + 4 * deltaDomain, avgDomain + 5 * deltaDomain];
+    // }
 
-    let domain = [-1, 1];
-    if (this.settings.isInputLayer) {
-        domain = [minZ, maxZ];
-    }
-
-    this.settings.yScale = d3.scaleLinear()
+    this.settings.colorScale = d3.scaleLinear()
         .domain(domain)
-        .range([0, this.canvasHeight]);
+        // .range(['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f'])
+        .range(['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f'])
+        .clamp(true);
 
     let self = this;
     let x = self.data.x;
     self.data.y.forEach((yVal, idx) => {
         let y = self.data.z[yVal];
-        let color = 'rgba(0,0,0,0.1)';
-        if (isOutlierGlobal[idx]) {
-            color = 'rgba(255,165,0,0.5)'
-        }
-        if (hiddenSimilarity.selected === idx) {
-            color = 'red';
-        } else if (hiddenSimilarity.similar === idx) {
-            color = 'blue';
-        }
-        this.draw(x, y, this.settings.lineWidth, color)
+        let shap = self.data.shap[yVal];
+        this.draw(x, y, shap, 0.5, this.settings.colorScale)
     });
 };
 
@@ -183,11 +181,12 @@ LstmLineChart.prototype.update = async function (newData) {
     this.plot();
 };
 
-LstmLineChart.prototype.draw = async function (x, y, lineWidth, strokeStyle) {
+LstmLineChart.prototype.draw = async function (x, y, shap, lineWidth, strokeStyle) {
     let lineData = x.map((xVal, i) => {
         return {
             x: xVal,
-            y: y[i]
+            y: y[i],
+            shap: shap[i]
         }
     });
 
@@ -196,9 +195,14 @@ LstmLineChart.prototype.draw = async function (x, y, lineWidth, strokeStyle) {
     let yScale = this.settings.yScale;
 
     let line = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)).context(ctx);
-    ctx.beginPath();
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = strokeStyle;
-    line(lineData);
-    ctx.stroke();
+    lineData.forEach(function (d, i) {
+        ctx.globalAlpha = 0.8;
+        ctx.beginPath();
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = strokeStyle(d.shap);
+        if (i + 1 < lineData.length) {
+            line([d, lineData[i + 1]]);
+        }
+        ctx.stroke();
+    });
 };

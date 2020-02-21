@@ -56,7 +56,7 @@ function loadModelChange(sourceType, theElm) {
     closeDialog("loadModelDialog");
 }
 
-function populateModelGUIFromData(model, modelData) {
+function populateModelGUIFromData(model, modelData, shapValues) {
     let layersConfig_ = loadModelDataFromObj(modelData, "layersConfig");
     let epochs_ = loadModelDataFromObj(modelData, "epochs");
     let batchSize_ = loadModelDataFromObj(modelData, "batchSize");

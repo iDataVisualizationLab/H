@@ -1,7 +1,21 @@
-function drawHeatmapDetails(selector, d, data, isInputLayer) {
+function drawHeatmapDetails(selector, d, data, shapValues, isInputLayer) {
     let theMapContainer = document.getElementById("mapDetailsContent");
     d3.select(theMapContainer).selectAll("*").remove();
     let hmData = mapObjects[selector + d].data;
+
+    let yAxisValues = [];
+
+    let flattenedZ = shapValues ? shapValues.flat().flat() : [1];
+    let minShapValue = d3.min(flattenedZ);
+    let maxShapValue = d3.max(flattenedZ);
+
+    if (neuronShowingHeatmap) {
+        yAxisValues = Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 20 === 0);
+    } else {
+        for (let i = Math.floor(minShapValue); i <= Math.ceil(maxShapValue); i++) {
+            yAxisValues.push(i);
+        }
+    }
 
     let hmSettings = {
         noSvg: true,
@@ -25,9 +39,11 @@ function drawHeatmapDetails(selector, d, data, isInputLayer) {
         height: 350,
         //TODO: Should make these change automatically depending on the dataset.
         xTickValues: Array.from(new Array(hmData.x.length), (x, i) => i).filter((x, i) => i % 5 === 0),
-        yTickValues: Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 20 === 0),
-        minValue: isInputLayer ? minDataVal : -1,
-        maxValue: isInputLayer ? maxDataVal : 1,
+        yTickValues: yAxisValues.filter(x => x % 20 === 0),
+        minInputValue: isInputLayer ? minDataVal : -1,
+        maxInputValue: isInputLayer ? maxDataVal : 1,
+        minShapValue: minShapValue,
+        maxShapValue: maxShapValue,
         isInputLayer: isInputLayer,
         reverseY: true
     };
@@ -155,7 +171,7 @@ function undoShowRelatedEntities(parent, timeStamp, neuronIdx) {
     }
 }
 
-async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) {
+async function drawHeatmaps(data, shapValues, container, selector, timeStamp, isInputLayer) {
     let noOfItems = data.length;
     let noOfSteps = data[0].length;
     let noOfFeatures = data[0][0].length;
@@ -187,7 +203,7 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
             .style("display", "inline-block")
             .on("click", (d) => {
                 // container.indexOf('layer')
-                drawHeatmapDetails(selector, d, data, true);
+                drawHeatmapDetails(selector, d, data, shapValues, true);
             })
             .on("mouseover", (d) => {
                 showRelatedEntities(enters, timeStamp, d);
@@ -204,7 +220,7 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
             .style("border", "1px solid black")
             .style("display", "inline-block")
             .on("click", (d) => {
-                drawHeatmapDetails(selector, d, data, false);
+                drawHeatmapDetails(selector, d, data, shapValues, false);
             })
             .on("mouseover", (d) => {
                 showRelatedEntities(enters, timeStamp, d);
@@ -216,15 +232,22 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
     //Generate data.
     let averageLineArr = [];
 
+    let flattenedZ = shapValues ? shapValues.flat().flat() : [1];
+    let minShapValue = d3.min(flattenedZ);
+    let maxShapValue = d3.max(flattenedZ);
 
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let z = [];
+        let shap = [];
         for (let itemIdx = noOfItems - 1; itemIdx >= 0; itemIdx--) {//Reverse order of items from big (top) to small (bottom).
-            let row = [];
+            let rowZ = [];
+            let rowShap = [];
             for (let stepIdx = 0; stepIdx < noOfSteps; stepIdx++) {
-                row.push(data[itemIdx][stepIdx][featureIdx])
+                rowZ.push(data[itemIdx][stepIdx][featureIdx]);
+                rowShap.push(shapValues ? shapValues[itemIdx][stepIdx][featureIdx] : 0);
             }
-            z.push(row);
+            z.push(rowZ);
+            shap.push(rowShap);
         }
 
         if (!mapObjects[selector + featureIdx]) {
@@ -239,28 +262,37 @@ async function drawHeatmaps(data, container, selector, timeStamp, isInputLayer) 
                 borderWidth: 0,
                 width: 100,
                 height: heatmapH,
-                minValue: isInputLayer ? minDataVal : -1,
-                maxValue: isInputLayer ? maxDataVal : 1,
+                minInputValue: isInputLayer ? minDataVal : -1,
+                maxInputValue: isInputLayer ? maxDataVal : 1,
+                minShapValue: minShapValue,
+                maxShapValue: maxShapValue,
                 isInputLayer: isInputLayer,
                 reverseY: true
             };
 
+            let hm = null;
+
             if (neuronShowingHeatmap) {
-                let hm = new HeatMap(document.getElementById(selector + featureIdx), {x: x, y: y, z: z}, hmSettings);
-                hm.plot();
-                mapObjects[selector + featureIdx] = hm;
-            } else {
-                let hm = new LstmLineChart(document.getElementById(selector + featureIdx), {
+                hm = new HeatMap(document.getElementById(selector + featureIdx), {
                     x: x,
                     y: y,
-                    z: z
+                    z: z,
+                    shap: shap
                 }, hmSettings);
-                hm.plot();
-                mapObjects[selector + featureIdx] = hm;
+            } else {
+                hm = new LstmLineChart(document.getElementById(selector + featureIdx), {
+                    x: x,
+                    y: y,
+                    z: z,
+                    shap: shap
+                }, hmSettings);
             }
+
+            hm.plot();
+            mapObjects[selector + featureIdx] = hm;
         } else {
             let hm = mapObjects[selector + featureIdx];
-            hm.update({x: x, y: y, z: z});
+            hm.update({x: x, y: y, z: z, shap: shap});
         }
         averageLineArr.push({data: calculateAverageLineForLstm({x: x, y: y, z: z}), idx: featureIdx});
     }
@@ -316,7 +348,6 @@ function calculateEuclideanDistanceV3(x, y) {
         sum += Math.sqrt(sumSquare);
     });
 
-    console.log(sum);
     return sum;
 }
 
@@ -340,7 +371,6 @@ function findAllHiddenStatesByRanking() {
 
 
     hiddenSimilarity = {'selected': idxMax.first, 'similar': idxMax.second};
-    console.log(hiddenSimilarity);
 
     for (let neuron in mapObjects) {
         if (mapObjects[neuron].type === 'lstmheatmap') {

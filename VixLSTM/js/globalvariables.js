@@ -39,6 +39,8 @@ let originalTrainingWeights = null;
 let originalWeights = null;
 let hiddenStates = {};
 let hiddenSimilarity = {};
+let shapValuesMap = {}, shapValuesArray = [];
+// let minShapValue = [], maxShapValue = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.sidenav');

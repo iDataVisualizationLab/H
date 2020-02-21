@@ -206,18 +206,26 @@ async function loadModelFromServer(modelName) {
         if (modelName.indexOf('pollution') <= 0) {
             features = ['pollution'].concat(features)
         }
-        if (modelName.indexOf('hour_in_date') <= 0) {
-            features = ['hour_in_date'].concat(features)
-        }
+        // if (modelName.indexOf('hour_in_date') <= 0) {
+        //     features = ['hour_in_date'].concat(features)
+        // }
     } else {
         features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
     }
 
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
     //Now load data.
+
     d3.json(`data/models/${modelName}_data.json`).then(modelData => {
-        populateModelGUIFromData(model, modelData);
-        hideLoader();
+        d3.json('data/model_with_shap/pollution_ts23_L8L8D8/pollution_ts23_L8L8D8_shap.json').then(function (shap) {
+            shapValuesMap = shap;
+            for (let key in shapValuesMap) {
+                shapValuesArray.push(shapValuesMap[key]);
+            }
+            populateModelGUIFromData(model, modelData);
+            hideLoader();
+        });
+
     });
 }
 
