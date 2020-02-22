@@ -10,7 +10,7 @@ function drawHeatmapDetails(selector, d, data, shapValues, isInputLayer) {
     let maxShapValue = d3.max(flattenedZ);
 
     if (neuronShowingHeatmap) {
-        yAxisValues = Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 20 === 0);
+        yAxisValues = Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 40 === 0);
     } else {
         for (let i = Math.floor(minShapValue); i <= Math.ceil(maxShapValue); i++) {
             yAxisValues.push(i);
@@ -605,10 +605,14 @@ function calculateAverageLineForLstm(data) {
     return averageLine;
 }
 
-function drawLinechartDetails(selector, d, data) {
+function drawLinechartDetails(selector, d, data, shapValues) {
     let theMapContainer = document.getElementById("mapDetailsContent");
     d3.select(theMapContainer).selectAll("*").remove();
     let mData = mapObjects[selector + d].data;
+
+    let flattenedZ = shapValues ? shapValues.flat().flat() : [1];
+    let minShapValue = d3.min(flattenedZ);
+    let maxShapValue = d3.max(flattenedZ);
 
     let mSettings = {
         noSvg: true,
@@ -636,6 +640,8 @@ function drawLinechartDetails(selector, d, data) {
         },
         width: 350,
         height: 350,
+        minShapValue: minShapValue,
+        maxShapValue: maxShapValue,
         fillWhite: false
     };
 
@@ -666,10 +672,9 @@ function detectOutlierByMAE(y, y_predicted, topPercentage) {
     return isOutlier;
 }
 
-async function drawLineCharts(data, normalizer, target, container, selector, lineChartSettings, noBorder) {
+async function drawLineCharts(data, shapValues, normalizer, target, container, selector, lineChartSettings, noBorder) {
     let noOfItems = data.length;
     let noOfFeatures = data[0].length;
-    console.log(container);
     //Generate steps
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs
@@ -677,7 +682,7 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
         .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "15px")
         .on("click", (d) => {
             if (container.indexOf('layer') > -1) {
-                drawLinechartDetails(selector, d, data);
+                drawLinechartDetails(selector, d, data, shapValues);
             }
         });
 
@@ -693,35 +698,55 @@ async function drawLineCharts(data, normalizer, target, container, selector, lin
     //Generate data.
     let averageLineArr = [];
 
+    let flattenedZ = shapValues ? shapValues.flat().flat() : [1];
+    let minShapValue = d3.min(flattenedZ);
+    let maxShapValue = d3.max(flattenedZ);
+
+    lineChartSettings.minShapValue = minShapValue;
+    lineChartSettings.maxShapValue = maxShapValue;
+
     if (selector.indexOf('trainTestLoss') > -1 || selector.indexOf('output') > -1 || selector.indexOf('test') > -1) {
         lineChartSettings.fillWhite = false;
     } else {
         lineChartSettings.fillWhite = true;
     }
 
+    let isLayer = container.indexOf('layer') > -1;
+
+    lineChartSettings.isLayer = isLayer;
+
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let x = [];
+        let shap = [];
         for (let itemIdx = 0; itemIdx < noOfItems; itemIdx++) {
             x.push(data[itemIdx][featureIdx]);
+            shap.push(shapValues ? shapValues[itemIdx][featureIdx] : 0);
         }
+
         x = normalizer ? normalizer(x, -1.0, 1.0) : x;
         const lineChartData = [
             {
                 x: x,
                 y: y,
+                shap: shap,
                 isOutlier: isOutlier,
                 series: 'predicted',
                 marker: 'o',
                 type: 'scatter'
-            },
-            {
+            }
+        ];
+
+        if (!isLayer) {
+            lineChartData.push({
                 x: target,
                 y: y,
+                shap: shap,
                 series: 'actual',
                 marker: 'x',
                 type: 'scatter'
-            }
-        ];
+            })
+        }
+
         if (!mapObjects[selector + featureIdx]) {
             if (document.getElementById(selector + featureIdx) === null) {//In case the layer is deleted, delete the data and move on.
                 delete (mapObjects[selector + featureIdx]);

@@ -525,8 +525,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         if (layer.name.indexOf("lstm") >= 0) {
             ts.array().then(data => {
                 data.layerName = "LSTM " + i;
-                console.log(layer.name);
-                console.log(shapValuesMap[layer.name]);
+                // console.log(layer.name);
+                // console.log(shapValuesMap[layer.name]);
                 drawHeatmaps(data, shapValuesMap[layer.name], "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp, false);
             });
         } else if (layer.name.indexOf("flatten") >= 0) {
@@ -534,7 +534,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         } else if (layer.name.indexOf("dense") >= 0) {
             ts.array().then(data => {
                 data.layerName = "Dense " + i;
-                drawLineCharts(data, normalizeTarget, target_ordered, "layerContainer" + timeStamp, "layer" + timeStamp, lineChartSettings, false);
+                drawLineCharts(data, shapValuesMap[layer.name], normalizeTarget, target_ordered, "layerContainer" + timeStamp, "layer" + timeStamp, lineChartSettings, false);
                 // drawHeatmaps(data, shapValuesMap[layer.name], "layerContainer" + timeStamp, "layer" + timeStamp, timeStamp, false);
             });
         }
@@ -555,16 +555,20 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             trainLossBatchSettings.yScale = d3.scaleLog().domain([0.1, trainLosses[0] > testLosses[0] ? trainLosses[0] : testLosses[0]]).range([trainLossBatchSettings.height - trainLossBatchSettings.paddingTop - trainLossBatchSettings.paddingBottom, 0]);
         }
 
+        let shap = trainLosses.map(d => 0);
+
         const lineChartData = [
             {
                 x: epochsArr,
                 y: trainLosses,
                 series: 'training MSE',
+                shap: shap
             },
             {
                 x: epochsArr,
                 y: testLosses,
                 series: 'testing MSE',
+                shap: shap
             }
         ];
         if (!mapObjects['trainTestLoss']) {
@@ -599,7 +603,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         ts.array().then(data => {
             //We don't normalize the final result.
             data.layerName = "Training output";
-            drawLineCharts(data, null, y_train_flat_ordered, "outputContainer", "output", outputSettings, true).then(() => {
+            drawLineCharts(data, null, null, y_train_flat_ordered, "outputContainer", "output", outputSettings, true).then(() => {
                 //Update the training loss
                 updateGraphTitle("outputContainer", "Training, MSE: " + trainLoss.toFixed(2));
                 drawHeatmaps(X_train_ordered, shapValuesArray[0], "inputContainer", "inputDiv", -1, true).then(() => {
@@ -613,7 +617,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
         test.array().then(data => {
             //We don't normalize the final result.
             data.layerName = "Testing output";
-            drawLineCharts(data, null, y_test_flat_ordered, "testContainer", "test", testOutputSettings, true).then(() => {
+            drawLineCharts(data, null, null, y_test_flat_ordered, "testContainer", "test", testOutputSettings, true).then(() => {
                 //Update test loss
                 testLoss = reviewMode ? testLoss : model.evaluate(X_test_T_ordered, y_test_T_ordered).dataSync()[0];
                 updateGraphTitle("testContainer", "Testing, MSE: " + testLoss.toFixed(2));

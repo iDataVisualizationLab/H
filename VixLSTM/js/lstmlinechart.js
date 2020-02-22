@@ -107,8 +107,6 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
             yAxis.tickValues(this.settings.yTickValues.reverse());
         }
 
-        console.log(this.settings.yScale.range());
-
         this.svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(" + this.settings.paddingLeft + "," + (this.settings.height - this.settings.paddingBottom) + ")")
@@ -153,17 +151,14 @@ LstmLineChart.prototype.plot = async function () {
     this.canvas.node().getContext("2d").fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     let domain = [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1];
-    // if (this.settings.isInputLayer) {
     let minDomain = this.settings.minShapValue;
     let maxDomain = this.settings.maxShapValue;
     let avgDomain = (this.settings.minShapValue + this.settings.maxShapValue) / 2;
     let deltaDomain = (maxDomain - minDomain) / 10;
     domain = [avgDomain - 5 * deltaDomain, avgDomain - 4 * deltaDomain, avgDomain - 3 * deltaDomain, avgDomain - 2 * deltaDomain, avgDomain - 1 * deltaDomain, avgDomain, avgDomain + 1 * deltaDomain, avgDomain + 2 * deltaDomain, avgDomain + 3 * deltaDomain, avgDomain + 4 * deltaDomain, avgDomain + 5 * deltaDomain];
-    // }
 
     this.settings.colorScale = d3.scaleLinear()
         .domain(domain)
-        // .range(['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f'])
         .range(['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f'])
         .clamp(true);
 
