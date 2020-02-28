@@ -747,7 +747,7 @@ async function displayLayerWeights(model, i, containerId) {
         let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
-        buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        buildWeightPositionDataV2(weights, 200, 22, 200, 22, 200 * (1 - trainingWeightWidthRatio), 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             result['layerType'] = 'lstm';
             weightsPathData[containerId] = {
                 lineData: result.lineData,
@@ -764,7 +764,7 @@ async function displayLayerWeights(model, i, containerId) {
             // drawLSTMWeights(containerId);
             // updateVarNetwork();
         });
-        buildTrainingWeightDataV2(i, weights.shape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 3).then((result) => {
+        buildTrainingWeightDataV2(i, weights.shape, 200, 22, 200, 22, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 3).then((result) => {
             result['layerType'] = 'lstm';
             trainingWeightsPathData[containerId] = result;
             drawLstmTrainingWeights(containerId);
@@ -785,7 +785,7 @@ async function displayLayerWeights(model, i, containerId) {
             let zeroOneScale = d3.scaleLinear().domain([0, d3.max(newTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
             buildWeightForFlattenLayer(weights, flattenSplits).then(cumulativeT => {
-                buildWeightPositionDataV2(cumulativeT, heatmapH, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+                buildWeightPositionDataV2(cumulativeT, 100, 22, 100, 22, 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                     result['layerType'] = 'dense';
                     weightsPathData[containerId] = {
                         lineData: result.lineData,
@@ -803,7 +803,7 @@ async function displayLayerWeights(model, i, containerId) {
                 });
             });
 
-            buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+            buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, 100, 22, 100, 22, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                 result['layerType'] = 'dense';
                 trainingWeightsPathData[containerId] = result;
                 drawTrainingWeights(containerId);
@@ -821,7 +821,7 @@ async function displayLayerWeights(model, i, containerId) {
             isLastLayer = true;
         }
 
-        buildWeightPositionDataV2(weights, heatmapH, 22, 100, 22, isLastLayer ? 49.125 : 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        buildWeightPositionDataV2(weights, 100, 22, 100, 22, isLastLayer ? 49.125 : 200 * (1 - trainingWeightWidthRatio), 1, 0, 0.5, 3, minLineWeightOpacity, maxLineWeightOpacity, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             result['layerType'] = 'dense';
             weightsPathData[containerId] = {
                 lineData: result.lineData,
@@ -838,7 +838,7 @@ async function displayLayerWeights(model, i, containerId) {
             drawDenseWeights(containerId);
         });
 
-        buildTrainingWeightDataV2(i, weights.shape, heatmapH, 22, 100, 22, isLastLayer ? 80 : 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 0).then((result) => {
+        buildTrainingWeightDataV2(i, weights.shape, 100, 22, 100, 22, isLastLayer ? 80 : 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale, 0).then((result) => {
             result['layerType'] = 'dense';
 
             trainingWeightsPathData[containerId] = result;
