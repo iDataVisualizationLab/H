@@ -802,6 +802,7 @@ async function displayLayerWeights(model, i, containerId) {
                     drawDenseWeights(containerId);
                 });
             });
+            //
 
             buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wShape, 200, 22, 100, 22, 200 * trainingWeightWidthRatio, 1, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
                 result['layerType'] = 'dense';
