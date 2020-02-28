@@ -32,7 +32,8 @@ function updateInputs() {
             } else {
                 // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
                 let num = 4;
-                loadModelFromServer("pollution_remove_pollution_ts23_e100_b16_lr0001_L16D8_" + num);
+                loadModelFromKeras('pollution_ts23_L6L6D4D4D2_i300');
+                // loadModelFromServer("pollution_remove_pollution_ts23_e100_b16_lr0001_L16D8_" + num);
                 // loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
                 // loadKerasModelFromServer("eeg_16_8_8_8_8_11");
                 // loadModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
@@ -266,7 +267,7 @@ async function createTrainingGUI(layersConfig) {
     // }
     layersConfig.forEach(layerInfo => {
         if (layerInfo.id !== "output" && layerInfo.layerType !== "flatten") {
-            networkHeight = calculateNetworkHeight(122);
+            networkHeight = calculateNetworkHeight(122 + 50);
             createLayerGUI(layerInfo);
         }
     });
@@ -410,12 +411,22 @@ function onHeatmapShowingCheckbox() {
             if (mapObjects[neuron].type === 'lstmheatmap') {
                 let config = mapObjects[neuron];
                 let htmlContainer = config.canvas.node().parentNode.parentNode;
-                htmlContainer.removeChild(htmlContainer.lastChild);
                 config.settings.xScale = null;
+                d3.select(htmlContainer).select('.linechart').remove();
                 config.settings.yScale = null;
                 let newNeuron = new HeatMap(htmlContainer, config.data, config.settings);
                 newNeuron.plot();
                 mapObjects[neuron] = newNeuron;
+
+                let wrapper = $(htmlContainer),
+                    items = wrapper.children('div'),
+                    arr = [0, 2, 1];
+
+                wrapper.empty();
+                wrapper.append($.map(arr, function (v) {
+                    return items[v]
+                }));
+
             }
         }
         neuronShowingHeatmap = true;
@@ -424,12 +435,21 @@ function onHeatmapShowingCheckbox() {
             if (mapObjects[neuron].type === 'heatmap') {
                 let config = mapObjects[neuron];
                 let htmlContainer = config.canvas.node().parentNode.parentNode;
-                htmlContainer.removeChild(htmlContainer.firstChild);
+                d3.select(htmlContainer).select('.heatmap').remove();
                 config.settings.xScale = null;
                 config.settings.yScale = null;
                 let newNeuron = new LstmLineChart(htmlContainer, config.data, config.settings);
                 newNeuron.plot();
                 mapObjects[neuron] = newNeuron;
+
+                let wrapper = $(htmlContainer),
+                    items = wrapper.children('div'),
+                    arr = [0, 2, 1];
+
+                wrapper.empty();
+                wrapper.append($.map(arr, function (v) {
+                    return items[v]
+                }));
             }
         }
         neuronShowingHeatmap = false;
@@ -532,6 +552,84 @@ $('#trainingButtonContainer').click(function () {
         $(this).addClass("paused");
         stopTraining();
     }
+});
+
+function updateDataForLstmLinechart(isOutlier, key) {
+    let data = cachedMapObjects[key].data;
+    let newData = {};
+    let newY = [];
+    isOutlier.forEach(function (d, idx) {
+        if (d) {
+            newY.push(data.y[idx]);
+        }
+    });
+
+    newData.x = cachedMapObjects[key].data.x;
+    newData.y = newY;
+    newData.z = cachedMapObjects[key].data.z;
+    newData.shap = cachedMapObjects[key].data.shap;
+
+    mapObjects[key].update(newData);
+}
+
+function updateDataForDenseLinechart(isOutlier, key) {
+    let gContainer = d3.select(mapObjects[key].svg.node().parentNode)
+        .select('.predictedContainer');
+
+    gContainer.selectAll('g').select('text').style('opacity', function (d) {
+        if (!isOutlier[d.index]) {
+            return 0;
+        }
+        return 0.9;
+    })
+}
+
+function calculateValidInstances(filterValue) {
+    let output = cachedMapObjects['output0'];
+    let outputData = output.data;
+    let actual = outputData.filter(d => d.series === 'actual')[0].x;
+    let predicted = outputData.filter(d => d.series === 'predicted')[0].x;
+
+    let absError = [];
+    actual.forEach(function (actElement, idx) {
+        let ae = Math.abs(actElement - predicted[idx]);
+        absError.push(ae);
+    });
+
+    let maxAE = d3.max(absError);
+
+    let isOutlier = [];
+    absError.forEach(function (d) {
+        isOutlier.push(d >= (filterValue / 100) * maxAE);
+    });
+
+    isOutlierGlobal = isOutlier;
+
+    for (let key in cachedMapObjects) {
+        if (cachedMapObjects[key].type !== 'linechart') {
+            updateDataForLstmLinechart(isOutlier, key);
+        } else {
+            updateDataForDenseLinechart(isOutlier, key);
+        }
+    }
+}
+
+let firstTime = true;
+
+$('#mae-range').on('input', function () {
+    // console.log($(this).val());
+    // for (let key in mapObjects) {
+    //     console.log(key, mapObjects[key]);
+    //
+    // }
+
+    if (firstTime) {
+        cachedMapObjects = JSON.parse(JSON.stringify(mapObjects));
+        firstTime = false;
+    }
+
+    calculateValidInstances($(this).val());
+    console.log('update done');
 });
 
 

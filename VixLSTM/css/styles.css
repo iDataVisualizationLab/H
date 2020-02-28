@@ -194,3 +194,7 @@ a {
     width: 200px;
     height: 190px;
 }
+
+.sidenav-overlay {
+    opacity: 0 !important;
+}

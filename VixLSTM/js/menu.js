@@ -69,7 +69,6 @@ function populateModelGUIFromData(model, modelData, shapValues) {
     let y_test_ = loadModelDataFromObj(modelData, "y_test");
     let trainingProcess_ = loadModelDataFromObj(modelData, "process");
 
-
     // currentModel = model;//Don't do this coz we need to re-compile things if would like to continue to train from here
     // trainLosses = trainLosses_;
     // testLosses = testLosses_;
@@ -78,6 +77,7 @@ function populateModelGUIFromData(model, modelData, shapValues) {
 
     trainLosses = [];
     testLosses = [];
+
     trainingProcess_.forEach(function (d) {
         trainLosses.push(d.loss.trainLoss);
         testLosses.push(d.loss.testLoss);

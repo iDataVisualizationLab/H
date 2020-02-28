@@ -194,7 +194,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
     let xScaleTest = d3.scaleLinear().domain([0, epochs]).range([0, trainLossBatchSettings.width - trainLossBatchSettings.paddingLeft - trainLossBatchSettings.paddingRight]);
     trainLossBatchSettings.xScale = xScaleTest;
 
-    networkHeight = calculateNetworkHeight(122);
+    networkHeight = calculateNetworkHeight(122+50);
 
     // drawHeatmaps(X_train_ordered, "inputContainer", "inputDiv", -1, true).then(() => {
     //     hideLoader();
@@ -682,6 +682,7 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
                 let tWeight = [];
                 layer.getWeights().forEach(function (w) {
                     tWeight.push(w.dataSync());
+                    console.log(w.dataSync());
                 });
                 weights.push({name: layer.getConfig().name, data: tWeight});
             } else {
@@ -816,7 +817,7 @@ async function displayLayerWeights(model, i, containerId) {
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
 
         let isLastLayer = false;
-        if (containerId.replace('weightsContainer', 'layer') === layersConfig[layersConfig.length - 2].id) {
+        if (parseInt(containerId.replace('weightsContainer', '')) === layersConfig[layersConfig.length - 2].timeStamp) {
             isLastLayer = true;
         }
 

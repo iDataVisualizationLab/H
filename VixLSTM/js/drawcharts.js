@@ -236,9 +236,14 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
     let minShapValue = d3.min(flattenedZ);
     let maxShapValue = d3.max(flattenedZ);
 
+    console.log(container);
+
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let z = [];
         let shap = [];
+        let sumPositiveShap = [];
+        let sumNegativeShap = [];
+        let sumAll = [];
         for (let itemIdx = noOfItems - 1; itemIdx >= 0; itemIdx--) {//Reverse order of items from big (top) to small (bottom).
             let rowZ = [];
             let rowShap = [];
@@ -248,6 +253,24 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
             }
             z.push(rowZ);
             shap.push(rowShap);
+        }
+
+        for (let i = 0; i < shap[0].length; i++) {
+            let positive = 0;
+            let negative = 0;
+            let sum = 0;
+            shap.forEach(instance => {
+                // console.log(instance[i]);
+                if (instance[i] > 0) {
+                    positive += instance[i];
+                } else {
+                    negative += Math.abs(instance[i]);
+                }
+                sum+=instance[i];
+            });
+            sumPositiveShap.push(positive);
+            sumNegativeShap.push(negative);
+            sumAll.push(sum)
         }
 
         if (!mapObjects[selector + featureIdx]) {
@@ -270,7 +293,45 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                 reverseY: true
             };
 
+            let positiveAreaSettings = {
+                noSvg: false,
+                showAxes: false,
+                paddingLeft: 0,
+                paddingRight: 0,
+                paddingTop: 0,
+                paddingBottom: 0,
+                borderWidth: 0,
+                width: 100,
+                height: 50,
+                minShapValue: d3.min(sumPositiveShap),
+                maxShapValue: d3.max(sumPositiveShap),
+                isInputLayer: isInputLayer,
+                direction: 'up'
+            };
+
+            let negativeAreaSettings = {
+                noSvg: false,
+                showAxes: false,
+                paddingLeft: 0,
+                paddingRight: 0,
+                paddingTop: 0,
+                paddingBottom: 0,
+                borderWidth: 0,
+                width: 100,
+                height: 50,
+                minShapValue: d3.min(sumNegativeShap),
+                maxShapValue: d3.max(sumNegativeShap),
+                isInputLayer: isInputLayer,
+                direction: 'down'
+            };
+
             let hm = null;
+            let topArea = null, botArea = null;
+
+            topArea = new AreaChart(document.getElementById(selector + featureIdx), {
+                x: x,
+                y: sumPositiveShap
+            }, positiveAreaSettings);
 
             if (neuronShowingHeatmap) {
                 hm = new HeatMap(document.getElementById(selector + featureIdx), {
@@ -288,6 +349,13 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                 }, hmSettings);
             }
 
+            botArea = new AreaChart(document.getElementById(selector + featureIdx), {
+                x: x,
+                y: sumNegativeShap
+            }, negativeAreaSettings);
+
+            topArea.plot();
+            botArea.plot();
             hm.plot();
             mapObjects[selector + featureIdx] = hm;
         } else {
@@ -605,7 +673,7 @@ function calculateAverageLineForLstm(data) {
     return averageLine;
 }
 
-function drawLinechartDetails(selector, d, data, shapValues) {
+function drawLinechartDetails(selector, d, data, shapValues, isLayer) {
     let theMapContainer = document.getElementById("mapDetailsContent");
     d3.select(theMapContainer).selectAll("*").remove();
     let mData = mapObjects[selector + d].data;
@@ -642,7 +710,8 @@ function drawLinechartDetails(selector, d, data, shapValues) {
         height: 350,
         minShapValue: minShapValue,
         maxShapValue: maxShapValue,
-        fillWhite: false
+        fillWhite: false,
+        isLayer: isLayer
     };
 
     // mSettings.fillWhite = false;
@@ -675,6 +744,7 @@ function detectOutlierByMAE(y, y_predicted, topPercentage) {
 async function drawLineCharts(data, shapValues, normalizer, target, container, selector, lineChartSettings, noBorder) {
     let noOfItems = data.length;
     let noOfFeatures = data[0].length;
+    let isLayer = container.indexOf('layer') > -1;
     //Generate steps
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs
@@ -682,7 +752,7 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
         .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "15px")
         .on("click", (d) => {
             if (container.indexOf('layer') > -1) {
-                drawLinechartDetails(selector, d, data, shapValues);
+                drawLinechartDetails(selector, d, data, shapValues, isLayer);
             }
         });
 
@@ -711,8 +781,6 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
         lineChartSettings.fillWhite = true;
     }
 
-    let isLayer = container.indexOf('layer') > -1;
-
     lineChartSettings.isLayer = isLayer;
 
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
@@ -729,7 +797,6 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                 x: x,
                 y: y,
                 shap: shap,
-                isOutlier: isOutlier,
                 series: 'predicted',
                 marker: 'o',
                 type: 'scatter'
@@ -1075,7 +1142,6 @@ async function buildWeightPositionDataV2(weightsT, leftNodeHeight, leftNodeMargi
     return new Promise((resolve, reject) => {
         let weightData = weightsT.dataSync();
         let lineData = [];
-
 
         let wShape = weightsT.shape;
         let noOfLeftNodes = wShape[0];

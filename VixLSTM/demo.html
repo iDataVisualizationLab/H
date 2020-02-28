@@ -5,6 +5,7 @@
     <title>VixLSTM</title>
     <style>
         @import "lib/materialize/css/materialize.css";
+        /*@import "lib/materialize/css/ghpages-materialize.css";*/
     </style>
     <style>
         @import "lib/playpausebutton/playpause.css";
@@ -19,7 +20,6 @@
     <script src="lib/queue.v1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="lib/jquery-3.4.1.js"></script>
-    <script src="lib/materialize/js/materialize.js"></script>
     <!--ML Lib-->
     <script src="lib/tf.min.js"></script>
     <!--custom-->
@@ -107,6 +107,17 @@
                 <option value="3">MSE</option>
                 <option value="4">Correlation</option>
             </select>
+        </div>
+    </li>
+    <li>
+        <div style="padding-left: 0.75rem;padding-right: 0.75rem">
+            MAE Filter
+            <form action="#" style="margin-top: 10px">
+                <p class="range-field" style="width: 330px; margin-left: auto; margin-right: auto;">
+                    <input type="range" id="mae-range" min="0" max="100" value="0" class="active"/>
+
+                </p>
+            </form>
         </div>
     </li>
 </ul>
@@ -569,6 +580,7 @@
         <!--        </p>-->
     </div>
 </footer>
+
 <!--UI initialization-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -579,8 +591,10 @@
     });
 </script>
 <!--Scripting-->
+<script src="lib/materialize/js/materialize.js"></script>
 <script src="lib/underscore-min.js"></script>
 <script src="js/tooltip/tooltip.js"></script>
+<script src="js/areachart.js"></script>
 <script src="js/lstmlinechart.js"></script>
 <script src="js/tooltip/networktooltip.js"></script>
 <script src="js/variablesnetwork.js"></script>

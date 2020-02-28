@@ -229,6 +229,22 @@ async function loadModelFromServer(modelName) {
     });
 }
 
+async function loadModelFromKeras(modelName) {
+    const model = await tf.loadLayersModel(`data/model_with_shap/${modelName}/model.json`);
+
+    d3.json(`data/model_with_shap/${modelName}/${modelName}_data.json`).then(modelData => {
+        d3.json(`data/model_with_shap/${modelName}/${modelName}_shap.json`).then(function (shap) {
+            shapValuesMap = shap;
+            for (let key in shapValuesMap) {
+                shapValuesArray.push(shapValuesMap[key]);
+            }
+            populateModelGUIFromData(model, modelData);
+            hideLoader();
+        })
+    })
+}
+
+
 async function loadKerasModelFromServer(modelName) {
     // showLoader();
     kerasModel = await tf.loadLayersModel(`data/models/${modelName}/model.json`);

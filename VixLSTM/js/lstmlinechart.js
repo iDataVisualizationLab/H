@@ -17,7 +17,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         reverseY: true
     };
     //Copy the settings if there are.
-    if (heatMapSettings != null) {
+    if (heatMapSettings !== null) {
         for (var prop in heatMapSettings) {
             this.settings[prop] = heatMapSettings[prop];
         }
@@ -36,6 +36,10 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
     if (!this.settings.height) {
         this.settings.height = htmlContainer.getBoundingClientRect().height;
     }
+
+    // console.log(this.settings.width, this.settings.height);
+    // console.log(htmlContainer);
+
     //contentWidth
     var contentWidth = this.settings.width - this.settings.paddingLeft - this.settings.paddingRight;
     var contentHeight = this.settings.height - this.settings.paddingTop - this.settings.paddingBottom;
@@ -73,6 +77,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
     var container = d3.select(htmlContainer).append("div")
         .style("width", this.settings.width + "px")
         .style("height", this.settings.height + "px")
+        .attr('class', 'linechart')
         .style("position", "relative")
         .style("top", "0px")
         .style("left", "0px");
@@ -144,6 +149,8 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
     }
 };
 
+LstmLineChart.prototype.plotSummaryChart
+
 LstmLineChart.prototype.plot = async function () {
     this.canvas.node().getContext("2d").clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
@@ -164,10 +171,11 @@ LstmLineChart.prototype.plot = async function () {
 
     let self = this;
     let x = self.data.x;
+
     self.data.y.forEach((yVal, idx) => {
         let y = self.data.z[yVal];
         let shap = self.data.shap[yVal];
-        this.draw(x, y, shap, 0.5, this.settings.colorScale)
+        this.draw(x, y, shap, 1, this.settings.colorScale)
     });
 };
 
@@ -190,8 +198,8 @@ LstmLineChart.prototype.draw = async function (x, y, shap, lineWidth, strokeStyl
     let yScale = this.settings.yScale;
 
     let line = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)).context(ctx);
+    ctx.globalAlpha = 0.9;
     lineData.forEach(function (d, i) {
-        ctx.globalAlpha = 0.8;
         ctx.beginPath();
         ctx.lineWidth = lineWidth;
         ctx.strokeStyle = strokeStyle(d.shap);

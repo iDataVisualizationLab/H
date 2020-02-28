@@ -29,7 +29,7 @@ let noOfBatches = 39;
 let minDataVal = null;
 let maxDataVal = null;
 let networkHeight = null;
-let neuronHeight = 122;
+let neuronHeight = 122+100;
 let trainingWeightWidthRatio = 129.125 / 200;//3 / 8;
 let neuronShowingHeatmap = false;
 let isOutlierGlobal = [];
@@ -40,6 +40,7 @@ let originalWeights = null;
 let hiddenStates = {};
 let hiddenSimilarity = {};
 let shapValuesMap = {}, shapValuesArray = [];
+let cachedMapObjects = {};
 // let minShapValue = [], maxShapValue = [];
 
 document.addEventListener('DOMContentLoaded', function () {
