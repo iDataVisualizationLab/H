@@ -118,9 +118,9 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     let X_train_ordered = trainRULOrder.map(d => X_train[d]);
     X_train_ordered.layerName = "Input";
 
-    drawHeatmaps(X_train_ordered, shapValuesArray[0], "inputContainer", "inputDiv", -1, true).then(() => {
-        hideLoader();
-    });
+    // drawHeatmaps(X_train_ordered, shapValuesArray[0], "inputContainer", "inputDiv", -1, true).then(() => {
+    //     hideLoader();
+    // });
     //Draw sample input for documentation.
     //Generate one sample output
     let noOfItems = X_train_ordered.length;
@@ -179,14 +179,14 @@ async function processInputs(sFs) {
         //     d3.json("data/newData/y_train_stock_ts4_fri.json").then(y_trainR => {
         //         d3.json("data/newData/X_test_stock_ts4_fri.json").then(X_testR => {
         //             d3.json("data/newData/y_test_stock_ts4_fri.json").then(y_testR => {
-        d3.json("data/newData/X_train_pollution_ts23.json").then(X_trainR => {
-            d3.json("data/newData/y_train_pollution_ts23.json").then(y_trainR => {
-                d3.json("data/newData/X_test_pollution_ts23.json").then(X_testR => {
-                    d3.json("data/newData/y_test_pollution_ts23.json").then(y_testR => {
+        d3.json("data/newData/X_train_pollution_ts23_i300.json").then(X_trainR => {
+            d3.json("data/newData/y_train_pollution_ts23_i300.json").then(y_trainR => {
+                d3.json("data/newData/X_test_pollution_ts23_i300.json").then(X_testR => {
+                    d3.json("data/newData/y_test_pollution_ts23_i300.json").then(y_testR => {
                         // features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
                         // features = ['Open', 'High', 'Low', 'Close', 'Volume'];
                         // features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
-                        features = ['pollution', 'dew', 'temp', 'press', 'wnd_spd', 'snow', 'rain', 'hour_in_date', 'month_in_year'];
+                        features = ['dew', 'temp', 'press', 'wnd_spd', 'snow'];
                         predictedVariable = "pollution";
                         dataItemName = "Data Instances";
                         populateFeatureSelection(features);
@@ -418,14 +418,7 @@ function onHeatmapShowingCheckbox() {
                 newNeuron.plot();
                 mapObjects[neuron] = newNeuron;
 
-                let wrapper = $(htmlContainer),
-                    items = wrapper.children('div'),
-                    arr = [0, 2, 1];
-
-                wrapper.empty();
-                wrapper.append($.map(arr, function (v) {
-                    return items[v]
-                }));
+                rearrangeCharts(htmlContainer, [0,2,1]);
 
             }
         }
@@ -442,14 +435,7 @@ function onHeatmapShowingCheckbox() {
                 newNeuron.plot();
                 mapObjects[neuron] = newNeuron;
 
-                let wrapper = $(htmlContainer),
-                    items = wrapper.children('div'),
-                    arr = [0, 2, 1];
-
-                wrapper.empty();
-                wrapper.append($.map(arr, function (v) {
-                    return items[v]
-                }));
+                rearrangeCharts(htmlContainer, [0,2,1]);
             }
         }
         neuronShowingHeatmap = false;

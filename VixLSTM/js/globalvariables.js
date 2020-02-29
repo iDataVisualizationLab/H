@@ -1,6 +1,7 @@
 const dispatch = d3.dispatch("start", "pause", "change", "save", "changeInput", "changeWeightFilter");
 let btnTrain = null;
 let mapObjects = {};
+let mapAreaObjects = {};
 let currentModel = null;
 const lstmWeightTypes = ["(click to toggle)", "input gate", "forget gate", "cell state", "output gate"];
 const lstmWeightTypeDisplay = [0, 0, 0, 1];
@@ -29,7 +30,7 @@ let noOfBatches = 39;
 let minDataVal = null;
 let maxDataVal = null;
 let networkHeight = null;
-let neuronHeight = 122+100;
+let neuronHeight = 126+100;
 let trainingWeightWidthRatio = 129.125 / 200;//3 / 8;
 let neuronShowingHeatmap = false;
 let isOutlierGlobal = [];
@@ -41,7 +42,6 @@ let hiddenStates = {};
 let hiddenSimilarity = {};
 let shapValuesMap = {}, shapValuesArray = [];
 let cachedMapObjects = {};
-// let minShapValue = [], maxShapValue = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.sidenav');
@@ -56,6 +56,16 @@ $(document).ready(function () {
     $('.sidenav').sidenav();
     $('select').formSelect();
 });
+
+function rearrangeCharts(container, newOrder) {
+    let wrapper = $(container),
+        items = wrapper.children('div');
+
+    wrapper.empty();
+    wrapper.append($.map(newOrder, function (v) {
+        return items[v]
+    }));
+}
 
 // function exportData() {
 //     let X_train_outlier = [];

@@ -37,12 +37,9 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
         this.settings.height = htmlContainer.getBoundingClientRect().height;
     }
 
-    // console.log(this.settings.width, this.settings.height);
-    // console.log(htmlContainer);
-
     //contentWidth
-    var contentWidth = this.settings.width - this.settings.paddingLeft - this.settings.paddingRight;
-    var contentHeight = this.settings.height - this.settings.paddingTop - this.settings.paddingBottom;
+    let contentWidth = this.settings.width - this.settings.paddingLeft - this.settings.paddingRight;
+    let contentHeight = this.settings.height - this.settings.paddingTop - this.settings.paddingBottom;
     this.canvasWidth = contentWidth;
     this.canvasHeight = contentHeight;
     //CellWidth, cellHeight
@@ -74,13 +71,18 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
             .range([contentHeight, 0]);
     }
 
-    var container = d3.select(htmlContainer).append("div")
-        .style("width", this.settings.width + "px")
-        .style("height", this.settings.height + "px")
+    let container = d3.select(htmlContainer).append("div")
+        .style("width", (this.settings.width + 2) + "px")
+        .style("height", (this.settings.height + 2) + "px")
         .attr('class', 'linechart')
         .style("position", "relative")
         .style("top", "0px")
         .style("left", "0px");
+
+    if (this.settings.haveBorder) {
+        container.style("border", "1px solid black")
+    }
+
     this.canvas = container.append("canvas")
         .attr("width", contentWidth)
         .attr("height", contentHeight)

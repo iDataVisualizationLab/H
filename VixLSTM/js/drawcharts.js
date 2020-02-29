@@ -35,6 +35,7 @@ function drawHeatmapDetails(selector, d, data, shapValues, isInputLayer) {
             text: dataItemName
         },
         showColorBar: true,
+        haveBorder: false,
         width: 350,
         height: 350,
         //TODO: Should make these change automatically depending on the dataset.
@@ -199,7 +200,7 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
             .attr("id", d => selector + d)
             .style("margin-top", "5px")
             .style("margin-bottom", "0px")
-            .style("border", "1px solid black")
+            // .style("border", "1px solid black")
             .style("display", "inline-block")
             .on("click", (d) => {
                 // container.indexOf('layer')
@@ -217,7 +218,7 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
             .attr("id", d => selector + d)
             .style("margin-top", "15px")
             .style("margin-bottom", "0px")
-            .style("border", "1px solid black")
+            // .style("border", "1px solid black")
             .style("display", "inline-block")
             .on("click", (d) => {
                 drawHeatmapDetails(selector, d, data, shapValues, false);
@@ -235,6 +236,11 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
     let flattenedZ = shapValues ? shapValues.flat().flat() : [1];
     let minShapValue = d3.min(flattenedZ);
     let maxShapValue = d3.max(flattenedZ);
+
+    let minPosAreaShapValue = 0, maxPosAreaShapValue = 0;
+    let minNegAreaShapValue = 0, maxNegAreaShapValue = 0;
+
+    let areaChartList = [];
 
     console.log(container);
 
@@ -266,7 +272,7 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                 } else {
                     negative += Math.abs(instance[i]);
                 }
-                sum+=instance[i];
+                sum += instance[i];
             });
             sumPositiveShap.push(positive);
             sumNegativeShap.push(negative);
@@ -290,10 +296,11 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                 minShapValue: minShapValue,
                 maxShapValue: maxShapValue,
                 isInputLayer: isInputLayer,
+                haveBorder: true,
                 reverseY: true
             };
 
-            let positiveAreaSettings = {
+            let areaSettings = {
                 noSvg: false,
                 showAxes: false,
                 paddingLeft: 0,
@@ -303,35 +310,28 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                 borderWidth: 0,
                 width: 100,
                 height: 50,
-                minShapValue: d3.min(sumPositiveShap),
-                maxShapValue: d3.max(sumPositiveShap),
                 isInputLayer: isInputLayer,
-                direction: 'up'
             };
 
-            let negativeAreaSettings = {
-                noSvg: false,
-                showAxes: false,
-                paddingLeft: 0,
-                paddingRight: 0,
-                paddingTop: 0,
-                paddingBottom: 0,
-                borderWidth: 0,
-                width: 100,
-                height: 50,
-                minShapValue: d3.min(sumNegativeShap),
-                maxShapValue: d3.max(sumNegativeShap),
-                isInputLayer: isInputLayer,
-                direction: 'down'
-            };
+            let maxPos = d3.max(sumPositiveShap);
+            let minPos = d3.min(sumPositiveShap);
+            let maxNeg = d3.max(sumNegativeShap);
+            let minNeg = d3.min(sumNegativeShap);
+
+            if (minPosAreaShapValue > minPos) {
+                minPosAreaShapValue = minPos
+            }
+            if (maxPosAreaShapValue < maxPos) {
+                maxPosAreaShapValue = maxPos
+            }
+            if (minNegAreaShapValue > minNeg) {
+                minNegAreaShapValue = minNeg
+            }
+            if (maxNegAreaShapValue < maxNeg) {
+                maxNegAreaShapValue = maxNeg
+            }
 
             let hm = null;
-            let topArea = null, botArea = null;
-
-            topArea = new AreaChart(document.getElementById(selector + featureIdx), {
-                x: x,
-                y: sumPositiveShap
-            }, positiveAreaSettings);
 
             if (neuronShowingHeatmap) {
                 hm = new HeatMap(document.getElementById(selector + featureIdx), {
@@ -349,21 +349,43 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                 }, hmSettings);
             }
 
-            botArea = new AreaChart(document.getElementById(selector + featureIdx), {
-                x: x,
-                y: sumNegativeShap
-            }, negativeAreaSettings);
+            areaChartList.push({
+                'selector': selector + featureIdx,
+                'container': document.getElementById(selector + featureIdx),
+                'dataPositive': {x: x, y: sumPositiveShap},
+                'dataNegative': {x: x, y: sumNegativeShap},
+                'settings': areaSettings
+            });
 
-            topArea.plot();
-            botArea.plot();
             hm.plot();
             mapObjects[selector + featureIdx] = hm;
         } else {
             let hm = mapObjects[selector + featureIdx];
             hm.update({x: x, y: y, z: z, shap: shap});
         }
+
         averageLineArr.push({data: calculateAverageLineForLstm({x: x, y: y, z: z}), idx: featureIdx});
     }
+    areaChartList.forEach(function (item) {
+        let positiveAreaSetting = item.settings;
+        positiveAreaSetting.minShapValue = minPosAreaShapValue;
+        positiveAreaSetting.maxShapValue = maxPosAreaShapValue;
+        positiveAreaSetting.direction = 'up';
+        let topArea = new AreaChart(item.container, item.dataPositive, positiveAreaSetting);
+        topArea.plot();
+
+        let negativeAreaSetting = item.settings;
+        negativeAreaSetting.minShapValue = minNegAreaShapValue;
+        negativeAreaSetting.maxShapValue = maxNegAreaShapValue;
+        positiveAreaSetting.direction = 'down';
+        let botArea = new AreaChart(item.container, item.dataNegative, negativeAreaSetting);
+        botArea.plot();
+
+        mapAreaObjects[item.selector] = {'positive': topArea, 'negative': botArea};
+
+        rearrangeCharts(item.container, [1,0,2]);
+    });
+
     // findRelevantHiddenStates(0, data);
     // if (container.indexOf('layer') > -1) {
     hiddenStates[container] = data;
