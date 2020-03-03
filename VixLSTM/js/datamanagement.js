@@ -238,6 +238,9 @@ async function loadModelFromKeras(modelName) {
             for (let key in shapValuesMap) {
                 shapValuesArray.push(shapValuesMap[key]);
             }
+            features = modelData['features'];
+            selectedFeatures = modelData['features'];
+            populateFeatureSelection(features);
             populateModelGUIFromData(model, modelData);
             hideLoader();
         })

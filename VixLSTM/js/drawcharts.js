@@ -9,6 +9,11 @@ function drawHeatmapDetails(selector, d, data, shapValues, isInputLayer) {
     let minShapValue = d3.min(flattenedZ);
     let maxShapValue = d3.max(flattenedZ);
 
+    let maxBound = d3.max([Math.abs(minShapValue), Math.abs(maxShapValue)]);
+
+    minShapValue = -maxBound;
+    maxShapValue = maxBound;
+
     if (neuronShowingHeatmap) {
         yAxisValues = Array.from(new Array(hmData.y.length), (x, i) => i).filter((x, i) => i % 40 === 0);
     } else {
@@ -185,51 +190,37 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
         .selectAll(`.${selector}`)
         .data(Array.from(Array(noOfFeatures), (x, i) => i), d => d).enter()
         .append("div")
-        .style("width", "100px");
+        .style("width", "102px")
+        .style("height", "152px");
+    if (isInputLayer) {
+        enters.style('transform', 'translate(0px,-25px)');
+    }
+
     if (container === "inputContainer") {
         enters.append("div")
             .text((d, i) => features.filter((f, fi) => selectedFeatures[fi])[i])
             .style("color", "black")
-            .style("font-size", "10px")
-            .style("height", "10px")
-            .style("width", "100px")
-            .style("text-align", "center");
-
-        enters.append("div")
-            .attr("class", selector)
-            .attr("id", d => selector + d)
-            .style("margin-top", "5px")
-            .style("margin-bottom", "0px")
-            // .style("border", "1px solid black")
-            .style("display", "inline-block")
-            .on("click", (d) => {
-                // container.indexOf('layer')
-                drawHeatmapDetails(selector, d, data, shapValues, true);
-            })
-            .on("mouseover", (d) => {
-                showRelatedEntities(enters, timeStamp, d);
-            })
-            .on("mouseout", (d) => {
-                undoShowRelatedEntities(enters, timeStamp, d);
-            });
-    } else {
-        enters.append("div")
-            .attr("class", selector)
-            .attr("id", d => selector + d)
-            .style("margin-top", "15px")
-            .style("margin-bottom", "0px")
-            // .style("border", "1px solid black")
-            .style("display", "inline-block")
-            .on("click", (d) => {
-                drawHeatmapDetails(selector, d, data, shapValues, false);
-            })
-            .on("mouseover", (d) => {
-                showRelatedEntities(enters, timeStamp, d);
-            })
-            .on("mouseout", (d) => {
-                undoShowRelatedEntities(enters, timeStamp, d);
-            })
+            .style("font-size", "15px")
+            .style("transform", 'translate(-65px, 75px) rotate(270deg)');
     }
+
+    enters.append("div")
+        .attr("class", selector)
+        .attr("id", d => selector + d)
+        // .style("margin-top", "15px")
+        .style("margin-bottom", "0px")
+        // .style("border", "1px solid black")
+        .style("display", "inline-block")
+        .on("click", (d) => {
+            drawHeatmapDetails(selector, d, data, shapValues, isInputLayer);
+        })
+        .on("mouseover", (d) => {
+            showRelatedEntities(enters, timeStamp, d);
+        })
+        .on("mouseout", (d) => {
+            undoShowRelatedEntities(enters, timeStamp, d);
+        })
+
     //Generate data.
     let averageLineArr = [];
 
@@ -237,19 +228,21 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
     let minShapValue = d3.min(flattenedZ);
     let maxShapValue = d3.max(flattenedZ);
 
+    let maxBound = d3.max([Math.abs(minShapValue), Math.abs(maxShapValue)]);
+
+    minShapValue = -maxBound;
+    maxShapValue = maxBound;
+
     let minPosAreaShapValue = 0, maxPosAreaShapValue = 0;
     let minNegAreaShapValue = 0, maxNegAreaShapValue = 0;
 
     let areaChartList = [];
-
-    console.log(container);
 
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let z = [];
         let shap = [];
         let sumPositiveShap = [];
         let sumNegativeShap = [];
-        let sumAll = [];
         for (let itemIdx = noOfItems - 1; itemIdx >= 0; itemIdx--) {//Reverse order of items from big (top) to small (bottom).
             let rowZ = [];
             let rowShap = [];
@@ -276,7 +269,6 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
             });
             sumPositiveShap.push(positive);
             sumNegativeShap.push(negative);
-            sumAll.push(sum)
         }
 
         if (!mapObjects[selector + featureIdx]) {
@@ -309,7 +301,7 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                 paddingBottom: 0,
                 borderWidth: 0,
                 width: 100,
-                height: 50,
+                height: 25,
                 isInputLayer: isInputLayer,
             };
 
@@ -338,14 +330,16 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                     x: x,
                     y: y,
                     z: z,
-                    shap: shap
+                    shap: shap,
+                    isOutlier: isOutlierGlobal
                 }, hmSettings);
             } else {
                 hm = new LstmLineChart(document.getElementById(selector + featureIdx), {
                     x: x,
                     y: y,
                     z: z,
-                    shap: shap
+                    shap: shap,
+                    isOutlier: isOutlierGlobal
                 }, hmSettings);
             }
 
@@ -383,20 +377,20 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
 
         mapAreaObjects[item.selector] = {'positive': topArea, 'negative': botArea};
 
-        rearrangeCharts(item.container, [1,0,2]);
+        rearrangeCharts(item.container, [1, 0, 2]);
     });
 
-    // findRelevantHiddenStates(0, data);
-    // if (container.indexOf('layer') > -1) {
-    hiddenStates[container] = data;
-    // }
-    neuronData.mse[container] = {};
-    neuronData.mse[container]['unsortedData'] = [];
-    neuronData.correlation[container] = {};
-    neuronData.correlation[container]['unsortedData'] = averageLineArr;
-
-    sortNeuronByMse(container, averageLineArr);
-    sortNeuronByCorrelation(container, averageLineArr);
+    // // findRelevantHiddenStates(0, data);
+    // // if (container.indexOf('layer') > -1) {
+    // hiddenStates[container] = data;
+    // // }
+    // neuronData.mse[container] = {};
+    // neuronData.mse[container]['unsortedData'] = [];
+    // neuronData.correlation[container] = {};
+    // neuronData.correlation[container]['unsortedData'] = averageLineArr;
+    //
+    // sortNeuronByMse(container, averageLineArr);
+    // sortNeuronByCorrelation(container, averageLineArr);
 }
 
 let globalError = {};
@@ -704,6 +698,11 @@ function drawLinechartDetails(selector, d, data, shapValues, isLayer) {
     let minShapValue = d3.min(flattenedZ);
     let maxShapValue = d3.max(flattenedZ);
 
+    let maxBound = d3.max([Math.abs(minShapValue), Math.abs(maxShapValue)]);
+
+    minShapValue = -maxBound;
+    maxShapValue = maxBound;
+
     let mSettings = {
         noSvg: true,
         showAxes: true,
@@ -733,7 +732,7 @@ function drawLinechartDetails(selector, d, data, shapValues, isLayer) {
         minShapValue: minShapValue,
         maxShapValue: maxShapValue,
         fillWhite: false,
-        isLayer: isLayer
+        isLayer: false
     };
 
     // mSettings.fillWhite = false;
@@ -770,16 +769,27 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
     //Generate steps
     let y = Array.from(Array(noOfItems), (yV, i) => i);
     //Generate div for the inputs
-    let elms = d3.select(`#${container}`).selectAll(`.${selector}`).data(Array.from(Array(noOfFeatures), (x, i) => i), d => d)
-        .enter().append("div").attr("class", selector).attr("id", d => selector + d).style("margin-top", "15px")
+    let elms = d3.select(`#${container}`)
+        .selectAll(`.${selector}`)
+        .data(Array.from(Array(noOfFeatures), (x, i) => i), d => d)
+        .enter()
+        .append("div")
+        .style("width", "102px")
+        .style("height", isLayer ? "152px" : "auto");
+
+    elms = elms.append("div")
+        .attr("class", selector)
+        .attr("id", d => selector + d)
+        // .style("margin-top", "15px")
         .on("click", (d) => {
             if (container.indexOf('layer') > -1) {
                 drawLinechartDetails(selector, d, data, shapValues, isLayer);
             }
         });
 
+
     if (typeof noBorder === 'undefined' || !noBorder) {
-        elms.style("border", "1px solid black").style("display", "inline-block");
+        elms.style("display", "inline-block");
     }
     let isOutlier = isOutlierGlobal;
     if (!normalizer && container === 'outputContainer') {
@@ -794,6 +804,16 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
     let minShapValue = d3.min(flattenedZ);
     let maxShapValue = d3.max(flattenedZ);
 
+    let maxBound = d3.max([Math.abs(minShapValue), Math.abs(maxShapValue)]);
+
+    minShapValue = -maxBound;
+    maxShapValue = maxBound;
+
+    let minPosAreaShapValue = 0, maxPosAreaShapValue = 0;
+    let minNegAreaShapValue = 0, maxNegAreaShapValue = 0;
+
+    let areaChartList = [];
+
     lineChartSettings.minShapValue = minShapValue;
     lineChartSettings.maxShapValue = maxShapValue;
 
@@ -804,6 +824,14 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
     }
 
     lineChartSettings.isLayer = isLayer;
+
+    console.log(container);
+
+    let newXDelta = 2 / 22;
+    let newX = [];
+    for (let i = -11; i <= 11; i++) {
+        newX.push(newXDelta * i);
+    }
 
     for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
         let x = [];
@@ -819,13 +847,14 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                 x: x,
                 y: y,
                 shap: shap,
+                isOutlier: isOutlier,
                 series: 'predicted',
                 marker: 'o',
                 type: 'scatter'
             }
         ];
 
-        if (!isLayer) {
+        // if (!isLayer) {
             lineChartData.push({
                 x: target,
                 y: y,
@@ -833,7 +862,51 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                 series: 'actual',
                 marker: 'x',
                 type: 'scatter'
-            })
+            });
+        // }
+
+        let areaSettings = {
+            noSvg: false,
+            showAxes: false,
+            paddingLeft: 0,
+            paddingRight: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            borderWidth: 0,
+            width: 100,
+            height: 25,
+            xScale: d3.scaleLinear().domain([-1, 1]).range([0, 100])
+        };
+
+        let sumPositiveShap = Array.from(new Array(newX.length), (x, i) => 0);
+        let sumNegativeShap = Array.from(new Array(newX.length), (x, i) => 0);
+        x.forEach(function (value, index) {
+            let valueSign = value / Math.abs(value);
+            let position = Math.ceil(Math.abs(value) / newXDelta);
+            let shapValue = shap[index];
+            if (shapValue > 0) {
+                sumPositiveShap[valueSign * position + 11] += shapValue;
+            } else {
+                sumNegativeShap[valueSign * position + 11] += Math.abs(shapValue);
+            }
+        });
+
+        let maxPos = d3.max(sumPositiveShap);
+        let minPos = d3.min(sumPositiveShap);
+        let maxNeg = d3.max(sumNegativeShap);
+        let minNeg = d3.min(sumNegativeShap);
+
+        if (minPosAreaShapValue > minPos) {
+            minPosAreaShapValue = minPos
+        }
+        if (maxPosAreaShapValue < maxPos) {
+            maxPosAreaShapValue = maxPos
+        }
+        if (minNegAreaShapValue > minNeg) {
+            minNegAreaShapValue = minNeg
+        }
+        if (maxNegAreaShapValue < maxNeg) {
+            maxNegAreaShapValue = maxNeg
         }
 
         if (!mapObjects[selector + featureIdx]) {
@@ -842,7 +915,19 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                 console.log("continued");
                 continue;
             }
+
             let lc = new LineChart(document.getElementById(selector + featureIdx), lineChartData, lineChartSettings);
+
+            if (isLayer) {
+                areaChartList.push({
+                    'selector': selector + featureIdx,
+                    'container': document.getElementById(selector + featureIdx),
+                    'dataPositive': {x: newX, y: sumPositiveShap},
+                    'dataNegative': {x: newX, y: sumNegativeShap},
+                    'settings': areaSettings
+                });
+            }
+
             lc.plot();
             mapObjects[selector + featureIdx] = lc;
         } else {
@@ -851,15 +936,62 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
         }
         averageLineArr.push({data: x, idx: featureIdx});
     }
-    if (normalizer) {
-        neuronData.mse[container] = {};
-        neuronData.mse[container]['unsortedData'] = [];
-        neuronData.correlation[container] = {};
-        neuronData.correlation[container]['unsortedData'] = averageLineArr;
 
-        sortNeuronByMse(container, averageLineArr);
-        sortNeuronByCorrelation(container, averageLineArr);
+    areaChartList.forEach(function (item) {
+        let positiveAreaSetting = item.settings;
+        positiveAreaSetting.minShapValue = minPosAreaShapValue;
+        positiveAreaSetting.maxShapValue = maxPosAreaShapValue;
+        positiveAreaSetting.direction = 'up';
+        let topArea = new AreaChart(item.container, item.dataPositive, positiveAreaSetting);
+        topArea.plot();
+
+        let negativeAreaSetting = item.settings;
+        negativeAreaSetting.minShapValue = minNegAreaShapValue;
+        negativeAreaSetting.maxShapValue = maxNegAreaShapValue;
+        positiveAreaSetting.direction = 'down';
+        let botArea = new AreaChart(item.container, item.dataNegative, negativeAreaSetting);
+        botArea.plot();
+
+        mapAreaObjects[item.selector] = {'positive': topArea, 'negative': botArea};
+
+        rearrangeCharts(item.container, [1, 0, 2]);
+    });
+
+
+    // if (normalizer) {
+    //     neuronData.mse[container] = {};
+    //     neuronData.mse[container]['unsortedData'] = [];
+    //     neuronData.correlation[container] = {};
+    //     neuronData.correlation[container]['unsortedData'] = averageLineArr;
+    //
+    //     sortNeuronByMse(container, averageLineArr);
+    //     sortNeuronByCorrelation(container, averageLineArr);
+    // }
+}
+
+function sortTwoArrayByIndex(x, y) {
+    let index = [];
+    for (let i = 0; i < x.length; i++) {
+        index.push(i);
     }
+
+    let n = x.length;
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            if (x[index[j]] < x[index[j + 1]]) {
+                let temp = index[j];
+                index[j] = index[j + 1];
+                index[j + 1] = temp;
+            }
+        }
+    }
+    let sortedX = [], sortedY = [];
+    index.forEach(i => {
+        sortedX.push(x[i]);
+        sortedY.push(y[i]);
+    });
+
+    return {sortedX, sortedY};
 }
 
 function updateGraphTitle(graphId, newText) {
@@ -1016,7 +1148,7 @@ async function buildTrainingWeightData(i, wShape, leftNodeHeight, leftNodeMargin
     })
 }
 
-async function buildTrainingWeightDataV2(i, wShape, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity, epochs, strokeWidthScale, opacityScale, zeroOneScale, weightTypeIdx) {
+async function buildTrainingWeightDataV2(i, wShape, isLeftNodeLSTM, leftNodeHeight, leftNodeMarginTop, rightNodeHeight, rightNodeMarginTop, weightWidth, noOfWeightTypes, spanForWeightTypes, minStrokeWidth, maxStrokeWidth, minOpacity, maxOpacity, epochs, strokeWidthScale, opacityScale, zeroOneScale, weightTypeIdx) {
     return new Promise((resolve, reject) => {
         let lineData = [];
 
@@ -1027,10 +1159,18 @@ async function buildTrainingWeightDataV2(i, wShape, leftNodeHeight, leftNodeMarg
         let noOfRightNodes = wShape[1] / noOfWeightTypes;
 
         let noOfWeights = wShape[1] / noOfWeightTypes;
-        let spanForWeightsLeft = leftNodeHeight / (noOfWeights + 5);
+
+        // let leftNodeMainChartHeight = isLeftNodeLSTM ? 100 : leftNodeHeight;
+        let leftNodeMainChartHeight = 100;
+        let spanForWeightsLeft = leftNodeMainChartHeight / (noOfWeights + 5);
 
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
             let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeMarginTop) / 2;
+            // if (isLeftNodeLSTM) {
+            //     leftNodeCenterY += 25;
+            // }
+            leftNodeCenterY += 25;
+
             let leftNodeStartY = leftNodeCenterY + 6 * spanForWeightsLeft / 2;
             for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
                 let idx = leftIdx * wShape[1] + weightTypeIdx * noOfRightNodes + rightIdx;
@@ -1087,11 +1227,14 @@ async function buildTrainingWeightDataForFlatten(cumulativeTrainingWeights, wSha
         let noOfRightNodes = wShape[1] / noOfWeightTypes;
 
         let noOfWeights = wShape[1];
-        let spanForWeightsLeft = leftNodeHeight / (noOfWeights + 5);
+
+        //hard code fix
+        let spanForWeightsLeft = 100 / (noOfWeights + 5);
 
 
         for (let leftIdx = 0; leftIdx < noOfLeftNodes; leftIdx++) {
-            let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2;
+            //hard code fix
+            let leftNodeCenterY = leftIdx * (leftNodeHeight + leftNodeMarginTop) + (leftNodeHeight + leftNodeMarginTop) / 2 + 25;
             let leftNodeStartY = leftNodeCenterY - leftNodeHeight / 2 + 6 * spanForWeightsLeft / 2;
             for (let rightIdx = 0; rightIdx < noOfRightNodes; rightIdx++) {
                 for (let typeIdx = 0; typeIdx < noOfWeightTypes; typeIdx++) {

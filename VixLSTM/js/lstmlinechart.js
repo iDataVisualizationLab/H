@@ -151,33 +151,33 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
     }
 };
 
-LstmLineChart.prototype.plotSummaryChart
-
 LstmLineChart.prototype.plot = async function () {
     this.canvas.node().getContext("2d").clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     this.canvas.node().getContext("2d").fillStyle = 'white';
     this.canvas.node().getContext("2d").fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-    let domain = [-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1];
     let minDomain = this.settings.minShapValue;
     let maxDomain = this.settings.maxShapValue;
-    let avgDomain = (this.settings.minShapValue + this.settings.maxShapValue) / 2;
-    let deltaDomain = (maxDomain - minDomain) / 10;
-    domain = [avgDomain - 5 * deltaDomain, avgDomain - 4 * deltaDomain, avgDomain - 3 * deltaDomain, avgDomain - 2 * deltaDomain, avgDomain - 1 * deltaDomain, avgDomain, avgDomain + 1 * deltaDomain, avgDomain + 2 * deltaDomain, avgDomain + 3 * deltaDomain, avgDomain + 4 * deltaDomain, avgDomain + 5 * deltaDomain];
+    let avgDomain = 0;
+    let deltaDomain = (maxDomain - minDomain) / 9;
+    let domain = [avgDomain - 4.5 * deltaDomain, avgDomain - 3.5 * deltaDomain, avgDomain - 2.5 * deltaDomain, avgDomain - 1.5 * deltaDomain, avgDomain - 0.5 * deltaDomain/*, avgDomain*/, avgDomain + 0.5 * deltaDomain, avgDomain + 1.5 * deltaDomain, avgDomain + 2.5 * deltaDomain, avgDomain + 3.5 * deltaDomain, avgDomain + 4.5 * deltaDomain];
+    // domain = [minDomain, maxDomain];
+
 
     this.settings.colorScale = d3.scaleLinear()
         .domain(domain)
-        .range(['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f'])
+        .range(['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', /*'#f7f7f7',*/ '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f'])
         .clamp(true);
 
     let self = this;
     let x = self.data.x;
+    let isOutlier = self.data.isOutlier;
 
     self.data.y.forEach((yVal, idx) => {
         let y = self.data.z[yVal];
         let shap = self.data.shap[yVal];
-        this.draw(x, y, shap, 1, this.settings.colorScale)
+        this.draw(x, y, shap, isOutlier[yVal], 0.6, this.settings.colorScale)
     });
 };
 
@@ -186,7 +186,7 @@ LstmLineChart.prototype.update = async function (newData) {
     this.plot();
 };
 
-LstmLineChart.prototype.draw = async function (x, y, shap, lineWidth, strokeStyle) {
+LstmLineChart.prototype.draw = async function (x, y, shap, isOutlier, lineWidth, strokeStyle) {
     let lineData = x.map((xVal, i) => {
         return {
             x: xVal,
@@ -200,14 +200,20 @@ LstmLineChart.prototype.draw = async function (x, y, shap, lineWidth, strokeStyl
     let yScale = this.settings.yScale;
 
     let line = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)).context(ctx);
-    ctx.globalAlpha = 0.9;
-    lineData.forEach(function (d, i) {
-        ctx.beginPath();
-        ctx.lineWidth = lineWidth;
-        ctx.strokeStyle = strokeStyle(d.shap);
-        if (i + 1 < lineData.length) {
-            line([d, lineData[i + 1]]);
-        }
-        ctx.stroke();
-    });
+    // ctx.globalAlpha = 0.8;
+    // lineData.forEach(function (d, i) {
+    //     ctx.beginPath();
+    //     ctx.lineWidth = lineWidth;
+    //     ctx.strokeStyle = strokeStyle(d.shap);
+    //     if (i + 1 < lineData.length) {
+    //         line([d, lineData[i + 1]]);
+    //     }
+    //     ctx.stroke();
+    // });
+
+    ctx.beginPath();
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = isOutlier ? "rgba(255,165,0,1)" : "rgba(0,0,0,0.3)";
+    line(lineData);
+    ctx.stroke();
 };

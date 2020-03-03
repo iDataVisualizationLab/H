@@ -14,47 +14,22 @@ let link = d3.linkHorizontal()
 // createVarNetwork();
 
 function updateInputs() {
-    if (target_variable === "allVariables") {
-        loadingAll = true;
-        pretrainedMode = true;
-        target_variable = "arrTemperature0";
-    } else {
-        pretrainedMode = false;
-        loadingAll = false;
-    }
 
-    processInputs().then(() => {
-        //Create default layersConfig.
-        // createDefaultLayers();
-        createTrainingGUI(layersConfig).then(() => {
-            if (pretrainedMode) {
-                loadAllVariablesModel();
-            } else {
-                // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
-                let num = 4;
-                loadModelFromKeras('pollution_ts23_L6L6D4D4D2_i300');
-                // loadModelFromServer("pollution_remove_pollution_ts23_e100_b16_lr0001_L16D8_" + num);
-                // loadModelFromServer("arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_" + num);
-                // loadKerasModelFromServer("eeg_16_8_8_8_8_11");
-                // loadModelFromServer("stock_ts4_e100_b8_lr0005_L8L8D8D4_" + num);
-                // loadModelFromServer("emp_super_large_settings" + num);
-                // loadModelFromServer("stock_large_model_2" + num);
-            }
-            // loadAllPretrainModelFromServerV2(target_variable_V2);
-        });
-    });
+    // processInputs().then(() => {
+    //Create default layersConfig.
+    // createDefaultLayers();
+    // createTrainingGUI(layersConfig).then(() => {
+    // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
+    predictedVariable = "CPU Temp 1";
+    loadModelFromKeras('HPCC_ts20_L8L8D8D4_i312');
+    // loadModelFromKeras('RUL_ts50_L8L8D8D4_i100_f10');
+    // loadModelFromKeras('RUL_ts50_L8L8D8D4_i100');
+    // loadModelFromKeras('pollution_ts23_L6L6D4D4D2_i300');
+    // });
+    // });
 }
 
 updateInputs();
-
-async function loadAllVariablesModel() {
-    for (const d of variables.filter(d => d.id !== -1).map(d => d.name)) {
-        // await loadAllPretrainModelFromServer(d);
-        target_variable = d;
-        console.log(target_variable);
-        await loadKerasModelFromServer(d);
-    }
-}
 
 function loadDefaultModel() {
     //Load default model.
@@ -107,57 +82,7 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
     trainRULOrder = trainRULOrder.sort((a, b) => y_train[a] - y_train[b]);
     testRULOrder = Array.from(y_test, (val, i) => i);
     testRULOrder = testRULOrder.sort((a, b) => y_test[a] - y_test[b]);
-    let flattenedZ = X_train.flat().flat();
-    minDataVal = d3.min(flattenedZ);
-    maxDataVal = d3.max(flattenedZ);
 
-    // drawInputColorScale(minDataVal, avgZ, maxDataVal);
-    // drawOutputColorScale();
-
-    //Draw input
-    let X_train_ordered = trainRULOrder.map(d => X_train[d]);
-    X_train_ordered.layerName = "Input";
-
-    // drawHeatmaps(X_train_ordered, shapValuesArray[0], "inputContainer", "inputDiv", -1, true).then(() => {
-    //     hideLoader();
-    // });
-    //Draw sample input for documentation.
-    //Generate one sample output
-    let noOfItems = X_train_ordered.length;
-    let noOfSteps = X_train_ordered[0].length;
-    //Generate steps
-    let x = Array.from(Array(noOfSteps), (x, i) => i);
-    //Generate items
-    let y = Array.from(Array(noOfItems), (x, i) => i);
-    let z = [];
-    for (let stepIdx = 0; stepIdx < noOfSteps; stepIdx++) {
-        let row = [];
-        for (let itemIdx = 0; itemIdx < noOfItems; itemIdx++) {
-            row.push(X_train_ordered[itemIdx][stepIdx][0])
-        }
-        z.push(row);
-    }
-    // drawSampleInputOutput({x: x, y: y, z: z}, "Sample input sensor", "sampleInput");
-    let y_train_ordered = trainRULOrder.map(v => y_train[v][0]).reverse();
-    let sampleY = y_train_ordered.map(rulVal => Math.round(rulVal + 30.0 * (Math.random() - 0.5)));
-
-    const lineChartData = [
-        {
-            x: sampleY,
-            y: y,
-            series: 'output',
-            marker: 'o',
-            type: 'scatter'
-        },
-        {
-            x: y_train_ordered,
-            y: y,
-            series: 'target',
-            marker: 'x',
-            type: 'scatter'
-        }
-    ];
-    // drawSampleOutput(lineChartData, "Target vs. output RUL", "trainRUL");
     resolve();
 }
 
@@ -189,18 +114,18 @@ async function processInputs(sFs) {
                         features = ['dew', 'temp', 'press', 'wnd_spd', 'snow'];
                         predictedVariable = "pollution";
                         dataItemName = "Data Instances";
-                        populateFeatureSelection(features);
                         if (!sFs) {
                             selectedFeatures = features.map(_ => true);
                         } else {
                             selectedFeatures = sFs;
                         }
-                        //TODO: These for testing the models.
-                        // selectedFeatures = [2, false, 4, 6, 7, false, 9, false, 12, 13, false, false, 17, false, false]; // for 8_8884
-                        // selectedFeatures = [false, 3, false, false, false, 8, false, 11, false, false, 14, 15, false, 20, 21];
-                        X_train = copyFeatures(X_trainR, selectedFeatures);
-                        X_test = copyFeatures(X_testR, selectedFeatures);
-                        processData(X_train, y_trainR, X_test, y_testR, resolve);
+                        // //TODO: These for testing the models.
+                        // // selectedFeatures = [2, false, 4, 6, 7, false, 9, false, 12, 13, false, false, 17, false, false]; // for 8_8884
+                        // // selectedFeatures = [false, 3, false, false, false, 8, false, 11, false, false, 14, 15, false, 20, 21];
+                        // X_train = copyFeatures(X_trainR, selectedFeatures);
+                        // X_test = copyFeatures(X_testR, selectedFeatures);
+                        // processData(X_train, y_trainR, X_test, y_testR, resolve);
+                        resolve();
                     });
                 });
             });
@@ -418,7 +343,7 @@ function onHeatmapShowingCheckbox() {
                 newNeuron.plot();
                 mapObjects[neuron] = newNeuron;
 
-                rearrangeCharts(htmlContainer, [0,2,1]);
+                rearrangeCharts(htmlContainer, [0, 2, 1]);
 
             }
         }
@@ -435,7 +360,7 @@ function onHeatmapShowingCheckbox() {
                 newNeuron.plot();
                 mapObjects[neuron] = newNeuron;
 
-                rearrangeCharts(htmlContainer, [0,2,1]);
+                rearrangeCharts(htmlContainer, [0, 2, 1]);
             }
         }
         neuronShowingHeatmap = false;

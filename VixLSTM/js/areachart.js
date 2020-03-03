@@ -10,8 +10,7 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
         paddingRight: 0,
         showColorBar: false,
         minShapValue: areaChartSettings.minShapValue,
-        maxShapValue: areaChartSettings.maxShapValue,
-        isInputLayer: areaChartSettings.isInputLayer,
+        maxShapValue: areaChartSettings.maxShapValue
     };
     //Copy the settings if there are.
     if (areaChartSettings !== null) {
@@ -70,17 +69,17 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
     }
 
     let container = d3.select(htmlContainer).append("div")
-        .style("width", this.settings.width + "px")
+        .style("width", (this.settings.width + 2) + "px")
         .style("height", this.settings.height + "px")
         .style("position", "relative")
         .style("top", "0px")
         .style("left", "0px");
 
-    if (this.settings.direction === 'up') {
-        container.style('margin-bottom', '1px');
-    } else {
-        container.style('margin-top', '1px');
-    }
+    // if (this.settings.direction === 'up') {
+    //     container.style('margin-bottom', '1px');
+    // } else {
+    //     container.style('margin-top', '1px');
+    // }
 
     // this.canvas = container.append("canvas")
     //     .attr("width", contentWidth)
@@ -91,7 +90,8 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
     //     .style("top", this.settings.paddingTop + "px")
     //     .style("left", this.settings.paddingLeft + "px");
     if (!this.settings.noSvg) {
-        this.svg = container.append("svg").attr("width", this.settings.width)
+        this.svg = container.append("svg")
+            .attr("width", this.settings.width)
             .attr("height", this.settings.height)
             .style("position", "absolute")
             .style("left", "1px")
@@ -150,24 +150,7 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
 };
 
 AreaChart.prototype.plot = async function () {
-    // this.canvas.node().getContext("2d").clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    //
-    // this.canvas.node().getContext("2d").fillStyle = 'white';
-    // this.canvas.node().getContext("2d").fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-
-    let minDomain = this.settings.minShapValue;
-    let maxDomain = this.settings.maxShapValue;
-    let avgDomain = (this.settings.minShapValue + this.settings.maxShapValue) / 2;
-    let deltaDomain = (maxDomain - minDomain) / 10;
-    let domain = [avgDomain - 5 * deltaDomain, avgDomain - 4 * deltaDomain, avgDomain - 3 * deltaDomain, avgDomain - 2 * deltaDomain, avgDomain - 1 * deltaDomain, avgDomain, avgDomain + 1 * deltaDomain, avgDomain + 2 * deltaDomain, avgDomain + 3 * deltaDomain, avgDomain + 4 * deltaDomain, avgDomain + 5 * deltaDomain];
-
-    this.settings.colorScale = d3.scaleLinear()
-        .domain(domain)
-        .range(['#053061', '#2166ac', '#4393c3', '#92c5de', '#d1e5f0', '#f7f7f7', '#fddbc7', '#f4a582', '#d6604d', '#b2182b', '#67001f'])
-        .clamp(true);
-
     let y0 = this.settings.direction === 'up' ? this.settings.height : 0;
-    // let y1 = this.settings.direction === 'up'?this.settings.height:0;
 
     this.settings.area = d3.area()
         .x(d => this.settings.xScale(d.x))
@@ -178,7 +161,7 @@ AreaChart.prototype.plot = async function () {
     let x = self.data.x;
     let y = self.data.y;
 
-    let strokeStyle = this.settings.direction === 'up' ? '#d6604d' : '#4393c3';
+    let strokeStyle = this.settings.direction === 'up' ? '#4393c3' : '#d6604d';
 
     this.draw(x, y, strokeStyle);
 };

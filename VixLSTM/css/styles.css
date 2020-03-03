@@ -38,6 +38,10 @@
     /*-webkit-animation: 0.5s linear 0s infinite flowing;*/
 }
 
+body {
+    font-family: "Times New Roman", serif;
+}
+
 @keyframes flowing {
     from {
         stroke-dashoffset: 0;
