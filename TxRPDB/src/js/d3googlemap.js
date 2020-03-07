@@ -9,7 +9,7 @@
  * The g element for the marker should have a class named .marker and position style is absolute
  * .marker {position: absolute;}
  */
-class GoogleMap {
+class Map {
     /**
      * Create a new map and place it to the div id
      * @param theDivId

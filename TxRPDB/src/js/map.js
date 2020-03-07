@@ -20,22 +20,22 @@ let colorValueScale = d3.scaleLinear().domain([0, 19]).range([1, 0]);
 function plotMaps(dp) {
     let longAccessor = (d) => {
         return d[COL_LONG];
-    }
+    };
     let latAccessor = (d) => {
         return d[COL_LAT];
-    }
+    };
     //Set the map size.
     d3.select("#map")
         .styles({
             // "width": map_conf.widthG()+"px",
             "width": "100%",
             "height": map_conf.heightG() + "px",
-            "margin-right": map_conf.margin.right+"px",
+            "margin-right": map_conf.margin.right + "px",
             "margin-top": map_conf.margin.top + "px",
-            "padding": 0+"px"
+            "padding": 0 + "px"
         });
 
-    gm = new GoogleMap("map");
+    gm = new CustomMap("map");
 
     gm.dispatch.on("draw", draw);
 
@@ -57,8 +57,11 @@ function plotMaps(dp) {
     // let timeLabel = createTimeLabel();
     // timeLabel.index = 3;
     // gm.map.controls[google.maps.ControlPosition.TOP_CENTER].push(timeLabel);
-    let arr =[];
-    dp.filter(d=>d['GPSEnd']).forEach(d=>{arr.push(d["GPSEnd"]);arr.push(d["GPSStart"]);});
+    let arr = [];
+    dp.filter(d => d['GPSEnd']).forEach(d => {
+        arr.push(d["GPSEnd"]);
+        arr.push(d["GPSStart"]);
+    });
     gm.fitBounds(arr, longAccessor, latAccessor);
 
 
@@ -73,19 +76,55 @@ function plotMaps(dp) {
         return wells;
     }
 
+    gm.map.on('click', function (evt) {
+        console.log(evt.coordinate);
+        utils.getNearest(evt.coordinate).then(function (coord_street) {
+            var last_point = points[points.length - 1];
+            var points_length = points.push(coord_street);
+
+            utils.createFeature(coord_street);
+
+            if (points_length < 2) {
+                console.log('Click to add another point');
+                return;
+            }
+
+            //get the route
+            var point1 = last_point.join();
+            var point2 = coord_street.join();
+
+            console.log(url_osrm_route + point1 + ';' + point2);
+
+            fetch(url_osrm_route + point1 + ';' + point2).then(function (r) {
+                return r.json();
+            }).then(function (json) {
+                if (json.code !== 'Ok') {
+                    console.log('No route found.');
+                    return;
+                }
+                console.log('Route added');
+                //points.length = 0;
+                utils.createRoute(json.routes[0].geometry);
+            });
+        });
+    });
+
 }
 
-function Updatemap(){
+function Updatemap() {
     let longAccessor = (d) => {
         return d[COL_LONG];
-    }
+    };
     let latAccessor = (d) => {
         return d[COL_LAT];
-    }
-    let arr =[];
-    dp.filter(d=>d['GPSEnd']).forEach(d=>{arr.push(d["GPSEnd"]);arr.push(d["GPSStart"]);});
-    if(arr.length)
-    gm.fitBounds(arr, longAccessor, latAccessor);
+    };
+    let arr = [];
+    dp.filter(d => d['GPSEnd']).forEach(d => {
+        arr.push(d["GPSEnd"]);
+        arr.push(d["GPSStart"]);
+    });
+    if (arr.length)
+        gm.fitBounds(arr, longAccessor, latAccessor);
 }
 
 function colorType(type) {
@@ -93,7 +132,7 @@ function colorType(type) {
         if (analyzeValueIndex === 0) {
             return color.waterLevel(d.value);
         } else {
-            if (type == "negative") {
+            if (type === "negative") {
                 return d3.interpolateReds(negativeValueDiffScale(d.value));
             }
             if (type === "positive") {
@@ -102,20 +141,21 @@ function colorType(type) {
         }
     }
 }
+
 function plotGPS() {
     gm.map.pin.remove();
 
-    let ct = dp.filter(d=>(d["GPSStart"]!==null)||(d["GPSEnd"]!==null)).map((d)=>{
-        var bermudaTriangle = d["GPSStart"]||d["GPSEnd"];
+    let ct = dp.filter(d => (d["GPSStart"] !== null) || (d["GPSEnd"] !== null)).map((d) => {
+        var bermudaTriangle = d["GPSStart"] || d["GPSEnd"];
         var newf = new ol.Feature({
-            geometry: new ol.geom.Point(ol.proj.fromLonLat([bermudaTriangle[COL_LONG],bermudaTriangle[COL_LAT]])),
-            data:d
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([bermudaTriangle[COL_LONG], bermudaTriangle[COL_LAT]])),
+            data: d
         });
         newf.setStyle(new ol.style.Style({
             image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
-                color: (d=>colors(sectionProjectMap[d['DataType']]))(d),
+                color: (d => colors(sectionProjectMap[d['DataType']]))(d),
                 crossOrigin: 'anonymous',
-                opacity:0.8,
+                opacity: 0.8,
                 src: 'src/Images/pin.png',
                 anchor: [0.5, 1],
                 anchorXUnits: 'fraction',
@@ -134,6 +174,7 @@ function plotGPS() {
 
     gm.map.pin.addtomap();
 }
+
 function plotCounties() {
     //Clear the previous county
     // d3.select('#overlaymap').selectAll('.Countieslayer').remove();
@@ -162,25 +203,25 @@ function plotDistrict() {
     //Clear the previous county
     gm.map.district.remove();
 
-        if (plotCountyOption) {
-            let ctPath = {
-                type: "FeatureCollection"
-            };
-            // ctPath.geometries = us.objects.cb_2015_texas_county_20m.geometries;//.filter(d=>d.properties.NAME.toLowerCase()===county.toLowerCase());
-            ctPath.features = us_dis.features.filter(d => dp.allDistrics.find(e=>e.toLowerCase() ===d.properties.DIST_NM.toLowerCase()));
-            if (ctPath.features.length) {
-                // geoJsonObject = topojson.feature(us, ctPath)
-                // let datam = d3.select('#overlaymap').selectAll('.Countieslayer').data(geoJsonObject);
-                // datam.enter().append('a').attr('class', 'Countieslayer');
-                gm.map.district.setStyle({
-                    'fill-color': [1, 1, 1, 0.05],
-                    'stroke-width': 1,
-                    'stroke-color': [1, 1, 1, 1],
-                    'stroke-lineDash': [4,4],
-                }, true);
-                gm.map.district.addGeoJson(ctPath);
-            }
+    if (plotCountyOption) {
+        let ctPath = {
+            type: "FeatureCollection"
+        };
+        // ctPath.geometries = us.objects.cb_2015_texas_county_20m.geometries;//.filter(d=>d.properties.NAME.toLowerCase()===county.toLowerCase());
+        ctPath.features = us_dis.features.filter(d => dp.allDistrics.find(e => e.toLowerCase() === d.properties.DIST_NM.toLowerCase()));
+        if (ctPath.features.length) {
+            // geoJsonObject = topojson.feature(us, ctPath)
+            // let datam = d3.select('#overlaymap').selectAll('.Countieslayer').data(geoJsonObject);
+            // datam.enter().append('a').attr('class', 'Countieslayer');
+            gm.map.district.setStyle({
+                'fill-color': [1, 1, 1, 0.05],
+                'stroke-width': 1,
+                'stroke-color': [1, 1, 1, 1],
+                'stroke-lineDash': [4, 4],
+            }, true);
+            gm.map.district.addGeoJson(ctPath);
         }
+    }
 
 }
 
@@ -209,43 +250,67 @@ function plotDistrict() {
 
 // overlayer
 function plotRoad() {
-    if(gm.roadData===undefined)
+    if (gm.roadData === undefined)
         gm.roadData = [];
     // Construct the polygon.
-    if(gm.roadData.length){
+    if (gm.roadData.length) {
         gm.map.removeLayer(gm.map.roadLayer);
     }
-    gm.roadData = dp.filter(d=>(d["GPSStart"]!==null)&&(d["GPSEnd"]!==null)).map((d)=>{
-        var bermudaTriangle = new ol.Feature({
-                geometry: new ol.geom.LineString(gm.latlong2ol([d["GPSStart"], d["GPSEnd"]])),
-                data:d
+
+    dp.filter(d => (d["GPSStart"] !== null) && (d["GPSEnd"] !== null)).forEach((d) => {
+
+        let point1 = d["GPSStart"].lng + "," + d["GPSStart"].lat;
+        let point2 = d["GPSEnd"].lng + "," + d["GPSEnd"].lat;
+
+        fetch(url_osrm_route + point1 + ';' + point2).then(function (r) {
+            return r.json();
+        }).then(function (json) {
+            console.log(d);
+            console.log(point1, point2);
+            console.log(json);
+            if (json.code !== 'Ok') {
+                console.log('No route found.');
+                return;
             }
-        //     {
-        //     paths: [d["GPSStart"],d["GPSEnd"]],
-        //     strokeColor: '#FF0000',
-        //     strokeOpacity: 0.8,
-        //     strokeWeight: 3,
-        //     fillColor: '#FF0000',
-        //     fillOpacity: 0.35
-        // }
-        );
+            console.log('Route added');
+            //points.length = 0;
+            let polyline = json.routes[0].geometry;
 
-        // Add a listener for the click event.
-        // bermudaTriangle.addListener('click', ()=>{});
-        return bermudaTriangle;
+            console.log(polyline);
+            console.log();
+
+            let route = new ol.format.Polyline({
+                factor: 1e5
+            }).readGeometry(polyline, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857'
+            });
+            let feature = new ol.Feature({
+                type: 'route',
+                geometry: route
+            });
+            feature.setStyle(styles.route);
+
+            gm.roadData.push(feature);
+        }).then(() => {
+            gm.map.roadLayer = new ol.layer.Vector({
+                source: new ol.source.Vector({features: gm.roadData}),
+                style: gm.json2style({
+                    'stroke-color': [255, 0, 0, 0.8],
+                    'stroke-width': 10,
+                })
+            });
+            gm.map.addLayer(gm.map.roadLayer);
+        });
     });
-    var vector = new ol.layer.Vector({
-        source: new ol.source.Vector({features:gm.roadData}),
-        style: gm.json2style({
-            'stroke-color': [255, 0, 0,0.8],
-            'stroke-width': 3,
-        })
-    });
-    gm.map.roadLayer = vector
-    gm.map.addLayer(gm.map.roadLayer);
+
+    console.log(gm.roadData);
+
+    // then(() => {
+
+
+    // });
 }
-
-
 
 
 function processThresholds1(range) {
@@ -382,7 +447,7 @@ function createPlotColorScale(ticks, colorFunction, width, height) {
     svg.attr("id", "colorScaleSvg");
     svg.attr("width", width);
     svg.attr("height", (height + margin.top + margin.bottom));
-    svg.append("g").attr("transform", `translate(${width/2}, ${height})`).append("text").text("(feet)")
+    svg.append("g").attr("transform", `translate(${width / 2}, ${height})`).append("text").text("(feet)")
         .attr("text-anchor", "middle").attr("alignment-baseline", "hanging")
         .attr("font-size", 14);
 

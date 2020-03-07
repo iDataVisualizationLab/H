@@ -139,7 +139,7 @@ function printfile (url){
  * .marker {position: absolute;}
  */
 
-class GoogleMap {
+class CustomMap {
     /**
      * Create a new map and place it to the div id
      * @param theDivId
@@ -157,12 +157,7 @@ class GoogleMap {
                 new ol.layer.Tile({
                     preload: 4,
                     source: new ol.source.OSM()
-                }),
-                // new ol.layer.Tile({
-                //     source: new ol.source.Stamen({
-                //         layer: 'terrain-labels'
-                //     })
-                // })
+                })
             ],
             view: self.view
         });

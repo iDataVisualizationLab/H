@@ -42,7 +42,7 @@ let Schemabox = function () {
 
         var maxValue = Math.ceil(Math.max(...dataShadow.map(d => d.value.len)) / 10) * 10;
 
-        x.domain([0, maxValue])
+        x.domain([0, maxValue]);
 
         if (hasSlider) graphicopt.barWidth = graphicopt.barWidth / 2;
 
