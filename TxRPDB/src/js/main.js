@@ -126,7 +126,7 @@ function init() {
 }
 
 function selectize_init(selection, data, type) {
-    console.log(selection);
+    console.log(selection, data);
     selection.selectAll('option')
         .data(data)
         .enter().append('option')
@@ -222,14 +222,16 @@ function addFilter(d, collapseMode) {
     Updatemap();
     redrawMap();
 
-    // if (d.type === "District") {
-    //     d3.select('#County')
-    //         .select('.selectize-control')
-    //         .select('.selectize-dropdown')
-    //         .select('.selectize-dropdown-content')
-    //         .selectAll('.option')
-    //         .each(function (d) {console.log(d3.select(this))});
-    // }
+    if (d.type === "District") {
+        console.log("hi");
+        $("#County").selectize()[0].selectize.destroy();
+
+        let data = dp.allCounties.map(function (d) {
+            return {'key': d}
+        });
+
+        selectize_init(d3.select('#County').select('.schema-field-tag'), data);
+    }
 }
 
 function removeFilter(d, fromSchema) {
