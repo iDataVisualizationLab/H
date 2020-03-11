@@ -92,7 +92,8 @@
     "GPSStart": "N30�04'23.1\" W095�57' 16.0\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N30�04' 20.5\" W095�57' 05.0\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "_tpvDdbthQ|@gFjA{J"
   },
   "18-I30-1": {
     "sectionID": "18-I30-1",
@@ -115,7 +116,8 @@
     "GPSStart": "N32�46'02.5\" W096�51' 49.6\"",
     "VerticalAlign": "Fill Grade",
     "GPSEnd": "N32�46' 02.6\" W096�52' 01.2\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "mz~fEruenQYbS"
   },
   "19-US59-1": {
     "sectionID": "19-US59-1",
@@ -138,7 +140,8 @@
     "GPSStart": "N33�20'03.0\" W094�09' 03.5\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N33�19' 53.0\" W094�09' 04.1\"",
-    "HorizontalAlign": "Curve L  Tangent"
+    "HorizontalAlign": "Curve L  Tangent",
+    "Route": "qqmjErzs}P~DNjJ@"
   },
   "19-US59-2": {
     "sectionID": "19-US59-2",
@@ -161,7 +164,8 @@
     "GPSStart": "N33�03'36.1\" W094�16' 54.4\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N33�03' 30.2\" W094�17' 04.0\"",
-    "HorizontalAlign": "Curve L  Tangent"
+    "HorizontalAlign": "Curve L  Tangent",
+    "Route": "q_xhEvkm~Ph@tA~GtL"
   },
   "2-I35-1": {
     "sectionID": "2-I35-1",
@@ -184,7 +188,8 @@
     "GPSStart": "N32�35'58.7\" W097�19' 10.2\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N32�35'49.0\" W097�19' 10.2\"",
-    "HorizontalAlign": "Curve R"
+    "HorizontalAlign": "Curve R",
+    "Route": "wb~eEhv~pQzO?"
   },
   "2-I820-1": {
     "sectionID": "2-I820-1",
@@ -207,7 +212,8 @@
     "GPSStart": "N32�49'10.5\" W097�24' 00.9\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N32�49'15.3\" W097�23' 50.5\"",
-    "HorizontalAlign": "Curve R"
+    "HorizontalAlign": "Curve R",
+    "Route": "caigEjnnqQgCuGcCiH"
   },
   "20-I10-1": {
     "sectionID": "20-I10-1",
@@ -230,7 +236,8 @@
     "GPSStart": "N30�06'24.7\" W094�03' 10.9\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N30�06' 30.86\" W094�03' 01.73\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "mgwvDzv`}PoIaO"
   },
   "24-I10-1": {
     "sectionID": "24-I10-1",
@@ -253,7 +260,8 @@
     "GPSStart": "N31�40'36.5\" W106�15' 24.7\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N31�40' 29.5\" W106�15' 16.7\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "i{i`E`hpgSfKwL"
   },
   "24-I10-2": {
     "sectionID": "24-I10-2",
@@ -276,7 +284,8 @@
     "GPSStart": "N31�38'36.7\" W106�13' 39.1\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N31�38' 28.6\" W106�13' 32.8\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "gkc`EvpjgSbM{I"
   },
   "24-I10-3": {
     "sectionID": "24-I10-3",
@@ -299,7 +308,8 @@
     "GPSStart": "N31�34' 21.5\" W106�10' 19.7\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N31�34' 30.1\" W106�10' 26.2\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "}ou_E~v_gSwMpJ"
   },
   "24-I10-4": {
     "sectionID": "24-I10-4",
@@ -322,7 +332,8 @@
     "GPSStart": "N31�10' 51.0\" W105�42' 48.3\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N31�10' 57.4\" W105�42'56.8\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "y~h}DfdfdSeJvM"
   },
   "25-I40-1": {
     "sectionID": "25-I40-1",
@@ -345,7 +356,8 @@
     "GPSStart": "N35�13' 37.5\" W100�19' 20.1\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N35�13' 37.5\" W100�19' 32.1\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "gh_vE`eicR@xS"
   },
   "25-I40-2": {
     "sectionID": "25-I40-2",
@@ -368,7 +380,8 @@
     "GPSStart": "N35�13' 37.8\" W100�31' 37.1\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N35�13' 37.3\" W100�31' 49.6\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "yh_vEpdqdR\\tT"
   },
   "3-I35-1": {
     "sectionID": "3-I35-1",
@@ -391,7 +404,8 @@
     "GPSStart": "N33�26'41.3\" W097�09' 50.4\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N33�26'50.8\" W097�09' 50.4\"",
-    "HorizontalAlign": "Curve R"
+    "HorizontalAlign": "Curve R",
+    "Route": "aeckEnj`pQmOB"
   },
   "3-US287-1": {
     "sectionID": "3-US287-1",
@@ -414,7 +428,8 @@
     "GPSStart": "N33�57'59.7\" W098�43' 25.8\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N33�58'03.3\" W098�43' 36.8\"",
-    "HorizontalAlign": "Curve R"
+    "HorizontalAlign": "Curve R",
+    "Route": "yainE`_qyQo@~DeArEsApE"
   },
   "3-US287-2": {
     "sectionID": "3-US287-2",
@@ -437,7 +452,8 @@
     "GPSStart": "N34�00'28.7\" W098�50' 46.3\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N34�00'34.2\" W098�50' 56.1\"",
-    "HorizontalAlign": "Curve R"
+    "HorizontalAlign": "Curve R",
+    "Route": "sdqnEz{hzQsH~O"
   },
   "3-US81-1": {
     "sectionID": "3-US81-1",
@@ -460,7 +476,8 @@
     "GPSStart": "N33�29'50.6976\" W097�48' 20.81",
     "VerticalAlign": null,
     "GPSEnd": "N33�30'1.3818\" W097�48' 27.780",
-    "HorizontalAlign": null
+    "HorizontalAlign": null,
+    "Route": "wmmkElu}sQqQ|J"
   },
   "4-I40-1": {
     "sectionID": "4-I40-1",
@@ -483,7 +500,8 @@
     "GPSStart": "N35�15'17.6\" W102�28' 57.5\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N35�15'21.1\" W102�29' 14.8\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "qudvErcopRaIvr@gGjv@_Gv^es@bsG{C~Qvv@egHxE}X^uO~LsgA_OfAiB~AEnAvQD"
   },
   "48-3569-IH30-LTPP": {
     "sectionID": "48-3569-IH30-LTPP",
@@ -552,7 +570,8 @@
     "GPSStart": "N34�06'39.7\" W101�46' 28.2\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N34�06'32.9\" W101�46' 37.1\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "uheoEhydlR|JhN"
   },
   "5-Loop_289-1": {
     "sectionID": "5-Loop_289-1",
@@ -575,7 +594,8 @@
     "GPSStart": "N33�32'31.7\" W101�56' 04.5\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N33�32' 40.3\" W101�56'08.4\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "mevkE|admR}MtE"
   },
   "9-I35-1": {
     "sectionID": "9-I35-1",
@@ -598,7 +618,8 @@
     "GPSStart": "N31�55'36.4\" W097�06' 07.9\"",
     "VerticalAlign": "Fill",
     "GPSEnd": "N31�55' 27.3\" W097�06' 04.1\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "iuzaExgtoQtN{E"
   },
   "9-I35-2": {
     "sectionID": "9-I35-2",
@@ -621,7 +642,8 @@
     "GPSStart": "N31�31'24.4\" W097�08' 03.7\"",
     "VerticalAlign": "Grade",
     "GPSEnd": "N31�31' 33.7\" W097�07' 59.4\"",
-    "HorizontalAlign": "Tangent"
+    "HorizontalAlign": "Tangent",
+    "Route": "s|k_E`qzoQeOkF"
   },
   "ABLSH226[WT]": {
     "sectionID": "ABLSH226[WT]",
@@ -3611,7 +3633,8 @@
     "GPSStart": "N32� 42' 12.9168\" W96� 35' 46.",
     "VerticalAlign": null,
     "GPSEnd": "N32� 42' 5.8968\" W96� 21' 28.4",
-    "HorizontalAlign": null
+    "HorizontalAlign": null,
+    "Route": "_lrfErlqlQfBhz@lEaBeN_kCbLwoEjNejBaC{tChSmyDuLkoDpSqqCbAexFa`@ymDyfAaaC}MofAgFeGrQbkAlfA`_C"
   },
   "DAL-IH30-0009-11-195": {
     "sectionID": "DAL-IH30-0009-11-195",
@@ -11109,7 +11132,8 @@
     "GPSStart": "N29�35'56.0\" W95�37'25.7\"",
     "VerticalAlign": null,
     "GPSEnd": "N29�35'52.3\" W95�37'15.4\"",
-    "HorizontalAlign": null
+    "HorizontalAlign": null,
+    "Route": "s`tsDposfQ_CjJ`@RjGwUuFqFiB{AiDmDlEaGn@_@bAIx@Ll@VjBbCjClAuBjI"
   },
   "SH146[BCO]": {
     "sectionID": "SH146[BCO]",
@@ -11155,7 +11179,8 @@
     "GPSStart": "N29�35'32.1\" W95�36'19.5\"",
     "VerticalAlign": null,
     "GPSEnd": "N29�35'30.6\" W95�36'15.5\"",
-    "HorizontalAlign": null
+    "HorizontalAlign": null,
+    "Route": "cwrsDp|ofQgAbEd@NvC_L"
   },
   "SJT-IH635-2574-01-038": {
     "sectionID": "SJT-IH635-2574-01-038",

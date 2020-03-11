@@ -1,0 +1,1143 @@
+[
+  {
+    "district": "Paris",
+    "counties": [
+      {
+        "id": 60,
+        "name": " Delta"
+      },
+      {
+        "id": 75,
+        "name": "Fannin"
+      },
+      {
+        "id": 81,
+        "name": "Franklin"
+      },
+      {
+        "id": 92,
+        "name": "Grayson"
+      },
+      {
+        "id": 113,
+        "name": "Hopkins"
+      },
+      {
+        "id": 117,
+        "name": "Hunt"
+      },
+      {
+        "id": 139,
+        "name": "Lamar"
+      },
+      {
+        "id": 190,
+        "name": "Rains"
+      },
+      {
+        "id": 194,
+        "name": "Red River"
+      }
+    ]
+  },
+  {
+    "district": "Fort Worth",
+    "counties": [
+      {
+        "id": 73,
+        "name": "Erath"
+      },
+      {
+        "id": 112,
+        "name": "Hood"
+      },
+      {
+        "id": 120,
+        "name": "Jack"
+      },
+      {
+        "id": 127,
+        "name": "Johnson"
+      },
+      {
+        "id": 182,
+        "name": "Palo Pinto"
+      },
+      {
+        "id": 184,
+        "name": "Parker"
+      },
+      {
+        "id": 213,
+        "name": "Somervell"
+      },
+      {
+        "id": 220,
+        "name": "Tarrant"
+      },
+      {
+        "id": 249,
+        "name": "Wise"
+      }
+    ]
+  },
+  {
+    "district": "Wichita Falls",
+    "counties": [
+      {
+        "id": 5,
+        "name": "Archer"
+      },
+      {
+        "id": 12,
+        "name": "Baylor"
+      },
+      {
+        "id": 39,
+        "name": "Clay"
+      },
+      {
+        "id": 49,
+        "name": "Cook"
+      },
+      {
+        "id": 169,
+        "name": "Montague "
+      },
+      {
+        "id": 224,
+        "name": "Throckmorton"
+      },
+      {
+        "id": 243,
+        "name": "Wichita"
+      },
+      {
+        "id": 244,
+        "name": "Wilbarger"
+      },
+      {
+        "id": 252,
+        "name": "Young"
+      }
+    ]
+  },
+  {
+    "district": "Amarillo",
+    "counties": [
+      {
+        "id": 6,
+        "name": "Armstrong"
+      },
+      {
+        "id": 33,
+        "name": "Carson"
+      },
+      {
+        "id": 56,
+        "name": "Dallam"
+      },
+      {
+        "id": 59,
+        "name": "Deaf Smith"
+      },
+      {
+        "id": 91,
+        "name": "Gray"
+      },
+      {
+        "id": 99,
+        "name": "Hansford"
+      },
+      {
+        "id": 104,
+        "name": "Hartley"
+      },
+      {
+        "id": 107,
+        "name": "Hemphill"
+      },
+      {
+        "id": 118,
+        "name": "Hutchinson"
+      },
+      {
+        "id": 148,
+        "name": "Lipscomb"
+      },
+      {
+        "id": 171,
+        "name": "Moore"
+      },
+      {
+        "id": 179,
+        "name": "Ochiltree"
+      },
+      {
+        "id": 180,
+        "name": "Oldham"
+      },
+      {
+        "id": 188,
+        "name": "Potter"
+      },
+      {
+        "id": 191,
+        "name": "Randall"
+      },
+      {
+        "id": 197,
+        "name": "Roberts"
+      },
+      {
+        "id": 211,
+        "name": "Sherman"
+      }
+    ]
+  },
+  {
+    "district": "Lubbock",
+    "counties": [
+      {
+        "id": 9,
+        "name": "Bailey"
+      },
+      {
+        "id": 35,
+        "name": "Castro"
+      },
+      {
+        "id": 40,
+        "name": "Cochran"
+      },
+      {
+        "id": 54,
+        "name": "Crosby"
+      },
+      {
+        "id": 58,
+        "name": "Dawson"
+      },
+      {
+        "id": 78,
+        "name": "Floyd"
+      },
+      {
+        "id": 84,
+        "name": "Gaines"
+      },
+      {
+        "id": 86,
+        "name": "Graza"
+      },
+      {
+        "id": 96,
+        "name": "Hale"
+      },
+      {
+        "id": 111,
+        "name": "Hockley"
+      },
+      {
+        "id": 140,
+        "name": "Lamb"
+      },
+      {
+        "id": 152,
+        "name": "Lubbock"
+      },
+      {
+        "id": 153,
+        "name": "Lynn"
+      },
+      {
+        "id": 185,
+        "name": "Parmer"
+      },
+      {
+        "id": 219,
+        "name": "Swisher"
+      },
+      {
+        "id": 223,
+        "name": "Terry"
+      },
+      {
+        "id": 251,
+        "name": "Yoakum"
+      }
+    ]
+  },
+  {
+    "district": "Odessa",
+    "counties": [
+      {
+        "id": 2,
+        "name": "Andrews"
+      },
+      {
+        "id": 52,
+        "name": "Crane"
+      },
+      {
+        "id": 69,
+        "name": "Ector"
+      },
+      {
+        "id": 151,
+        "name": "Loving"
+      },
+      {
+        "id": 156,
+        "name": "Martin"
+      },
+      {
+        "id": 165,
+        "name": "Midland"
+      },
+      {
+        "id": 186,
+        "name": "Pecos"
+      },
+      {
+        "id": 195,
+        "name": "Reeves"
+      },
+      {
+        "id": 222,
+        "name": "Terrell"
+      },
+      {
+        "id": 231,
+        "name": "Upton"
+      },
+      {
+        "id": 238,
+        "name": "Ward"
+      },
+      {
+        "id": 248,
+        "name": "Winkler"
+      }
+    ]
+  },
+  {
+    "district": "San Angelo",
+    "counties": [
+      {
+        "id": 41,
+        "name": "Coke"
+      },
+      {
+        "id": 48,
+        "name": "Concho"
+      },
+      {
+        "id": 53,
+        "name": "Crockett"
+      },
+      {
+        "id": 70,
+        "name": "Edwards"
+      },
+      {
+        "id": 88,
+        "name": "Glasscock"
+      },
+      {
+        "id": 119,
+        "name": "Irion"
+      },
+      {
+        "id": 134,
+        "name": "Kimble"
+      },
+      {
+        "id": 164,
+        "name": "Menard"
+      },
+      {
+        "id": 192,
+        "name": "Reagan"
+      },
+      {
+        "id": 193,
+        "name": "Real"
+      },
+      {
+        "id": 200,
+        "name": "Runnels"
+      },
+      {
+        "id": 207,
+        "name": "Schleicher"
+      },
+      {
+        "id": 216,
+        "name": "Sterling"
+      },
+      {
+        "id": 218,
+        "name": "Sutton"
+      },
+      {
+        "id": 226,
+        "name": "Tom Green"
+      }
+    ]
+  },
+  {
+    "district": "Abilene",
+    "counties": [
+      {
+        "id": 17,
+        "name": "Borden"
+      },
+      {
+        "id": 30,
+        "name": "Callahan"
+      },
+      {
+        "id": 77,
+        "name": "Fisher"
+      },
+      {
+        "id": 105,
+        "name": "Haskell"
+      },
+      {
+        "id": 115,
+        "name": "Howard"
+      },
+      {
+        "id": 128,
+        "name": "Jones"
+      },
+      {
+        "id": 132,
+        "name": "Kent"
+      },
+      {
+        "id": 168,
+        "name": "Mitchell"
+      },
+      {
+        "id": 177,
+        "name": "Nolan"
+      },
+      {
+        "id": 208,
+        "name": "Scurry"
+      },
+      {
+        "id": 209,
+        "name": "Shackelford"
+      },
+      {
+        "id": 217,
+        "name": "Stonewall"
+      },
+      {
+        "id": 221,
+        "name": "Taylor"
+      }
+    ]
+  },
+  {
+    "district": "Waco",
+    "counties": [
+      {
+        "id": 14,
+        "name": "Bell"
+      },
+      {
+        "id": 18,
+        "name": "Bosque"
+      },
+      {
+        "id": 50,
+        "name": "Coryell"
+      },
+      {
+        "id": 74,
+        "name": "Falls"
+      },
+      {
+        "id": 98,
+        "name": "Hamilton"
+      },
+      {
+        "id": 110,
+        "name": "Hill"
+      },
+      {
+        "id": 147,
+        "name": "Limestone"
+      },
+      {
+        "id": 161,
+        "name": "McLennan"
+      }
+    ]
+  },
+  {
+    "district": "Tyler",
+    "counties": [
+      {
+        "id": 1,
+        "name": "Anderson"
+      },
+      {
+        "id": 37,
+        "name": "Cherokee"
+      },
+      {
+        "id": 93,
+        "name": "Gregg"
+      },
+      {
+        "id": 108,
+        "name": "Henderson"
+      },
+      {
+        "id": 201,
+        "name": "Rusk"
+      },
+      {
+        "id": 212,
+        "name": "Smith"
+      },
+      {
+        "id": 234,
+        "name": "Van Zandt"
+      },
+      {
+        "id": 250,
+        "name": "Wood"
+      }
+    ]
+  },
+  {
+    "district": "Lufkin",
+    "counties": [
+      {
+        "id": 3,
+        "name": "Angelina"
+      },
+      {
+        "id": 114,
+        "name": "Houston"
+      },
+      {
+        "id": 174,
+        "name": "Nacogdoches"
+      },
+      {
+        "id": 187,
+        "name": "Polk"
+      },
+      {
+        "id": 202,
+        "name": "Sabine"
+      },
+      {
+        "id": 203,
+        "name": "San Augustine"
+      },
+      {
+        "id": 204,
+        "name": "San Jacinto"
+      },
+      {
+        "id": 210,
+        "name": "Shelby"
+      },
+      {
+        "id": 228,
+        "name": "Trinity"
+      }
+    ]
+  },
+  {
+    "district": "Houston",
+    "counties": [
+      {
+        "id": 20,
+        "name": "Brazoria"
+      },
+      {
+        "id": 80,
+        "name": "Fort Bend"
+      },
+      {
+        "id": 85,
+        "name": "Galveston"
+      },
+      {
+        "id": 102,
+        "name": "Harris"
+      },
+      {
+        "id": 170,
+        "name": "Montgomery"
+      },
+      {
+        "id": 237,
+        "name": "Waller"
+      }
+    ]
+  },
+  {
+    "district": "Yoakum",
+    "counties": [
+      {
+        "id": 8,
+        "name": "Austin"
+      },
+      {
+        "id": 29,
+        "name": "Calhoun"
+      },
+      {
+        "id": 45,
+        "name": "Colorado"
+      },
+      {
+        "id": 62,
+        "name": "DeWitt"
+      },
+      {
+        "id": 76,
+        "name": "Fayette"
+      },
+      {
+        "id": 90,
+        "name": "Gonzales"
+      },
+      {
+        "id": 121,
+        "name": "Jackson"
+      },
+      {
+        "id": 143,
+        "name": "Lavaca"
+      },
+      {
+        "id": 158,
+        "name": "Matagorda"
+      },
+      {
+        "id": 235,
+        "name": "Victoria"
+      },
+      {
+        "id": 241,
+        "name": "Wharton"
+      }
+    ]
+  },
+  {
+    "district": "Austin",
+    "counties": [
+      {
+        "id": 11,
+        "name": "Bastrop"
+      },
+      {
+        "id": 16,
+        "name": "Blanco"
+      },
+      {
+        "id": 27,
+        "name": "Burnett"
+      },
+      {
+        "id": 28,
+        "name": "Caldwell"
+      },
+      {
+        "id": 87,
+        "name": "Gillespie"
+      },
+      {
+        "id": 106,
+        "name": "Hays"
+      },
+      {
+        "id": 144,
+        "name": "Lee"
+      },
+      {
+        "id": 150,
+        "name": "Llano"
+      },
+      {
+        "id": 157,
+        "name": "Mason"
+      },
+      {
+        "id": 227,
+        "name": "Travis"
+      },
+      {
+        "id": 246,
+        "name": "Williamson"
+      }
+    ]
+  },
+  {
+    "district": "San Antonio",
+    "counties": [
+      {
+        "id": 7,
+        "name": "Atascosa"
+      },
+      {
+        "id": 10,
+        "name": "Bandera"
+      },
+      {
+        "id": 15,
+        "name": "Bexar"
+      },
+      {
+        "id": 46,
+        "name": "Comal"
+      },
+      {
+        "id": 83,
+        "name": "Frio"
+      },
+      {
+        "id": 95,
+        "name": "Guadalupe"
+      },
+      {
+        "id": 131,
+        "name": "Kendall"
+      },
+      {
+        "id": 133,
+        "name": "Kerr"
+      },
+      {
+        "id": 162,
+        "name": "McMullen"
+      },
+      {
+        "id": 163,
+        "name": "Medina"
+      },
+      {
+        "id": 232,
+        "name": "Uvalde"
+      },
+      {
+        "id": 247,
+        "name": "Wilson"
+      }
+    ]
+  },
+  {
+    "district": "Corpus Christi",
+    "counties": [
+      {
+        "id": 4,
+        "name": "Aransas"
+      },
+      {
+        "id": 13,
+        "name": "Bee"
+      },
+      {
+        "id": 89,
+        "name": "Goliad"
+      },
+      {
+        "id": 126,
+        "name": "Jim Wells"
+      },
+      {
+        "id": 129,
+        "name": "Karnes"
+      },
+      {
+        "id": 137,
+        "name": "Kleberg"
+      },
+      {
+        "id": 149,
+        "name": "Live Oak"
+      },
+      {
+        "id": 178,
+        "name": "Nueces"
+      },
+      {
+        "id": 196,
+        "name": "Refugio"
+      },
+      {
+        "id": 205,
+        "name": "San Patricio"
+      }
+    ]
+  },
+  {
+    "district": "Bryan",
+    "counties": [
+      {
+        "id": 21,
+        "name": "Brazos"
+      },
+      {
+        "id": 26,
+        "name": "Burleson"
+      },
+      {
+        "id": 82,
+        "name": "Freestone"
+      },
+      {
+        "id": 94,
+        "name": "Grimes"
+      },
+      {
+        "id": 145,
+        "name": "Leon"
+      },
+      {
+        "id": 154,
+        "name": "Madison"
+      },
+      {
+        "id": 166,
+        "name": "Milam"
+      },
+      {
+        "id": 198,
+        "name": "Robertson"
+      },
+      {
+        "id": 236,
+        "name": "Walker"
+      },
+      {
+        "id": 239,
+        "name": "Washington"
+      }
+    ]
+  },
+  {
+    "district": "Dallas",
+    "counties": [
+      {
+        "id": 43,
+        "name": "Collin"
+      },
+      {
+        "id": 57,
+        "name": "Dallas"
+      },
+      {
+        "id": 61,
+        "name": "Denton"
+      },
+      {
+        "id": 71,
+        "name": "Ellis"
+      },
+      {
+        "id": 130,
+        "name": "Kaufman"
+      },
+      {
+        "id": 175,
+        "name": "Navarro"
+      },
+      {
+        "id": 199,
+        "name": "Rockwall"
+      }
+    ]
+  },
+  {
+    "district": "Atlanta",
+    "counties": [
+      {
+        "id": 19,
+        "name": "Bowie"
+      },
+      {
+        "id": 32,
+        "name": "Camp"
+      },
+      {
+        "id": 34,
+        "name": "Cass"
+      },
+      {
+        "id": 103,
+        "name": "Harrison"
+      },
+      {
+        "id": 155,
+        "name": "Marion"
+      },
+      {
+        "id": 172,
+        "name": "Morris"
+      },
+      {
+        "id": 183,
+        "name": "Panola"
+      },
+      {
+        "id": 225,
+        "name": "Titus"
+      },
+      {
+        "id": 230,
+        "name": "Upshur"
+      }
+    ]
+  },
+  {
+    "district": "Beaumont",
+    "counties": [
+      {
+        "id": 36,
+        "name": "Chambers"
+      },
+      {
+        "id": 101,
+        "name": "Hardin"
+      },
+      {
+        "id": 122,
+        "name": "Jasper"
+      },
+      {
+        "id": 124,
+        "name": "Jefferson"
+      },
+      {
+        "id": 146,
+        "name": "Liberty"
+      },
+      {
+        "id": 176,
+        "name": "Newton"
+      },
+      {
+        "id": 181,
+        "name": "Orange"
+      },
+      {
+        "id": 229,
+        "name": "Tyler"
+      }
+    ]
+  },
+  {
+    "district": "Pharr",
+    "counties": [
+      {
+        "id": 24,
+        "name": "Brooks"
+      },
+      {
+        "id": 31,
+        "name": "Cameron"
+      },
+      {
+        "id": 109,
+        "name": "Hildago"
+      },
+      {
+        "id": 125,
+        "name": "Jim Hogg"
+      },
+      {
+        "id": 66,
+        "name": "Kenedy"
+      },
+      {
+        "id": 214,
+        "name": "Starr"
+      },
+      {
+        "id": 245,
+        "name": "Willacy"
+      },
+      {
+        "id": 253,
+        "name": "Zapata"
+      }
+    ]
+  },
+  {
+    "district": "Laredo",
+    "counties": [
+      {
+        "id": 64,
+        "name": "Dimmit"
+      },
+      {
+        "id": 67,
+        "name": "Duval"
+      },
+      {
+        "id": 136,
+        "name": "Kinney"
+      },
+      {
+        "id": 142,
+        "name": "La Salle"
+      },
+      {
+        "id": 159,
+        "name": "Maverick"
+      },
+      {
+        "id": 233,
+        "name": "Val Verde"
+      },
+      {
+        "id": 240,
+        "name": "Webb"
+      },
+      {
+        "id": 254,
+        "name": "Zavala"
+      }
+    ]
+  },
+  {
+    "district": "Brownwood",
+    "counties": [
+      {
+        "id": 25,
+        "name": "Brown"
+      },
+      {
+        "id": 42,
+        "name": "Coleman"
+      },
+      {
+        "id": 47,
+        "name": "Comanche"
+      },
+      {
+        "id": 68,
+        "name": "Eastland"
+      },
+      {
+        "id": 141,
+        "name": "Lampasas"
+      },
+      {
+        "id": 160,
+        "name": "McCulloch"
+      },
+      {
+        "id": 167,
+        "name": "Mills"
+      },
+      {
+        "id": 206,
+        "name": "San Saba"
+      },
+      {
+        "id": 215,
+        "name": "Stephens"
+      }
+    ]
+  },
+  {
+    "district": "El Paso",
+    "counties": [
+      {
+        "id": 22,
+        "name": "Brewster"
+      },
+      {
+        "id": 55,
+        "name": "Culberson"
+      },
+      {
+        "id": 72,
+        "name": "El Paso"
+      },
+      {
+        "id": 116,
+        "name": "Hudspeth"
+      },
+      {
+        "id": 123,
+        "name": "Jeff Davis"
+      },
+      {
+        "id": 189,
+        "name": "Presidio"
+      }
+    ]
+  },
+  {
+    "district": "Childress",
+    "counties": [
+      {
+        "id": 23,
+        "name": "Briscoe"
+      },
+      {
+        "id": 38,
+        "name": "Childress"
+      },
+      {
+        "id": 44,
+        "name": "Collingsworth"
+      },
+      {
+        "id": 51,
+        "name": "Cottle"
+      },
+      {
+        "id": 63,
+        "name": "Dickens"
+      },
+      {
+        "id": 65,
+        "name": "Donley"
+      },
+      {
+        "id": 79,
+        "name": "Foard"
+      },
+      {
+        "id": 97,
+        "name": "Hall"
+      },
+      {
+        "id": 100,
+        "name": "Hardeman"
+      },
+      {
+        "id": 135,
+        "name": "King"
+      },
+      {
+        "id": 138,
+        "name": "Knox"
+      },
+      {
+        "id": 173,
+        "name": "Motley"
+      },
+      {
+        "id": 242,
+        "name": "Wheeler"
+      }
+    ]
+  }
+]

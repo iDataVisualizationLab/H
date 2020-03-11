@@ -50,7 +50,8 @@ function init() {
 
     d3.select('#filterContent').on('removeFilter', function (d) {
         removeFilter(d3.event.detail, false);
-    })
+    });
+
     Foundation.reInit($('#projects'));
     readConf("Data_details").then((data) => {
         reformat(data);
@@ -71,6 +72,12 @@ function init() {
             mediaQuery = data
         });
     }).then(function () {
+        return readConf("district_counties").then((data) => {
+            district_counties = data;
+            // dp.allDistrics = district_counties.map(d => d.district).flat();
+            // dp.allCounties = district_counties.map(d => d.counties.map(e => e.name.trim())).flat();
+        });
+    }).then(function () {
             return readLib("TxDOT_Districts", 'json').then((data) =>
                 us_dis = data, us_dis);
         }
@@ -87,6 +94,8 @@ function init() {
                     return {len: d.length, val: d[0][v.id], elem: countElements(d)}
                 })
                 .entries(dp.filter(d => d[v.id] !== null));
+
+            console.log(data);
 
             if (v.id === 'DataType') {
                 data = sortProject(data);
@@ -117,7 +126,9 @@ function init() {
 }
 
 function selectize_init(selection, data, type) {
-    selection.selectAll('option').data(data)
+    console.log(selection);
+    selection.selectAll('option')
+        .data(data)
         .enter().append('option')
         .text(d => {
             return d.key;
@@ -195,16 +206,30 @@ function UpdateSchema() {
     });
 }
 
+function updateCounties() {
+
+}
 
 function addFilter(d, collapseMode) {
     if (collapseMode) {
         _.remove(filters, e => e.type === d.type);
     }
+    console.log(d.type);
+
     filters.push(d);
     updateFilterChip(d3.select('#filterContent'), filters);
     filterData(filters);
     Updatemap();
     redrawMap();
+
+    // if (d.type === "District") {
+    //     d3.select('#County')
+    //         .select('.selectize-control')
+    //         .select('.selectize-dropdown')
+    //         .select('.selectize-dropdown-content')
+    //         .selectAll('.option')
+    //         .each(function (d) {console.log(d3.select(this))});
+    // }
 }
 
 function removeFilter(d, fromSchema) {

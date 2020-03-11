@@ -1,5 +1,5 @@
 // data variable
-let basearr=[],basedata={},dp,mediaQuery,
+let basearr=[],basedata={},dp,district_counties,mediaQuery,
     COL_LAT = 'lat',
     COL_LONG = 'lng',
     filter={};

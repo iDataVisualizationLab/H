@@ -76,38 +76,38 @@ function plotMaps(dp) {
         return wells;
     }
 
-    gm.map.on('click', function (evt) {
-        console.log(evt.coordinate);
-        utils.getNearest(evt.coordinate).then(function (coord_street) {
-            var last_point = points[points.length - 1];
-            var points_length = points.push(coord_street);
-
-            utils.createFeature(coord_street);
-
-            if (points_length < 2) {
-                console.log('Click to add another point');
-                return;
-            }
-
-            //get the route
-            var point1 = last_point.join();
-            var point2 = coord_street.join();
-
-            console.log(url_osrm_route + point1 + ';' + point2);
-
-            fetch(url_osrm_route + point1 + ';' + point2).then(function (r) {
-                return r.json();
-            }).then(function (json) {
-                if (json.code !== 'Ok') {
-                    console.log('No route found.');
-                    return;
-                }
-                console.log('Route added');
-                //points.length = 0;
-                utils.createRoute(json.routes[0].geometry);
-            });
-        });
-    });
+    // gm.map.on('click', function (evt) {
+    //     console.log(evt.coordinate);
+    //     utils.getNearest(evt.coordinate).then(function (coord_street) {
+    //         var last_point = points[points.length - 1];
+    //         var points_length = points.push(coord_street);
+    //
+    //         utils.createFeature(coord_street);
+    //
+    //         if (points_length < 2) {
+    //             console.log('Click to add another point');
+    //             return;
+    //         }
+    //
+    //         //get the route
+    //         var point1 = last_point.join();
+    //         var point2 = coord_street.join();
+    //
+    //         console.log(url_osrm_route + point1 + ';' + point2);
+    //
+    //         fetch(url_osrm_route + point1 + ';' + point2).then(function (r) {
+    //             return r.json();
+    //         }).then(function (json) {
+    //             if (json.code !== 'Ok') {
+    //                 console.log('No route found.');
+    //                 return;
+    //             }
+    //             console.log('Route added');
+    //             //points.length = 0;
+    //             utils.createRoute(json.routes[0].geometry);
+    //         });
+    //     });
+    // });
 
 }
 
@@ -257,10 +257,38 @@ function plotRoad() {
         gm.map.removeLayer(gm.map.roadLayer);
     }
 
-    dp.filter(d => (d["GPSStart"] !== null) && (d["GPSEnd"] !== null)).forEach((d) => {
+    dp.filter(d => d.Route !== undefined).forEach((d) => {
+        let polyline = d.Route;
+
+        let route = new ol.format.Polyline({
+            factor: 1e5
+        }).readGeometry(polyline, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857'
+        });
+        let feature = new ol.Feature({
+            type: 'route',
+            geometry: route
+        });
+        feature.setStyle(styles.route);
+
+        gm.roadData.push(feature);
+    });
+
+    gm.map.roadLayer = new ol.layer.Vector({
+        source: new ol.source.Vector({features: gm.roadData}),
+        style: gm.json2style({
+            'stroke-color': [255, 0, 0, 0.8],
+            'stroke-width': 10,
+        })
+    });
+    gm.map.addLayer(gm.map.roadLayer);
+
+    dp.filter(d => (d["GPSStart"] !== null) && (d["GPSEnd"] !== null) && d["Route"] === undefined).forEach((d) => {
 
         let point1 = d["GPSStart"].lng + "," + d["GPSStart"].lat;
         let point2 = d["GPSEnd"].lng + "," + d["GPSEnd"].lat;
+
 
         fetch(url_osrm_route + point1 + ';' + point2).then(function (r) {
             return r.json();
@@ -274,24 +302,7 @@ function plotRoad() {
             }
             console.log('Route added');
             //points.length = 0;
-            let polyline = json.routes[0].geometry;
 
-            console.log(polyline);
-            console.log();
-
-            let route = new ol.format.Polyline({
-                factor: 1e5
-            }).readGeometry(polyline, {
-                dataProjection: 'EPSG:4326',
-                featureProjection: 'EPSG:3857'
-            });
-            let feature = new ol.Feature({
-                type: 'route',
-                geometry: route
-            });
-            feature.setStyle(styles.route);
-
-            gm.roadData.push(feature);
         }).then(() => {
             gm.map.roadLayer = new ol.layer.Vector({
                 source: new ol.source.Vector({features: gm.roadData}),
@@ -304,12 +315,7 @@ function plotRoad() {
         });
     });
 
-    console.log(gm.roadData);
 
-    // then(() => {
-
-
-    // });
 }
 
 
