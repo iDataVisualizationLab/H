@@ -95,8 +95,6 @@ function init() {
                 })
                 .entries(dp.filter(d => d[v.id] !== null));
 
-            console.log(data);
-
             if (v.id === 'DataType') {
                 data = sortProject(data);
             }
@@ -126,7 +124,6 @@ function init() {
 }
 
 function selectize_init(selection, data, type) {
-    console.log(selection, data);
     selection.selectAll('option')
         .data(data)
         .enter().append('option')
@@ -159,6 +156,7 @@ function selectize_init(selection, data, type) {
 
 function onItemAdd() {
     return function () {
+        console.log(arguments);
         var newSelected = arguments[0];
         var type = arguments[1][0].parentNode.parentNode.parentNode.id;
         addFilter({type: type, text: newSelected, id: newSelected}, false);
@@ -206,15 +204,11 @@ function UpdateSchema() {
     });
 }
 
-function updateCounties() {
-
-}
-
 function addFilter(d, collapseMode) {
     if (collapseMode) {
         _.remove(filters, e => e.type === d.type);
     }
-    console.log(d.type);
+    console.log("add ", d);
 
     filters.push(d);
     updateFilterChip(d3.select('#filterContent'), filters);
@@ -222,27 +216,82 @@ function addFilter(d, collapseMode) {
     Updatemap();
     redrawMap();
 
-    if (d.type === "District") {
-        console.log("hi");
-        $("#County").selectize()[0].selectize.destroy();
+    updateFields(d.type);
+}
 
-        let data = dp.allCounties.map(function (d) {
-            return {'key': d}
-        });
+function updateFields(type, action) {
+    if (filters.length === 0) {
+        updateOptions("District", dp.allDistrics);
+        updateOptions("County", dp.allCounties);
+        updateOptions("Highway", dp.allHighway);
+        updateOptions("PavementType", dp.allPavementType);
 
-        selectize_init(d3.select('#County').select('.schema-field-tag'), data);
+        return;
     }
+
+    switch (type) {
+        case "District":
+            updateOptions("County", dp.allCounties);
+            updateOptions("Highway", dp.allHighway);
+            updateOptions("PavementType", dp.allPavementType);
+            if (action === "remove") {
+
+            }
+            break;
+        case "County":
+            updateOptions("District", dp.allDistrics);
+            updateOptions("Highway", dp.allHighway);
+            updateOptions("PavementType", dp.allPavementType);
+            break;
+        case "Highway":
+            updateOptions("District", dp.allDistrics);
+            updateOptions("County", dp.allCounties);
+            updateOptions("PavementType", dp.allPavementType);
+            break;
+        case "PavementType":
+            updateOptions("District", dp.allDistrics);
+            updateOptions("County", dp.allCounties);
+            updateOptions("Highway", dp.allHighway);
+            break;
+        default:
+            break;
+    }
+}
+
+function updateOptions(typeField, dpData) {
+
+
+    console.log("update: ", typeField);
+    let selectizeCounty = $(d3.select(`#${typeField}`).select('.schema-field-tag').node())[0].selectize;
+
+    selectizeCounty.clearOptions();
+
+    let data = dpData.map(function (d, i) {
+        return {'text': d, 'value': d}
+    });
+
+    console.log(data);
+
+    selectizeCounty.addOption(data);
+
+    selectizeCounty.refreshOptions(false);
 }
 
 function removeFilter(d, fromSchema) {
     if (!fromSchema) {
         $("#" + d.type + " .selectized")[0].selectize.removeItem(d.text);
     }
+
+
     _.remove(filters, e => e.id === d.id);
     updateFilterChip(d3.select('#filterContent'), filters);
     filterData(filters);
     Updatemap();
     redrawMap();
+
+    console.log("remove", $(d.type).attr("id"));
+
+    updateFields($(d.type).attr('id'));
 }
 
 function filterTrigger(ob, state) {

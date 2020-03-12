@@ -293,9 +293,6 @@ function plotRoad() {
         fetch(url_osrm_route + point1 + ';' + point2).then(function (r) {
             return r.json();
         }).then(function (json) {
-            console.log(d);
-            console.log(point1, point2);
-            console.log(json);
             if (json.code !== 'Ok') {
                 console.log('No route found.');
                 return;

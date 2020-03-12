@@ -9,6 +9,96 @@
       "2-I820-1_PICS.pdf"
     ]
   },
+  "3-I35-1": {
+    "Pictures": [
+      "3-I35-1_PICS.pdf"
+    ]
+  },
+  "3-US287-1": {
+    "Pictures": [
+      "3-US287-1_PICS.pdf"
+    ]
+  },
+  "3-US287-2": {
+    "Pictures": [
+      "3-US287-2_PICS.pdf"
+    ]
+  },
+  "9-I35-1": {
+    "Pictures": [
+      "9-I35-1_PICS.pdf"
+    ]
+  },
+  "9-I35-2": {
+    "Pictures": [
+      "9-I35-2_PICS.pdf"
+    ]
+  },
+  "12-I45-1": {
+    "Pictures": [
+      "12-I45-1_PICS.pdf"
+    ]
+  },
+  "12-US290-1": {
+    "Pictures": [
+      "12-US290-1_PICS.pdf"
+    ]
+  },
+  "12-US290-2": {
+    "Pictures": [
+      "12-US290-2_PICS.pdf"
+    ]
+  },
+  "12-US290-3": {
+    "Pictures": [
+      "12-US290-3_PICS.pdf"
+    ]
+  },
+  "18-I30-1": {
+    "Pictures": [
+      "18-I30-1_PICS.pdf"
+    ]
+  },
+  "19-US59-1": {
+    "Pictures": [
+      "19-US59-1_PICS.pdf"
+    ]
+  },
+  "19-US59-2": {
+    "Pictures": [
+      "19-US59-2_PICS.pdf"
+    ]
+  },
+  "20-I10-1": {
+    "Pictures": [
+      "20-I10-1_PICS.pdf"
+    ]
+  },
+  "24-I10-1": {
+    "Pictures": [
+      "24-I10-1_PICS.pdf"
+    ]
+  },
+  "24-I10-2": {
+    "Pictures": [
+      "24-I10-2_PICS.pdf"
+    ]
+  },
+  "24-I10-4": {
+    "Pictures": [
+      "24-I10-4_PICS.pdf"
+    ]
+  },
+  "25-I40-1": {
+    "Pictures": [
+      "25-I40-1_PICS.pdf"
+    ]
+  },
+  "25-I40-2": {
+    "Pictures": [
+      "25-I40-2_PICS.pdf"
+    ]
+  },
   "HOU-IH45_0500-04-056": {
     "Plans": [
       "HOU-IH45_0500-04-056-P.pdf"
@@ -83,11 +173,11 @@
     "Load Trans Eff": [
       "4I401LTE062410.xlsx"
     ],
-    "Pictures": [
-      "4I401PD062410.pdf"
-    ],
     "Deflections": [
       "4I401GN062410.xlsx"
+    ],
+    "Pictures": [
+      "4-I40-1_PICS.pdf"
     ]
   },
   "AUS[PCP]": {
@@ -302,6 +392,9 @@
     ],
     "Deflections": [
       "24I103GN092211.xlsx"
+    ],
+    "Pictures": [
+      "24-I10-3_PICS.pdf"
     ]
   },
   "BMT-US90_ 0028-13-014": {

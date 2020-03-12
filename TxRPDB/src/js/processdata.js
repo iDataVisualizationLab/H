@@ -1,6 +1,9 @@
 function dataProcessor(data) {
     data.allCounties = _.uniq(_.flatten(data.filter(d => d["County"] !== null).map(d => d["County"])));
     data.allDistrics = _.uniq(_.flatten(data.filter(d => d["District"] !== null).map(d => d["District"])));
+    data.allHighway = _.uniq(_.flatten(data.filter(d => d["Highway"] !== null).map(d => d["Highway"])));
+    // data.allDrainage = _.uniq(_.flatten(data.filter(d => d["District"] !== null).map(d => d["PavementType"])));
+    data.allPavementType = _.uniq(_.flatten(data.filter(d => d["PavementType"] !== null).map(d => d["PavementType"])));
     return data;
 }
 
@@ -9,10 +12,10 @@ function seperateStr(str) {
 }
 
 function filterData(filters) {
-    dp = basearr;
+    let tempDp = basearr;
     d3.nest().key(d => d.type).entries(filters)
         .forEach(ff => {
-            dp = dp.filter(e => {
+            tempDp = tempDp.filter(e => {
                     var type = ff.values[0].type;
                     if (type === 'ConstYear') {
                         if (ff.values[0].from !== undefined) {
@@ -25,7 +28,8 @@ function filterData(filters) {
                 }
             )
         });
-    dp = new dataProcessor(dp);
+
+    dp = new dataProcessor(tempDp);
 }
 
 function reformat(data) {
