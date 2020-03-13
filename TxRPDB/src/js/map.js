@@ -284,7 +284,7 @@ function plotRoad() {
     });
     gm.map.addLayer(gm.map.roadLayer);
 
-    dp.filter(d => (d["GPSStart"] !== null) && (d["GPSEnd"] !== null) && d["Route"] === undefined).forEach((d) => {
+    dp.filter(d => (d["GPSStart"] !== null) && (d["GPSEnd"] !== null) && (d["Route"] === undefined || d["Route"] === null)).forEach((d) => {
 
         let point1 = d["GPSStart"].lng + "," + d["GPSStart"].lat;
         let point2 = d["GPSEnd"].lng + "," + d["GPSEnd"].lat;
@@ -298,9 +298,25 @@ function plotRoad() {
                 return;
             }
             console.log('Route added');
+            console.log(d);
+            console.log(json);
             //points.length = 0;
+            let polyline = json.routes[0].geometry;
 
-        }).then(() => {
+            let route = new ol.format.Polyline({
+                factor: 1e5
+            }).readGeometry(polyline, {
+                dataProjection: 'EPSG:4326',
+                featureProjection: 'EPSG:3857'
+            });
+            let feature = new ol.Feature({
+                type: 'route',
+                geometry: route
+            });
+            feature.setStyle(styles.route);
+
+            gm.roadData.push(feature);
+        }).then((polyline) => {
             gm.map.roadLayer = new ol.layer.Vector({
                 source: new ol.source.Vector({features: gm.roadData}),
                 style: gm.json2style({
