@@ -200,8 +200,8 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
         enters.append("div")
             .text((d, i) => features.filter((f, fi) => selectedFeatures[fi])[i])
             .style("color", "black")
-            .style("font-size", "15px")
-            .style("transform", 'translate(-65px, 75px) rotate(270deg)');
+            .style("font-size", "12px")
+            .style("transform", 'translate(-65px, 85px) rotate(270deg)');
     }
 
     enters.append("div")
