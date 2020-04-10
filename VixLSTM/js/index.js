@@ -23,8 +23,8 @@ function updateInputs() {
     predictedVariable = "Unemployment rate";
     // loadModelFromKeras('unemployment_48months_ts12_L8L8D8D4_i200_2');
     // loadModelFromKeras('unemployment_48months_ts12_L8L8D8D4_i200');
-    loadModelFromKeras('unemployment_24months_ts12_L8L8D8D4_i450');
-    // loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900');
+    // loadModelFromKeras('unemployment_24months_ts12_L8L8D8D4_i450');
+    loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900');
     // loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900_2');
     // loadModelFromKeras('HPCC_ts20_L8L8D8D4_i312');
     // loadModelFromKeras('RUL_ts50_L8L8D8D4_i100_f10');
@@ -94,21 +94,6 @@ function processData(X_trainR, y_trainR, X_testR, y_testR, resolve) {
 //TODO: Since we load the default models => this might not be needed => but there are few dataset specific information that we need to save/load before by passing this. So check again.
 async function processInputs(sFs) {
     return new Promise(resolve => {
-        // d3.json("data/train_FD001_100x50.json").then(X_trainR => {
-        //     d3.json("data/train_RUL_FD001_100x50.json").then(y_trainR => {
-        //         d3.json("data/test_FD001_100x50.json").then(X_testR => {
-        //             d3.json("data/test_RUL_FD001_100x50.json").then(y_testR => {
-        //                 features = [2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 17, 20, 21].map(ss => "sensor" + ss);
-        //                 predictedVariable = "RUL";
-        //                 dataItemName = "Engines";
-        // d3.json("data/newData/" + target_variable + "_target_X_train_HPCC_" + timeStep + ".json").then(X_trainR => {
-        //     d3.json("data/newData/" + target_variable + "_target_y_train_HPCC_" + timeStep + ".json").then(y_trainR => {
-        //         d3.json("data/newData/" + target_variable + "_target_X_test_HPCC_" + timeStep + ".json").then(X_testR => {
-        //             d3.json("data/newData/" + target_variable + "_target_y_test_HPCC_" + timeStep + ".json").then(y_testR => {
-        // d3.json("data/newData/X_train_stock_ts4_fri.json").then(X_trainR => {
-        //     d3.json("data/newData/y_train_stock_ts4_fri.json").then(y_trainR => {
-        //         d3.json("data/newData/X_test_stock_ts4_fri.json").then(X_testR => {
-        //             d3.json("data/newData/y_test_stock_ts4_fri.json").then(y_testR => {
         d3.json("data/newData/X_train_pollution_ts23_i300.json").then(X_trainR => {
             d3.json("data/newData/y_train_pollution_ts23_i300.json").then(y_trainR => {
                 d3.json("data/newData/X_test_pollution_ts23_i300.json").then(X_testR => {
@@ -548,6 +533,210 @@ $('#mae-range').on('input', function () {
     console.log('update done');
 });
 
+function changeShapValues(state) {
+    let stateIdList = [];
+    if (state !== 'all') {
+        stateIdList = [];
+        trainIdState.forEach((s, idx) => {
+            if (s === state) {
+                stateIdList.push(idx);
+            }
+        });
+    } else {
+        stateIdList = Array.from(Array(450).keys());
+    }
+
+
+    //Hard code here
+    let idx = 0;
+
+    for (let layer in shapValuesMap) {
+        let newShapValues = [];
+        let layerShapValues = shapValuesMap[layer];
+        layerShapValues.forEach(function (d, idx) {
+            if (stateIdList.includes(idx)) {
+                newShapValues.push(d);
+            }
+        });
+        console.log(newShapValues);
+        let selector = "";
+        if (layer.includes('input')) {
+            selector =  'inputDiv';
+        } else {
+            selector = `layer${idx}`;
+            idx++;
+            if (idx === 2) {
+                idx = 3;
+            }
+        }
+        updateAreaChart(newShapValues, layer.includes('input'), selector);
+    }
+}
+
+function updateAreaChart(shapValues, isInputLayer, selector) {
+    let noOfItems = shapValues.length;
+    let noOfSteps = shapValues[0].length;
+    let noOfFeatures = shapValues[0][0].length;
+
+    //Generate steps
+    let x = Array.from(Array(noOfSteps), (x, i) => i);
+    //Generate items
+    let y = Array.from(Array(noOfItems), (x, i) => i).reverse();//reverse since we sort from lower engine number to higher engine number
+
+    // let flattenedZ = shapValues ? shapValues.flat().flat() : [1];
+    // let minShapValue = d3.min(flattenedZ);
+    // let maxShapValue = d3.max(flattenedZ);
+
+    // let maxBound = d3.max([Math.abs(minShapValue), Math.abs(maxShapValue)]);
+
+    // minShapValue = -maxBound;
+    // maxShapValue = maxBound;
+
+    let minPosAreaShapValue = 0, maxPosAreaShapValue = 0;
+    let minNegAreaShapValue = 0, maxNegAreaShapValue = 0;
+
+    let areaChartList = [];
+
+    for (let featureIdx = 0; featureIdx < noOfFeatures; featureIdx++) {
+        // let z = [];
+        let shap = [];
+        let sumPositiveShap = [];
+        let sumNegativeShap = [];
+        for (let itemIdx = noOfItems - 1; itemIdx >= 0; itemIdx--) {//Reverse order of items from big (top) to small (bottom).
+            // let rowZ = [];
+            let rowShap = [];
+            for (let stepIdx = 0; stepIdx < noOfSteps; stepIdx++) {
+                // rowZ.push(data[itemIdx][stepIdx][featureIdx]);
+                rowShap.push(shapValues ? shapValues[itemIdx][stepIdx][featureIdx] : 0);
+            }
+            // z.push(rowZ);
+            shap.push(rowShap);
+        }
+
+        for (let i = 0; i < shap[0].length; i++) {
+            let positive = 0;
+            let negative = 0;
+            let sum = 0;
+            shap.forEach(instance => {
+                // console.log(instance[i]);
+                if (instance[i] > 0) {
+                    positive += instance[i];
+                } else {
+                    negative += Math.abs(instance[i]);
+                }
+                sum += instance[i];
+            });
+            sumPositiveShap.push(positive);
+            sumNegativeShap.push(negative);
+        }
+
+        // if (!mapObjects[selector + featureIdx]) {
+        //Draw the feature.
+        // let hmSettings = {
+        //     noSvg: true,
+        //     showAxes: false,
+        //     paddingLeft: 0,
+        //     paddingRight: 0,
+        //     paddingTop: 0,
+        //     paddingBottom: 0,
+        //     borderWidth: 0,
+        //     width: 100,
+        //     height: heatmapH,
+        //     minInputValue: isInputLayer ? minDataVal : -1,
+        //     maxInputValue: isInputLayer ? maxDataVal : 1,
+        //     minShapValue: minShapValue,
+        //     maxShapValue: maxShapValue,
+        //     isInputLayer: isInputLayer,
+        //     haveBorder: true,
+        //     reverseY: true
+        // };
+
+        let areaSettings = {
+            noSvg: false,
+            showAxes: false,
+            paddingLeft: 0,
+            paddingRight: 0,
+            paddingTop: 0,
+            paddingBottom: 0,
+            borderWidth: 0,
+            width: 100,
+            height: 25,
+            isInputLayer: isInputLayer,
+        };
+
+        let maxPos = d3.max(sumPositiveShap);
+        let minPos = d3.min(sumPositiveShap);
+        let maxNeg = d3.max(sumNegativeShap);
+        let minNeg = d3.min(sumNegativeShap);
+
+        if (minPosAreaShapValue > minPos) {
+            minPosAreaShapValue = minPos
+        }
+        if (maxPosAreaShapValue < maxPos) {
+            maxPosAreaShapValue = maxPos
+        }
+        if (minNegAreaShapValue > minNeg) {
+            minNegAreaShapValue = minNeg
+        }
+        if (maxNegAreaShapValue < maxNeg) {
+            maxNegAreaShapValue = maxNeg
+        }
+
+        // let hm = null;
+
+        // if (neuronShowingHeatmap) {
+        //     hm = new HeatMap(document.getElementById(selector + featureIdx), {
+        //         x: x,
+        //         y: y,
+        //         z: z,
+        //         shap: shap,
+        //         isOutlier: isOutlierGlobal
+        //     }, hmSettings);
+        // } else {
+        //     hm = new LstmLineChart(document.getElementById(selector + featureIdx), {
+        //         x: x,
+        //         y: y,
+        //         z: z,
+        //         shap: shap,
+        //         isOutlier: isOutlierGlobal
+        //     }, hmSettings);
+        // }
+
+        areaChartList.push({
+            'selector': selector + featureIdx,
+            'container': document.getElementById(selector + featureIdx),
+            'dataPositive': {x: x, y: sumPositiveShap},
+            'dataNegative': {x: x, y: sumNegativeShap},
+            'settings': areaSettings
+        });
+
+        // hm.plot();
+        // mapObjects[selector + featureIdx] = hm;
+        // } else {
+        //     let hm = mapObjects[selector + featureIdx];
+        //     hm.update({x: x, y: y, z: z, shap: shap});
+        // }
+    }
+    areaChartList.forEach(function (item) {
+        console.log(item.selector)
+        let topArea = mapAreaObjects[item.selector].positive;
+
+        let positiveAreaSetting = item.settings;
+        positiveAreaSetting.minShapValue = minPosAreaShapValue;
+        positiveAreaSetting.maxShapValue = maxPosAreaShapValue;
+        positiveAreaSetting.direction = 'up';
+        topArea.update(item.dataPositive, positiveAreaSetting);
+
+        let botArea = mapAreaObjects[item.selector].negative;
+        let negativeAreaSetting = item.settings;
+        negativeAreaSetting.minShapValue = minNegAreaShapValue;
+        negativeAreaSetting.maxShapValue = maxNegAreaShapValue;
+        positiveAreaSetting.direction = 'down';
+        botArea.update(item.dataNegative, negativeAreaSetting);
+
+        // rearrangeCharts(item.container, [1, 0, 2]);
+    });
+}
 
 
 

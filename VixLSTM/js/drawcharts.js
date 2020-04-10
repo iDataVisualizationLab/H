@@ -219,7 +219,7 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
         })
         .on("mouseout", (d) => {
             undoShowRelatedEntities(enters, timeStamp, d);
-        })
+        });
 
     //Generate data.
     let averageLineArr = [];
@@ -379,18 +379,6 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
 
         rearrangeCharts(item.container, [1, 0, 2]);
     });
-
-    // // findRelevantHiddenStates(0, data);
-    // // if (container.indexOf('layer') > -1) {
-    // hiddenStates[container] = data;
-    // // }
-    // neuronData.mse[container] = {};
-    // neuronData.mse[container]['unsortedData'] = [];
-    // neuronData.correlation[container] = {};
-    // neuronData.correlation[container]['unsortedData'] = averageLineArr;
-    //
-    // sortNeuronByMse(container, averageLineArr);
-    // sortNeuronByCorrelation(container, averageLineArr);
 }
 
 let globalError = {};
@@ -825,7 +813,10 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
 
     lineChartSettings.isLayer = isLayer;
 
-    console.log(container);
+    lineChartSettings.drawSvg = false;
+    if (container === 'testContainer') {
+        lineChartSettings.drawSvg = true;
+    }
 
     let newXDelta = 2 / 22;
     let newX = [];
@@ -928,7 +919,26 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                 });
             }
 
-            lc.plot();
+            lc.plot().then(() => {
+                d3.select('#test-data-point')
+                    .selectAll('.test-point')
+                    .on('mouseover', function (d) {
+                        if (!blockTip){
+                            showTip(`${testIdState[d.index]}`);
+                        }
+                    })
+                    .on('mouseout', function (d) {
+                        if (!blockTip) {
+                            hideTip();
+                        }
+                    })
+                    .on('click', function (d) {
+                        if (!blockTip) {
+                            changeShapValues(testIdState[d.index]);
+                            blockTip = true;
+                        }
+                    })
+            });
             mapObjects[selector + featureIdx] = lc;
         } else {
             let lc = mapObjects[selector + featureIdx];
@@ -956,17 +966,6 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
 
         rearrangeCharts(item.container, [1, 0, 2]);
     });
-
-
-    // if (normalizer) {
-    //     neuronData.mse[container] = {};
-    //     neuronData.mse[container]['unsortedData'] = [];
-    //     neuronData.correlation[container] = {};
-    //     neuronData.correlation[container]['unsortedData'] = averageLineArr;
-    //
-    //     sortNeuronByMse(container, averageLineArr);
-    //     sortNeuronByCorrelation(container, averageLineArr);
-    // }
 }
 
 function sortTwoArrayByIndex(x, y) {

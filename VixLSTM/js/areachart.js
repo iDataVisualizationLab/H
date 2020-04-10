@@ -12,6 +12,7 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
         minShapValue: areaChartSettings.minShapValue,
         maxShapValue: areaChartSettings.maxShapValue
     };
+
     //Copy the settings if there are.
     if (areaChartSettings !== null) {
         for (let prop in areaChartSettings) {
@@ -25,6 +26,7 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
     if (this.settings.showAxes || this.settings.showColorBar || this.settings.title) {
         this.settings.noSvg = false;
     }
+
     //Find width and height
     if (!this.settings.width) {
         this.settings.width = htmlContainer.getBoundingClientRect().width;
@@ -32,11 +34,13 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
     if (!this.settings.height) {
         this.settings.height = htmlContainer.getBoundingClientRect().height;
     }
+
     //contentWidth
-    var contentWidth = this.settings.width - this.settings.paddingLeft - this.settings.paddingRight;
-    var contentHeight = this.settings.height - this.settings.paddingTop - this.settings.paddingBottom;
+    let contentWidth = this.settings.width - this.settings.paddingLeft - this.settings.paddingRight;
+    let contentHeight = this.settings.height - this.settings.paddingTop - this.settings.paddingBottom;
     this.canvasWidth = contentWidth;
     this.canvasHeight = contentHeight;
+
     //CellWidth, cellHeight
     if (!this.settings.cellWidth) {
         this.settings.cellWidth = (contentWidth) / this.data.x.length;
@@ -44,6 +48,7 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
     if (!this.settings.cellHeight) {
         this.settings.cellHeight = (contentHeight) / this.data.y.length;
     }
+
     //Scales
     if (!this.settings.xScale) {
         this.settings.xScale = d3.scaleLinear()
@@ -52,10 +57,6 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
 
     }
     if (!this.settings.yScale) {
-        // let flattenedZ = [].concat.apply([], this.data.z);
-        // let minZ = d3.min(flattenedZ);
-        // let maxZ = d3.max(flattenedZ);
-
         let domain = [this.settings.minShapValue, this.settings.maxShapValue];
 
         this.settings.yScale = d3.scaleLinear()
@@ -75,20 +76,6 @@ let AreaChart = function AreaChart(htmlContainer, areaChartData, areaChartSettin
         .style("top", "0px")
         .style("left", "0px");
 
-    // if (this.settings.direction === 'up') {
-    //     container.style('margin-bottom', '1px');
-    // } else {
-    //     container.style('margin-top', '1px');
-    // }
-
-    // this.canvas = container.append("canvas")
-    //     .attr("width", contentWidth)
-    //     .attr("height", contentHeight)
-    //     .style("width", (contentWidth) + "px")
-    //     .style("height", (contentHeight) + "px")
-    //     .style("position", "absolute")
-    //     .style("top", this.settings.paddingTop + "px")
-    //     .style("left", this.settings.paddingLeft + "px");
     if (!this.settings.noSvg) {
         this.svg = container.append("svg")
             .attr("width", this.settings.width)
@@ -166,8 +153,12 @@ AreaChart.prototype.plot = async function () {
     this.draw(x, y, strokeStyle);
 };
 
-AreaChart.prototype.update = async function (newData) {
+AreaChart.prototype.update = async function (newData, newSettings) {
     this.data = newData;
+    for (let prop in newSettings) {
+        this.settings[prop] = newSettings[prop];
+    }
+    this.settings.yScale = this.settings.yScale.domain([this.settings.minShapValue, this.settings.maxShapValue]);
     this.plot();
 };
 
@@ -178,6 +169,8 @@ AreaChart.prototype.draw = async function (x, y, strokeStyle) {
             y: y[i]
         }
     });
+
+    this.svg.selectAll('*').remove();
 
     this.svg.append("path")
         .data([areaData])
