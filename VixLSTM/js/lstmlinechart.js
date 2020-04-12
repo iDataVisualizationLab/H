@@ -125,7 +125,7 @@ let LstmLineChart = function LstmLineChart(htmlContainer, heatMapData, heatMapSe
     }
     //Show title
     if (this.settings.title) {
-        var title = this.svg.append("g").append("text").attr("class", "graphTitle").attr("x", this.settings.paddingLeft + contentWidth / 2).attr("y", -this.settings.paddingTop / 2)
+        let title = this.svg.append("g").append("text").attr("class", "graphTitle").attr("x", this.settings.paddingLeft + contentWidth / 2).attr("y", -this.settings.paddingTop / 2)
             .text(this.settings.title.text).attr("alignment-baseline", "middle").attr("text-anchor", "middle").attr("font-weight", "bold");
         if (this.settings.title.fontFamily) {
             title.attr("font-family", this.settings.title.fontFamily);
@@ -162,8 +162,6 @@ LstmLineChart.prototype.plot = async function () {
     let avgDomain = 0;
     let deltaDomain = (maxDomain - minDomain) / 9;
     let domain = [avgDomain - 4.5 * deltaDomain, avgDomain - 3.5 * deltaDomain, avgDomain - 2.5 * deltaDomain, avgDomain - 1.5 * deltaDomain, avgDomain - 0.5 * deltaDomain/*, avgDomain*/, avgDomain + 0.5 * deltaDomain, avgDomain + 1.5 * deltaDomain, avgDomain + 2.5 * deltaDomain, avgDomain + 3.5 * deltaDomain, avgDomain + 4.5 * deltaDomain];
-    // domain = [minDomain, maxDomain];
-
 
     this.settings.colorScale = d3.scaleLinear()
         .domain(domain)
@@ -173,11 +171,12 @@ LstmLineChart.prototype.plot = async function () {
     let self = this;
     let x = self.data.x;
     let isOutlier = self.data.isOutlier;
+    let isStateObservation = self.data.isStateObservation;
 
     self.data.y.forEach((yVal, idx) => {
         let y = self.data.z[yVal];
         let shap = self.data.shap[yVal];
-        this.draw(x, y, shap, isOutlier[yVal], 0.6, this.settings.colorScale)
+        this.draw(x, y, shap, isOutlier[yVal], isStateObservation[yVal], 0.3, this.settings.colorScale)
     });
 };
 
@@ -186,7 +185,7 @@ LstmLineChart.prototype.update = async function (newData) {
     this.plot();
 };
 
-LstmLineChart.prototype.draw = async function (x, y, shap, isOutlier, lineWidth, strokeStyle) {
+LstmLineChart.prototype.draw = async function (x, y, shap, isOutlier, isStateObservation, lineWidth, strokeStyle) {
     let lineData = x.map((xVal, i) => {
         return {
             x: xVal,
@@ -213,7 +212,7 @@ LstmLineChart.prototype.draw = async function (x, y, shap, isOutlier, lineWidth,
 
     ctx.beginPath();
     ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = isOutlier ? "rgba(255,165,0,1)" : "rgba(0,0,0,0.3)";
+    ctx.strokeStyle = isStateObservation ? "rgba(255,40,0,1)" : (isOutlier ? "rgba(255,165,0,0.3)" : "rgba(0,0,0,0.3)");
     line(lineData);
     ctx.stroke();
 };

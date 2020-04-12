@@ -42,6 +42,7 @@ let hiddenStates = {};
 let hiddenSimilarity = {};
 let shapValuesMap = {}, shapValuesArray = [];
 let cachedMapObjects = {};
+let isStateObservationGlobal = [];
 
 let trainIdState = ['Alabama',
     'Alabama',

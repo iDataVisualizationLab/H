@@ -24,8 +24,8 @@ function updateInputs() {
     // loadModelFromKeras('unemployment_48months_ts12_L8L8D8D4_i200_2');
     // loadModelFromKeras('unemployment_48months_ts12_L8L8D8D4_i200');
     // loadModelFromKeras('unemployment_24months_ts12_L8L8D8D4_i450');
-    loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900');
-    // loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900_2');
+    // loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900');
+    loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900_2');
     // loadModelFromKeras('HPCC_ts20_L8L8D8D4_i312');
     // loadModelFromKeras('RUL_ts50_L8L8D8D4_i100_f10');
     // loadModelFromKeras('RUL_ts50_L8L8D8D4_i100');
@@ -441,7 +441,6 @@ btnTrain = document.getElementById("trainingButtonContainer");
 
 $('#trainingButtonContainer').click(function () {
     // $('#trainingButtonContainer').unbind('click');
-    console.log("click");
     if ($(this).attr('class').includes("paused")) {
         btnTrain.innerHTML = '<i class="material-icons right" id="playPausedIcon">pause</i>Pause';
         console.log("Start");
@@ -459,6 +458,7 @@ function updateDataForLstmLinechart(isOutlier, key) {
     let data = cachedMapObjects[key].data;
     let newData = {};
     let newY = [];
+
     isOutlier.forEach(function (d, idx) {
         if (d) {
             newY.push(data.y[idx]);
@@ -469,20 +469,63 @@ function updateDataForLstmLinechart(isOutlier, key) {
     newData.y = newY;
     newData.z = cachedMapObjects[key].data.z;
     newData.shap = cachedMapObjects[key].data.shap;
+    newData.isOutlier = isOutlier;
+
+    mapObjects[key].update(newData);
+}
+
+function updateStateDataForLstmLinechart(isStateObservation, key) {
+    let newData = {};
+
+    newData.x = cachedMapObjects[key].data.x;
+    newData.y = cachedMapObjects[key].data.y;
+    newData.z = cachedMapObjects[key].data.z;
+    newData.shap = cachedMapObjects[key].data.shap;
+    newData.isOutlier = cachedMapObjects[key].data.isOutlier;
+    newData.isStateObservation = isStateObservation;
 
     mapObjects[key].update(newData);
 }
 
 function updateDataForDenseLinechart(isOutlier, key) {
-    let gContainer = d3.select(mapObjects[key].svg.node().parentNode)
-        .select('.predictedContainer');
+    let predicted = cachedMapObjects[key].data[0];
 
-    gContainer.selectAll('g').select('text').style('opacity', function (d) {
-        if (!isOutlier[d.index]) {
-            return 0;
-        }
-        return 0.9;
-    })
+    let newData = [];
+
+    let newPredicted = {};
+    newPredicted.isOutlier = isOutlier;
+    newPredicted.marker = predicted.marker;
+    newPredicted.series = predicted.series;
+    newPredicted.shap = predicted.shap;
+    newPredicted.type = predicted.type;
+    newPredicted.x = predicted.x;
+    newPredicted.y = predicted.y;
+
+    newData.push(newPredicted);
+    newData.push(cachedMapObjects[key].data[1]);
+
+    mapObjects[key].update(newData);
+}
+
+function updateStateDataForDenseLinechart(isStateObservation, key) {
+    let predicted = cachedMapObjects[key].data[0];
+
+    let newData = [];
+
+    let newPredicted = {};
+    newPredicted.isOutlier = predicted.isOutlier;
+    newPredicted.marker = predicted.marker;
+    newPredicted.series = predicted.series;
+    newPredicted.shap = predicted.shap;
+    newPredicted.type = predicted.type;
+    newPredicted.x = predicted.x;
+    newPredicted.y = predicted.y;
+    newPredicted.isStateObservation = isStateObservation;
+
+    newData.push(newPredicted);
+    newData.push(cachedMapObjects[key].data[1]);
+
+    mapObjects[key].update(newData);
 }
 
 function calculateValidInstances(filterValue) {
@@ -507,6 +550,11 @@ function calculateValidInstances(filterValue) {
     isOutlierGlobal = isOutlier;
 
     for (let key in cachedMapObjects) {
+        console.log(key);
+        console.log(key.includes('layer'));
+        // if (!key.includes('layer') || !key.includes('input')) {
+        //     continue;
+        // }
         if (cachedMapObjects[key].type !== 'linechart') {
             updateDataForLstmLinechart(isOutlier, key);
         } else {
@@ -530,10 +578,14 @@ $('#mae-range').on('input', function () {
     }
 
     calculateValidInstances($(this).val());
-    console.log('update done');
 });
 
 function changeShapValues(state) {
+    if (firstTime) {
+        cachedMapObjects = JSON.parse(JSON.stringify(mapObjects));
+        firstTime = false;
+    }
+
     let stateIdList = [];
     if (state !== 'all') {
         stateIdList = [];
@@ -545,6 +597,8 @@ function changeShapValues(state) {
     } else {
         stateIdList = Array.from(Array(450).keys());
     }
+    let isStateObservation = isStateObservationGlobal;
+
 
 
     //Hard code here
@@ -556,20 +610,32 @@ function changeShapValues(state) {
         layerShapValues.forEach(function (d, idx) {
             if (stateIdList.includes(idx)) {
                 newShapValues.push(d);
+                isStateObservation[idx] = true;
             }
         });
-        console.log(newShapValues);
         let selector = "";
         if (layer.includes('input')) {
-            selector =  'inputDiv';
+            selector = 'inputDiv';
         } else {
             selector = `layer${idx}`;
             idx++;
-            if (idx === 2) {
-                idx = 3;
+            if (layersConfig[idx]) {
+                if (layersConfig[idx].id.includes('flatten')) {
+                    idx++;
+                }
             }
         }
         updateAreaChart(newShapValues, layer.includes('input'), selector);
+    }
+
+    console.log(isStateObservation.filter(d => d));
+
+    for (let key in cachedMapObjects) {
+        if (cachedMapObjects[key].type !== 'linechart') {
+            updateStateDataForLstmLinechart(isStateObservation, key);
+        } else {
+            updateStateDataForDenseLinechart(isStateObservation, key);
+        }
     }
 }
 
@@ -618,7 +684,6 @@ function updateAreaChart(shapValues, isInputLayer, selector) {
             let negative = 0;
             let sum = 0;
             shap.forEach(instance => {
-                // console.log(instance[i]);
                 if (instance[i] > 0) {
                     positive += instance[i];
                 } else {
@@ -718,7 +783,6 @@ function updateAreaChart(shapValues, isInputLayer, selector) {
         // }
     }
     areaChartList.forEach(function (item) {
-        console.log(item.selector)
         let topArea = mapAreaObjects[item.selector].positive;
 
         let positiveAreaSetting = item.settings;
@@ -733,8 +797,6 @@ function updateAreaChart(shapValues, isInputLayer, selector) {
         negativeAreaSetting.maxShapValue = maxNegAreaShapValue;
         positiveAreaSetting.direction = 'down';
         botArea.update(item.dataNegative, negativeAreaSetting);
-
-        // rearrangeCharts(item.container, [1, 0, 2]);
     });
 }
 

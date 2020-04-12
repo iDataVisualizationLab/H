@@ -331,7 +331,8 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                     y: y,
                     z: z,
                     shap: shap,
-                    isOutlier: isOutlierGlobal
+                    isOutlier: isOutlierGlobal,
+                    isStateObservation: isStateObservationGlobal
                 }, hmSettings);
             } else {
                 hm = new LstmLineChart(document.getElementById(selector + featureIdx), {
@@ -339,7 +340,8 @@ async function drawHeatmaps(data, shapValues, container, selector, timeStamp, is
                     y: y,
                     z: z,
                     shap: shap,
-                    isOutlier: isOutlierGlobal
+                    isOutlier: isOutlierGlobal,
+                    isStateObservation: isStateObservationGlobal
                 }, hmSettings);
             }
 
@@ -785,6 +787,11 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
     } else if (container === 'testContainer') {
         isOutlier = null;
     }
+
+    if (!isStateObservationGlobal.length) {
+        isStateObservationGlobal = Array.from(Array(noOfItems), (yV, i) => false);
+    }
+
     //Generate data.
     let averageLineArr = [];
 
@@ -839,6 +846,7 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                 y: y,
                 shap: shap,
                 isOutlier: isOutlier,
+                isStateObservation: isStateObservationGlobal,
                 series: 'predicted',
                 marker: 'o',
                 type: 'scatter'
@@ -924,18 +932,21 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                     .selectAll('.test-point')
                     .on('mouseover', function (d) {
                         if (!blockTip){
-                            showTip(`${testIdState[d.index]}`);
+                            showStateTip(`${testIdState[d.index]}`);
                         }
                     })
                     .on('mouseout', function (d) {
                         if (!blockTip) {
-                            hideTip();
+                            hideStateTip();
                         }
                     })
                     .on('click', function (d) {
                         if (!blockTip) {
                             changeShapValues(testIdState[d.index]);
                             blockTip = true;
+                        } else {
+                            changeShapValues('all');
+                            blockTip = false;
                         }
                     })
             });
