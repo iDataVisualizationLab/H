@@ -931,6 +931,7 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                 d3.select('#test-data-point')
                     .selectAll('.test-point')
                     .on('mouseover', function (d) {
+                        console.log('mouseover',blockTip);
                         if (!blockTip){
                             showStateTip(`${testIdState[d.index]}`);
                         }
@@ -941,6 +942,7 @@ async function drawLineCharts(data, shapValues, normalizer, target, container, s
                         }
                     })
                     .on('click', function (d) {
+                        console.log('click',blockTip);
                         if (!blockTip) {
                             changeShapValues(testIdState[d.index]);
                             blockTip = true;

@@ -595,11 +595,9 @@ function changeShapValues(state) {
             }
         });
     } else {
-        stateIdList = Array.from(Array(450).keys());
+        stateIdList = Array.from(Array(950).keys());
     }
-    let isStateObservation = isStateObservationGlobal;
-
-
+    let isStateObservation = Array.from(Array(950), (yV, i) => false);
 
     //Hard code here
     let idx = 0;
@@ -610,7 +608,9 @@ function changeShapValues(state) {
         layerShapValues.forEach(function (d, idx) {
             if (stateIdList.includes(idx)) {
                 newShapValues.push(d);
-                isStateObservation[idx] = true;
+                if (state !== 'all') {
+                    isStateObservation[idx] = true;
+                }
             }
         });
         let selector = "";
@@ -631,6 +631,9 @@ function changeShapValues(state) {
     console.log(isStateObservation.filter(d => d));
 
     for (let key in cachedMapObjects) {
+        if (key === 'test0') {
+            continue;
+        }
         if (cachedMapObjects[key].type !== 'linechart') {
             updateStateDataForLstmLinechart(isStateObservation, key);
         } else {
