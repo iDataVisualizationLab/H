@@ -150,8 +150,8 @@ async function trainModel(model, X_train, y_train, X_test, y_test, epochs = 50, 
             text: "Testing"
         },
         legend: {
-            x: 50,
-            y: 35
+            x: 150,
+            y: 185
         },
         colorScheme: testOutputColorScheme
     };

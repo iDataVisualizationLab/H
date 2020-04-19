@@ -173,10 +173,12 @@ LstmLineChart.prototype.plot = async function () {
     let isOutlier = self.data.isOutlier;
     let isStateObservation = self.data.isStateObservation;
 
+    let stateMode = isStateObservation.filter(d => d).length > 0;
+
     self.data.y.forEach((yVal, idx) => {
         let y = self.data.z[yVal];
         let shap = self.data.shap[yVal];
-        this.draw(x, y, shap, isOutlier[yVal], isStateObservation[yVal], 0.3, this.settings.colorScale)
+        this.draw(x, y, shap, isOutlier[yVal], isStateObservation[yVal], stateMode ? 0.6 : 0.4, stateMode ? 0.8 : 0.3, this.settings.colorScale)
     });
 };
 
@@ -185,7 +187,7 @@ LstmLineChart.prototype.update = async function (newData) {
     this.plot();
 };
 
-LstmLineChart.prototype.draw = async function (x, y, shap, isOutlier, isStateObservation, lineWidth, strokeStyle) {
+LstmLineChart.prototype.draw = async function (x, y, shap, isOutlier, isStateObservation, lineWidth, opacity, strokeStyle) {
     let lineData = x.map((xVal, i) => {
         return {
             x: xVal,
@@ -212,7 +214,10 @@ LstmLineChart.prototype.draw = async function (x, y, shap, isOutlier, isStateObs
 
     ctx.beginPath();
     ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = isStateObservation ? "rgba(255,40,0,1)" : (isOutlier ? "rgba(255,165,0,0.3)" : "rgba(0,0,0,0.3)");
+    // Change Outlier to be on with button
+    // ctx.strokeStyle = isStateObservation ? "rgba(255,0,0,1)" : (isOutlier ? "rgba(255,165,0,0.1)" : "rgba(0,0,0,0.1)");
+    // ctx.strokeStyle = isOutlier ? "rgba(255,165,0,0.5)" : "rgba(0,0,0,0.5)";
+    ctx.strokeStyle = `rgba(0,0,0,${opacity})`;
     line(lineData);
     ctx.stroke();
 };
