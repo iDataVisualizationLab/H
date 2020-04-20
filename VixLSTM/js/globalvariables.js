@@ -43,6 +43,7 @@ let hiddenSimilarity = {};
 let shapValuesMap = {}, shapValuesArray = [];
 let cachedMapObjects = {};
 let isStateObservationGlobal = [];
+let dataset = "unemployment";
 
 let trainIdState = ['Alabama',
     'Alabama',
