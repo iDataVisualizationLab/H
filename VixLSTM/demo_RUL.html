@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VixLSTM</title>
+    <style>
+        @import "lib/materialize/css/materialize.css";
+        /*@import "lib/materialize/css/ghpages-materialize.css";*/
+    </style>
+    <style>
+        @import "lib/playpausebutton/playpause.css";
+        @import "css/styles.css";
+        @import "js/toast/toast.css";
+        @import "js/loader/loader.css";
+        @import "js/tooltip/tooltip.css";
+
+    </style>
+    <!--GUI Lib-->
+    <script src="lib/d3.v5.min.js"></script>
+    <script src="lib/queue.v1.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="lib/jquery-3.4.1.js"></script>
+    <!--ML Lib-->
+    <script src="lib/tf.min.js"></script>
+    <!--custom-->
+    <script src="lib/charts.min.js"></script>
+    <!--    <script src="js/chart/charts.js"></script>-->
+    <script src="js/toast/toast.js"></script>
+    <script src="lib/playpausebutton/playpause.js"></script>
+    <script src="lib/cssvariable/cssvariables.js"></script>
+    <script src="js/globalvariables.js"></script>
+    <script src="js/datamanagement.js"></script>
+</head>
+<body>
+<div id="snackbar"></div>
+<!--loader-->
+<script src="js/loader/loader.js"></script>
+<script>
+    showLoader();
+</script>
+
+<!--<editor-fold desc="Header">-->
+<nav class="nav-wrapper indigo">
+    <div class="container">
+        <a href="#" class="brand-logo"><strong>VixLSTM</strong>: <strong>V</strong>isual <strong>E</strong>xplainable
+            <strong>LSTM</strong> for Multivariate Time Series</a>
+    </div>
+</nav>
+
+
+<!--<a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">keyboard_arrow_right</i></a>-->
+<a href="#" class="btn-floating btn-small waves-effect waves-light red sidenav-trigger"
+   data-target="slide-out" id="btn-sidenav"><i class="material-icons">keyboard_arrow_right</i></a>
+
+
+<ul id="slide-out" class="sidenav">
+    <li>
+        <div class="row">
+            <div class="input-field col s5" style="text-align: left">Epoch</div>
+            <div class="input-field col s7">
+                <input id="epochs" type="number" value="30" style="text-align: center">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s5" style="text-align: left">Batch</div>
+            <div class="input-field col s7">
+                <input id="batchSize" type="number" value="8" style="text-align: center">
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s5" style="text-align: left">Learning Rate</div>
+            <div class="input-field col s7">
+                <input id="learningRate" type="number" value="0.005" style="text-align: center">
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="row valign-wrapper" style="height: 100%">
+            <div class="row" style="margin-bottom: 10px">
+                <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load
+                    model</a>
+                <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i
+                        class="material-icons right" id="playPausedIcon">play_arrow</i>Start</a>
+                <a class="btn btn-menu " id="saveModelMenu" onclick="displaySaveModelDialog()">Save
+                    model</a>
+            </div>
+        </div>
+    </li>
+    <li>
+        <form action="#" style="padding-left: 0.75rem;padding-right: 0.75rem">
+            <p style="float: left">
+                <label>
+                    <input type="checkbox" class="filled-in" id="heatmapShowingCheckbox"
+                           onchange="onHeatmapShowingCheckbox()"/>
+                    <span>Heat Map on neurons</span>
+                </label>
+            </p>
+        </form>
+    </li>
+
+    <li>
+        <div class="input-field" style="padding-left: 0.75rem;padding-right: 0.75rem">
+            <select id="orderNeuronsSelect">
+                <option value="" disabled selected>Reorder neurons</option>
+                <option value="1">Unordered</option>
+                <option value="2">Weights</option>
+                <option value="3">MSE</option>
+                <option value="4">Correlation</option>
+            </select>
+        </div>
+    </li>
+    <li>
+        <div style="padding-left: 0.75rem;padding-right: 0.75rem">
+            MAE Filter
+            <form action="#" style="margin-top: 10px">
+                <p class="range-field" style="width: 330px; margin-left: auto; margin-right: auto;">
+                    <input type="range" id="mae-range" min="0" max="100" value="0" class="active"/>
+
+                </p>
+            </form>
+        </div>
+    </li>
+</ul>
+
+<!--<div class="row">-->
+<!--    <div class="row" style="height: 50px; width: 90%" id="toolbar">-->
+<!--        <div class="col s6">-->
+<!--            <div class="col s4">-->
+<!--                <div class="input-field col s5" style="text-align: right">Epoch</div>-->
+<!--                <div class="input-field col s7">-->
+<!--                    <input id="epochs" type="number" value="30" style="text-align: center">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col s4">-->
+<!--                <div class="input-field col s5" style="text-align: right">Batch</div>-->
+<!--                <div class="input-field col s7">-->
+<!--                    <input id="batchSize" type="number" value="8" style="text-align: center">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col s4">-->
+<!--                <div class="input-field col s7" style="text-align: right">Learning Rate</div>-->
+<!--                <div class="input-field col s5">-->
+<!--                    <input id="learningRate" type="number" value="0.005" style="text-align: center">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="row col s3 valign-wrapper" style="height: 100%">-->
+<!--            <div class="row" style="margin-bottom: 10px">-->
+<!--                <a class="btn btn-menu " onclick="displayLoadModelDialog()" id="loadModelMenu">load-->
+<!--                    model</a>-->
+<!--                <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i-->
+<!--                        class="material-icons right" id="playPausedIcon">play_arrow</i>Start</a>-->
+<!--                <a class="btn btn-menu " id="saveModelMenu" onclick="displaySaveModelDialog()">Save-->
+<!--                    model</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--                <div class="col s3">-->
+<!--                    <div>-->
+<!--                        <div class="col s7">-->
+<!--                            <p class="range-field"-->
+<!--                               style="float: left;margin-top: 0px; height: 13px; width: 180px; line-height: 0.0;">-->
+<!--                                <label for="weightFilter">Filter weight (absolute)</label>-->
+<!--                                <input type="range" id="weightFilter" min="0.0" max="1.0" step="0.01" value="0.0"-->
+<!--                                       oninput="onWeightFilterInput()"/>-->
+<!--                            </p>-->
+
+<!--                            <form action="#">-->
+<!--                                <p style="float: left">-->
+<!--                                    <label>-->
+<!--                                        <input type="checkbox" class="filled-in" id="heatmapShowingCheckbox"-->
+<!--                                               onchange="onHeatmapShowingCheckbox()"/>-->
+<!--                                        <span>Heat Map on neurons</span>-->
+<!--                                    </label>-->
+<!--                                </p>-->
+<!--                            </form>-->
+<!--                        </div>-->
+
+<!--                <div class="input-field col s7">-->
+<!--                    <select id="orderNeuronsSelect">-->
+<!--                        <option value="" disabled selected>Reorder neurons</option>-->
+<!--                        <option value="1">Unordered</option>-->
+<!--                        <option value="2">Weights</option>-->
+<!--                        <option value="3">MSE</option>-->
+<!--                        <option value="4">Correlation</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="divider"></div>-->
+<!--</editor-fold>-->
+
+<div class="container pageWidth" style="margin: 10px auto auto;">
+    <div class="columnWrapper">
+        <div class="grid-item" id="layerInput">
+            <div class="row">
+                <a href="#configInput" onclick="configInput();" class="btn-small btn-floating modal-trigger"><i
+                        class="material-icons">input</i></a>
+                <b>Input</b>
+                <br/>
+                x-axis: time sequences
+                <br/>
+                y-axis: data instances
+                <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
+                <div class="row valign-wrapper" style="height: 100%">
+                    <div>
+                        <div id="inputContainer" class="col s5"></div>
+                        <div class="col s7 left">
+                            <svg id="training_layer0Weights" width="100" transform="translate(0,5)"
+                                 style="overflow: visible;">
+                            </svg>
+                        </div>
+                        <!--                        <div class="col s5 right">-->
+                        <!--                            &lt;!&ndash;for the first svg, add also the defs for arrow (to be used in all other places)&ndash;&gt;-->
+                        <!--                            <svg id="layer0Weights" width="100" transform="translate(0,5)" style="overflow: visible;">-->
+                        <!--                                <defs>-->
+                        <!--                                    <marker id="arrow" markerWidth="5" markerHeight="5" refX="5" refY="2.5"-->
+                        <!--                                            orient="auto"-->
+                        <!--                                            markerUnits="userSpaceOnUse">-->
+                        <!--                                        <path d="M0,0 L5,2.5 L0,5 z"></path>-->
+                        <!--                                    </marker>-->
+                        <!--                                </defs>-->
+                        <!--                            </svg>-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Dynamic part here. -->
+        <div class="grid-item" style="width: 480px !important;" id="layerOutput">
+            <div class="row">
+
+                <a href="#" class="btn-small btn-floating modal-trigger"><i
+                        class="material-icons" onclick="displayAddLayerDialog()">add</i></a>
+                <b>Output</b>
+                <br/>
+                x-axis: output values
+                <RUL></RUL>
+                <br/>
+                y-axis: data instances
+                <div class="divider" style="margin-bottom: 10px; margin-top: 5px;"></div>
+                <div class="valign-wrapper" style="height: 1190px">
+                    <div>
+
+                        <div class="row">
+                            <div id="trainTestLoss" class="col s12 center"></div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <div id="outputContainer" class="col s12" style="width: 400px;"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="testContainer" class="col s12" style="width: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="networkContainer">
+        <!--        <p class="range-field">-->
+        <!--            <label for="weightFilter">Contribution filter</label>-->
+        <!--            <input type="range" id="contributionFilter" min="0.0" max="1.0" step="0.05" value="0.0"-->
+        <!--                   oninput="changeContributionFilter()"/>-->
+        <!--        </p>-->
+        <div class="row">
+            <div class="col s8">
+                <svg id="network" class="network-svg"></svg>
+            </div>
+            <div class="col s4">
+                <svg id="matrix" class="matrix-svg"></svg>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="divider"></div>
+
+<!--<editor-fold desc="dialogs">-->
+<div class="modal" id="mapDetails" style="width: 400px; height: 440px;">
+    <div class="modal-content" style="width: 400px; height: 400px;" id="mapDetailsContent">
+    </div>
+    <div class="modal-footer">
+        <div class="row" style="padding-right: 10px; height: 20px;">
+            <a href="#" class="modal-close">Close</a>&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+<div class="modal" id="loadModelDialog" style="width: 400px;">
+    <div class="header center">
+        <h5>Please select a load source</h5>
+    </div>
+    <div class="divider"></div>
+    <div class="modal-content" style="height: 300px;">
+        <div class="row">
+            <div class="input-field col s12">
+                <select id="modelsFromServer" onchange="loadServerModelChange(this)">
+                    <option value="" disabled selected>Choose your model</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_1">arrTemp0_L8L8D8D4_1</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_2">arrTemp0_L8L8D8D4_2</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_1">arrTemp0_L8L4D2_1</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_2">arrTemp0_L8L4D2_2</option>
+                    <option value="stock_ts4_e100_b8_lr0005_L8L8D8D4_2">stock_L8L8D8D4_1</option>
+                    <option value="stock_ts4_e30_b8_lr0005_L8L8D8D4_1">stock_L8L8D8D4_2</option>
+                    <option value="emp_ts12_e100_b8_lr0005_L16L8L8D8D4_1">emp_L16L8L8D8D4_1</option>
+
+
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_3">arrTemp0_L8L8D8D4_3</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_4">arrTemp0_L8L8D8D4_4</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_5">arrTemp0_L8L8D8D4_5</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_6">arrTemp0_L8L8D8D4_6</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_7">arrTemp0_L8L8D8D4_7</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_8">arrTemp0_L8L8D8D4_8</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_9">arrTemp0_L8L8D8D4_9</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_10">arrTemp0_L8L8D8D4_10</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_11">arrTemp0_L8L8D8D4_11</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_12">arrTemp0_L8L8D8D4_12</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_13">arrTemp0_L8L8D8D4_13</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_14">arrTemp0_L8L8D8D4_14</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_15">arrTemp0_L8L8D8D4_15</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_16">arrTemp0_L8L8D8D4_16</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_17">arrTemp0_L8L8D8D4_17</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_18">arrTemp0_L8L8D8D4_18</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_19">arrTemp0_L8L8D8D4_19</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_20">arrTemp0_L8L8D8D4_20</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_21">arrTemp0_L8L8D8D4_21</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_22">arrTemp0_L8L8D8D4_22</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_23">arrTemp0_L8L8D8D4_23</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_24">arrTemp0_L8L8D8D4_24</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_25">arrTemp0_L8L8D8D4_25</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_26">arrTemp0_L8L8D8D4_26</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_27">arrTemp0_L8L8D8D4_27</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_28">arrTemp0_L8L8D8D4_28</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_29">arrTemp0_L8L8D8D4_29</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_30">arrTemp0_L8L8D8D4_30</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L8D8D4_31">arrTemp0_L8L8D8D4_31</option>
+
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_3">arrTemp0_L8L4D2_3</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_4">arrTemp0_L8L4D2_4</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_5">arrTemp0_L8L4D2_5</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_6">arrTemp0_L8L4D2_6</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_7">arrTemp0_L8L4D2_7</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_8">arrTemp0_L8L4D2_8</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_9">arrTemp0_L8L4D2_9</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_10">arrTemp0_L8L4D2_10</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_11">arrTemp0_L8L4D2_11</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_12">arrTemp0_L8L4D2_12</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_13">arrTemp0_L8L4D2_13</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_14">arrTemp0_L8L4D2_14</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_15">arrTemp0_L8L4D2_15</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_16">arrTemp0_L8L4D2_16</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_17">arrTemp0_L8L4D2_17</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_18">arrTemp0_L8L4D2_18</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_19">arrTemp0_L8L4D2_19</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_20">arrTemp0_L8L4D2_20</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_21">arrTemp0_L8L4D2_21</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_22">arrTemp0_L8L4D2_22</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_23">arrTemp0_L8L4D2_23</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_24">arrTemp0_L8L4D2_24</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_25">arrTemp0_L8L4D2_25</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_26">arrTemp0_L8L4D2_26</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_27">arrTemp0_L8L4D2_27</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_28">arrTemp0_L8L4D2_28</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_29">arrTemp0_L8L4D2_29</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_30">arrTemp0_L8L4D2_30</option>
+                    <option value="arrTemp0_ts100_e30_b8_lr0005_L8L4D2_31">arrTemp0_L8L4D2_31</option>
+
+                    <option value="arrTemp0_e30_b8_lr0005_L16L8L8D8D4_5">arrTemp0_L16L8L8D8D4_5</option>
+                    <option value="arrTemp0_ts20_e30_b8_lr0005_L16L8L8D8D4_6">arrTemp0_L16L8D8D4_6</option>
+                    <option value="arrTemp0_e30_b8_lr0005_L16L8L8D8D4_7">arrTemp0_L16L16L8D8D4_7</option>
+
+                </select>
+                <label>Select a model from server</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <select id="modelsFromLocalStorage" onchange="loadLocalStorageModelChange(this)">
+                    <option value="" disabled selected>Choose your model</option>
+                </select>
+                <label>Select a model from browser local storage</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field">
+                <label for="loadFromFile">Upload files<input type="file" id="loadFromFile"
+                                                             onchange="loadModelFromFiles(this)" multiple/></label>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="row" style="padding-right: 10px; height: 20px;">
+            <a href="#" class="modal-close">Cancel</a>
+        </div>
+    </div>
+</div>
+<div class="modal" id="saveModelDialog" style="width: 400px;">
+    <div class="modal-content" style="height: 200px;">
+        <div class="row">
+            <div class="input-field">
+                <label for="modelName">Model Name</label>
+                <input type="text" id="modelName"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <label>
+                    <input type="radio" name="saveOption" id="localstorage"/>
+                    <span>Local storage</span>
+                </label>
+            </div>
+            <div class="input-field col s6">
+                <label>
+                    <input type="radio" name="saveOption" id="downloads" checked/>
+                    <span>Downloads</span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row" style="padding-right: 10px; height: 20px;">
+            <a href="#" class="modal-close" onclick="saveModelClick()">Save & close</a>&nbsp;&nbsp;
+            <a href="#" class="modal-close">Cancel</a>
+        </div>
+    </div>
+</div>
+<div class="modal" id="configInput" style="width: 630px;">
+    <div class="modal-content" style="height: 200px;">
+        <div class="row" id="features"></div>
+    </div>
+    <div class="modal-footer">
+        <div class="row" style="padding-right: 10px; height: 20px;">
+            <a href="#" class="modal-close" onclick="selectFeatures()">Select & close</a>&nbsp;&nbsp;
+            <a href="#" class="modal-close">Cancel</a>
+        </div>
+    </div>
+</div>
+<div class="modal" id="changeLayerDialog" style="width: 630px;">
+    <div class="center">
+        <h5><span id="changeLayerDialogTitle"></span></h5>
+    </div>
+    <div class="modal-content" style="height: 85px;">
+        <div class="row">
+            <div class="input-field col">
+                <select id="layerType">
+                    <option value="dense" selected>Dense</option>
+                    <option value="lstm">LSTM</option>
+                </select>
+                <label>Layer</label>
+            </div>
+            <div class="input-field col">
+                <input id="noOfUnits" type="number" value="8">
+                <label for="noOfUnits">Units</label>
+            </div>
+            <div class="input-field col">
+                <select id="activationType">
+                    <option value="default" selected>default</option>
+                    <option value="relu">relu</option>
+                    <option value="tanh">tanh</option>
+                    <option value="sigmoid">sigmoid</option>
+                </select>
+                <label>Activation</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="row" style="padding-right: 10px; height: 20px;">
+            <a href="#" class="modal-close" id="changeLayerDialogConfirm">OK</a>&nbsp;&nbsp;
+            <a href="#" class="modal-close">Cancel</a>
+        </div>
+    </div>
+</div>
+<!--</editor-fold>-->
+
+<!--<div class="container">-->
+<!--    <div class="param-container" id="param">-->
+<!--        <form class="col-12">-->
+<!--            &lt;!&ndash;      <div class="form-group">&ndash;&gt;-->
+<!--            &lt;!&ndash;        <label for="exampleFormControlInput1">Email address</label>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">&ndash;&gt;-->
+<!--            &lt;!&ndash;      </div>&ndash;&gt;-->
+<!--            <div class="row form-group">-->
+<!--                <label for="target-variables" class="col-3 col-form-label">Select target variable</label>-->
+<!--                <select class="form-control col-9" id="target-variables">-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="text-center">-->
+<!--                <button type="submit" class="btn btn-primary mb-2">Train</button>-->
+<!--                <button type="submit" class="btn btn-primary mb-2">Train with all targets</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--    <div class="chart-container">-->
+<!--        <svg class="chart-svg" id="chart"></svg>-->
+<!--    </div>-->
+<!--</div>-->
+
+<footer style="margin-bottom: 10px;">
+    <div class="container">
+        <h3><a name="article">The article</a></h3>
+        <h5>Quick start:</h5>
+        <p>
+            Click the start/pause button to start/pause the training process accordingly. The training loss vs. testing
+            loss graph will be updated every batch. The intermediate outputs, final training output, final testing
+            output, and weights are updated every epoch.
+        </p>
+
+        <h5>Functionalities</h5>
+        <ul class="collection with-header">
+            <li class="collection-header"><b>Model configuration and training</b></li>
+            <li class="collection-item">
+                Click on <a class="btn-small btn-floating"><i class="material-icons grey">delete</i></a> button to
+                delete the layer.
+            </li>
+            <li class="collection-item">
+                Click on <a class="btn-small btn-floating modal-trigger"><i
+                    class="material-icons">add</i></a> button to add more layer.
+            </li>
+            <li class="collection-item">
+                Change number of epochs/batch size if needed.
+            </li>
+            <!--            <li class="collection-item">-->
+            <!--                Click on <label><input type="checkbox" class="filled-in"-->
+            <!--                                       checked="checked" disabled="true"/><span>snapshots</span></label> checkbox to-->
+            <!--                enable/disable-->
+            <!--                saving training snapshots, so user could review the trained model later on.-->
+            <!--            </li>-->
+            <li class="collection-item">
+                Click on <a class="waves-effect waves-light btn btn-menu paused" id="trainingButtonContainer"><i
+                    class="material-icons right">play_arrow</i>Start</a> button to start training process.
+            </li>
+            <li class="collection-header"><b>Model weights and intermediate outputs view</b></li>
+            <li class="collection-item">
+                Click on the weight type (e.g., LSTM, positive/negative) to toggle display.
+            </li>
+            <li class="collection-item">
+                Mouse over the weight path to see its current value.
+            </li>
+            <li class="collection-header"><b>Load model</b></li>
+            <li class="collection-item">
+                Click on <a href="#" class="btn btn-menu dropdown-trigger">load model</a> button to load and review the
+                a saved, trained model.
+            </li>
+        </ul>
+        <!--        <h5>Graph description</h5>-->
+        <!--        <P>-->
+        <!--            Please click on each of the graphs to view the graph in details.-->
+        <!--        </P>-->
+        <!--        <p>-->
+        <!--            After loading, the system displays the input in the form of the heat-maps, one heat-map-->
+        <!--            per sensor data column. The system does not display the axes for graphs at the input layer. Instead, it-->
+        <!--            gives their descriptions on top of each layer for the simplicity of the visual display. The x-axis of the-->
+        <!--            heat-map is the engine units (e.g., 0-99 for dataset 1). Its y-axis is the sensor data sequence (the number-->
+        <!--            of cycles). The heat-map color at a specific point represents the sensor's value of a corresponding engine-->
+        <!--            at a-->
+        <!--            time step accordingly. The input units are also sorted by their RUL to see if they appear to have any sensor-->
+        <!--            input pattern. The first panel of the picture above shows the details view of a sample input for one sensor.-->
+        <!--        </p>-->
+        <!--        <p>-->
+        <!--            Similar to the input layer, the outputs from LSTM layers are also sequences with the corresponding number of-->
+        <!--            engines and steps. Therefore, the system also represents them as heat-map (second panel) with a similar-->
+        <!--            specification. The second panel of the picture above shows the details view of a sample LSTM layer output.-->
+        <!--        </p>-->
+        <!--        <p>-->
+        <!--            Outputs of the Dense layers, and the final training and testing outputs are alike and are visualized as-->
+        <!--            scatter plots. Y-axis also represents the number of engines, and x-axis describes the output-->
+        <!--            values. The green circles at the scatter plot represent the predicted outputs of the corresponding engine-->
+        <!--            units as-->
+        <!--            inputs. The gray x symbols are the actual target RULs. The two are scaled linearly to the domain of target-->
+        <!--            RULs for better visualization. The second panel of the picture above shows the details view of a sample-->
+        <!--            Dense layer output.-->
+        <!--        </p>-->
+    </div>
+</footer>
+
+<!--UI initialization-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let selectElems = document.querySelectorAll('select');
+        let selectInstances = M.FormSelect.init(selectElems);
+        let modalElems = document.querySelectorAll('.modal');
+        let modalInstances = M.Modal.init(modalElems);
+    });
+</script>
+<!--Scripting-->
+<script src="lib/materialize/js/materialize.js"></script>
+<script src="lib/underscore-min.js"></script>
+<script src="js/tooltip/tooltip.js"></script>
+<script src="js/areachart.js"></script>
+<script src="js/lstmlinechart.js"></script>
+<script src="js/tooltip/networktooltip.js"></script>
+<script src="js/variablesnetwork.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/layerManagement.js"></script>
+<script src="js/drawcharts.js"></script>
+<script src="js/modelmanagement.js"></script>
+<script src="js/index.js"></script>
+<script>
+    $(document).ready(function () {
+        updateInputs("RUL");
+    })
+</script>
+</body>
+</html>

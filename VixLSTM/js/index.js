@@ -13,28 +13,50 @@ let link = d3.linkHorizontal()
 
 // createVarNetwork();
 
-function updateInputs() {
+function updateInputs(datasetName) {
 
     // processInputs().then(() => {
     //Create default layersConfig.
     // createDefaultLayers();
     // createTrainingGUI(layersConfig).then(() => {
     // loadAllPretrainModelFromServer("new_arrTemperature0_100_process");
-    predictedVariable = "Unemployment rate";
     // loadModelFromKeras('unemployment_48months_ts12_L8L8D8D4_i200_2');
     // loadModelFromKeras('unemployment_48months_ts12_L8L8D8D4_i200');
     // loadModelFromKeras('unemployment_24months_ts12_L8L8D8D4_i450');
     // loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900');
-    loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900_2');
     // loadModelFromKeras('HPCC_ts20_L8L8D8D4_i312');
     // loadModelFromKeras('RUL_ts50_L8L8D8D4_i100_f10');
-    // loadModelFromKeras('RUL_ts50_L8L8D8D4_i100');
     // loadModelFromKeras('pollution_ts23_L6L6D4D4D2_i300');
     // });
     // });
+
+    dataset = datasetName;
+
+    switch (datasetName) {
+        case "RUL":
+            predictedVariable = "RUL";
+            loadModelFromKeras('RUL_ts50_L8L8D8D4_i100_final');
+            break;
+        case "unemployment":
+            predictedVariable = "Unemployment rate";
+            loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900_2');
+            break;
+        case "stock":
+            predictedVariable = "Close price";
+            loadModelFromKeras('stock_ts4_L8L8D8D4_i328_final');
+            break;
+        case "hpcc":
+            predictedVariable = "CPU Temp";
+            loadModelFromKeras('HPCC_ts20_L8L8D8D4_i312');
+            break;
+        default:
+            predictedVariable = "Unemployment rate";
+            loadModelFromKeras('unemployment_ts12_L8L8D8D4_i900_2');
+            break;
+    }
 }
 
-updateInputs();
+// updateInputs();
 
 function loadDefaultModel() {
     //Load default model.

@@ -230,6 +230,7 @@ async function loadModelFromServer(modelName) {
 }
 
 async function loadModelFromKeras(modelName) {
+    console.log(modelName);
     const model = await tf.loadLayersModel(`data/model_with_shap/${modelName}/model.json`);
 
     d3.json(`data/model_with_shap/${modelName}/${modelName}_data.json`).then(modelData => {
