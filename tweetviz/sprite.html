@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<script src="lib/d3.js"></script>
+<script src="javascript/d3.layout.wordstream.js"></script>
+<script src="javascript/testutil.js"></script>
+<script>
+    function draw(data) {
+        var ws = d3.wordStream()
+            .data(data)
+            .minFontSize(6)
+            .maxFontSize(24);
+        //var boxes = ws.boxes();
+        var cw = 1 << 11,
+            ch = 1 << 11;
+        var canvas = d3.select('body').append("canvas")
+            .attr('width', cw)
+            .attr('height', ch)
+            .style('border', '1px solid black');
+        var c = canvas.node().getContext("2d");
+        var boxes = ws.buildBoxes(data);
+        var imageData = ws.getImageData(boxes);
+        c.putImageData(imageData, 0, 0);
+        //Draw the boxes to see the x and y and width, height coordinate is right or not
+        for (var bc = 0; bc < boxes.length; bc++) {
+            var words = boxes[bc].words;
+            for (var i = 0; i < words.length; i++) {
+                var word = words[i];
+                c.rect(word.x, word.y, word.width, word.height);
+            }
+        }
+        c.stroke();
+    };
+</script>
+<script src="javascript/wordstream_data.js"></script>
+<script src="javascript/main.js"></script>
+</body>
+</html>

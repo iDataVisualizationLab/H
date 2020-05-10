@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<script src="lib/d3.js"></script>
+<script src="javascript/d3.layout.wordstream.js"></script>
+<script src="javascript/testutil.js"></script>
+<script>
+    function draw(data){
+        var width = 1200, height = 600;
+        var ws = d3.wordStream()
+            .size([width, height])
+            .data(data);
+
+        ws.buildFontScale(data);
+        var boxes = ws.buildBoxes(data);
+        //Set the sprite for each word
+        ws.getImageData(boxes);
+        boxes.topics.forEach(topic=>{
+            var board = ws.buildBoard(boxes, topic);
+            var canvas = document.createElement('canvas');
+            document.body.append(canvas);
+            canvas.width = width;
+            canvas.height = height;
+            var c = canvas.getContext("2d");
+            spriteToScreen(c, board);
+        });
+    };
+</script>
+<script src="javascript/wordstream_data.js"></script>
+<script src="javascript/main.js"></script>
+</body>
+</html>
