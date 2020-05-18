@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--    <link rel="manifest" href="manifest.json">-->
+    <title>Soil 3D</title>
+    <script src="lib/jquery.js"></script>
+    <script src="lib/d3.js"></script>
+    <script src="js/charts.min.js"></script>
+    <script src="lib/d3-color.v1.min.js"></script>
+    <script src="lib/simple-statistics.min.js"></script>
+    <script src="lib/kriging.js"></script>
+    <script src="lib/three.js"></script>
+    <script src="lib/OrbitControls.js"></script>
+    <script src="lib/DragControls.js"></script>
+    <script src="lib/dat.gui.min.js"></script>
+
+    <style>
+        @import "js/loader/loader.css";
+
+        #gui {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 255px; /* 32 * 7 - 1*/
+        }
+
+        input[type="checkbox"] {
+            visibility: hidden;
+        }
+
+        label {
+            cursor: pointer;
+            font: 12px/1em sans-serif;
+            vertical-align: middle;
+        }
+
+        input[type="checkbox"] + label:before {
+            border: 1px solid #333;
+            content: "\00a0";
+            display: inline-block;
+            font: 12px/1em sans-serif;
+            height: 11px;
+            margin: 0 .25em 0 0;
+            padding: 0;
+            vertical-align: middle;
+            width: 11px;
+        }
+
+        input[type="checkbox"]:checked + label:before {
+            background: #fff;
+            color: #333;
+            content: "\2713";
+            text-align: center;
+        }
+
+        input[type="checkbox"]:checked + label:after {
+            font-weight: bold;
+        }
+
+        input[type="checkbox"]:focus + label::before {
+            outline: rgb(59, 153, 252) auto 5px;
+        }
+    </style>
+</head>
+<body style="margin: 0px; padding:0px;">
+<!--loader-->
+<script src="js/loader/loader.js"></script>
+<div id="elementSelectionList" style="margin-top: -4px; z-index: 999;"></div>
+<div id="container1" style="z-index: -1;"></div>
+<span id="detailChart1"></span>
+<span id="detailChart2"></span>
+
+
+<div id="container2">
+    <div id="verticalChartContainer"></div>
+    <div id="horizontalChartContainer"></div>
+</div>
+
+<script src="js/colorschemes.js"></script>
+<script src="js/globalsettings.js"></script>
+<script src="js/dataprocessing.js"></script>
+<script src="js/3d/pointcloud.js"></script>
+<script src="js/3d/menus.js"></script>
+<script src="js/3d/cutplanes.js"></script>
+<script src="js/3d/twoDCharts.js"></script>
+<script src="js/3d/3dscenes.js"></script>
+<script src="js/3d/packages.js"></script>
+<script src="js/3d/main3d.js"></script>
+<script>
+    main();
+</script>
+</body>
+</html>

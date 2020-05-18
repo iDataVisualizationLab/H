@@ -14,7 +14,7 @@ function draw(data, drawAxis) {
         .size([width, height])
         .interpolate(interpolation)
         .fontScale(d3.scaleLinear())
-        .minFontSize(8)
+        .minFontSize(10)
         .maxFontSize(20)
         .pictureSize(pictureSize)
         .pictureShape(pictureShape)

@@ -1,0 +1,235 @@
+:root{
+    --page-width: 980px;
+    --default-margin: 20px;
+    --box-width: 460px;
+    --box-height: var(--box-width);
+
+    --corcoef-graph-margin-left: var(--default-margin);
+    --corcoef-graph-margin-top: var(--default-margin);
+
+    --option1-width: 150px;
+    --option2-width: var(--option1-width);
+
+    --msdropdown-height: 28px;/*28px is the default height of the msdropdown*/
+
+    --scatter-plot-margin-left: calc(var(--default-margin) + var(--box-width) + var(--default-margin));
+    --scatter-plot-margin-top: var(--corcoef-graph-margin-top);
+
+    --contour-control-panel-margin-left:var(--corcoef-graph-margin-left);
+    --contour-control-panel-margin-top:calc(var(--corcoef-graph-margin-top) + var(--box-height) + var(--default-margin));
+    --contour-control-panel-height: 18px;
+
+    --contour-height: 597px;
+    --contour1-margin-left: var(--default-margin);
+    --contour1-margin-top: calc(var(--contour-control-panel-margin-top) + var(--contour-control-panel-height) + var(--default-margin));
+
+    --contour2-margin-left: var(--scatter-plot-margin-left);
+    --contour2-margin-top: var(--contour1-margin-top);
+
+    --boxPlot1-margin-left: var(--contour1-margin-left);
+    --boxPlot1-margin-top: calc(var(--contour1-margin-top) + var(--contour-height) + var(--default-margin));
+
+    --boxPlot2-margin-left: var(--contour2-margin-left);
+    --boxPlot2-margin-top: var(--boxPlot1-margin-top);
+
+    --curvePlot1-margin-left: var(--contour1-margin-left);
+    --curvePlot1-margin-top: calc(var(--boxPlot1-margin-top) + var(--contour-height) + var(--default-margin));
+
+    --curvePlot2-margin-left: var(--contour2-margin-left);
+    --curvePlot2-margin-top: var(--curvePlot1-margin-top);
+}
+/*<editor-fold desc="Section for the loader">*/
+ .loader {
+     border: 16px solid #f3f3f3;
+     border-radius: 50%;
+     border-top: 16px solid #3498db;
+     width: 120px;
+     height: 120px;
+     -webkit-animation: spin 2s linear infinite; /* Safari */
+     animation: spin 2s linear infinite;
+     margin: 0 auto;
+     display: none;
+ }
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/*</editor-fold>*/
+
+#page{
+    position: relative;
+    width: var(--page-width);
+    margin: 0 auto;
+    overflow: cover;
+}
+#profileDiv{
+    position: relative;
+    width: var(--page-width);
+    margin: 0 auto;
+    overflow: cover;
+}
+.roundedBorder{
+    border: 1px solid rgba(0,0,0, 1);
+    background-color: rgba(255,255,255, 1);
+    border-radius: 6px;
+    box-shadow: 5px 5px 5px #444;
+    width: var(--box-width);
+    height: var(--box-height);
+}
+
+.contourRoundedBorder{
+    border: 1px solid rgba(0,0,0, 1);
+    background-image: url("../data/images/Profile1.png");
+    border-radius: 6px;
+    box-shadow: 5px 5px 5px #444;
+    width: var(--box-width);
+    height: var(--contour-height);
+    margin-bottom: var(--default-margin);
+}
+
+
+#option1Container{
+    position: absolute;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: var(--option1-width);
+}
+#option2Container{
+    position: absolute;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: var(--option2-width);
+}
+
+#plotOpacity1{
+    position: absolute;
+    margin-right: 10px;
+    margin-top: -10px;
+    width: 460px;
+    height: 50px;
+}
+#plotOpacity2{
+    position: absolute;
+    margin-right: 10px;
+    margin-top: -10px;
+    width: 460px;
+    height: 50px;
+}
+#corcoefGraphDiv{
+    position: absolute;
+    float: left;
+    margin-left: var(--corcoef-graph-margin-left);
+    margin-top: var(--corcoef-graph-margin-top);
+}
+#corcoefGraph{
+    width: var(--box-width);
+    height: calc(var(--box-width) - 3*var(--default-margin));;
+}
+#corcoefGraphTitle{
+    text-align: center;
+    margin-top: var(--default-margin);
+}
+.elementText{
+    font-family: sans-serif;
+    text-anchor: middle;
+    font-size: 8px;
+    alignment-baseline: hanging;
+}
+
+#scatterPlot{
+    position: absolute;
+    margin-left: var(--scatter-plot-margin-left);
+    margin-top: var(--scatter-plot-margin-top);
+}
+#contourControlPanel{
+    position: absolute;
+    margin-left: var(--contour-control-panel-margin-left);
+    margin-top: var(--contour-control-panel-margin-top);
+}
+
+#contour1Div{
+    position: absolute;
+    margin-left: var(--contour1-margin-left);
+    margin-top: var(--contour1-margin-top);
+}
+#contour2Div{
+    position: absolute;
+    margin-left: var(--contour2-margin-left);
+    margin-top: var(--contour2-margin-top);
+}
+#contour1{
+    width: var(--box-width);
+    height: calc(var(--box-width) - 2*var(--default-margin))
+}
+#contour2{
+    width: var(--box-width);
+    height: calc(var(--box-width) - 2*var(--default-margin))
+}
+
+#boxPlot1Div{
+    position: absolute;
+    margin-left: var(--boxPlot1-margin-left);
+    margin-top: var(--boxPlot1-margin-top);
+}
+#boxPlot2Div{
+    position: absolute;
+    margin-left: var(--boxPlot2-margin-left);
+    margin-top: var(--boxPlot2-margin-top);
+}
+#boxPlot1{
+    width: var(--box-width);
+    height: calc(var(--box-width) - 2*var(--default-margin))
+}
+#boxPlot2{
+    width: var(--box-width);
+    height: calc(var(--box-width) - 2*var(--default-margin))
+}
+
+#curvePlot1Div{
+    position: absolute;
+    margin-left: var(--curvePlot1-margin-left);
+    margin-top: var(--curvePlot1-margin-top);
+}
+#curvePlot2Div{
+    position: absolute;
+    margin-left: var(--curvePlot2-margin-left);
+    margin-top: var(--curvePlot2-margin-top);
+}
+#curvePlot1{
+    width: var(--box-width);
+    height: calc(var(--box-width) - 2*var(--default-margin))
+}
+#curvePlot2{
+    width: var(--box-width);
+    height: calc(var(--box-width) - 2*var(--default-margin))
+}
+
+svg image:hover{
+    cursor: pointer;
+}
+
+#profileContainerDiv{
+    margin-top: var(--default-margin);
+    margin-left: var(--default-margin);
+    width: 200px;
+}
+
+#menu{
+    margin-left: var(--default-margin);
+}
+.myclip{
+    clip-path: circle(15px at center);
+    -webkit-clip-path: circle(15px at center);
+    -moz-clip-path: circle(15px at center)
+}
+
+.cartesianlayer{
+    opacity: 0.75;
+}

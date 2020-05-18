@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4d44520b-e281-4314-9e0c-878438e3413e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../tweetviz/data/bigrams_fc_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tweetviz/data/terms_fc_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tweetviz/data/trigrams_fc_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tweetviz/javascript/main_terms.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/javascript/main_terms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tweetviz/javascript/wordstream_draw.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/javascript/wordstream_draw.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1c3OYV6esaiFLK6rh0C1rMQhyQJ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="soil3d.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Soil/soil3d.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.soil3d.html" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4d44520b-e281-4314-9e0c-878438e3413e" name="Default Changelist" comment="" />
+      <created>1589753857408</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1589753857408</updated>
+      <workItem from="1589753858592" duration="5449000" />
+      <workItem from="1589760587008" duration="16000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="341" y="135" key="SettingsEditor" timestamp="1589760602345">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="341" y="135" key="SettingsEditor/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1589760602345" />
+    <state x="541" y="251" width="598" height="522" key="find.popup" timestamp="1589759154054">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="541" y="251" width="598" height="522" key="find.popup/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1589759154054" />
+  </component>
+</project>
