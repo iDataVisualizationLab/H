@@ -187,7 +187,9 @@ function readData(fileName, handleData) {
         d3.csv(fileName + ".csv", function (error, rawData) {
             if (error) throw error;
 
-            data = rawData.filter(function (d) {
+            console.log(rawData)
+
+            let data = rawData.filter(function (d) {
                 //Valid ID
                 return validGridId(d["Grid ID"]);
             });

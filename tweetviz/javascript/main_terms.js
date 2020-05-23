@@ -1,5 +1,5 @@
 let mainsvg = d3.select("#mainsvg"),
-    svgWidth = window.innerWidth * 3,
+    svgWidth = window.innerWidth * 2,
     svgHeight = window.innerHeight,
     axisHeight = 40,
     margin = {top: 40, right: 40, bottom: 40, left: 80, axisx: 40, axisy: 20, storyTop: 40},
@@ -45,7 +45,7 @@ function loadDataAll() {
         let newTermsData = termsData
             .map(function (d) {
                 let newD = d;
-                newD.words.tweet = d.words.tweet.splice(0, 1000);
+                newD.words.tweet = d.words.tweet.splice(0, 200);
                 return newD;
             })
         // draw(rawData, false);
@@ -60,7 +60,7 @@ function loadDataAll() {
             let newBigramsData = bigramsData
                 .map(function (d) {
                     let newD = d;
-                    newD.words.tweet = d.words.tweet.splice(0, 1000);
+                    newD.words.tweet = d.words.tweet.splice(0, 200);
                     return newD;
                 });
             // draw(rawData, false);
@@ -75,7 +75,7 @@ function loadDataAll() {
                 let newTrigramsData = trigramsData
                     .map(function (d) {
                         let newD = d;
-                        newD.words.tweet = d.words.tweet.splice(0, 1000);
+                        newD.words.tweet = d.words.tweet.splice(0, 200);
                         return newD;
                     })
                 let data = [];

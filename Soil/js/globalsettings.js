@@ -8,8 +8,10 @@ let defaultProfileIndex = 0;
 // Hao edit
 // let letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
 let letters = ["A", "B", "C", "D", "E", "F"];
+// let letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 // let digits = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
 let digits = ["01", "02", "03", "04", "05", "06", "07", "08", "09"];
+// let digits = ["01", "02", "03", "04", "05", "06", "07"];
 let columns = [
     'Grid ID',
     'Al Concentration',

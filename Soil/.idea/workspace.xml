@@ -2,9 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d44520b-e281-4314-9e0c-878438e3413e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../tweetviz/data/bigrams_fc_data.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../tweetviz/data/terms_fc_data.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../tweetviz/data/trigrams_fc_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/processed-tommy-house-grid-2220.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/processed-tommy-house-grid-2220Avg.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tweetviz/backup_data/terms_fc_data.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tweetviz/backup_data/trigrams_fc_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/processed-chemistry-Idvl-tommy-house-grid-2020-05-17-14-31-26.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/processed-tommy-house-grid-117.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/processed-chemistry-Idvl-tommy-house-grid-2020-05-17-14-31-26Avg.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/processed-tommy-house-grid-117Avg.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/3d/main3d.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/3d/main3d.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/3d/twoDCharts.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/3d/twoDCharts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/dataprocessing.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/dataprocessing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/globalsettings.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/globalsettings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tweetviz/data/bigrams_fc_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/data/bigrams_fc_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tweetviz/data/terms_fc_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/data/terms_fc_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tweetviz/data/trigrams_data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tweetviz/data/trigrams_fc_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/data/trigrams_fc_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tweetviz/javascript/d3.layout.wordstream.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/javascript/d3.layout.wordstream.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tweetviz/javascript/main_terms.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/javascript/main_terms.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tweetviz/javascript/wordstream_draw.js" beforeDir="false" afterPath="$PROJECT_DIR$/../tweetviz/javascript/wordstream_draw.js" afterDir="false" />
     </list>
@@ -26,14 +39,14 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data" />
     </key>
   </component>
@@ -58,8 +71,17 @@
       <option name="presentableId" value="Default" />
       <updated>1589753857408</updated>
       <workItem from="1589753858592" duration="5449000" />
-      <workItem from="1589760587008" duration="16000" />
+      <workItem from="1589760587008" duration="3709000" />
+      <workItem from="1590187804027" duration="2642000" />
     </task>
+    <task id="LOCAL-00001" summary="update tweetviz and upload Soil data">
+      <created>1589760894450</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1589760894450</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -69,15 +91,29 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
+    <MESSAGE value="update tweetviz and upload Soil data" />
+    <option name="LAST_COMMIT_MESSAGE" value="update tweetviz and upload Soil data" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="410" y="72" key="CommitChangelistDialog2" timestamp="1589760892393">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="410" y="72" key="CommitChangelistDialog2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1589760892393" />
     <state x="341" y="135" key="SettingsEditor" timestamp="1589760602345">
       <screen x="0" y="23" width="1680" height="947" />
     </state>
     <state x="341" y="135" key="SettingsEditor/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1589760602345" />
-    <state x="541" y="251" width="598" height="522" key="find.popup" timestamp="1589759154054">
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2" timestamp="1589760972961">
       <screen x="0" y="23" width="1680" height="947" />
     </state>
-    <state x="541" y="251" width="598" height="522" key="find.popup/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1589759154054" />
+    <state x="440" y="236" key="Vcs.Push.Dialog.v2/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1589760972961" />
+    <state x="541" y="251" width="598" height="522" key="find.popup" timestamp="1590249405933">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="541" y="251" width="598" height="522" key="find.popup/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1590249405933" />
+    <state x="505" y="230" width="670" height="676" key="search.everywhere.popup" timestamp="1590219031221">
+      <screen x="0" y="23" width="1680" height="947" />
+    </state>
+    <state x="505" y="230" width="670" height="676" key="search.everywhere.popup/1680.23.1920.1057/0.23.1680.947@0.23.1680.947" timestamp="1590219031221" />
   </component>
 </project>

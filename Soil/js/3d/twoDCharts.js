@@ -64,6 +64,7 @@ function TwoDCharts() {
             // Hao edit
             // chartSettings.yTickLabels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"].reverse();
             chartSettings.yTickLabels = ["A", "B", "C", "D", "E", "F"].reverse();
+            // chartSettings.yTickLabels = ["A", "B", "C", "D", "E", "F", "G", "H"].reverse();
 
 
             let chartData = [cutData.traces.find(trace => trace.series === selectedPointClouds[i].name)];
@@ -134,6 +135,9 @@ function TwoDCharts() {
 
             chartSettings.xTickValues = Array.from(new Array(9), (_, i) => 0.5 + i);
             chartSettings.xTickLabels = Array.from(new Array(9), (_, i) => 1 + i);
+
+            // chartSettings.xTickValues = Array.from(new Array(7), (_, i) => 0.5 + i);
+            // chartSettings.xTickLabels = Array.from(new Array(7), (_, i) => 1 + i);
 
             let chartData = [cutData.traces.find(trace => trace.series === selectedPointClouds[i].name)];
             horizontalChartsData.push(chartData);

@@ -14,14 +14,16 @@ function draw(data, drawAxis) {
         .size([width, height])
         .interpolate(interpolation)
         .fontScale(d3.scaleLinear())
-        .minFontSize(10)
-        .maxFontSize(20)
+        .minFontSize(12)
+        .maxFontSize(50)
         .pictureSize(pictureSize)
         .pictureShape(pictureShape)
         .pictureFrequency(pictureFrequency)
         .data(data)
         .font(font);
     let boxes = ws.boxes();
+
+    console.log(ws)
 
     boxes.data.forEach(row => {
         dateLabels.push(row.date);

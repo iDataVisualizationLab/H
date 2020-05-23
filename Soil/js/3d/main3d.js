@@ -85,7 +85,7 @@ function main() {
     //</editor-fold>
 
     //Load data
-    readData("data/" + "processed-chemistry-Idvl-tommy-house-grid-2020-05-17-14-31-26", handleData);
+    readData("data/" + "processed-tommy-house-grid-117", handleData);
     // readData("data/" + "Profile1", handleData);
 
     function handleData(data) {
@@ -216,7 +216,6 @@ function main() {
             //These are the two selected elements in the details comparison
             selectedPointClouds[0] = pointClouds[0];
             selectedPointClouds[1] = pointClouds[1];
-
 
             elementInfo1 = threeDScences.setupElementScene1(pointClouds[0], elementInfo1);
             elementInfo2 = threeDScences.setupElementScene2(pointClouds[1], elementInfo2);

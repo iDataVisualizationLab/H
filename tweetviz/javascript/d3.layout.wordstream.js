@@ -4,7 +4,7 @@ d3.wordStream = function () {
     let data = [],
         size = [1600, 300],
         maxFontSize = 24,
-        minFontSize = 10,
+        minFontSize = 8,
         pictureSize = 20,
         pictureShape = "circle",
         pictureFrequency = 40,//One picture can be counted as 40 words for frequency
@@ -26,6 +26,7 @@ d3.wordStream = function () {
         buildFrequencyScale(data);
         let boxes = buildBoxes(data);
         //Get the sprite for each word
+        console.log(boxes);
         getImageData(boxes);
         //Set for each stream
         for (let tc = 0; tc < boxes.topics.length; tc++) {
@@ -129,6 +130,10 @@ d3.wordStream = function () {
                 if (minFrequency > min) minFrequency = min;
             })
         });
+
+        //Hao edit
+        console.log(maxFrequency, minFrequency);
+        console.log(maxFontSize, minFontSize);
         fontScale.domain([minFrequency, maxFrequency]).range([minFontSize, maxFontSize]);
     }
 
@@ -462,15 +467,20 @@ d3.wordStream = function () {
                 }
             });
         }
+        console.log(data);
+        console.log(boxes);
         for (let bc = 0; bc < data.length; bc++) {
             boxes.topics.forEach(topic => {
                 let words = data[bc].words[topic];
+                // console.log(words);
                 let n = words.length;
                 let di = -1;
                 let d = {};
                 while (++di < n) {
                     d = words[di];
+                    // console.log(d);
                     let pixels = c.getImageData(d.x, d.y, d.width, d.height).data;
+                    // console.log(pixels);
                     d.sprite = Array();
                     for (let i = 0; i << 2 < pixels.length; i++) {
                         d.sprite.push(pixels[i << 2]);
