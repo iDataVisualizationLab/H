@@ -3,7 +3,7 @@
 d3.wordStream = function () {
     let data = [],
         size = [1600, 300],
-        maxFontSize = 24,
+        maxFontSize = 18,
         minFontSize = 8,
         pictureSize = 20,
         pictureShape = "circle",
