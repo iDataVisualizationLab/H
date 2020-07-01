@@ -478,7 +478,7 @@ d3.wordStream = function () {
                 let d = {};
                 while (++di < n) {
                     d = words[di];
-                    // console.log(d);
+                    console.log(d);
                     let pixels = c.getImageData(d.x, d.y, d.width, d.height).data;
                     // console.log(pixels);
                     d.sprite = Array();

@@ -48,7 +48,7 @@ function draw(data, drawAxis) {
         // let xAxisScale = d3.scaleTime().domain(d3.extent(dateLabels)).range([0, width]);
         let axisx = mainGroup.append("g")
             .attr("class", 'axis axis--x')
-            .attr("transform", `translate(${margin.axisx},${wordStreamHeight + margin.axisy})`)
+            .attr("transform", `translate(${margin.axisx},${wordStreamHeight-30})`)
             .call(d3.axisBottom(xAxisScale));
     }
 

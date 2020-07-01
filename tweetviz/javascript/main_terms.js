@@ -1,11 +1,11 @@
 let mainsvg = d3.select("#mainsvg"),
-    svgWidth = window.innerWidth * 2,
+    svgWidth = window.innerWidth * 3,
     svgHeight = window.innerHeight,
     axisHeight = 40,
     margin = {top: 40, right: 40, bottom: 40, left: 80, axisx: 40, axisy: 20, storyTop: 40},
     width = svgWidth - margin.left - margin.right - margin.axisx,
     height = svgHeight - margin.top - margin.storyTop - margin.axisx - margin.bottom,
-    wordStreamHeight = 800,
+    wordStreamHeight = svgHeight-100,
     wordStreamWidth = width,
     scaleX = d3.scaleLinear().rangeRound([0, width]),
     mainGroup = null;//used to store main group as a global variable later on
@@ -37,7 +37,7 @@ function loadDataAll() {
     //The maingroup
     mainGroup = mainsvg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    d3.json('data/terms_fc_data.json').then(termsData => {
+    d3.json('data/top1000terms_fc_scaled_data.json').then(termsData => {
         termsData = termsData.sort((a, b) => {
             return new Date(a.date) - new Date(b.date);
         });
@@ -45,14 +45,14 @@ function loadDataAll() {
         let newTermsData = termsData
             .map(function (d) {
                 let newD = d;
-                newD.words.tweet = d.words.tweet.splice(0, 200);
+                newD.words.tweet = d.words.tweet.splice(0, 150);
                 return newD;
             })
         // draw(rawData, false);
 
         // mainGroup = mainsvg.append("g").attr("transform", `translate(${margin.left}, ${svgHeight / 3})`);
 
-        d3.json('data/bigrams_fc_data.json').then(bigramsData => {
+        d3.json('data/top1000bigrams_fc_scaled_data.json').then(bigramsData => {
             bigramsData = bigramsData.sort((a, b) => {
                 return new Date(a.date) - new Date(b.date);
             });
@@ -60,14 +60,14 @@ function loadDataAll() {
             let newBigramsData = bigramsData
                 .map(function (d) {
                     let newD = d;
-                    newD.words.tweet = d.words.tweet.splice(0, 200);
+                    newD.words.tweet = d.words.tweet.splice(0, 50);
                     return newD;
                 });
             // draw(rawData, false);
 
             // mainGroup = mainsvg.append("g").attr("transform", `translate(${margin.left}, ${svgHeight * 2 / 3})`);
 
-            d3.json('data/trigrams_fc_data.json').then(trigramsData => {
+            d3.json('data/top1000trigrams_fc_scaled_data.json').then(trigramsData => {
                 trigramsData = trigramsData.sort((a, b) => {
                     return new Date(a.date) - new Date(b.date);
                 });
@@ -75,7 +75,7 @@ function loadDataAll() {
                 let newTrigramsData = trigramsData
                     .map(function (d) {
                         let newD = d;
-                        newD.words.tweet = d.words.tweet.splice(0, 200);
+                        newD.words.tweet = d.words.tweet.splice(0, 50);
                         return newD;
                     })
                 let data = [];
