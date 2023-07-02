@@ -45,10 +45,12 @@ function loadServerModelChange(theElm) {
 
 function loadModelChange(sourceType, theElm) {
     //Reset the selected features to all features
+    console.log("loadModelChange");
     selectedFeatures = features.map(_=>true);
     let modelName = theElm.value;
     isTraining = false;
     if (sourceType === "server") {
+        console.log("loadModelFromServer12");
         loadModelFromServer(modelName);
     } else if (sourceType === "localstorage") {
         loadModelFromLocalStorage(modelName);
@@ -65,6 +67,9 @@ function populateModelGUIFromData(model, modelData) {
     let testLosses_ = loadModelDataFromObj(modelData, "testLosses");
     let X_train_ = loadModelDataFromObj(modelData, "X_train");
     let y_train_ = loadModelDataFromObj(modelData, "y_train");
+
+    console.log(X_train_.length)
+
     let X_test_ = loadModelDataFromObj(modelData, "X_test");
     let y_test_ = loadModelDataFromObj(modelData, "y_test");
     let trainingProcess_ = loadModelDataFromObj(modelData, "process");
