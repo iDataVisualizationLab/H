@@ -849,12 +849,16 @@ function getLayerTrainingWeight(i) {
 async function displayLayerWeights(model, i, containerId) {
     let layer = model.layers[i];
     let weights = layer.getWeights()[0];
-
     let layerTrainingWeight = getLayerTrainingWeight(i);
     let minStrokeWidth = 0,
         maxStrokeWidth = 3;
 
+    console.log(layer + " " + i)
+    console.log(layer)
+    console.log(layer.getWeights())
+
     if (layer.name.indexOf("lstm") >= 0) {
+
         let strokeWidthScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([minStrokeWidth, maxStrokeWidth]);
         let opacityScale = d3.scaleLinear().domain(strokeWidthScale.domain()).range([minLineWeightOpacity, maxLineWeightOpacity]);
         let zeroOneScale = d3.scaleLinear().domain([0, d3.max(layerTrainingWeight.map(d => d >= 0 ? d : -d))]).range([0, 1]).clamp(true);
@@ -864,7 +868,7 @@ async function displayLayerWeights(model, i, containerId) {
             drawLSTMWeights(containerId);
             // updateVarNetwork();
         });
-        buildTrainingWeightData(i, weights.shape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
+        buildTrainingWeightData(i,weights.shape, heatmapH, 22, 100, 22, 200 * trainingWeightWidthRatio, 4, 20, 0, 3, minLineWeightOpacity, maxLineWeightOpacity, isTraining ? currentEpoch : noOfEpochs, strokeWidthScale, opacityScale, zeroOneScale).then((result) => {
             trainingWeightsPathData[containerId] = result;
             drawLstmTrainingWeights(containerId);
         });

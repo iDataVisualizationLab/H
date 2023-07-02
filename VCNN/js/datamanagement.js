@@ -194,13 +194,15 @@ async function loadModelFromServer(modelName) {
     } else {
         modelName = 'large_model/' + modelName;
     }
+    //adding a directory to your model
 
     if (modelName.indexOf('stock') > 0) {
         features = ['Open', 'High', 'Low', 'Close', 'Volume'];
     } else if (modelName.indexOf('arrTemp') > 0) {
         features = ['CPU1 Temp', 'CPU2 Temp', 'Inlet Temp', 'CPU Load', 'Memory usage', 'Fan1 speed', 'Fan2 speed', 'Fan3 speed', 'Fan4 speed', 'Power consumption'];
     } else {
-        features = ['Total_Nonfarm', 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
+        console.log("modelName: " + modelName);
+        features = ['potential']; //, 'Total_Private', 'Goods_Producing', 'Service_Providing', 'Manufacturing', 'Trade|Transportation|Utilities', 'Wholesale_Trade', 'Retail_Trade', 'Transportation|Warehousing|Utilities', 'Financial_Activities', 'Professional_and_Business_Services', 'Education|Health_Services', 'Leisure_and_Hospitality', 'Other_Services', 'Government'];
     }
 
     const model = await tf.loadLayersModel(`data/models/${modelName}.json`);
